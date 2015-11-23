@@ -1,14 +1,15 @@
 source 'https://rubygems.org'
 
-gem 'rails', github: "rails/rails"
-gem 'sprockets-rails', github: "rails/sprockets-rails"
-gem 'sprockets', github: "rails/sprockets"
-gem 'sass-rails', github: "rails/sass-rails"
-gem 'arel', github: "rails/arel"
-gem 'rack', github: "rack/rack"
+gem 'rails', github: 'rails/rails'
+gem 'sprockets-rails', github: 'rails/sprockets-rails'
+gem 'sprockets', github: 'rails/sprockets'
+gem 'sass-rails', github: 'rails/sass-rails'
+gem 'arel', github: 'rails/arel'
+gem 'rack', github: 'rack/rack'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
+gem 'pg'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -18,6 +19,9 @@ gem 'active_model_serializers', '~> 0.10.0.rc2'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -33,5 +37,6 @@ group :development do
   # gem 'listen', '~> 3.0.4'
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+group :metrics do
+  gem 'rubocop'
+end
