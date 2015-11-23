@@ -19,3 +19,9 @@ Metrics/ClassLength:
 
 Metrics/MethodLength:
   Max: 8
+
+Style/EmptyLinesAroundClassBody:
+  EnforcedStyle: empty_lines
+
+Rails/Delegate:
+  Enabled: false

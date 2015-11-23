@@ -13,6 +13,7 @@ default: &default
   timeout: 5000
   username: <%= ENV['RAILS_DB_USERNAME'] %>
   password: <%= ENV['RAILS_DB_PASSWORD'] %>
+  port: <%= ENV['RAILS_DB_PORT'] %>
   host: <%= ENV['RAILS_DB_HOST'] %>
 
 development:
