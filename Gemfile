@@ -11,6 +11,8 @@ gem 'rack', github: 'rack/rack'
 gem 'sqlite3'
 gem 'pg'
 
+gem 'streamio-ffmpeg'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

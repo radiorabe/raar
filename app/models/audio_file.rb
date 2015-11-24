@@ -21,4 +21,12 @@ class AudioFile < ActiveRecord::Base
   validates :bitrate, :channels,
             numericality: { only_integer: true, greater_than: 0, allow_blank: true }
 
+  def full_path
+    File.join(Rails.application.secrets.archive_home, path)
+  end
+
+  def to_s
+    path
+  end
+
 end

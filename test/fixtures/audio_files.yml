@@ -42,7 +42,7 @@ klangbecken_mai1_best:
   archive_format: unimportant_mp3
   playback_format: high
 
-klangbecken_mai1_best:
+klangbecken_mai1_low:
   broadcast: klangbecken_mai1
   path: 2015/05/20/2015-05-20T113000Z_96_1.mp3
   bitrate: 96
