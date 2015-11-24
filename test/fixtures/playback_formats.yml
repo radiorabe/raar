@@ -11,13 +11,15 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #
-class PlaybackFormat < ActiveRecord::Base
 
-  has_many :audio_files, dependent: :nullify
+low:
+  name: low
+  audio_format: mp3
+  bitrate: 96
+  channels: 1
 
-  validates :name, uniqueness: true
-  validates :name, :audio_format, :bitrate, :channels, presence: true
-  validates :bitrate, :channels,
-            numericality: { only_integer: true, greater_than: 0, allow_blank: true }
-
-end
+high:
+  name: high
+  audio_format: mp3
+  bitrate: 192
+  channels: 2

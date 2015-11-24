@@ -1,0 +1,34 @@
+# == Schema Information
+#
+# Table name: archive_formats
+#
+#  id                 :integer          not null, primary key
+#  profile_id         :integer          not null
+#  audio_format       :string           not null
+#  initial_bitrate    :integer          not null
+#  initial_channels   :integer          not null
+#  max_public_bitrate :integer
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#
+
+important_mp3:
+  profile: important
+  audio_format: mp3
+  initial_bitrate: 320
+  initial_channels: 2
+  max_public_bitrate: 192
+
+default_mp3:
+  profile: default
+  audio_format: mp3
+  initial_bitrate: 320
+  initial_channels: 2
+  max_public_bitrate: 96
+
+unimportant_mp3:
+  profile: unimportant
+  audio_format: mp3
+  initial_bitrate: 192
+  initial_channels: 2
+  max_public_bitrate: 96

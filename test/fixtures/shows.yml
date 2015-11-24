@@ -1,0 +1,21 @@
+# == Schema Information
+#
+# Table name: shows
+#
+#  id         :integer          not null, primary key
+#  name       :string           not null
+#  details    :text
+#  profile_id :integer          not null
+#
+
+info:
+  name: Info
+  profile: important
+
+klangbecken:
+  name: Klangbecken
+  profile: unimportant
+
+g9s:
+  name: Geschäch9schlimmers
+  profile: default

@@ -1,0 +1,49 @@
+# == Schema Information
+#
+# Table name: broadcasts
+#
+#  id          :integer          not null, primary key
+#  show_id     :integer          not null
+#  label       :string           not null
+#  started_at  :datetime         not null
+#  finished_at :datetime         not null
+#  people      :string
+#  details     :text
+#
+
+
+info_april:
+  show: info
+  label: Info April
+  started_at: 2015-04-10 11:00
+  finished_at: 2015-04-10 11:30
+
+info_mai:
+  show: info
+  label: Info Mai
+  started_at: 2015-05-20 11:00
+  finished_at: 2015-05-20 11:30
+
+klangbecken_mai1:
+  show: klangbecken
+  label: Klangbecken
+  started_at: 2015-05-20 11:30
+  finished_at: 2015-05-20 20:00
+
+klangbecken_mai2:
+  show: klangbecken
+  label: Klangbecken
+  started_at: 2015-05-20 23:00
+  finished_at: 2015-05-21 08:00
+
+g9s_mai:
+  show: g9s
+  label: G9S Shizzle Edition
+  started_at: 2015-05-20 20:00
+  finished_at: 2015-05-20 23:00
+
+g9s_juni:
+  show: g9s
+  label: G9S Shizzle Edition II
+  started_at: 2015-06-12 20:00
+  finished_at: 2015-06-12 22:00

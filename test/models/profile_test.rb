@@ -9,12 +9,13 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-class Profile < ActiveRecord::Base
 
-  has_many :shows, dependent: :restrict_with_error
-  has_many :archive_formats, dependent: :destroy
+require 'test_helper'
 
-  validates :name, presence: true, uniqueness: true
-  validates :default, inclusion: [true, false]
-
+class ProfileTest < ActiveSupport::TestCase
+  test "all fixtures valid" do
+    Profile.all.each do |e|
+      assert e.valid?, "#{e} is not valid"
+    end
+  end
 end

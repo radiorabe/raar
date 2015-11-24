@@ -1,0 +1,32 @@
+# == Schema Information
+#
+# Table name: downgrade_actions
+#
+#  id                :integer          not null, primary key
+#  archive_format_id :integer          not null
+#  months            :integer          not null
+#  bitrate           :integer
+#  channels          :integer
+#
+
+important_mp3_1:
+  archive_format: important_mp3
+  months: 12
+  bitrate: 240
+  channels: 2
+
+default_mp3_1:
+  archive_format: default_mp3
+  months: 4
+  bitrate: 192
+  channels: 2
+
+default_mp3_2:
+  archive_format: default_mp3
+  months: 24
+  bitrate: 128
+  channels: 2
+
+unimportant_mp3_1:
+  archive_format: important_mp3
+  months: 4

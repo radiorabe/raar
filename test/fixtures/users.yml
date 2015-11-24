@@ -13,12 +13,10 @@
 #  updated_at         :datetime         not null
 #
 
-require 'test_helper'
+admin:
+  username: admin
+  groups: admins,grooveexpress
 
-class UserTest < ActiveSupport::TestCase
-  test "all fixtures valid" do
-    User.all.each do |user|
-      assert user.valid?, "#{user} is not valid"
-    end
-  end
-end
+speedee:
+  username: speedee
+  groups: dermorgen

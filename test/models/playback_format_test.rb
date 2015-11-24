@@ -11,13 +11,13 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #
-class PlaybackFormat < ActiveRecord::Base
 
-  has_many :audio_files, dependent: :nullify
+require 'test_helper'
 
-  validates :name, uniqueness: true
-  validates :name, :audio_format, :bitrate, :channels, presence: true
-  validates :bitrate, :channels,
-            numericality: { only_integer: true, greater_than: 0, allow_blank: true }
-
+class PlaybackFormatTest < ActiveSupport::TestCase
+  test "all fixtures valid" do
+    PlaybackFormat.all.each do |e|
+      assert e.valid?, "#{e} is not valid"
+    end
+  end
 end
