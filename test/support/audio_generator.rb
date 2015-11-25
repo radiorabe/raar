@@ -7,7 +7,12 @@ class AudioGenerator
         FileUtils.mkdir_p(File.dirname(f.full_path))
         cmd = "ffmpeg -f lavfi -i anullsrc=r=44100:cl=stereo -t 3 " \
               "-b:a #{f.bitrate}k -acodec #{f.archive_format.audio_format} #{f.full_path}"
-        _, _, _, wait_thr = Open3.popen3(cmd)
+        stdin, stdout, stderr, wait_thr = Open3.popen3(cmd)
+        puts stdout.read
+        puts stderr.read
+        stdin.close
+        stdout.close
+        stderr.close
         wait_thr.value
       end
     end

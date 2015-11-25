@@ -39,10 +39,6 @@ group :development do
   # gem 'listen', '~> 3.0.4'
 end
 
-group :test do
-  gem 'codeclimate-test-reporter', require: nil
-end
-
 group :metrics do
   gem 'rubocop'
 end
