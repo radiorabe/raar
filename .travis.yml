@@ -1,0 +1,14 @@
+language: ruby
+rvm:
+ - "2.2.3"
+env:
+  - RAILS_DB_ADAPTER=postgresql
+  - RAILS_DB_NAME=raar_test
+  - RAILS_DB_USERNAME=postgres
+services:
+  - postgresql
+before_install:
+  - sudo apt-get install -y ffmpeg
+before_script:
+  - psql -c 'create database raar_test;' -U postgres
+script: bundle exec rake
