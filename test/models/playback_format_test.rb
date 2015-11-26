@@ -15,9 +15,18 @@
 require 'test_helper'
 
 class PlaybackFormatTest < ActiveSupport::TestCase
+
   test "all fixtures valid" do
     PlaybackFormat.all.each do |e|
-      assert e.valid?, "#{e} is not valid"
+      byebug unless e.valid?
+      assert_valid e
     end
   end
+
+  test 'name must be a valid identifier' do
+    p = playback_formats(:low)
+    p.name = 'Expre?'
+    assert_not_valid p, :name
+  end
+
 end

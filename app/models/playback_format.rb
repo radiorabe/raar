@@ -13,11 +13,19 @@
 #
 class PlaybackFormat < ActiveRecord::Base
 
+  include WithAudioFormat
+
   has_many :audio_files, dependent: :nullify
 
-  validates :name, uniqueness: true
-  validates :name, :audio_format, :bitrate, :channels, presence: true
-  validates :bitrate, :channels,
-            numericality: { only_integer: true, greater_than: 0, allow_blank: true }
+  validates :name,
+            presence: true,
+            uniqueness: true,
+            format: { with: /\A[a-z0-9_]*\z/, message: :identifier_format }
+  validates :audio_format, :bitrate, :channels, presence: true
+  validate_audio_format
+
+  def to_s
+    name
+  end
 
 end

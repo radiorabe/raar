@@ -16,5 +16,23 @@ class Profile < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
   validates :default, inclusion: [true, false]
+  validate :assert_exactly_one_default_profile_exists
+
+  # If we set a new default, remove flag from other instances.
+  after_save :clear_defaults, if: :default
+
+  def to_s
+    name
+  end
+
+  private
+
+  def clear_defaults
+    Profile.where('id <> ?', id).update_all(default: false)
+  end
+
+  def assert_exactly_one_default_profile_exists
+    errors.add(:default, :must_exist) if default_changed? && !default
+  end
 
 end

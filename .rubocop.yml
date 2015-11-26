@@ -20,8 +20,15 @@ Metrics/ClassLength:
 Metrics/MethodLength:
   Max: 8
 
+Style/Documentation:
+  Enabled: false
+
 Style/EmptyLinesAroundClassBody:
   EnforcedStyle: empty_lines
+
+# namespace modules do not require empty lines, mixins do.
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
 
 Rails/Delegate:
   Enabled: false

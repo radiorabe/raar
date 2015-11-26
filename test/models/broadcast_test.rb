@@ -16,7 +16,7 @@ require 'test_helper'
 class BroadcastTest < ActiveSupport::TestCase
   test "all fixtures valid" do
     Broadcast.all.each do |e|
-      assert e.valid?, "#{e} is not valid"
+      assert_valid e
     end
   end
 end

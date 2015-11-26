@@ -16,7 +16,7 @@ require 'test_helper'
 class AudioFileTest < ActiveSupport::TestCase
   test "all fixtures valid" do
     AudioFile.all.each do |e|
-      assert e.valid?, "#{e} is not valid"
+      assert_valid e
     end
   end
 end

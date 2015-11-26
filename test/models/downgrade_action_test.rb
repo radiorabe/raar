@@ -14,7 +14,7 @@ require 'test_helper'
 class DowngradeActionTest < ActiveSupport::TestCase
   test "all fixtures valid" do
     DowngradeAction.all.each do |e|
-      assert e.valid?, "#{e} is not valid"
+      assert_valid e
     end
   end
 end

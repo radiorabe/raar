@@ -13,7 +13,7 @@ require 'test_helper'
 class ShowTest < ActiveSupport::TestCase
   test "all fixtures valid" do
     Show.all.each do |e|
-      assert e.valid?, "#{e} is not valid"
+      assert_valid e
     end
   end
 end

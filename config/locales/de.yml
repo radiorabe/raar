@@ -20,4 +20,12 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 de:
-  hello: "Hello world"
+  activerecord:
+    errors:
+      messages:
+        identifier_format: darf nur die Zeichen a-z, 0-9 und '_' enthalten.
+      models:
+        profile:
+          attributes:
+            default:
+              must_exist: muss definiert sein.

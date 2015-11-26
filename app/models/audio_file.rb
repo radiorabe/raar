@@ -12,14 +12,17 @@
 #
 class AudioFile < ActiveRecord::Base
 
+  include WithAudioFormat
+
   belongs_to :broadcast
   belongs_to :archive_format
   belongs_to :playback_format, optional: true
 
   validates :path, :bitrate, :channels, presence: true
   validates :path, uniqueness: true
-  validates :bitrate, :channels,
-            numericality: { only_integer: true, greater_than: 0, allow_blank: true }
+  validate_audio_format
+
+  delegate :audio_format, to: :archive_format
 
   def full_path
     File.join(Rails.application.secrets.archive_home, path)

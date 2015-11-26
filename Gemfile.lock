@@ -137,6 +137,9 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.2)
       loofah (~> 2.0)
+    rails-i18n (4.0.2)
+      i18n (~> 0.6)
+      rails (>= 4.0)
     rainbow (2.0.0)
     rake (10.4.2)
     rubocop (0.34.2)
@@ -165,6 +168,7 @@ DEPENDENCIES
   pg
   rack!
   rails!
+  rails-i18n
   rubocop
   sass-rails!
   spring

@@ -12,7 +12,7 @@
 important_mp3_1:
   archive_format: important_mp3
   months: 12
-  bitrate: 240
+  bitrate: 224
   channels: 2
 
 default_mp3_1:

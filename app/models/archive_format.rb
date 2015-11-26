@@ -13,6 +13,8 @@
 #
 class ArchiveFormat < ActiveRecord::Base
 
+  include WithAudioFormat
+
   belongs_to :profile
 
   has_many :downgrade_actions, dependent: :destroy
@@ -20,7 +22,8 @@ class ArchiveFormat < ActiveRecord::Base
 
   validates :audio_format, :initial_bitrate, :initial_channels, presence: true
   validates :audio_format, uniqueness: { scope: :profile_id }
-  validates :initial_bitrate, :initial_channels, :max_public_bitrate,
-            numericality: { only_integer: true, greater_than: 0, allow_blank: true }
+  validates :max_public_bitrate,
+            numericality: { only_integer: true, greater_or_equal_to: 0, allow_blank: true }
+  validate_audio_format(:initial_bitrate, :initial_channels)
 
 end

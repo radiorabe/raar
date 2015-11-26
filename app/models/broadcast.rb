@@ -19,4 +19,8 @@ class Broadcast < ActiveRecord::Base
   validates :label, :started_at, :finished_at, presence: true
   validates :started_at, :finished_at, uniqueness: true
 
+  def to_s
+    label
+  end
+
 end

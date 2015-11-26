@@ -17,8 +17,8 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   test "all fixtures valid" do
-    User.all.each do |user|
-      assert user.valid?, "#{user} is not valid"
+    User.all.each do |e|
+      assert_valid e
     end
   end
 end
