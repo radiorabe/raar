@@ -28,5 +28,5 @@ default_mp3_2:
   channels: 2
 
 unimportant_mp3_1:
-  archive_format: important_mp3
+  archive_format: unimportant_mp3
   months: 4

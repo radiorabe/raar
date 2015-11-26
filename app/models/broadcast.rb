@@ -19,8 +19,16 @@ class Broadcast < ActiveRecord::Base
   validates :label, :started_at, :finished_at, presence: true
   validates :started_at, :finished_at, uniqueness: true
 
+  before_validation :set_show_label_if_empty
+
   def to_s
     label
+  end
+
+  private
+
+  def set_show_label_if_empty
+    self.label ||= show.name if show
   end
 
 end

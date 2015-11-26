@@ -31,8 +31,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     end
 
     def processor(audio_file)
-      path = File.join(audio_files(audio_file).full_path)
-      AudioProcessor::Ffmpeg.new(path)
+      AudioProcessor::Ffmpeg.new(audio_files(audio_file).absolute_path)
     end
 
   end # unless TRAVIS

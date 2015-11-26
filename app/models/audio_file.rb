@@ -24,8 +24,8 @@ class AudioFile < ActiveRecord::Base
 
   delegate :audio_format, to: :archive_format
 
-  def full_path
-    File.join(Rails.application.secrets.archive_home, path)
+  def absolute_path
+    FileStore::Layout.absolute_path(path)
   end
 
   def to_s
