@@ -28,13 +28,13 @@ ActiveRecord::Schema.define(version: 20151123201416) do
   end
 
   create_table "audio_files", force: :cascade do |t|
-    t.integer "broadcast_id",       null: false
-    t.string  "path",               null: false
-    t.integer "bitrate",            null: false
-    t.integer "channels",           null: false
-    t.integer "archive_format_id",  null: false
-    t.integer "playback_format_id"
-    t.index ["archive_format_id"], name: "index_audio_files_on_archive_format_id", using: :btree
+    t.integer  "broadcast_id",       null: false
+    t.string   "path",               null: false
+    t.string   "audio_format",       null: false
+    t.integer  "bitrate",            null: false
+    t.integer  "channels",           null: false
+    t.integer  "playback_format_id"
+    t.datetime "created_at",         null: false
     t.index ["broadcast_id"], name: "index_audio_files_on_broadcast_id", using: :btree
     t.index ["playback_format_id"], name: "index_audio_files_on_playback_format_id", using: :btree
   end

@@ -64,10 +64,11 @@ class CreateModels < ActiveRecord::Migration
     create_table :audio_files do |t|
       t.references :broadcast, null: false, index: true, foreign_key: { on_delete: :restrict }
       t.string :path, null: false, unique: true
+      t.string :audio_format, null: false
       t.integer :bitrate, null: false
       t.integer :channels, null: false
-      t.references :archive_format, null: false, index: true, foreign_key: { on_delete: :restrict }
       t.references :playback_format, index: true, foreign_key: { on_delete: :nullify }
+      t.datetime :created_at, null: false
     end
   end
 

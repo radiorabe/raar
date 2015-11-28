@@ -19,20 +19,16 @@ module Downgrade
       relative = new_path(file)
       absolute = FileStore::Layout.absolute_path(relative)
       create_downgraded(file, relative, absolute) unless File.exist?(absolute)
-      super
+      remove(file)
     end
 
     private
 
     def new_path(file)
       FileStore::Layout.relative_path(file.broadcast,
-                                      audio_format(file),
+                                      file.audio_format_class,
                                       bitrate,
                                       channels)
-    end
-
-    def audio_format(file)
-      file.archive_format.audio_format_class
     end
 
     def create_downgraded(file, relative, absolute)

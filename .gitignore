@@ -17,3 +17,5 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+
+/doc/models.png

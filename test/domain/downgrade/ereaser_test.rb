@@ -9,15 +9,14 @@ module Downgrade
 
     test 'finds files with higher bitrate' do
       format = archive_formats(:unimportant_mp3)
-      format.audio_files.destroy_all
-      assert_equal [], format.audio_files.reload
+      AudioFile.destroy_all
 
       b1 = Broadcast.create!(show: shows(:klangbecken),
                              started_at: Time.zone.local(2012, 12, 12, 20),
                              finished_at: Time.zone.local(2012, 12, 12, 22))
       file  = AudioFile.create!(broadcast: b1,
-                                archive_format: format,
                                 path: 'dummy_lower',
+                                audio_format: 'mp3',
                                 bitrate: 128,
                                 channels: 1)
 
@@ -26,11 +25,11 @@ module Downgrade
                              started_at: start,
                              finished_at: start + 2.hours)
       newer  = AudioFile.create!(broadcast: b2,
-                                 archive_format: format,
                                  path: 'dummy_newer',
+                                 audio_format: 'mp3',
                                  bitrate: 224,
                                  channels: 2)
-                                                            
+
       assert_equal [file], ereaser.pending_files
     end
 

@@ -18,7 +18,6 @@ class ArchiveFormat < ActiveRecord::Base
   belongs_to :profile
 
   has_many :downgrade_actions, dependent: :destroy
-  has_many :audio_files, dependent: :restrict_with_error
 
   validates :audio_format, :initial_bitrate, :initial_channels, presence: true
   validates :audio_format, uniqueness: { scope: :profile_id }

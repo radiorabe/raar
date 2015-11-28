@@ -5,10 +5,11 @@
 #  id                 :integer          not null, primary key
 #  broadcast_id       :integer          not null
 #  path               :string           not null
+#  audio_format       :string           not null
 #  bitrate            :integer          not null
 #  channels           :integer          not null
-#  archive_format_id  :integer          not null
 #  playback_format_id :integer
+#  created_at         :datetime         not null
 #
 
 require 'test_helper'

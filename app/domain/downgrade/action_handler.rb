@@ -28,11 +28,10 @@ module Downgrade
     end
 
     def pending_files
-      # TODO: If Profile of show changes, existing files are still downgraded by the original
-      # profile / archive_format
       AudioFile
-        .joins(:broadcast)
-        .where(archive_format_id: action.archive_format_id)
+        .joins(broadcast: { show: { profile: :archive_formats } })
+        .where(archive_formats: { id: action.archive_format_id })
+        .where('audio_files.audio_format = archive_formats.audio_format')
         .where('broadcasts.started_at < ?', Time.zone.now - action.months.months)
     end
 
