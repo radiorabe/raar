@@ -24,7 +24,7 @@ class AudioFile < ActiveRecord::Base
   validate_audio_format
 
   def absolute_path
-    FileStore::Layout.absolute_path(path)
+    FileStore::Structure.new(self).absolute_path
   end
 
   def to_s

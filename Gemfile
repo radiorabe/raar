@@ -41,6 +41,10 @@ group :development do
   # gem 'listen', '~> 3.0.4'
 end
 
+group :test do
+  gem 'mocha'
+end
+
 group :metrics do
   gem 'rubocop'
 end

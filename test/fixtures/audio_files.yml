@@ -14,14 +14,14 @@
 
 info_april_best:
   broadcast: info_april
-  path: 2015/04/10/2015-05-20T110000Z_320_2.mp3
+  path: 2015/04/10/2015-04-10T110000Z_320_2.mp3
   audio_format: mp3
   bitrate: 320
   channels: 2
 
 info_april_high:
   broadcast: info_april
-  path: 2015/04/10/2015-05-20T110000Z_192_2.mp3
+  path: 2015/04/10/2015-04-10T110000Z_192_2.mp3
   audio_format: mp3
   bitrate: 192
   channels: 2
@@ -29,7 +29,7 @@ info_april_high:
 
 info_april_low:
   broadcast: info_april
-  path: 2015/04/10/2015-05-20T110000Z_96_1.mp3
+  path: 2015/04/10/2015-04-10T110000Z_96_1.mp3
   audio_format: mp3
   bitrate: 96
   channels: 1

@@ -40,7 +40,7 @@ module Downgrade
     end
 
     def remove(file)
-      FileUtils.rm_f(file.absolute_path)
+      FileUtils.rm(file.absolute_path) if File.exist?(file.absolute_path)
       file.destroy!
     end
 
