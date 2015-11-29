@@ -22,10 +22,7 @@ module Downgrade
 
     def process_files
       pending_files.find_each do |file|
-        # TODO: handle exceptions for each file individually for a more robust processing.
-        AudioFile.transaction do
-          handle(file)
-        end
+        safe_handle(file)
       end
     end
 
@@ -39,6 +36,16 @@ module Downgrade
 
     def handle(file)
       remove(file)
+    end
+
+    private
+
+    def safe_handle(file)
+      AudioFile.transaction do
+        handle(file)
+      end
+    rescue StandardError => e
+      ExceptionNotifier.notify_exception(e, data: { audio_file: file, downgrade_action: action })
     end
 
     def remove(file)

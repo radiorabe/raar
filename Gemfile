@@ -11,6 +11,7 @@ gem 'rack', github: 'rack/rack'
 gem 'sqlite3'
 gem 'pg'
 
+gem 'exception_notification'
 gem 'streamio-ffmpeg'
 gem 'rails-i18n'
 

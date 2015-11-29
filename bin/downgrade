@@ -1,8 +1,14 @@
 #!/usr/bin/env ruby
 
 # Runs all pending downgrade actions on the archive.
+# Schedule in cron with `bash -l -c 'app_root/bin/downgrade >> /dev/null 2>&1'`
+# and make sure all required environment variables are set.
 
 require File.expand_path('../../config/environment', __FILE__)
 
-Downgrade::Downgrader.run
-Downgrade::Ereaser.run
+begin
+  Downgrade::Downgrader.run
+  Downgrade::Ereaser.run
+rescue Exception => e
+  ExceptionNotifier.notify_exception(e)
+end
