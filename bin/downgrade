@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+# Runs all pending downgrade actions on the archive.
+
+require File.expand_path('../../config/environment', __FILE__)
+
+Downgrade::Downgrader.run
+Downgrade::Ereaser.run

@@ -23,7 +23,9 @@ module Downgrade
     def process_files
       pending_files.find_each do |file|
         # TODO: handle exceptions for each file individually for a more robust processing.
-        handle(file)
+        AudioFile.transaction do
+          handle(file)
+        end
       end
     end
 
@@ -42,6 +44,12 @@ module Downgrade
     def remove(file)
       FileUtils.rm(file.absolute_path) if File.exist?(file.absolute_path)
       file.destroy!
+      inform(file, "Deleted #{file.audio_format}/#{file.bitrate}/#{file.channels}")
+    end
+
+    def inform(file, action)
+      msg = "#{action} of #{file.broadcast.show} at #{file.broadcast.started_at.to_s(:db)}"
+      Rails.logger.info("#{Time.zone.now.to_s(:db)} #{msg}")
     end
 
   end
