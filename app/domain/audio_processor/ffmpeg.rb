@@ -4,9 +4,9 @@ module AudioProcessor
   # Specific processor class working with FFmpeg backend.
   class Ffmpeg < Base
 
-    def downgrade(new_path, bitrate, channels)
+    def transcode(new_path, cod = codec, bitrate, channels)
       audio.transcode(new_path,
-                      audio_codec: codec,
+                      audio_codec: cod,
                       audio_bitrate: bitrate,
                       audio_channels: channels,
                       validate: true)

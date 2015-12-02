@@ -8,7 +8,7 @@ module AudioProcessor
       @file = file
     end
 
-    def downgrade(_new_path, _bitrate, _channels)
+    def transcode(_new_path, _codec = codec, _bitrate, _channels)
       fail(NotImplementedError)
     end
 

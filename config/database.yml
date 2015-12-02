@@ -30,3 +30,14 @@ test:
 production:
   <<: *default
   database: <%= ENV['RAILS_DB_NAME'] || 'db/production.sqlite3' %>
+
+# Connection configuration to read show information out of the airtime database
+airtime:
+  adapter: <%= ENV['RAILS_AIRTIME_ADAPTER'] || 'sqlite3' %>
+  pool: 5
+  timeout: 5000
+  username: <%= ENV['RAILS_AIRTIME_USERNAME'] %>
+  password: <%= ENV['RAILS_AIRTIME_PASSWORD'] %>
+  port: <%= ENV['RAILS_AIRTIME_PORT'] %>
+  host: <%= ENV['RAILS_AIRTIME_HOST'] %>
+  database: <%= ENV['RAILS_AIRTIME_NAME'] || 'db/airtime.sqlite3' %>

@@ -19,6 +19,7 @@ module FileStore
     end
 
     def relative_path
+      # TODO: include duration in minutes?
       File.join(utc.year.to_s,
                 format('%02d', utc.month),
                 format('%02d', utc.day),

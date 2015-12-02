@@ -22,7 +22,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     test 'downgrades mp3 file' do
       file = Tempfile.new(['low', '.mp3'])
       begin
-        low = processor(:klangbecken_mai1_best).downgrade(file.path, 56, 1)
+        low = processor(:klangbecken_mai1_best).transcode(file.path, 56, 1)
         assert_equal 56, low.audio_bitrate
         assert_equal 1, low.audio_channels
       ensure

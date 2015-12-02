@@ -18,7 +18,7 @@ module Downgrade
                                channels: 2)
       home = FileStore::Structure.home
       path = File.join('2012', '12', '12', '2012-12-12T190000Z_192_2.mp3')
-      AudioProcessor::Ffmpeg.any_instance.expects(:downgrade).with(File.join(home, path), 192, 2)
+      AudioProcessor::Ffmpeg.any_instance.expects(:transcode).with(File.join(home, path), 192, 2)
       assert_no_difference('AudioFile.count') do
         downgrader.handle(file)
       end
@@ -33,7 +33,7 @@ module Downgrade
       File.expects(:exist?).with(lower.absolute_path).returns(true)
       File.expects(:exist?).with(higher.absolute_path).returns(true)
       FileUtils.expects(:rm).with(higher.absolute_path)
-      AudioProcessor::Ffmpeg.any_instance.expects(:downgrade).never
+      AudioProcessor::Ffmpeg.any_instance.expects(:transcode).never
       assert_difference('AudioFile.count', -1) do
         downgrader.handle(higher)
       end
@@ -47,7 +47,7 @@ module Downgrade
       File.expects(:exist?).with(lower.absolute_path).returns(false)
       File.expects(:exist?).with(higher.absolute_path).returns(false)
       AudioProcessor::Ffmpeg.any_instance
-        .expects(:downgrade)
+        .expects(:transcode)
         .with(File.join(home, lower.path), 192, 2)
       assert_difference('AudioFile.count', -1) do
         downgrader.handle(higher)
@@ -60,7 +60,7 @@ module Downgrade
       lower = audio_files(:info_april_high)
       File.expects(:exist?).with(lower.absolute_path).returns(true)
       File.expects(:exist?).with(higher.absolute_path).returns(false)
-      AudioProcessor::Ffmpeg.any_instance.expects(:downgrade).never
+      AudioProcessor::Ffmpeg.any_instance.expects(:transcode).never
       lower.destroy!
       assert_no_difference('AudioFile.count') do
         downgrader.handle(higher)
