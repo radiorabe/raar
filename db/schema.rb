@@ -94,7 +94,6 @@ ActiveRecord::Schema.define(version: 20151123201416) do
   end
 
   add_foreign_key "archive_formats", "profiles", on_delete: :cascade
-  add_foreign_key "audio_files", "archive_formats", on_delete: :restrict
   add_foreign_key "audio_files", "broadcasts", on_delete: :restrict
   add_foreign_key "audio_files", "playback_formats", on_delete: :nullify
   add_foreign_key "broadcasts", "shows", on_delete: :restrict
