@@ -2,4 +2,6 @@
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 #
 
-Rake.application['db:fixtures:load'].invoke                
+Rake.application['db:fixtures:load'].invoke
+
+system 'sqlite3 db/airtime.sqlite3 < db/seeds/airtime_dump.sql'
