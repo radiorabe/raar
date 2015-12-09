@@ -27,6 +27,15 @@ class AudioFile < ActiveRecord::Base
     FileStore::Structure.new(self).absolute_path
   end
 
+  def generate_path
+    self.path ||= FileStore::Structure.new(self).relative_path
+  end
+
+  def with_path
+    generate_path
+    self
+  end
+
   def to_s
     path
   end

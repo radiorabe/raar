@@ -21,6 +21,14 @@ class Profile < ActiveRecord::Base
   # If we set a new default, remove flag from other instances.
   after_save :clear_defaults, if: :default
 
+  class << self
+
+    def default
+      find_by(default: true)
+    end
+
+  end
+
   def to_s
     name
   end

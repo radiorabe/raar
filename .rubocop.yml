@@ -30,5 +30,8 @@ Style/EmptyLinesAroundClassBody:
 Style/EmptyLinesAroundModuleBody:
   Enabled: false
 
+Style/GuardClause:
+  MinBodyLength: 3
+
 Rails/Delegate:
   Enabled: false

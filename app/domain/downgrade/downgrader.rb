@@ -29,9 +29,7 @@ module Downgrade
     end
 
     def target_audio_file(file)
-      AudioFile.where(target_attributes(file)).first_or_initialize.tap do |f|
-        f.path = FileStore::Structure.new(f).relative_path
-      end
+      AudioFile.where(target_attributes(file)).first_or_initialize.with_path
     end
 
     def target_attributes(file)

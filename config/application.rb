@@ -37,7 +37,8 @@ module Raar
     config.api_only = true
 
     config.to_prepare do
-      AudioProcessor.klass = AudioProcessor::Ffmpeg
+      AudioProcessor.klass ||= AudioProcessor::Ffmpeg
+      Import::BroadcastMapper.klass ||= Import::BroadcastMapper::AirtimeDb
     end
   end
 end

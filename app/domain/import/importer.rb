@@ -3,37 +3,52 @@ require 'time'
 module Import
   class Importer
 
-    attr_reader :datetime, :file
+    class << self
 
-    def initialize(files, broadcast)
-      #@datetime = datetime
-      #@file = file
+      def run(recordings, _comparator)
+        # TODO: overall exception handling, especially from metadata, files and transcoder
+        recordings = Recording.pending
+        broadcasts = BroadcastMapper.new(recordings).mapping
+        broadcasts.each { |b| new(b).run }
+        Recording.old_imported.each(&:clear_old_imported)
+        # TODO: warn if unimported recordings older than one day exist.
+      end
+
     end
 
-    def self.run(recordings, comparator)
-      # TODO overall exception handling, especially from metadata, files and transcoder
-      files = best_for_each_time(recordings.by_time)
-      files_with_broadcast = BroadcastAssigner.new(files).assign
-      files_with_broadcast.each do |f|
-        new(f).run
-        recordings.mark_imported(time)
-      end
-      recordings.clear_old_imported
+    attr_reader :broadcast, :recordings
+
+    def initialize(broadcast)
+      @broadcast = broadcast
     end
 
     def run
-      # merge or split into master file
-      # find or create show
-      # find profile
-      # create broadcast in db
-      profile.archive_formats.each do |format|
-        # create audio files db
-        AudioProcessor.new(master).transcode(
-          archive_file,
-          format.audio_format_class.key,
-          format.initial_bitrate,
-          format.initial_channels)
+      return if !broadcast.complete? || broadcast.imported?
+
+      recordings = determine_best_recordings
+      master = compose_master(recordings)
+      import_into_archive(master)
+      mark_recordings_as_imported
+    end
+
+    private
+
+    def determine_best_recordings
+      broadcast.recordings.group_by(&:datetime).collect do |_start, variants|
+        RecordingSelector.new(variants).best
       end
+    end
+
+    def compose_master(recordings)
+      RecordingComposer.new(broadcast, recordings).compose
+    end
+
+    def import_into_archive(master)
+      Archiver.new(broadcast, master).run
+    end
+
+    def mark_recordings_as_imported
+      broadcast.recordings.each(&:mark_imported)
     end
 
   end

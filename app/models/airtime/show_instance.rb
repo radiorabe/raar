@@ -1,10 +1,11 @@
 module Airtime
 
+  # rubocop:disable Metrics/LineLength
   # <column name="id" phpName="DbId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
   # <column name="description" phpName="DbDescription" type="VARCHAR" size="512" required="false" defaultValue=""/>
   # <column name="starts" phpName="DbStarts" type="TIMESTAMP" required="true"/>
   # <column name="ends" phpName="DbEnds" type="TIMESTAMP" required="true"/>
-	# <column name="show_id" phpName="DbShowId" type="INTEGER" required="true"/>
+  # <column name="show_id" phpName="DbShowId" type="INTEGER" required="true"/>
   # <column name="record" phpName="DbRecord" type="TINYINT" required="false" defaultValue="0"/>
   # <column name="rebroadcast" phpName="DbRebroadcast" type="TINYINT" required="false" defaultValue="0"/>
   # <column name="instance_id" phpName="DbOriginalShow" type="INTEGER" required="false"/>
@@ -17,7 +18,7 @@ module Airtime
   #    instances can be regenerated if we edit the show, which is unwanted behaviour. This column serves
   #    to ensure that we don't regenerate the instance. -->
   # <column name="modified_instance" phpName="DbModifiedInstance" type="BOOLEAN" required="true" defaultValue="false" />
-	# <foreign-key foreignTable="cc_show" name="cc_show_fkey" onDelete="CASCADE">
+  # <foreign-key foreignTable="cc_show" name="cc_show_fkey" onDelete="CASCADE">
   #    <reference local="show_id" foreign="id"/>
   # </foreign-key>
   # <foreign-key foreignTable="cc_show_instances" name="cc_original_show_instance_fkey" onDelete="CASCADE">
@@ -26,11 +27,10 @@ module Airtime
   # <foreign-key foreignTable="cc_files" name="cc_recorded_file_fkey" onDelete="CASCADE">
   #     <reference local="file_id" foreign="id"/>
   # </foreign-key>
+  # rubocop:enable Metrics/LineLength
   class ShowInstance < Base
 
     belongs_to :show
-
-    private
 
     # A little hack to avoid DangerousAttributeErrors with the #record column.
     # Should not create issues as we do not write to Airtime anyways.
