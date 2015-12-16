@@ -17,5 +17,6 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+/*.mp3
 
 /doc/models.png

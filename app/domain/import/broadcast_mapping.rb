@@ -1,22 +1,22 @@
 module Import
   # A simple data holder for a single broadcast.
-  class BroadcastData
+  class BroadcastMapping
 
-    attr_accessor :show_name, :show_description, :label, :details,
-                  :people, :started_at, :finished_at, :recordings,
-                  :best_recordings
+    attr_reader :show, :broadcast, :recordings
+
+    delegate :started_at, :finished_at, :duration,
+             to: :broadcast, allow_nil: true
 
     def initialize
       @recordings = []
-      @best_recordings = []
     end
 
-    def show
-      @show ||= fetch_show
+    def assign_show_attrs(attrs = {})
+      @show = fetch_show(attrs)
     end
 
-    def broadcast
-      @broadcast ||= fetch_broadcast
+    def assign_broadcast_attrs(attrs = {})
+      @broadcast = fetch_broadcast(attrs)
     end
 
     def profile
@@ -35,14 +35,10 @@ module Import
       end
     end
 
-    def duration
-      finished_at - started_at
-    end
-
-    def add_overlapping(recording)
+    def add_if_overlapping(recording)
       if overlaps?(recording)
         recordings << recording
-        recording.broadcasts_data << self
+        recording.broadcasts_mappings << self
       end
     end
 
@@ -63,21 +59,18 @@ module Import
         recording.finished_at > started_at
     end
 
-    def fetch_show
-      Show.where(name: show_name).first_or_initialize.tap do |show|
-        show.details = show_description
+    def fetch_show(attrs = {})
+      Show.where(name: attrs.fetch(:name)).first_or_initialize.tap do |show|
+        show.attributes = attrs
         show.profile ||= Profile.default
       end
     end
 
-    def fetch_broadcast
+    def fetch_broadcast(attrs = {})
       show.broadcasts
-        .where(started_at: started_at, finished_at: finished_at)
-        .first_or_initialize.tap do |bc|
-        bc.label = label
-        bc.people = people
-        bc.details = details
-      end
+        .where(started_at: attrs.fetch(:started_at), finished_at: attrs.fetch(:finished_at))
+        .first_or_initialize
+        .tap { |bc| bc.attributes = attrs }
     end
 
   end

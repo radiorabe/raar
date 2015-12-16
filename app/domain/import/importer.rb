@@ -8,22 +8,22 @@ module Import
       def run(recordings, _comparator)
         # TODO: overall exception handling, especially from metadata, files and transcoder
         recordings = Recording.pending
-        broadcasts = BroadcastMapper.new(recordings).mapping
-        broadcasts.each { |b| new(b).run }
+        mappings = BroadcastMapper.new(recordings).mappings
+        mappings.each { |b| new(b).run }
         Recording.old_imported.each(&:clear_old_imported)
         # TODO: warn if unimported recordings older than one day exist.
       end
 
     end
 
-    attr_reader :broadcast, :recordings
+    attr_reader :mapping, :recordings
 
-    def initialize(broadcast)
-      @broadcast = broadcast
+    def initialize(mapping)
+      @mapping = mapping
     end
 
     def run
-      return if !broadcast.complete? || broadcast.imported?
+      return if !mapping.complete? || mapping.imported?
 
       recordings = determine_best_recordings
       master = compose_master(recordings)
@@ -34,17 +34,17 @@ module Import
     private
 
     def determine_best_recordings
-      broadcast.recordings.group_by(&:datetime).collect do |_start, variants|
+      mapping.recordings.group_by(&:datetime).collect do |_start, variants|
         RecordingSelector.new(variants).best
       end
     end
 
     def compose_master(recordings)
-      RecordingComposer.new(broadcast, recordings).compose
+      RecordingComposer.new(mapping, recordings).compose
     end
 
     def import_into_archive(master)
-      Archiver.new(broadcast, master).run
+      Archiver.new(mapping, master).run
     end
 
     def mark_recordings_as_imported

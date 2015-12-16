@@ -8,7 +8,15 @@ module AudioProcessor
       @file = file
     end
 
-    def transcode(_new_path, _codec = codec, _bitrate, _channels)
+    def transcode(_new_path, _bitrate, _channels, _codec = codec)
+      fail(NotImplementedError)
+    end
+
+    def split(_new_path, _start, _duration)
+      fail(NotImplementedError)
+    end
+
+    def concat(_others, _new_path)
       fail(NotImplementedError)
     end
 

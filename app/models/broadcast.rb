@@ -25,6 +25,10 @@ class Broadcast < ActiveRecord::Base
     label
   end
 
+  def duration
+    finished_at - started_at
+  end
+
   private
 
   def set_show_label_if_empty

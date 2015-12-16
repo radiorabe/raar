@@ -40,11 +40,11 @@ module Import
 
     end
 
-    attr_reader :path, :broadcasts_data
+    attr_reader :path, :broadcasts_mappings
 
     def initialize(path)
       @path = path
-      @broadcasts_data = []
+      @broadcasts_mappings = []
     end
 
     def datetime
@@ -61,7 +61,7 @@ module Import
     end
 
     def mark_imported
-      if broadcasts_data.all?(&:imported?)
+      if broadcasts_mappings.all?(&:imported?)
         FileUtils.mv(path, path.gsub(/(\..+)\z/, "#{IMPORTED_SUFFIX}\1"))
       end
     end

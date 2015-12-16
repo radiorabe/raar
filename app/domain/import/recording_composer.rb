@@ -3,10 +3,10 @@ module Import
   # The recordings must overlap or correspond to the broadcast duration but must not be shorter.
   class RecordingComposer
 
-    attr_reader :broadcast, :recordings
+    attr_reader :mapping, :recordings
 
-    def initialize(broadcast, recordings)
-      @broadcast = broadcast
+    def initialize(mapping, recordings)
+      @mapping = mapping
       @recordings = recordings.sort_by(&:started_at)
     end
 
@@ -34,30 +34,30 @@ module Import
     end
 
     def first_equal?
-      first.started_at == broadcast.started_at && first.finished_at == broadcast.finished_at
+      first.started_at == mapping.started_at && first.finished_at == mapping.finished_at
     end
 
     def first_earlier_and_longer?
-      first_earlier? && first.finished_at > broadcast.finished_at
+      first_earlier? && first.finished_at > mapping.finished_at
     end
 
     def first_earlier?
-      first.started_at < broadcast.started_at
+      first.started_at < mapping.started_at
     end
 
     def last_longer?
-      last.finished_at > broadcast.finished_at
+      last.finished_at > mapping.finished_at
     end
 
     def trim_start_and_end
-      start = broadcast.started_at - first.started_at
-      finish = relative_start + broadcast.duration
+      start = mapping.started_at - first.started_at
+      finish = relative_start + mapping.duration
       proc = AudioProcessor.new(first.path)
       proc.trim(target_file, start, finish)
     end
 
     def trim_start
-      start = broadcast.started_at - first.started_at
+      start = mapping.started_at - first.started_at
       finish = first.duration
       proc = AudioProcessor.new(first.path)
       proc.trim(target_file, start, finish)
@@ -65,7 +65,7 @@ module Import
 
     def trim_end
       start = 0
-      finish = broadcast.finish_at - last.started_at
+      finish = mapping.finish_at - last.started_at
       proc = AudioProcessor.new(last.path)
       proc.trim(target_file, start, finish)
     end
