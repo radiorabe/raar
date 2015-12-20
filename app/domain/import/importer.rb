@@ -5,13 +5,12 @@ module Import
 
     class << self
 
-      def run(recordings, _comparator)
-        # TODO: overall exception handling, especially from metadata, files and transcoder
+      def run
         recordings = Recording.pending
         mappings = BroadcastMapper.new(recordings).mappings
         mappings.each { |b| new(b).run }
         Recording.old_imported.each(&:clear_old_imported)
-        # TODO: warn if unimported recordings older than one day exist.
+        # TODO: warn if unimported recordings older than one day exist.s
       end
 
     end
@@ -29,6 +28,8 @@ module Import
       master = compose_master(recordings)
       import_into_archive(master)
       mark_recordings_as_imported
+    rescue StandardError => e
+      ExceptionNotifier.notify_exception(e, data: { mapping: mapping })
     end
 
     private

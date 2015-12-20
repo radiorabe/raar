@@ -25,6 +25,7 @@ class Broadcast < ActiveRecord::Base
     label
   end
 
+  # duration in seconds
   def duration
     finished_at - started_at
   end

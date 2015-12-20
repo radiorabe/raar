@@ -2,24 +2,24 @@
 #
 # Table name: playback_formats
 #
-#  id           :integer          not null, primary key
-#  name         :string           not null
-#  description  :text
-#  audio_format :string           not null
-#  bitrate      :integer          not null
-#  channels     :integer          not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id          :integer          not null, primary key
+#  name        :string           not null
+#  description :text
+#  codec       :string           not null
+#  bitrate     :integer          not null
+#  channels    :integer          not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #
 
 low:
   name: low
-  audio_format: mp3
+  codec: mp3
   bitrate: 96
   channels: 1
 
 high:
   name: high
-  audio_format: mp3
+  codec: mp3
   bitrate: 192
   channels: 2

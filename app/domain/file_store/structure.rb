@@ -19,7 +19,6 @@ module FileStore
     end
 
     def relative_path
-      # TODO: include duration in minutes?
       File.join(utc.year.to_s,
                 format('%02d', utc.month),
                 format('%02d', utc.day),
@@ -36,12 +35,17 @@ module FileStore
       @utc ||= audio_file.broadcast.started_at.utc
     end
 
+    def duration
+      audio_file.broadcast.duration.to_i / 60
+    end
+
     def filename
-      "#{utc.iso8601.tr(':', '')}_#{audio_file.bitrate}_#{audio_file.channels}.#{extension}"
+      "#{utc.iso8601.tr(':', '')}_#{format('%03d', duration)}." \
+      "#{audio_file.bitrate}_#{audio_file.channels}.#{extension}"
     end
 
     def extension
-      audio_file.audio_format_class.file_extension
+      audio_file.audio_encoding.file_extension
     end
 
   end

@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: cc_show_instances
+#
+#  id                :integer          not null, primary key
+#  starts            :datetime         not null
+#  ends              :datetime         not null
+#  show_id           :integer          not null
+#  record            :integer          default(0)
+#  rebroadcast       :integer          default(0)
+#  instance_id       :integer
+#  file_id           :integer
+#  time_filled       :integer
+#  created           :datetime         not null
+#  last_scheduled    :datetime
+#  modified_instance :boolean          default(FALSE), not null
+#
+
 module Airtime
 
   # rubocop:disable Metrics/LineLength

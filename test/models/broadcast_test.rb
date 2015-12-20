@@ -14,9 +14,15 @@
 require 'test_helper'
 
 class BroadcastTest < ActiveSupport::TestCase
+
   test "all fixtures valid" do
     Broadcast.all.each do |e|
       assert_valid e
     end
   end
+
+  test 'duration is in seconds' do
+    assert_equal 1800, broadcasts(:info_april).duration
+  end
+
 end

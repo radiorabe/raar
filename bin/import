@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+# Imports all pending recordings that form a complete broadcast.
+# Schedule in cron with `bash -l -c 'app_root/bin/import >> /dev/null 2>&1'`
+# and make sure all required environment variables are set.
+
+require File.expand_path('../../config/environment', __FILE__)
+
+begin
+  Import::Importer.run
+rescue Exception => e
+  ExceptionNotifier.notify_exception(e)
+end

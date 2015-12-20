@@ -4,8 +4,8 @@ module AudioProcessor
   # Specific processor class working with FFmpeg backend.
   class Ffmpeg < Base
 
-    def transcode(new_path, bitrate, channels, cod = codec)
-      options = codec_options(cod, bitrate, channels)
+    def transcode(new_path, audio_format)
+      options = codec_options(audio_format)
       audio.transcode(new_path,
                       options.merge(validate: true))
     end
@@ -64,24 +64,13 @@ module AudioProcessor
       end
     end
 
-    def codec_options(codec, bitrate, channels)
-      codec = normalize_codec(codec)
+    def codec_options(audio_format)
       options = {
-        audio_codec: codec,
-        audio_bitrate: bitrate,
-        audio_channels: channels }
-      options.delete(:bitrate) if codec == 'flac'
+        audio_codec: audio_format.codec,
+        audio_bitrate: audio_format.bitrate,
+        audio_channels: audio_format.channels }
+      options.delete(:audio_bitrate) if audio_format.codec == 'flac'
       options
-    end
-
-    def normalize_codec(codec)
-      if codec.is_a?(Class) && codec < AudioFormat::Base
-        codec.key
-      elsif codec.is_a?(String)
-        codec
-      else
-        fail(ArgumentError, "Unknown codec #{codec}")
-      end
     end
 
   end

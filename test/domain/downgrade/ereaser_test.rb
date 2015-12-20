@@ -16,7 +16,7 @@ module Downgrade
                              finished_at: Time.zone.local(2012, 12, 12, 22))
       file  = AudioFile.create!(broadcast: b1,
                                 path: 'dummy_lower',
-                                audio_format: 'mp3',
+                                codec: 'mp3',
                                 bitrate: 128,
                                 channels: 1)
 
@@ -26,7 +26,7 @@ module Downgrade
                              finished_at: start + 2.hours)
       newer  = AudioFile.create!(broadcast: b2,
                                  path: 'dummy_newer',
-                                 audio_format: 'mp3',
+                                 codec: 'mp3',
                                  bitrate: 224,
                                  channels: 2)
 

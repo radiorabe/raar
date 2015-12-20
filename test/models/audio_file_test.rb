@@ -5,7 +5,7 @@
 #  id                 :integer          not null, primary key
 #  broadcast_id       :integer          not null
 #  path               :string           not null
-#  audio_format       :string           not null
+#  codec              :string           not null
 #  bitrate            :integer          not null
 #  channels           :integer          not null
 #  playback_format_id :integer

@@ -6,15 +6,15 @@ class AudioGenerator
     AudioFile.find_each do |f|
       unless File.exists?(f.absolute_path)
         FileUtils.mkdir_p(File.dirname(f.absolute_path))
-        create_silent_file(f.audio_format, f.bitrate, f.absolute_path)
+        create_silent_file(f.audio_format, f.absolute_path)
       end
     end
   end
 
-  def create_silent_file(audio_format, bitrate, path, duration = 3)
+  def create_silent_file(audio_format, path, duration = 3)
     cmd = "ffmpeg -y -f lavfi -i anullsrc=r=44100:cl=stereo -t #{duration} " \
-          "-acodec #{audio_format} -v error "
-    cmd += "-b:a #{bitrate}k " if bitrate
+          "-acodec #{audio_format.codec} -v error "
+    cmd += "-b:a #{audio_format.bitrate}k " if audio_format.bitrate
     cmd += path
     Open3.popen3(cmd) do |i, o, e, t|
       i.close

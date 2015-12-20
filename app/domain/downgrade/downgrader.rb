@@ -44,8 +44,8 @@ module Downgrade
       return if File.exist?(target.absolute_path)
 
       processor = AudioProcessor.new(source.absolute_path)
-      processor.transcode(target.absolute_path, target.bitrate, target.channels)
-      inform(target, "Downgraded #{target.audio_format} to #{target.bitrate}/#{target.channels}")
+      processor.transcode(target.absolute_path, target.audio_format)
+      inform(target, "Downgraded #{target.codec} to #{target.bitrate}/#{target.channels}")
     end
 
     def create_database_entry(target)

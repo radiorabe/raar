@@ -13,12 +13,16 @@ module Downgrade
                              finished_at: Time.zone.local(2012, 12, 12, 22))
       file = AudioFile.create!(broadcast: b1,
                                path: 'dummy_higher',
-                               audio_format: 'mp3',
+                               codec: 'mp3',
                                bitrate: 224,
                                channels: 2)
       home = FileStore::Structure.home
-      path = File.join('2012', '12', '12', '2012-12-12T190000Z_192_2.mp3')
-      AudioProcessor::Ffmpeg.any_instance.expects(:transcode).with(File.join(home, path), 192, 2)
+      path = File.join('2012', '12', '12', '2012-12-12T190000Z_120.192_2.mp3')
+
+      AudioProcessor::Ffmpeg.any_instance.
+        expects(:transcode).
+        with(File.join(home, path), AudioFormat.new('mp3', 192, 2))
+
       assert_no_difference('AudioFile.count') do
         downgrader.handle(file)
       end
@@ -30,10 +34,12 @@ module Downgrade
     test 'just deletes higher-bitrate file when lower-bitrate already exists' do
       higher = audio_files(:info_april_best)
       lower = audio_files(:info_april_high)
+
       File.expects(:exist?).with(lower.absolute_path).returns(true)
       File.expects(:exist?).with(higher.absolute_path).returns(true)
       FileUtils.expects(:rm).with(higher.absolute_path)
       AudioProcessor::Ffmpeg.any_instance.expects(:transcode).never
+
       assert_difference('AudioFile.count', -1) do
         downgrader.handle(higher)
       end
@@ -44,11 +50,13 @@ module Downgrade
       higher = audio_files(:info_april_best)
       lower = audio_files(:info_april_high)
       home = FileStore::Structure.home
+
       File.expects(:exist?).with(lower.absolute_path).returns(false)
       File.expects(:exist?).with(higher.absolute_path).returns(false)
       AudioProcessor::Ffmpeg.any_instance
         .expects(:transcode)
-        .with(File.join(home, lower.path), 192, 2)
+        .with(File.join(home, lower.path), AudioFormat.new('mp3', 192, 2))
+
       assert_difference('AudioFile.count', -1) do
         downgrader.handle(higher)
       end
@@ -58,16 +66,19 @@ module Downgrade
     test 're-creates database entry if lower-bitrate file exists' do
       higher = audio_files(:info_april_best)
       lower = audio_files(:info_april_high)
+
       File.expects(:exist?).with(lower.absolute_path).returns(true)
       File.expects(:exist?).with(higher.absolute_path).returns(false)
       AudioProcessor::Ffmpeg.any_instance.expects(:transcode).never
+
       lower.destroy!
+
       assert_no_difference('AudioFile.count') do
         downgrader.handle(higher)
       end
       assert !AudioFile.where(id: higher.id).exists?
       assert AudioFile.where(broadcast_id: lower.broadcast_id,
-                             audio_format: 'mp3',
+                             codec: 'mp3',
                              bitrate: 192,
                              channels: 2).exists?
     end
@@ -78,17 +89,17 @@ module Downgrade
                              finished_at: Time.zone.local(2012, 12, 12, 22))
       lower  = AudioFile.create!(broadcast: b1,
                                  path: 'dummy_lower',
-                                 audio_format: 'mp3',
+                                 codec: 'mp3',
                                  bitrate: 128,
                                  channels: 1)
       same   = AudioFile.create!(broadcast: b1,
                                  path: 'dummy_same',
-                                 audio_format: 'mp3',
+                                 codec: 'mp3',
                                  bitrate: 192,
                                  channels: 2)
       higher = AudioFile.create!(broadcast: b1,
                                  path: 'dummy_higher',
-                                 audio_format: 'mp3',
+                                 codec: 'mp3',
                                  bitrate: 224,
                                  channels: 2)
       start = Time.zone.now - action.months.months + 1.day
@@ -97,7 +108,7 @@ module Downgrade
                              finished_at: start + 2.hours)
       newer  = AudioFile.create!(broadcast: b2,
                                  path: 'dummy_newer',
-                                 audio_format: 'mp3',
+                                 codec: 'mp3',
                                  bitrate: 224,
                                  channels: 2)
       b3 = Broadcast.create!(show: shows(:klangbecken),
@@ -105,7 +116,7 @@ module Downgrade
                              finished_at: Time.zone.local(2012, 12, 13, 8))
       different  = AudioFile.create!(broadcast: b3,
                                      path: 'dummy_different_profile',
-                                     audio_format: 'mp3',
+                                     codec: 'mp3',
                                      bitrate: 224,
                                      channels: 2)
       assert_equal [higher], downgrader.pending_files

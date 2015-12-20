@@ -1,11 +1,11 @@
-module AudioFormat
+module AudioEncoding
   class Base
 
     class_attribute :bitrates, :channels, :file_extension
 
     class << self
 
-      def key
+      def codec
         name.demodulize.underscore
       end
 

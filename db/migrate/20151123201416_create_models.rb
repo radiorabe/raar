@@ -21,7 +21,7 @@ class CreateModels < ActiveRecord::Migration
 
     create_table :archive_formats do |t|
       t.references :profile, null: false, index: true, foreign_key: { on_delete: :cascade }
-      t.string :audio_format, null: false
+      t.string :codec, null: false
       t.integer :initial_bitrate, null: false
       t.integer :initial_channels, null: false
       t.integer :max_public_bitrate
@@ -39,7 +39,7 @@ class CreateModels < ActiveRecord::Migration
     create_table :playback_formats do |t|
       t.string :name, null: false, unique: true
       t.text :description
-      t.string :audio_format, null: false
+      t.string :codec, null: false
       t.integer :bitrate, null: false
       t.integer :channels, null: false
 
@@ -64,7 +64,7 @@ class CreateModels < ActiveRecord::Migration
     create_table :audio_files do |t|
       t.references :broadcast, null: false, index: true, foreign_key: { on_delete: :restrict }
       t.string :path, null: false, unique: true
-      t.string :audio_format, null: false
+      t.string :codec, null: false
       t.integer :bitrate, null: false
       t.integer :channels, null: false
       t.references :playback_format, index: true, foreign_key: { on_delete: :nullify }

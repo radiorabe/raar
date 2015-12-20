@@ -14,13 +14,14 @@ class DowngradeAction < ActiveRecord::Base
 
   belongs_to :archive_format
 
+  composed_of_audio_format
+
   validates :months,
             presence: true,
             uniqueness: { scope: :archive_format_id },
             numericality: { only_integer: true, greater_than: 0, allow_blank: true }
   validates :channels, presence: { if: :bitrate }
-  validate_audio_format
 
-  delegate :audio_format, to: :archive_format
+  delegate :codec, to: :archive_format
 
 end

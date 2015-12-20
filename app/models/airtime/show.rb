@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: cc_show
+#
+#  id                             :integer          not null, primary key
+#  name                           :string(255)      not null
+#  url                            :string(255)
+#  genre                          :string(255)
+#  description                    :string(512)
+#  color                          :string(6)
+#  background_color               :string(6)
+#  live_stream_using_airtime_auth :boolean          default(FALSE)
+#  live_stream_using_custom_auth  :boolean          default(FALSE)
+#  live_stream_user               :string(255)
+#  live_stream_pass               :string(255)
+#  linked                         :boolean          default(FALSE), not null
+#  is_linkable                    :boolean          default(TRUE), not null
+#
+
 module Airtime
 
   # rubocop:disable Metrics/LineLength

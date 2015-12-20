@@ -10,33 +10,50 @@ module Import
     end
 
     def run
-      create_archive_files
-      mapping.persist!
+      AudioFile.transaction do
+        create_archive_files
+        mapping.persist!
+      end
     end
 
+    private
+
     def create_archive_files
-      # TODO: handle playback formats and merge with archive formats
-      mapping.profile.archive_formats.each do |format|
+      audio_formats.each do |format|
         file = build_audio_file(format)
+        link_to_playback_format(file)
         transcode(file)
         add_tags(file)
       end
     end
 
+    def audio_formats
+      (archive_formats + playback_formats).collect(&:audio_format).uniq
+    end
+
     def build_audio_file(format)
       mapping.broadcast.audio_files
-        .build(audio_format: format.audio_format,
-               bitrate: format.initial_bitrate,
-               channels: format.initial_channels)
+        .build(audio_format: format)
         .with_path
+    end
+
+    def link_to_playback_format(file)
+      file.playback_format =
+        playback_formats.detect { |f| f.audio_format == file.audio_format }
     end
 
     def transcode(audio_file)
       AudioProcessor.new(master).transcode(
         audio_file.absolute_path,
-        audio_file.bitrate,
-        audio_file.channels,
-        audio_file.audio_format_class)
+        audio_file.audio_format)
+    end
+
+    def archive_formats
+      mapping.profile.archive_formats
+    end
+
+    def playback_formats
+      @playback_formats ||= PlaybackFormat.all
     end
 
     def add_tags(_file)

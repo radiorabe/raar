@@ -5,7 +5,7 @@
 #  id                 :integer          not null, primary key
 #  broadcast_id       :integer          not null
 #  path               :string           not null
-#  audio_format       :string           not null
+#  codec              :string           not null
 #  bitrate            :integer          not null
 #  channels           :integer          not null
 #  playback_format_id :integer
@@ -19,9 +19,10 @@ class AudioFile < ActiveRecord::Base
   belongs_to :broadcast
   belongs_to :playback_format, optional: true
 
+  composed_of_audio_format
+
   validates :path, :bitrate, :channels, presence: true
   validates :path, uniqueness: true
-  validate_audio_format
 
   def absolute_path
     FileStore::Structure.new(self).absolute_path

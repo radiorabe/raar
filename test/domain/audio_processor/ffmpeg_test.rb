@@ -22,7 +22,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     test 'downgrades mp3 file' do
       file = Tempfile.new(['low', '.mp3'])
       begin
-        low = processor(:klangbecken_mai1_best).transcode(file.path, 56, 1)
+        low = processor(:klangbecken_mai1_best).transcode(file.path, AudioFormat.new('mp3', 56, 1))
         assert_equal 56, low.audio_bitrate
         assert_equal 1, low.audio_channels
       ensure
@@ -60,10 +60,10 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     test 'converts flac to mp3' do
       flac = Tempfile.new(['input', '.flac'])
       mp3 = Tempfile.new(['output', '.mp3'])
-      AudioGenerator.new.create_silent_file('flac', nil, flac.path)
+      AudioGenerator.new.create_silent_file(AudioFormat.new('flac', nil, 2), flac.path)
 
       begin
-        output = AudioProcessor::Ffmpeg.new(flac.path).transcode(mp3.path, 56, 2, AudioFormat::Mp3)
+        output = AudioProcessor::Ffmpeg.new(flac.path).transcode(mp3.path, AudioFormat.new('mp3', 56, 2))
         assert_equal 56, output.audio_bitrate
         assert_equal 2, output.audio_channels
         assert_equal 'mp3', output.audio_codec

@@ -2,15 +2,24 @@
 module WithAudioFormat
   extend ActiveSupport::Concern
 
-  def audio_format_class
-    AudioFormat.get(audio_format)
+  def audio_encoding
+    AudioEncoding.fetch(codec)
   end
 
   # Methods for validating the audio format attributes.
   module ClassMethods
 
+    def composed_of_audio_format(bitrate_attr = :bitrate, channels_attr = :channels)
+      composed_of :audio_format,
+                  mapping: [%w(codec codec),
+                            [bitrate_attr, :bitrate],
+                            [channels_attr, :channels]]
+
+      validate_audio_format(bitrate_attr, channels_attr)
+    end
+
     def validate_audio_format(bitrate_attr = :bitrate, channels_attr = :channels)
-      validates :audio_format, inclusion: AudioFormat.list.map(&:key)
+      validates :codec, inclusion: AudioEncoding.list.map(&:codec)
 
       validates bitrate_attr, channels_attr,
                 numericality: { only_integer: true, greater_than: 0, allow_blank: true }
@@ -22,13 +31,13 @@ module WithAudioFormat
 
     def validate_bitrate(bitrate_attr)
       validates bitrate_attr,
-                inclusion: { in: -> (e) { e.audio_format_class.try(:bitrates) || [] },
+                inclusion: { in: -> (e) { e.audio_encoding.try(:bitrates) || [] },
                              allow_blank: true }
     end
 
     def validate_channels(channels_attr)
       validates channels_attr,
-                inclusion: { in: -> (e) { e.audio_format_class.try(:channels) || [] },
+                inclusion: { in: -> (e) { e.audio_encoding.try(:channels) || [] },
                              allow_blank: true }
     end
 

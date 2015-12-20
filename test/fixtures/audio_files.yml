@@ -5,7 +5,7 @@
 #  id                 :integer          not null, primary key
 #  broadcast_id       :integer          not null
 #  path               :string           not null
-#  audio_format       :string           not null
+#  codec              :string           not null
 #  bitrate            :integer          not null
 #  channels           :integer          not null
 #  playback_format_id :integer
@@ -14,55 +14,55 @@
 
 info_april_best:
   broadcast: info_april
-  path: 2013/04/10/2013-04-10T110000Z_320_2.mp3
-  audio_format: mp3
+  path: 2013/04/10/2013-04-10T110000Z_030.320_2.mp3
+  codec: mp3
   bitrate: 320
   channels: 2
 
 info_april_high:
   broadcast: info_april
-  path: 2013/04/10/2013-04-10T110000Z_192_2.mp3
-  audio_format: mp3
+  path: 2013/04/10/2013-04-10T110000Z_030.192_2.mp3
+  codec: mp3
   bitrate: 192
   channels: 2
   playback_format: high
 
 info_april_low:
   broadcast: info_april
-  path: 2013/04/10/2013-04-10T110000Z_96_1.mp3
-  audio_format: mp3
+  path: 2013/04/10/2013-04-10T110000Z_030.96_1.mp3
+  codec: mp3
   bitrate: 96
   channels: 1
   playback_format: low
 
 g9s_mai_high:
   broadcast: g9s_mai
-  path: 2013/05/20/2013-05-20T200000Z_192_2.mp3
-  audio_format: mp3
+  path: 2013/05/20/2013-05-20T200000Z_120.192_2.mp3
+  codec: mp3
   bitrate: 192
   channels: 2
   playback_format: high
 
 g9s_mai_low:
   broadcast: g9s_mai
-  path: 2013/05/20/2013-05-20T200000Z_128_2.mp3
-  audio_format: mp3
+  path: 2013/05/20/2013-05-20T200000Z_120.128_2.mp3
+  codec: mp3
   bitrate: 128
   channels: 2
   playback_format: low
 
 klangbecken_mai1_best:
   broadcast: klangbecken_mai1
-  path: 2013/05/20/2013-05-20T113000Z_192_2.mp3
-  audio_format: mp3
+  path: 2013/05/20/2013-05-20T113000Z_510.192_2.mp3
+  codec: mp3
   bitrate: 192
   channels: 2
   playback_format: high
 
 klangbecken_mai1_low:
   broadcast: klangbecken_mai1
-  path: 2013/05/20/2013-05-20T113000Z_96_1.mp3
-  audio_format: mp3
+  path: 2013/05/20/2013-05-20T113000Z_510.96_1.mp3
+  codec: mp3
   bitrate: 96
   channels: 1
   playback_format: low

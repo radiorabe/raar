@@ -30,7 +30,7 @@ module Downgrade
       AudioFile
         .joins(broadcast: { show: { profile: :archive_formats } })
         .where(archive_formats: { id: action.archive_format_id })
-        .where('audio_files.audio_format = archive_formats.audio_format')
+        .where('audio_files.codec = archive_formats.codec')
         .where('broadcasts.started_at < ?', Time.zone.now - action.months.months)
     end
 
