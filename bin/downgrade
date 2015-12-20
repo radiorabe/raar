@@ -6,9 +6,4 @@
 
 require File.expand_path('../../config/environment', __FILE__)
 
-begin
-  Downgrade::Downgrader.run
-  Downgrade::Ereaser.run
-rescue Exception => e
-  ExceptionNotifier.notify_exception(e)
-end
+Downgrade.run

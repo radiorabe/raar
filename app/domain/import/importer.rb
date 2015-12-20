@@ -1,21 +1,7 @@
-require 'time'
-
 module Import
   class Importer
 
-    class << self
-
-      def run
-        recordings = Recording.pending
-        mappings = BroadcastMapper.new(recordings).mappings
-        mappings.each { |b| new(b).run }
-        Recording.old_imported.each(&:clear_old_imported)
-        # TODO: warn if unimported recordings older than one day exist.s
-      end
-
-    end
-
-    attr_reader :mapping, :recordings
+    attr_reader :mapping
 
     def initialize(mapping)
       @mapping = mapping
@@ -36,12 +22,12 @@ module Import
 
     def determine_best_recordings
       mapping.recordings.group_by(&:datetime).collect do |_start, variants|
-        RecordingSelector.new(variants).best
+        Recording::Chooser.new(variants).best
       end
     end
 
     def compose_master(recordings)
-      RecordingComposer.new(mapping, recordings).compose
+      Recording::Composer.new(mapping, recordings).compose
     end
 
     def import_into_archive(master)

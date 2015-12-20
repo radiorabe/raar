@@ -38,7 +38,7 @@ module Raar
 
     config.to_prepare do
       AudioProcessor.klass ||= AudioProcessor::Ffmpeg
-      Import::BroadcastMapper.klass ||= Import::BroadcastMapper::AirtimeDb
+      Import::BroadcastMapping::Builder.klass ||= Import::BroadcastMapping::Builder::AirtimeDb
     end
   end
 end

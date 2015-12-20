@@ -12,7 +12,7 @@ module AudioProcessor
       fail(NotImplementedError)
     end
 
-    def split(_new_path, _start, _duration)
+    def trim(_new_path, _start, _duration)
       fail(NotImplementedError)
     end
 

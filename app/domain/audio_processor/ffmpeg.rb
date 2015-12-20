@@ -10,7 +10,7 @@ module AudioProcessor
                       options.merge(validate: true))
     end
 
-    def split(new_path, start, duration)
+    def trim(new_path, start, duration)
       audio.transcode(new_path,
                       seek_time: start,
                       duration: duration,

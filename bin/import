@@ -6,8 +6,4 @@
 
 require File.expand_path('../../config/environment', __FILE__)
 
-begin
-  Import::Importer.run
-rescue Exception => e
-  ExceptionNotifier.notify_exception(e)
-end
+Import.run

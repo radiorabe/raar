@@ -30,10 +30,10 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       end
     end
 
-    test 'splits mp3 file' do
+    test 'trims mp3 file' do
       file = Tempfile.new(['part', '.mp3'])
       begin
-        part = processor(:klangbecken_mai1_best).split(file.path, 1, 1)
+        part = processor(:klangbecken_mai1_best).trim(file.path, 1, 1)
         assert_equal 1, part.duration.round
         assert_equal 192, part.audio_bitrate
       ensure
