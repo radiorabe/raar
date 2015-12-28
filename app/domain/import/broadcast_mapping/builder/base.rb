@@ -11,7 +11,7 @@ module Import
 
         def initialize(recordings)
           check_intervals(recordings)
-          @recordings = recordings.sort_by(&:datetime)
+          @recordings = recordings.sort_by(&:started_at)
         end
 
         def run
@@ -25,7 +25,7 @@ module Import
         end
 
         def check_intervals(recordings)
-          recordings.group_by(&:datetime).each do |time, variants|
+          recordings.group_by(&:started_at).each do |time, variants|
             durations = variants.collect(&:duration).uniq
             unless durations.size == 1
               fail(ArgumentError,

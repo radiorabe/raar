@@ -13,15 +13,12 @@ module Import
       end
 
       def compose
-        # TODO: where to put trimmed/merged files? how to manage the file references?
         if first_equal?
           first.path
         elsif first_earlier_and_longer?
           trim_start_and_end
         else
-          trim_start if first_earlier?
-          trim_end if last_longer?
-          merge if recordings.size > 1
+          merge_list
         end
       end
 
@@ -40,7 +37,8 @@ module Import
       end
 
       def first_earlier_and_longer?
-        first_earlier? && first.finished_at > mapping.finished_at
+        first.started_at <= mapping.started_at &&
+          first.finished_at >= mapping.finished_at
       end
 
       def first_earlier?
@@ -52,27 +50,53 @@ module Import
       end
 
       def trim_start_and_end
+        target_file = new_tempfile
         start = mapping.started_at - first.started_at
         finish = relative_start + mapping.duration
         proc = AudioProcessor.new(first.path)
         proc.trim(target_file, start, finish)
+        target_file
       end
 
-      def trim_start
+      def merge_list
+        list = recordings.collect(&:path)
+        trim_start(list) if first_earlier?
+        trim_end(list) if last_longer?
+
+        if recordings.size > 1
+          merge(list)
+        else
+          list.first
+        end
+      end
+
+      def trim_start(list)
+        target_file = new_tempfile
         start = mapping.started_at - first.started_at
         finish = first.duration
         proc = AudioProcessor.new(first.path)
         proc.trim(target_file, start, finish)
+        list[0] = target_file
       end
 
-      def trim_end
+      def trim_end(list)
+        target_file = new_tempfile
         start = 0
-        finish = mapping.finish_at - last.started_at
-        proc = AudioProcessor.new(last.path)
+        finish = mapping.finished_at - last.started_at
+        proc = AudioProcessor.new(list[-1].path)
         proc.trim(target_file, start, finish)
+        list[-1] = target_file
       end
 
-      def merge
+      def merge(list)
+        target_file = new_tempfile
+        proc = AudioProcessor.new(list[0])
+        proc.concat(target_file, list[1..-1])
+        target_file
+      end
+
+      def new_tempfile
+        Tempfile.new(['master', File.extname(first.path)])
       end
 
     end

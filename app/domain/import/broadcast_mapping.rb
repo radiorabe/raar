@@ -55,7 +55,7 @@ module Import
     private
 
     def overlaps?(recording)
-      recording.datetime < finished_at &&
+      recording.started_at < finished_at &&
         recording.finished_at > started_at
     end
 

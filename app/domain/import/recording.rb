@@ -17,17 +17,20 @@ module Import
       @broadcasts_mappings = []
     end
 
-    def datetime
-      @datetime ||= Time.strptime(datetime_duration_parts[1], DATE_TIME_FORMAT)
+    def started_at
+      @started_at ||= Time.strptime(datetime_duration_parts[1], DATE_TIME_FORMAT)
     end
-    alias_method :started_at, :datetime
 
     def finished_at
-      datetime + duration.minutes
+      started_at + audio_duration.seconds
     end
 
-    def duration # in minutes
-      @duration ||= datetime_duration_parts[2].to_i
+    def duration # in seconds
+      @duration ||= datetime_duration_parts[2].to_i * 60
+    end
+
+    def audio_duration # in seconds
+      @audio_duration ||= AudioProcessor.new(path).duration
     end
 
     def mark_imported

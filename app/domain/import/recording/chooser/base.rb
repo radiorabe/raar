@@ -18,9 +18,7 @@ module Import
 
         def by_audio_length
           variants.sort_by do |v|
-            declared_duration = v.duration * 60
-            audio_duration = AudioProcessor.new(v.path).duration
-            audio_duration > declared_duration ? declared_duration : audio_duration
+            v.audio_duration > v.duration ? v.duration : v.audio_duration
           end
         end
 

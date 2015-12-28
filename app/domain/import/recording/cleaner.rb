@@ -22,7 +22,7 @@ module Import
       private
 
       def older_than?(recording, days)
-        recording.datetime.to_date < Time.zone.today - days
+        recording.started_at.to_date < Time.zone.today - days
       end
 
       def days_to_keep_imported

@@ -16,7 +16,7 @@ module AudioProcessor
       fail(NotImplementedError)
     end
 
-    def concat(_others, _new_path)
+    def concat(_new_path, _others)
       fail(NotImplementedError)
     end
 

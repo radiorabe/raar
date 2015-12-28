@@ -21,7 +21,7 @@ module Import
     private
 
     def determine_best_recordings
-      mapping.recordings.group_by(&:datetime).collect do |_start, variants|
+      mapping.recordings.group_by(&:started_at).collect do |_start, variants|
         Recording::Chooser.new(variants).best
       end
     end
