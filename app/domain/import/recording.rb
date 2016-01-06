@@ -18,7 +18,7 @@ module Import
     end
 
     def started_at
-      @started_at ||= Time.strptime(datetime_duration_parts[1], DATE_TIME_FORMAT)
+      @started_at ||= Time.strptime(datetime_duration_parts[1], DATE_TIME_FORMAT).in_time_zone
     end
 
     def finished_at
@@ -34,8 +34,8 @@ module Import
     end
 
     def mark_imported
-      if broadcasts_mappings.all?(&:imported?)
-        FileUtils.mv(path, path.gsub(/(\..+)\z/, "#{IMPORTED_SUFFIX}\1"))
+      if broadcasts_mappings.present? && broadcasts_mappings.all?(&:imported?)
+        FileUtils.mv(path, path.gsub(/(\..+)\z/, "#{IMPORTED_SUFFIX}\\1"))
       end
     end
 
@@ -43,7 +43,7 @@ module Import
 
     def datetime_duration_parts
       name = File.basename(path, '.*')
-      name.match(/^(.+)_(\d{3})[_\.]/)
+      name.match(/^(.+)_(\d{3})(#{IMPORTED_SUFFIX})?$/)
     end
 
   end

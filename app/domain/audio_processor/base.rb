@@ -32,5 +32,9 @@ module AudioProcessor
       fail(NotImplementedError)
     end
 
+    def duration
+      fail(NotImplementedError)
+    end
+
   end
 end

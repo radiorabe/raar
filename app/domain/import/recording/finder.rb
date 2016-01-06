@@ -28,7 +28,7 @@ module Import
       def glob_recordings(pattern)
         import_directories.collect do |d, _h|
           Dir.glob(File.join(d, pattern)).collect do |f|
-            new(f)
+            Import::Recording.new(f)
           end
         end.flatten
       end

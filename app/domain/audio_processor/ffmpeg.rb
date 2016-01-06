@@ -43,6 +43,10 @@ module AudioProcessor
       audio.audio_codec
     end
 
+    def duration
+      audio.duration
+    end
+
     private
 
     def audio

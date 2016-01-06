@@ -19,6 +19,10 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       assert_equal 2, processor(:klangbecken_mai1_best).channels
     end
 
+    test 'reads mp3 duration' do
+      assert_in_delta 3, processor(:klangbecken_mai1_best).duration, 0.1
+    end
+
     test 'downgrades mp3 file' do
       file = Tempfile.new(['low', '.mp3'])
       begin

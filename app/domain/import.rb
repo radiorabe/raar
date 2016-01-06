@@ -4,7 +4,7 @@ module Import
   # make sure we get notified in absolutely all cases.
 
   def self.run
-    recordings = Recording::Finder.pending
+    recordings = Recording::Finder.new.pending
     mappings = BroadcastMapping::Builder.new(recordings).run
     mappings.each { |b| Importer.new(b).run }
     Recording::Cleaner.clear_old_imported
