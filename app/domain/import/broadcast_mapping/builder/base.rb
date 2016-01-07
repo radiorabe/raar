@@ -1,7 +1,7 @@
 module Import
   class BroadcastMapping
-
     module Builder
+
       # Based on a list of recording files, determine the corresponding broadcasts
       # and create a broadcast mapping object for each broadcast, containing the
       # corresponding recordings.
@@ -41,7 +41,7 @@ module Import
         end
 
       end
-    end
 
+    end
   end
 end

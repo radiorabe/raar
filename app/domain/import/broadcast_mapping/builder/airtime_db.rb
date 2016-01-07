@@ -1,7 +1,8 @@
 module Import
   class BroadcastMapping
-
     module Builder
+      # Builds BroadcastMappings based on the show instances found in the airtime database
+      # at the time of the given recordings.
       class AirtimeDb < Base
 
         private
@@ -18,22 +19,21 @@ module Import
 
         def build_broadcast_mapping(instance)
           Import::BroadcastMapping.new.tap do |mapping|
-            assign_show_attrs(mapping, instance)
-            assign_broadcast_attrs(mapping, instance)
+            assign_show(mapping, instance)
+            assign_broadcast(mapping, instance)
           end
         end
 
-        def assign_show_attrs(mapping, instance)
-          mapping.assign_show_attrs(
-            name: instance.show.name,
+        def assign_show(mapping, instance)
+          mapping.assign_show(
+            name: instance.show.name.strip,
             details: instance.show.description)
         end
 
-        def assign_broadcast_attrs(mapping, instance)
-          # TODO: time zone conversion necessary?
-          mapping.assign_broadcast_attrs(
-            label: instance.show.name,
-            details: instance.description,
+        def assign_broadcast(mapping, instance)
+          mapping.assign_broadcast(
+            label: instance.show.name.strip,
+            details: instance.show.description,
             started_at: instance.starts,
             finished_at: instance.ends,
             people: '')
@@ -50,6 +50,5 @@ module Import
 
       end
     end
-
   end
 end

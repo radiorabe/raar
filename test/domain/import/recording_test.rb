@@ -26,6 +26,12 @@ class Import::RecordingTest < ActiveSupport::TestCase
     assert_equal 30 * 60, recording.duration
   end
 
+  test '#finished_at returns correct time' do
+    recording = Import::Recording.new(file('2016-01-01T235959+0200_120.mp3'))
+    time = Time.find_zone!('Etc/GMT-2').local(2016, 1, 2, 1, 59, 59)
+    assert_equal time, recording.finished_at
+  end
+
   test '#mark_imported does nothing if no mappings exist' do
     f = file('2016-01-01T235959+0200_120.mp3')
     recording = Import::Recording.new(f)
@@ -56,7 +62,7 @@ class Import::RecordingTest < ActiveSupport::TestCase
       recording = Import::Recording.new(f)
       assert_in_delta 3, recording.audio_duration, 0.1
     end
-    
+
   end
 
 end

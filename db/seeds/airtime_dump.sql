@@ -1,4 +1,4 @@
-
+-- loaded into db with rake db:seed
 
 CREATE TABLE cc_show (
     id integer PRIMARY KEY AUTOINCREMENT NOT NULL,

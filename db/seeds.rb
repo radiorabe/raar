@@ -4,4 +4,4 @@
 
 Rake.application['db:fixtures:load'].invoke
 
-system 'sqlite3 db/airtime.sqlite3 < db/seeds/airtime_dump.sql'
+system 'sqlite3 db/airtime_development.sqlite3 < db/seeds/airtime_dump.sql'

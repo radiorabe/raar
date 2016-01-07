@@ -23,10 +23,10 @@ Metrics/MethodLength:
 Style/Documentation:
   Enabled: false
 
-Style/EmptyLinesAroundClassBody:
-  EnforcedStyle: empty_lines
-
 # namespace modules do not require empty lines, mixins do.
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
 Style/EmptyLinesAroundModuleBody:
   Enabled: false
 

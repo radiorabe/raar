@@ -22,7 +22,7 @@ module Import
     end
 
     def finished_at
-      started_at + audio_duration.seconds
+      started_at + duration.seconds
     end
 
     def duration # in seconds

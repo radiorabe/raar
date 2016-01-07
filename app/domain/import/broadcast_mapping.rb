@@ -7,20 +7,23 @@ module Import
     delegate :started_at, :finished_at, :duration,
              to: :broadcast, allow_nil: true
 
+    delegate :profile, to: :show, allow_nil: true
+
     def initialize
       @recordings = []
     end
 
-    def assign_show_attrs(attrs = {})
+    # Assigns a show based on the given attrs. A :name key must be included.
+    def assign_show(attrs = {})
       @show = fetch_show(attrs)
     end
 
-    def assign_broadcast_attrs(attrs = {})
+    # Assigns a broadcast based on the given attrs.
+    # :started_at and :finished_at keys must be included.
+    # This method may only be called after a show is set.
+    def assign_broadcast(attrs = {})
+      fail(KeyError, 'show attrs must be set beforehand') unless @show
       @broadcast = fetch_broadcast(attrs)
-    end
-
-    def profile
-      show.profile
     end
 
     def imported?
