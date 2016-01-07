@@ -3,8 +3,13 @@ module Import
 
     class Cleaner
 
+      def run
+        clear_old_imported
+        warn_for_old_unimported
+      end
+
       def clear_old_imported
-        Finder.imported do |recording|
+        Finder.new.imported.each do |recording|
           if older_than?(recording, days_to_keep_imported)
             FileUtils.rm(recording.path)
           end
@@ -12,8 +17,8 @@ module Import
       end
 
       def warn_for_old_unimported
-        Finder.pending do |recording|
-          if older_than?(recording, days_to_perform_import)
+        Finder.new.pending.each do |recording|
+          if older_than?(recording, days_to_finish_import)
             ExceptionNotifier.notify_exception(UnimportedWarning.new(recording))
           end
         end
@@ -29,8 +34,8 @@ module Import
         Rails.application.secrets.days_to_keep_imported
       end
 
-      def days_to_perform_import
-        Rails.application.secrets.days_to_perform_import
+      def days_to_finish_import
+        Rails.application.secrets.days_to_finish_import
       end
 
     end

@@ -7,8 +7,7 @@ module Import
     recordings = Recording::Finder.new.pending
     mappings = BroadcastMapping::Builder.new(recordings).run
     mappings.each { |b| Importer.new(b).run }
-    Recording::Cleaner.clear_old_imported
-    Recording::Cleaner.warn_for_old_unimported
+    Recording::Cleaner.new.run
   rescue Exception => e
     ExceptionNotifier.notify_exception(e)
   end

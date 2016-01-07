@@ -1,9 +1,19 @@
-module ImportHelper
+module RecordingHelper
   extend ActiveSupport::Concern
 
   included do
     setup :create_import_dir
     teardown :clear_import_dir
+  end
+
+  private
+
+  def file(name)
+    File.join(import_directory, name)
+  end
+  
+  def touch(name)
+    FileUtils.touch(file(name))
   end
 
   def import_directory

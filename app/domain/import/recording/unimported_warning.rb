@@ -1,5 +1,5 @@
 module Import
-  module Recording
+  class Recording
     class UnimportedWarning < StandardError
 
       def initialize(recording)
