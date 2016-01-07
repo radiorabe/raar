@@ -1,11 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', github: 'rails/rails'
-gem 'sprockets-rails', github: 'rails/sprockets-rails'
-gem 'sprockets', github: 'rails/sprockets'
-gem 'sass-rails', github: 'rails/sass-rails'
-gem 'arel', github: 'rails/arel'
-gem 'rack', github: 'rack/rack'
+gem 'rails', '>= 5.0.0.beta1'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
