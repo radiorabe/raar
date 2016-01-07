@@ -1,6 +1,5 @@
 module Import
   class Recording
-
     module Chooser
 
       mattr_accessor :klass
@@ -10,6 +9,5 @@ module Import
       end
 
     end
-
   end
 end

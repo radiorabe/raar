@@ -11,9 +11,9 @@ module RecordingHelper
   def file(name)
     File.join(import_directory, name)
   end
-  
+
   def touch(name)
-    FileUtils.touch(file(name))
+    file(name).tap { |f| FileUtils.touch(f) }
   end
 
   def import_directory

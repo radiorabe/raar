@@ -49,12 +49,14 @@ class Import::RecordingTest < ActiveSupport::TestCase
 
   # Travis has ffmpeg 0.8.17, which reports "Unknown input format: 'lavfi'"
   unless ENV['TRAVIS']
+
     test '#audio_duration returns actual duration' do
       f = file('2016-01-01T235959+0200_120.mp3')
       AudioGenerator.new.create_silent_file(AudioFormat.new('mp3', 96, 1), f)
       recording = Import::Recording.new(f)
       assert_in_delta 3, recording.audio_duration, 0.1
     end
+    
   end
 
 end

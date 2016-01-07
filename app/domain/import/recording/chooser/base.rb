@@ -1,6 +1,5 @@
 module Import
   class Recording
-
     module Chooser
 
       # Compares an array of audio files and returns the one with the best quality.
@@ -13,7 +12,7 @@ module Import
         end
 
         def best
-          by_audio_length.last
+          fail(NotImplementedError)
         end
 
         def by_audio_length

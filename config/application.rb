@@ -37,8 +37,10 @@ module Raar
     config.api_only = true
 
     config.to_prepare do
+      # Define default classes.
       AudioProcessor.klass ||= AudioProcessor::Ffmpeg
       Import::BroadcastMapping::Builder.klass ||= Import::BroadcastMapping::Builder::AirtimeDb
+      Import::Recording::Chooser.klass ||= Import::Recording::Chooser::Default
     end
   end
 end
