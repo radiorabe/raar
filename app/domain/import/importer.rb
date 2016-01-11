@@ -15,6 +15,7 @@ module Import
       recordings = determine_best_recordings
       master = compose_master(recordings)
       import_into_archive(master)
+      # TODO: add mp3 tags, always when transcoding.
       mark_recordings_as_imported
     rescue StandardError => e
       ExceptionNotifier.notify_exception(e, data: { mapping: mapping })

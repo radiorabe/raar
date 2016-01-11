@@ -23,7 +23,6 @@ module Import
         file = build_audio_file(format)
         link_to_playback_format(file)
         transcode(file)
-        add_tags(file)
       end
     end
 
@@ -54,10 +53,6 @@ module Import
 
     def playback_formats
       @playback_formats ||= PlaybackFormat.all
-    end
-
-    def add_tags(_file)
-      # TODO
     end
 
   end

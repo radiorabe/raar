@@ -1,4 +1,4 @@
-
+# A value object representing an audio format, consisting of codec, bitrate and channels.
 class AudioFormat
 
   attr_reader :codec, :bitrate, :channels
@@ -17,6 +17,11 @@ class AudioFormat
     codec == other.codec &&
       bitrate == other.bitrate &&
       channels == other.channels
+  end
+  alias_method :eql?, :==
+
+  def hash
+    [codec, bitrate, channels].hash
   end
 
 end
