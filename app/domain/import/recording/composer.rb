@@ -10,6 +10,7 @@ module Import
       def initialize(mapping, recordings)
         @mapping = mapping
         @recordings = recordings.sort_by(&:started_at)
+        check_arguments
       end
 
       def compose
@@ -24,6 +25,15 @@ module Import
 
       private
 
+      def check_arguments
+        unless mapping.complete?
+          fail(ArgumentError, 'broadcast mapping must be complete')
+        end
+        if (recordings - mapping.recordings).present?
+          fail(ArgumentError, 'recordings must be part of the broadcast mapping')
+        end
+      end
+
       def first
         recordings.first
       end
@@ -33,7 +43,8 @@ module Import
       end
 
       def first_equal?
-        first.started_at == mapping.started_at && first.finished_at == mapping.finished_at
+        first.started_at == mapping.started_at &&
+          first.finished_at == mapping.finished_at
       end
 
       def first_earlier_and_longer?
@@ -52,7 +63,7 @@ module Import
       def trim_start_and_end
         target_file = new_tempfile
         start = mapping.started_at - first.started_at
-        finish = relative_start + mapping.duration
+        finish = start + mapping.duration
         proc = AudioProcessor.new(first.path)
         proc.trim(target_file, start, finish)
         target_file
@@ -83,7 +94,7 @@ module Import
         target_file = new_tempfile
         start = 0
         finish = mapping.finished_at - last.started_at
-        proc = AudioProcessor.new(list[-1].path)
+        proc = AudioProcessor.new(last.path)
         proc.trim(target_file, start, finish)
         list[-1] = target_file
       end
@@ -96,7 +107,7 @@ module Import
       end
 
       def new_tempfile
-        Tempfile.new(['master', File.extname(first.path)])
+        Tempfile.new(['master', File.extname(first.path)]).path
       end
 
     end

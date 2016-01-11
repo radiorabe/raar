@@ -1,4 +1,6 @@
 module Import
+  # Imports a given broadcast mapping by creating a master audio file from the
+  # corresponding recordings. This master may then be archived by the Archiver.
   class Importer
 
     attr_reader :mapping
