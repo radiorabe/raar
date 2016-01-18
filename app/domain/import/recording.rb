@@ -7,6 +7,8 @@ module Import
   # for the file extension.
   class Recording
 
+    include Loggable
+
     DATE_TIME_FORMAT = '%Y-%m-%dT%H%M%S%z'
     IMPORTED_SUFFIX = '_imported'
 
@@ -35,6 +37,7 @@ module Import
 
     def mark_imported
       if broadcasts_mappings.present? && broadcasts_mappings.all?(&:imported?)
+        inform("Marking recording file #{path} as imported.")
         FileUtils.mv(path, path.gsub(/(\..+)\z/, "#{IMPORTED_SUFFIX}\\1"))
       end
     end

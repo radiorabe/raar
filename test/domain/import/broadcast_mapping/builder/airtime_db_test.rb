@@ -2,9 +2,8 @@ require 'test_helper'
 
 class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
 
-  setup :setup_airtime
-
   include RecordingHelper
+  include AirtimeHelper
 
   test 'returns no mappings without recordings' do
     builder = new_builder([])
@@ -12,9 +11,9 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
   end
 
   test 'recordings are checked for equal intervals' do
-    recordings = build_recordings('2016-01-01T235959+0200_120.mp3',
-                                  '2016-01-01T235959+0200_110.mp3',
-                                  '2016-01-02T000000+0200_119.mp3')
+    recordings = build_recordings('2016-01-01T235959+0100_120.mp3',
+                                  '2016-01-01T235959+0100_110.mp3',
+                                  '2016-01-02T000000+0100_119.mp3')
     assert_raise(ArgumentError) { new_builder(recordings) }
   end
 
@@ -153,53 +152,6 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
 
   def build_recordings(*names)
     names.collect { |f| Import::Recording.new(file(f)) }
-  end
-
-  def setup_airtime
-    if Airtime::Base.connection.data_sources.present?
-      clear_airtime_db
-    else
-      create_show_table
-      create_show_instances_table
-    end
-  end
-
-  def create_show_table
-    Airtime::Base.connection.create_table :cc_show do |t|
-      t.string :name, null: false
-      t.string :url
-      t.string :genre
-      t.string :description, limit: 512
-      t.string :color, limit: 6
-      t.string :background_color, limit: 6
-      t.boolean :live_stream_using_airtime_auth, default: false
-      t.boolean :live_stream_using_custom_auth, default: false
-      t.string :live_stream_user
-      t.string :live_stream_pass
-      t.boolean :linked, null: false, default: false
-      t.boolean :is_linkable, null: false, default: true
-    end
-  end
-
-  def create_show_instances_table
-    Airtime::Base.connection.create_table :cc_show_instances do |t|
-      t.timestamp :starts, null: false
-      t.timestamp :ends, null: false
-      t.integer :show_id, null: false
-      t.integer :record, default: 0, limit: 2
-      t.integer :rebroadcast, default: 0, limit: 2
-      t.integer :instance_id
-      t.integer :file_id
-      t.column :time_filled, :interval
-      t.timestamp :created, null: false
-      t.timestamp :last_scheduled
-      t.boolean :modified_instance, null: false, default: false
-    end
-  end
-
-  def clear_airtime_db
-    Airtime::ShowInstance.delete_all
-    Airtime::Show.delete_all
   end
 
 end

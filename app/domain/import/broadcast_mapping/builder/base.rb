@@ -7,15 +7,20 @@ module Import
       # corresponding recordings.
       class Base
 
+        include Loggable
+
         attr_reader :recordings
 
         def initialize(recordings)
           check_intervals(recordings)
           @recordings = recordings.sort_by(&:started_at)
+          @unmapped_recordings = @recordings.clone
         end
 
         def run
-          build_mappings.each { |m| add_corresponding_recordings(m) }
+          build_mappings.each { |m| add_corresponding_recordings(m) }.tap do |_|
+            warn_for_unmapped_recordings
+          end
         end
 
         private
@@ -36,7 +41,16 @@ module Import
 
         def add_corresponding_recordings(mapping)
           recordings.each do |r|
-            mapping.add_if_overlapping(r)
+            if mapping.add_recording_if_overlapping(r)
+              @unmapped_recordings.delete(r)
+            end
+          end
+        end
+
+        def warn_for_unmapped_recordings
+          if @unmapped_recordings.present?
+            warn("No corresponding broadcasts found for the following recordings:\n" +
+                 @unmapped_recordings.collect(&:path).join("\n"))
           end
         end
 

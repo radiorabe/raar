@@ -68,7 +68,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
   def build_composer(*recordings)
     assign_broadcast
     recordings.collect! { |r| Import::Recording.new(r) }
-    mapping.recordings.push(*recordings)
+    recordings.each { |r| mapping.add_recording_if_overlapping(r) }
     Import::Recording::Composer.new(mapping, recordings)
   end
 

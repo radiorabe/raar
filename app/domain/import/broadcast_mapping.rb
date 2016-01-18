@@ -2,7 +2,7 @@ module Import
   # A simple data holder for a single broadcast.
   class BroadcastMapping
 
-    attr_reader :show, :broadcast, :recordings
+    attr_reader :show, :broadcast
 
     delegate :started_at, :finished_at, :duration,
              to: :broadcast, allow_nil: true
@@ -26,6 +26,10 @@ module Import
       @broadcast = fetch_broadcast(attrs)
     end
 
+    def to_s
+      "#{show} @ #{I18n.l(broadcast.started_at)}"
+    end
+
     def imported?
       broadcast.persisted?
     end
@@ -38,17 +42,24 @@ module Import
       end
     end
 
-    def add_if_overlapping(recording)
+    def recordings
+      @recordings.clone
+    end
+
+    def add_recording_if_overlapping(recording)
       if overlaps?(recording)
-        recordings << recording
+        @recordings << recording
         recording.broadcasts_mappings << self
+        true
+      else
+        false
       end
     end
 
     # Do the assigned recordings cover the entire duration of the broadcast?
     def complete?
       finish = started_at
-      recordings.sort_by(&:started_at).all? do |r|
+      @recordings.sort_by(&:started_at).all? do |r|
         adjacent = r.started_at <= finish
         finish = r.finished_at
         adjacent

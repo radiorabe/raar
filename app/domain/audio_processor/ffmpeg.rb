@@ -6,11 +6,13 @@ module AudioProcessor
 
     def transcode(new_path, audio_format)
       options = codec_options(audio_format)
+      assert_directory(new_path)
       audio.transcode(new_path,
                       options.merge(validate: true))
     end
 
     def trim(new_path, start, duration)
+      assert_directory(new_path)
       audio.transcode(new_path,
                       seek_time: start,
                       duration: duration,
@@ -21,11 +23,11 @@ module AudioProcessor
     end
 
     def concat(new_path, other_paths)
+      assert_directory(new_path)
       list_file = Tempfile.new('list')
       begin
         create_list_file(list_file, [audio.path, *other_paths])
-        run_command("#{FFMPEG.ffmpeg_binary} -y -f concat -i \"#{list_file.path}\" " \
-                    "-c copy #{Shellwords.escape(new_path)}")
+        concat_audio(new_path, list_file)
       ensure
         list_file.unlink
       end
@@ -58,6 +60,11 @@ module AudioProcessor
       File.write(file, entries.join("\n"))
     end
 
+    def concat_audio(new_path, list_file)
+      run_command("#{FFMPEG.ffmpeg_binary} -y -f concat -i \"#{list_file.path}\" " \
+                  "-c copy #{Shellwords.escape(new_path)}")
+    end
+
     def run_command(command)
       FFMPEG.logger.info("Running command...\n#{command}\n")
       Open3.popen3(command) do |stdin, stdout, stderr, wait_thread|
@@ -75,6 +82,10 @@ module AudioProcessor
         audio_channels: audio_format.channels }
       options.delete(:audio_bitrate) if audio_format.codec == 'flac'
       options
+    end
+
+    def assert_directory(file)
+      FileUtils.mkdir_p(File.dirname(file))
     end
 
   end

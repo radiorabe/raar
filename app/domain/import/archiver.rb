@@ -2,6 +2,8 @@ module Import
   # Imports a master recording into the archive
   class Archiver
 
+    include Loggable
+
     attr_reader :mapping, :master
 
     def initialize(mapping, master)
@@ -22,6 +24,7 @@ module Import
       audio_formats.each do |format|
         file = build_audio_file(format)
         link_to_playback_format(file)
+        inform("Creating audio file #{file.absolute_path} from master recording.")
         transcode(file)
       end
     end

@@ -7,6 +7,7 @@ module Downgrade
     Downgrader.run
     Ereaser.run
   rescue Exception => e
+    Rails.logger.error(e)
     ExceptionNotifier.notify_exception(e)
   end
 

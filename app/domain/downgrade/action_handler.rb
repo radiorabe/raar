@@ -1,6 +1,8 @@
 module Downgrade
   class ActionHandler
 
+    include Loggable
+
     class << self
 
       def run
@@ -55,8 +57,7 @@ module Downgrade
     end
 
     def inform(file, action)
-      msg = "#{action} of #{file.broadcast.show} at #{file.broadcast.started_at.to_s(:db)}"
-      Rails.logger.info("#{Time.zone.now.to_s(:db)} #{msg}")
+      super("#{action} of #{file.broadcast.show} at #{file.broadcast.started_at.to_s(:db)}")
     end
 
   end

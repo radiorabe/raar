@@ -3,6 +3,8 @@ module Import
 
     class Cleaner
 
+      include Loggable
+
       def run
         clear_old_imported
         warn_for_old_unimported
@@ -11,6 +13,7 @@ module Import
       def clear_old_imported
         Finder.new.imported.each do |recording|
           if older_than?(recording, days_to_keep_imported)
+            inform("Removing old imported file #{recording.path}")
             FileUtils.rm(recording.path)
           end
         end

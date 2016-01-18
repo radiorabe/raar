@@ -3,6 +3,8 @@ module Import
   # corresponding recordings. This master may then be archived by the Archiver.
   class Importer
 
+    include Loggable
+
     attr_reader :mapping
 
     def initialize(mapping)
@@ -10,7 +12,7 @@ module Import
     end
 
     def run
-      return if !mapping.complete? || mapping.imported?
+      return unless ready_for_import?
 
       recordings = determine_best_recordings
       master = compose_master(recordings)
@@ -18,10 +20,37 @@ module Import
       # TODO: add mp3 tags, always when transcoding.
       mark_recordings_as_imported
     rescue StandardError => e
+      Rails.logger.error(e)
       ExceptionNotifier.notify_exception(e, data: { mapping: mapping })
     end
 
     private
+
+    def ready_for_import?
+      recordings? &&
+        mapping_complete? &&
+        !mapping_imported?
+    end
+
+    def recordings?
+      mapping.recordings.present?
+    end
+
+    def mapping_complete?
+      mapping.complete?.tap do |complete|
+        unless complete
+          inform("Broadcast #{mapping} is not imported, " \
+                 "as the following recordings are not (yet) complete:\n" +
+                 mapping.recordings.collect(&:path).join("\n"))
+        end
+      end
+    end
+
+    def mapping_imported?
+      mapping.imported?.tap do |imported|
+        warn("Broadcast #{mapping} is already imported.") if imported
+      end
+    end
 
     def determine_best_recordings
       mapping.recordings.group_by(&:started_at).collect do |_start, variants|
@@ -30,15 +59,18 @@ module Import
     end
 
     def compose_master(recordings)
+      inform("Composing master file for broadcast #{mapping} out of the following recordings:\n" +
+            recordings.collect(&:path).join("\n"))
       Recording::Composer.new(mapping, recordings).compose
     end
 
     def import_into_archive(master)
       Archiver.new(mapping, master).run
+      inform("Broadcast #{mapping} successfully imported.")
     end
 
     def mark_recordings_as_imported
-      broadcast.recordings.each(&:mark_imported)
+      mapping.recordings.each(&:mark_imported)
     end
 
   end

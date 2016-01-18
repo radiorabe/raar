@@ -22,7 +22,7 @@ class Broadcast < ActiveRecord::Base
   before_validation :set_show_label_if_empty
 
   def to_s
-    label
+    I18n.l(started_at)
   end
 
   # duration in seconds

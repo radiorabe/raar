@@ -13,6 +13,11 @@ module Import
         check_arguments
       end
 
+      # TODO: handle recordings not matching the declared duration
+      # ffmpeg fails e.g. if it should trim after the duration time.
+      # possible strategy:
+      # * for longer files: assume they start at the declared time, cut the end
+      # * for shorter files: assume they start at the declared time, add silence up to the end
       def compose
         if first_equal?
           first.path
