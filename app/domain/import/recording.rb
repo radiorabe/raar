@@ -42,6 +42,14 @@ module Import
       end
     end
 
+    def ==(other)
+      path == other.path
+    end
+
+    def hash
+      path.hash
+    end
+
     private
 
     def datetime_duration_parts

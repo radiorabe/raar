@@ -56,7 +56,7 @@ module AudioProcessor
     end
 
     def create_list_file(file, paths)
-      entries = paths.collect { |p| "file '#{Shellwords.escape(p)}'" }
+      entries = paths.collect { |p| "file '#{p}'" }
       File.write(file, entries.join("\n"))
     end
 
@@ -67,12 +67,8 @@ module AudioProcessor
 
     def run_command(command)
       FFMPEG.logger.info("Running command...\n#{command}\n")
-      Open3.popen3(command) do |stdin, stdout, stderr, wait_thread|
-        stdin.close
-        stdout.gets
-        stderr.gets
-        wait_thread.value
-      end
+      out, status = Open3.capture2e(command)
+      fail("#{command} failed with status #{status}:\n#{out}") unless status == 0
     end
 
     def codec_options(audio_format)

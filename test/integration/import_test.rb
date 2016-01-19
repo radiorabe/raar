@@ -8,21 +8,26 @@ class ImportTest < ActiveSupport::TestCase
   self.use_transactional_tests = false
 
   # Travis has ffmpeg 0.8.17, which reports "Unknown input format: 'lavfi'"
-  unless ENV['TRAVIS'] || true # skip for now
+  unless ENV['TRAVIS']
     test 'imports recordings as broadcasts' do
-      Time.zone.stubs(today: Time.local(2013, 6, 19))
+      Time.zone.stubs(today: Time.local(2013, 6, 19),
+                      now: Time.local(2013, 6, 19, 13, 6))
       build_recording_files
       build_airtime_entries
+
+      ExceptionNotifier
+        .expects(:notify_exception)
+        .with(Import::Recording::UnimportedWarning.new(Import::Recording.new(@f1)))
 
       assert_difference('Show.count', 1) do
         assert_difference('Broadcast.count', 2) do
           assert_difference('AudioFile.count', 6) do
-            system Rails.root.join('bin', 'import').to_s
+            Import.run
           end
         end
       end
 
-      assert_equal 6, Dir.glob("tmp/archive/2013/09/19/*.mp3").size
+      assert_equal 6, Dir.glob("tmp/archive/2013/06/19/*.mp3").size
     end
   end
 
@@ -32,13 +37,12 @@ class ImportTest < ActiveSupport::TestCase
     touch('2013-06-10T090000+0200_060_imported.mp3') # old imported
     touch('2013-06-19T080000+0200_060_imported.mp3')
     touch('2013-06-19T090000+0200_060_imported.mp3')
-    f1 = file('2013-06-10T100000+0200_060.mp3') # old unimported
-    f2 = file('2013-06-19T100000+0200_060.mp3')
-    f3 = file('2013-06-19T110000+0200_060.mp3')
-    f4 = file('2013-06-19T120000+0200_060.mp3')
-    [f1, f2, f3, f4].each do |f|
-      AudioGenerator.new.create_silent_file(AudioFormat.new('mp3', 320, 2), f, 60 * 60)
-    end
+    @f1 = file('2013-06-10T100000+0200_060.mp3') # old unimported
+    @f2 = file('2013-06-19T100000+0200_060.mp3')
+    @f3 = file('2013-06-19T110000+0200_060.mp3')
+    @f4 = file('2013-06-19T120000+0200_060.mp3')
+    AudioGenerator.new.create_silent_file(AudioFormat.new('mp3', 320, 2), @f1, 60 * 60)
+    [@f2, @f3, @f4].each { |f| FileUtils.cp(@f1, f) }
   end
 
   def build_airtime_entries

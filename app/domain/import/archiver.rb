@@ -12,10 +12,8 @@ module Import
     end
 
     def run
-      AudioFile.transaction do
-        create_archive_files
-        mapping.persist!
-      end
+      create_archive_files
+      mapping.persist!
     end
 
     private
