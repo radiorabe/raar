@@ -13,14 +13,9 @@ module Import
         check_arguments
       end
 
-      # TODO: handle recordings not matching the declared duration
-      # ffmpeg fails e.g. if it should trim after the duration time.
-      # possible strategy:
-      # * for longer files: assume they start at the declared time, cut the end
-      # * for shorter files: assume they start at the declared time, add silence up to the end
       def compose
         if first_equal?
-          first.path
+          file_with_maximum_duration(first)
         elsif first_earlier_and_longer?
           trim_start_and_end
         else
@@ -66,45 +61,51 @@ module Import
       end
 
       def trim_start_and_end
-        target_file = new_tempfile
         start = mapping.started_at - first.started_at
         finish = start + mapping.duration
-        proc = AudioProcessor.new(first.path)
+        trim_audio(first.path, start, finish)
+      end
+
+      def merge_list
+        list = Array.new(recordings.size)
+        list[0] = trim_start if first_earlier?
+        list[-1] = trim_end if last_longer?
+        recordings.each_with_index do |r, i|
+          list[i] ||= file_with_maximum_duration(r)
+        end
+        merge(list)
+      end
+
+      def trim_start
+        start = mapping.started_at - first.started_at
+        finish = first.duration
+        trim_audio(first.path, start, finish)
+      end
+
+      def trim_end
+        start = 0
+        finish = mapping.finished_at - last.started_at
+        trim_audio(last.path, start, finish)
+      end
+
+      def file_with_maximum_duration(recording)
+        if recording.audio_duration_too_long?
+          trim_audio(recording.path, 0, recording.duration)
+        else
+          recording.path
+        end
+      end
+
+      def trim_audio(file, start, finish)
+        target_file = new_tempfile
+        proc = AudioProcessor.new(file)
         proc.trim(target_file, start, finish)
         target_file
       end
 
-      def merge_list
-        list = recordings.collect(&:path)
-        trim_start(list) if first_earlier?
-        trim_end(list) if last_longer?
-
-        if recordings.size > 1
-          merge(list)
-        else
-          list.first
-        end
-      end
-
-      def trim_start(list)
-        target_file = new_tempfile
-        start = mapping.started_at - first.started_at
-        finish = first.duration
-        proc = AudioProcessor.new(first.path)
-        proc.trim(target_file, start, finish)
-        list[0] = target_file
-      end
-
-      def trim_end(list)
-        target_file = new_tempfile
-        start = 0
-        finish = mapping.finished_at - last.started_at
-        proc = AudioProcessor.new(last.path)
-        proc.trim(target_file, start, finish)
-        list[-1] = target_file
-      end
-
       def merge(list)
+        return list.first if list.size <= 1
+
         target_file = new_tempfile
         proc = AudioProcessor.new(list[0])
         proc.concat(target_file, list[1..-1])

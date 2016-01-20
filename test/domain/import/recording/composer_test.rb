@@ -4,7 +4,16 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
   test 'returns single recording if times correspond to mapping' do
     composer = build_composer('2013-06-12T20000+0200_120.mp3')
+    expect_duration(mapping.recordings.first.path, 120)
     assert_equal '2013-06-12T20000+0200_120.mp3', composer.compose
+  end
+
+  test 'returns trimmed single recording if it is longer' do
+    composer = build_composer('2013-06-12T20000+0200_120.mp3')
+    file = mapping.recordings.first.path
+    expect_trim(file, 0, 120)
+    expect_duration(file, 125)
+    assert_not_equal '2013-06-12T20000+0200_120.mp3', composer.compose
   end
 
   test 'returns trimmed recording if it is longer than mapping' do
@@ -29,7 +38,11 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
     composer = build_composer('2013-06-12T20000+0200_030.mp3',
                               '2013-06-12T20300+0200_030.mp3',
                               '2013-06-12T21000+0200_060.mp3')
+
     expect_concat(2)
+    expect_duration(mapping.recordings.first.path, 30)
+    expect_duration(mapping.recordings.second.path, 30)
+    expect_duration(mapping.recordings.last.path, 60)
     composer.compose
   end
 
@@ -38,6 +51,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
                               '2013-06-12T21000+0200_060.mp3')
 
     expect_concat(1)
+    expect_duration(mapping.recordings.last.path, 60)
     expect_trim(:first, 10, 70)
     composer.compose
   end
@@ -47,6 +61,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
                               '2013-06-12T21000+0200_065.mp3')
 
     expect_concat(1)
+    expect_duration(mapping.recordings.first.path, 60)
     expect_trim(:last, 0, 60)
     composer.compose
   end
@@ -57,11 +72,11 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
                               '2013-06-12T213000+0200_060.mp3')
 
     expect_concat(2)
+    expect_duration(mapping.recordings.second.path, 60)
     expect_trim(:first, 30, 60)
     expect_trim(:last, 0, 30)
     composer.compose
   end
-
 
   private
 
@@ -70,6 +85,12 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
     recordings.collect! { |r| Import::Recording.new(r) }
     recordings.each { |r| mapping.add_recording_if_overlapping(r) }
     Import::Recording::Composer.new(mapping, recordings)
+  end
+
+  def expect_duration(file, duration)
+    proc = mock('processor')
+    proc.expects(:duration).returns(duration * 60)
+    AudioProcessor.expects(:new).with(file).returns(proc)
   end
 
   def expect_trim(file, start, finish)

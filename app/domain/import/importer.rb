@@ -17,7 +17,6 @@ module Import
       recordings = determine_best_recordings
       master = compose_master(recordings)
       import_into_archive(master)
-      # TODO: add mp3 tags, always when transcoding.
       mark_recordings_as_imported
     rescue StandardError => e
       Rails.logger.error(e)
@@ -40,7 +39,7 @@ module Import
       mapping.complete?.tap do |complete|
         unless complete
           inform("Broadcast #{mapping} is not imported, " \
-                 "as the following recordings are not (yet) complete:\n" +
+                 "as the following recordings do not cover the entire duration:\n" +
                  mapping.recordings.collect(&:path).join("\n"))
         end
       end
@@ -58,7 +57,14 @@ module Import
       end
     end
 
+    def assert_minimal_durations(recordings)
+      recordings.each do |r|
+        fail(Recording::TooShortError, r) if r.audio_duration_too_short?
+      end
+    end
+
     def compose_master(recordings)
+      assert_minimal_durations(recordings)
       inform("Composing master file for broadcast #{mapping} out of the following recordings:\n" +
             recordings.collect(&:path).join("\n"))
       Recording::Composer.new(mapping, recordings).compose

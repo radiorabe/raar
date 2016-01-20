@@ -11,6 +11,7 @@ module Import
 
     DATE_TIME_FORMAT = '%Y-%m-%dT%H%M%S%z'
     IMPORTED_SUFFIX = '_imported'
+    DURATION_TOLERANCE = 5.seconds
 
     attr_reader :path, :broadcasts_mappings
 
@@ -33,6 +34,14 @@ module Import
 
     def audio_duration # in seconds
       @audio_duration ||= AudioProcessor.new(path).duration
+    end
+
+    def audio_duration_too_short?
+      audio_duration < duration - DURATION_TOLERANCE
+    end
+
+    def audio_duration_too_long?
+      audio_duration > duration + DURATION_TOLERANCE
     end
 
     def mark_imported
