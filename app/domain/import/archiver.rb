@@ -1,5 +1,6 @@
 module Import
-  # Imports a master recording into the archive
+  # Imports a master recording into the archive.
+  # The argument master may be nil. In this case, no audio files are created.
   class Archiver
 
     include Loggable
@@ -12,7 +13,7 @@ module Import
     end
 
     def run
-      create_archive_files
+      create_archive_files if master
       mapping.persist!
     end
 

@@ -25,17 +25,6 @@ class Import::ImporterTest < ActiveSupport::TestCase
     importer.run
   end
 
-  test 'it raises exception if recording is too short' do
-    f = touch('2013-06-19T200000+0200_120.mp3')
-    r = Import::Recording.new(f)
-    mapping.add_recording_if_overlapping(r)
-    AudioProcessor::Ffmpeg.any_instance.expects(:duration).returns(110 * 60)
-    ExceptionNotifier.expects(:notify_exception).with(
-      instance_of(Import::Recording::TooShortError),
-      instance_of(Hash))
-    importer.run
-  end
-
   test 'creates database entries' do
     f = touch('2013-06-19T200000+0200_120.mp3')
     mapping.add_recording_if_overlapping(Import::Recording.new(f))
@@ -55,6 +44,20 @@ class Import::ImporterTest < ActiveSupport::TestCase
     AudioProcessor::Ffmpeg.any_instance.expects(:duration).returns(120 * 60)
     AudioProcessor::Ffmpeg.any_instance.expects(:transcode).times(3)
     ExceptionNotifier.expects(:notify_exception).never
+    importer.run
+    assert !File.exists?(f)
+    assert File.exists?(file('2013-06-19T200000+0200_120_imported.mp3'))
+  end
+
+  test 'it notifies if recording is too short but still does import' do
+    f = touch('2013-06-19T200000+0200_120.mp3')
+    r = Import::Recording.new(f)
+    mapping.add_recording_if_overlapping(r)
+    AudioProcessor::Ffmpeg.any_instance.expects(:duration).returns(110 * 60)
+    AudioProcessor::Ffmpeg.any_instance.expects(:transcode).times(3)
+    ExceptionNotifier.expects(:notify_exception).with(
+      instance_of(Import::Recording::TooShortError),
+      instance_of(Hash))
     importer.run
     assert !File.exists?(f)
     assert File.exists?(file('2013-06-19T200000+0200_120_imported.mp3'))

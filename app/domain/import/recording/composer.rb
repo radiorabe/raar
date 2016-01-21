@@ -3,6 +3,10 @@ module Import
 
     # From a list of recordings, split or join them to correspond to a single broadcast.
     # The recordings must overlap or correspond to the broadcast duration but must not be shorter.
+    #
+    # If the audio duration of the given recordings is longer than declared, the files are trimmed
+    # at the end. If the audio duration is shorter, the recordings are used from the declared
+    # start position as long as available.
     class Composer
 
       attr_reader :mapping, :recordings
@@ -19,7 +23,7 @@ module Import
         elsif first_earlier_and_longer?
           trim_start_and_end
         else
-          merge_list
+          concat_list
         end
       end
 
@@ -62,54 +66,70 @@ module Import
 
       def trim_start_and_end
         start = mapping.started_at - first.started_at
-        finish = start + mapping.duration
-        trim_audio(first.path, start, finish)
+        duration = mapping.duration
+        trim_available(first, start, duration)
       end
 
-      def merge_list
-        list = Array.new(recordings.size)
-        list[0] = trim_start if first_earlier?
-        list[-1] = trim_end if last_longer?
-        recordings.each_with_index do |r, i|
-          list[i] ||= file_with_maximum_duration(r)
+      def concat_list
+        list = []
+        list << first_file_in_list
+        recordings[1..-2].each do |r|
+          list << file_with_maximum_duration(r)
         end
-        merge(list)
+        list << last_file_in_list
+
+        concat(list.compact)
+      end
+
+      def first_file_in_list
+        first_earlier? ? trim_start : file_with_maximum_duration(first)
+      end
+
+      def last_file_in_list
+        last_longer? ? trim_end : file_with_maximum_duration(last)
       end
 
       def trim_start
         start = mapping.started_at - first.started_at
-        finish = first.duration
-        trim_audio(first.path, start, finish)
+        duration = first.duration - start
+        trim_available(first, start, duration)
       end
 
       def trim_end
         start = 0
-        finish = mapping.finished_at - last.started_at
-        trim_audio(last.path, start, finish)
+        duration = mapping.finished_at - last.started_at
+        trim_available(last, start, duration)
       end
 
       def file_with_maximum_duration(recording)
         if recording.audio_duration_too_long?
-          trim_audio(recording.path, 0, recording.duration)
+          trim_available(recording, 0, recording.duration)
         else
           recording.path
         end
       end
 
-      def trim_audio(file, start, finish)
-        target_file = new_tempfile
-        proc = AudioProcessor.new(file)
-        proc.trim(target_file, start, finish)
-        target_file
+      def trim_available(recording, start, duration)
+        if start < recording.audio_duration
+          duration = [duration, recording.audio_duration - start].min
+          trim(recording.path, start, duration)
+        end
       end
 
-      def merge(list)
+      def trim(file, start, duration)
+        new_tempfile.tap do |target_file|
+          proc = AudioProcessor.new(file)
+          proc.trim(target_file, start, duration)
+        end
+      end
+
+      def concat(list)
         return list.first if list.size <= 1
 
-        target_file = new_tempfile
-        proc = AudioProcessor.new(list[0])
-        proc.concat(target_file, list[1..-1])
-        target_file
+        new_tempfile.tap do |target_file|
+          proc = AudioProcessor.new(list[0])
+          proc.concat(target_file, list[1..-1])
+        end
       end
 
       def new_tempfile

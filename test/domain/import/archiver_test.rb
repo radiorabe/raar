@@ -42,6 +42,17 @@ class Import::ArchiverTest < ActiveSupport::TestCase
     assert_equal playback_formats(:high), high.playback_format
   end
 
+  test 'not audio files are created if master is nil' do
+    AudioProcessor.expects(:new).never
+    archiver = Import::Archiver.new(mapping, nil)
+
+    assert_no_difference('AudioFile.count') do
+      assert_difference('Broadcast.count', 1) do
+        archiver.run
+      end
+    end
+  end
+
   private
 
   def archiver

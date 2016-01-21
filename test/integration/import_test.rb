@@ -21,6 +21,9 @@ class ImportTest < ActiveSupport::TestCase
       ExceptionNotifier
         .expects(:notify_exception)
         .with(Import::Recording::UnimportedWarning.new(Import::Recording.new(@f1)))
+      ExceptionNotifier
+        .expects(:notify_exception)
+        .with(Import::Recording::TooShortError.new(Import::Recording.new(@f4)), instance_of(Hash))
 
       assert_difference('Show.count', 1) do
         assert_difference('Broadcast.count', 2) do
@@ -32,6 +35,10 @@ class ImportTest < ActiveSupport::TestCase
 
       archive_mp3s = File.join(FileStore::Structure.home, '2013', '06', '19', '*.mp3')
       assert_equal 6, Dir.glob(archive_mp3s).size
+      audio = Show.find_by_name('Mittag').broadcasts.last.audio_files.first
+      assert_in_delta 170, AudioProcessor.new(audio.absolute_path).duration, 0.1
+      audio = Show.find_by_name('Info').broadcasts.last.audio_files.first
+      assert_in_delta 60, AudioProcessor.new(audio.absolute_path).duration, 0.1
     end
   end
 
@@ -46,7 +53,9 @@ class ImportTest < ActiveSupport::TestCase
     @f3 = file('2013-06-19T100800+0200_002.mp3')
     @f4 = file('2013-06-19T101000+0200_002.mp3')
     AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f1, 120)
-    [@f2, @f3, @f4].each { |f| FileUtils.cp(@f1, f) }
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f2, 120)
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f3, 130)
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f4, 110)
   end
 
   def build_airtime_entries

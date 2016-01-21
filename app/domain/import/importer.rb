@@ -57,14 +57,16 @@ module Import
       end
     end
 
-    def assert_minimal_durations(recordings)
-      recordings.each do |r|
-        fail(Recording::TooShortError, r) if r.audio_duration_too_short?
+    def warn_for_too_short_recordings(recordings)
+      recordings.select(&:audio_duration_too_short?).each do |r|
+        ExceptionNotifier.notify_exception(
+          Recording::TooShortError.new(r),
+          data: { mapping: mapping })
       end
     end
 
     def compose_master(recordings)
-      assert_minimal_durations(recordings)
+      warn_for_too_short_recordings(recordings)
       inform("Composing master file for broadcast #{mapping} out of the following recordings:\n" +
             recordings.collect(&:path).join("\n"))
       Recording::Composer.new(mapping, recordings).compose
