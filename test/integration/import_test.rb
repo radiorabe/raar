@@ -14,7 +14,7 @@ class ImportTest < ActiveSupport::TestCase
     test 'imports recordings as broadcasts' do
       Time.zone.stubs(today: Time.local(2013, 6, 19),
                       now: Time.local(2013, 6, 19, 11))
-      # build dummy recordings and broadcasts with a duration of two minutes                
+      # build dummy recordings and broadcasts with a duration of two minutes
       build_recording_files
       build_airtime_entries
 
@@ -45,7 +45,7 @@ class ImportTest < ActiveSupport::TestCase
     @f2 = file('2013-06-19T100600+0200_002.mp3')
     @f3 = file('2013-06-19T100800+0200_002.mp3')
     @f4 = file('2013-06-19T101000+0200_002.mp3')
-    AudioGenerator.new.create_silent_file(AudioFormat.new('mp3', 320, 2), @f1, 120)
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f1, 120)
     [@f2, @f3, @f4].each { |f| FileUtils.cp(@f1, f) }
   end
 

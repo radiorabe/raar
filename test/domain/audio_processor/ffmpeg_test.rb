@@ -5,7 +5,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
   # Travis has ffmpeg 0.8.17, which reports "Unknown input format: 'lavfi'"
   unless ENV['TRAVIS']
 
-    setup { AudioGenerator.new.create_silent_files }
+    setup { AudioGenerator.new.silent_files_for_audio_files }
 
     test 'reads mp3 codec' do
       assert_equal 'mp3', processor(:klangbecken_mai1_best).codec
@@ -62,17 +62,15 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     end
 
     test 'converts flac to mp3' do
-      flac = Tempfile.new(['input', '.flac'])
       mp3 = Tempfile.new(['output', '.mp3'])
-      AudioGenerator.new.create_silent_file(AudioFormat.new('flac', nil, 2), flac.path)
 
       begin
-        output = AudioProcessor::Ffmpeg.new(flac.path).transcode(mp3.path, AudioFormat.new('mp3', 56, 2))
+        flac = AudioGenerator.new.silent_source_file(AudioFormat.new('flac', nil, 2))
+        output = AudioProcessor::Ffmpeg.new(flac).transcode(mp3.path, AudioFormat.new('mp3', 56, 2))
         assert_equal 56, output.audio_bitrate
         assert_equal 2, output.audio_channels
         assert_equal 'mp3', output.audio_codec
       ensure
-        flac.unlink
         mp3.unlink
       end
     end

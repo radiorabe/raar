@@ -12,3 +12,4 @@ module AudioEncoding
 end
 
 require_relative 'audio_encoding/mp3'
+require_relative 'audio_encoding/flac'
