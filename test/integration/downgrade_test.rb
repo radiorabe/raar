@@ -8,18 +8,19 @@ class DowngradeTest < ActiveSupport::TestCase
   unless ENV['TRAVIS']
 
     test 'downgrades and ereases all pending files' do
-      FileUtils.rm_rf('tmp/archive')
+
+      FileUtils.rm_rf(FileStore::Structure.home)
       AudioGenerator.new.silent_files_for_audio_files
 
-      assert_equal 3, Dir.glob("tmp/archive/2013/04/10/*.mp3").size
-      assert_equal 4, Dir.glob("tmp/archive/2013/05/20/*.mp3").size
+      assert_equal 3, file_count('2013', '04', '10')
+      assert_equal 4, file_count('2013', '05', '20')
 
       assert_difference('AudioFile.count', -3) do
         system Rails.root.join('bin', 'downgrade').to_s
       end
 
-      assert_equal 3, Dir.glob("tmp/archive/2013/04/10/*.mp3").size
-      assert_equal 1, Dir.glob("tmp/archive/2013/05/20/*.mp3").size
+      assert_equal 3, file_count('2013', '04', '10')
+      assert_equal 1, file_count('2013', '05', '20')
 
       info = broadcasts(:info_april)
       assert !info.audio_files.where(bitrate: 320).exists?
@@ -37,6 +38,10 @@ class DowngradeTest < ActiveSupport::TestCase
       assert_equal 0, klangbecken.audio_files.count
     end
 
+  end
+
+  def file_count(year, month, day)
+    Dir.glob(File.join(FileStore::Structure.home, year, month, day, '*.mp3')).size
   end
 
 end

@@ -5,31 +5,31 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: <%= ENV['RAILS_DB_ADAPTER'] || 'sqlite3' %>
+  adapter: <%= ENV['RAAR_DB_ADAPTER'] || 'sqlite3' %>
   encoding: unicode
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
   timeout: 5000
-  username: <%= ENV['RAILS_DB_USERNAME'] %>
-  password: <%= ENV['RAILS_DB_PASSWORD'] %>
-  port: <%= ENV['RAILS_DB_PORT'] %>
-  host: <%= ENV['RAILS_DB_HOST'] %>
+  username: <%= ENV['RAAR_DB_USERNAME'] %>
+  password: <%= ENV['RAAR_DB_PASSWORD'] %>
+  port: <%= ENV['RAAR_DB_PORT'] %>
+  host: <%= ENV['RAAR_DB_HOST'] %>
 
 development:
   <<: *default
-  database: <%= ENV['RAILS_DB_NAME'] || 'db/development.sqlite3' %>
+  database: <%= ENV['RAAR_DB_NAME'] || 'db/development.sqlite3' %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: <%= ENV['RAILS_DB_NAME'] || 'db/test.sqlite3' %>
+  database: <%= ENV['RAAR_DB_NAME'] || 'db/test.sqlite3' %>
 
 production:
   <<: *default
-  database: <%= ENV['RAILS_DB_NAME'] || 'db/production.sqlite3' %>
+  database: <%= ENV['RAAR_DB_NAME'] || 'db/production.sqlite3' %>
 
 # Connection configuration to read show information out of the airtime database
 airtime:

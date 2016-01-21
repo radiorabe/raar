@@ -2,7 +2,7 @@ require 'open3'
 
 class AudioGenerator
 
-  TEMP_DIR = Rails.root.join('tmp', 'test_audio')
+  TEMP_DIR = Rails.root.join('tmp', 'test', 'audio')
 
   def silent_files_for_audio_files
     AudioFile.find_each do |f|

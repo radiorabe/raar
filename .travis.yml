@@ -5,9 +5,9 @@ rvm:
 
 env:
   global:
-    - RAILS_DB_ADAPTER=postgresql
-    - RAILS_DB_NAME=raar_test
-    - RAILS_DB_USERNAME=postgres
+    - RAAR_DB_ADAPTER=postgresql
+    - RAAR_DB_NAME=raar_test
+    - RAAR_DB_USERNAME=postgres
 
 sudo: false
 
