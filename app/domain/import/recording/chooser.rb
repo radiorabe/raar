@@ -2,7 +2,7 @@ module Import
   class Recording
     # Compares an array of audio files and returns the best one.
     class Chooser
-      
+
       attr_reader :variants
 
       def initialize(variants)

@@ -9,8 +9,8 @@ module Import
 
     include Loggable
 
-    DATE_TIME_FORMAT = '%Y-%m-%dT%H%M%S%z'
-    IMPORTED_SUFFIX = '_imported'
+    DATE_TIME_FORMAT = '%Y-%m-%dT%H%M%S%z'.freeze
+    IMPORTED_SUFFIX = '_imported'.freeze
     DURATION_TOLERANCE = 5.seconds
 
     attr_reader :path, :broadcasts_mappings

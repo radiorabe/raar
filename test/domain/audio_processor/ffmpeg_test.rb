@@ -27,7 +27,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       file = Tempfile.new(['low', '.mp3'])
       begin
         low = processor(:klangbecken_mai1_best).transcode(file.path, AudioFormat.new('mp3', 56, 1))
-        assert_equal 56, low.audio_bitrate
+        assert_equal 56000, low.audio_bitrate
         assert_equal 1, low.audio_channels
       ensure
         file.unlink
@@ -39,7 +39,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       begin
         part = processor(:klangbecken_mai1_best).trim(file.path, 1, 1)
         assert_equal 1, part.duration.round
-        assert_equal 192, part.audio_bitrate
+        assert_equal 192000, part.audio_bitrate
       ensure
         file.unlink
       end
@@ -55,7 +55,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
 
         merge = FFMPEG::Movie.new(file.path)
         assert_equal 9, merge.duration.round
-        assert_equal 192, merge.audio_bitrate
+        assert_equal 192000, merge.audio_bitrate
       ensure
         file.unlink
       end
@@ -67,7 +67,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       begin
         flac = AudioGenerator.new.silent_source_file(AudioFormat.new('flac', nil, 2))
         output = AudioProcessor::Ffmpeg.new(flac).transcode(mp3.path, AudioFormat.new('mp3', 56, 2))
-        assert_equal 56, output.audio_bitrate
+        assert_equal 56000, output.audio_bitrate
         assert_equal 2, output.audio_channels
         assert_equal 'mp3', output.audio_codec
       ensure

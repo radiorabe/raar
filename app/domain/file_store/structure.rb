@@ -19,9 +19,9 @@ module FileStore
     end
 
     def relative_path
-      File.join(utc.year.to_s,
-                format('%02d', utc.month),
-                format('%02d', utc.day),
+      File.join(timestamp.year.to_s,
+                format('%02d', timestamp.month),
+                format('%02d', timestamp.day),
                 filename)
     end
 
@@ -31,8 +31,8 @@ module FileStore
 
     private
 
-    def utc
-      @utc ||= audio_file.broadcast.started_at.utc
+    def timestamp
+      audio_file.broadcast.started_at
     end
 
     def duration
@@ -40,7 +40,7 @@ module FileStore
     end
 
     def filename
-      "#{utc.iso8601.tr(':', '')}_#{format('%03d', duration)}." \
+      "#{timestamp.iso8601.tr(':', '')}_#{format('%03d', duration)}." \
       "#{audio_file.bitrate}_#{audio_file.channels}.#{extension}"
     end
 

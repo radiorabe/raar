@@ -82,9 +82,9 @@ module Import
 
     def fetch_broadcast(attrs = {})
       show.broadcasts
-        .where(started_at: attrs.fetch(:started_at), finished_at: attrs.fetch(:finished_at))
-        .first_or_initialize
-        .tap { |bc| bc.attributes = attrs }
+          .where(started_at: attrs.fetch(:started_at), finished_at: attrs.fetch(:finished_at))
+          .first_or_initialize
+          .tap { |bc| bc.attributes = attrs }
     end
 
   end

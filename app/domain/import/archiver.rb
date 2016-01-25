@@ -34,8 +34,8 @@ module Import
 
     def build_audio_file(format)
       mapping.broadcast.audio_files
-        .build(audio_format: format)
-        .with_path
+             .build(audio_format: format)
+             .with_path
     end
 
     def link_to_playback_format(file)

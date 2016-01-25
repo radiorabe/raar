@@ -6,10 +6,10 @@ module Import
     # for the file extension.
     class Finder
 
-      DATE_GLOB = '[12][019][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' # yyyy-mm-dd
-      TIME_GLOB = '[0-2][0-9][0-5][0-9][0-5][0-9]{+,-}[0-2][0-9][0-5]0' # HHMM+ZZZZ
-      DURATION_GLOB = '[0-9][0-9][0-9]' # ddd, minutes
-      FILENAME_GLOB = "#{DATE_GLOB}T#{TIME_GLOB}_#{DURATION_GLOB}"
+      DATE_GLOB = '[12][019][0-9][0-9]-[0-1][0-9]-[0-3][0-9]'.freeze # yyyy-mm-dd
+      TIME_GLOB = '[0-2][0-9][0-5][0-9][0-5][0-9]{+,-}[0-2][0-9][0-5]0'.freeze # HHMM+ZZZZ
+      DURATION_GLOB = '[0-9][0-9][0-9]'.freeze # ddd, minutes
+      FILENAME_GLOB = "#{DATE_GLOB}T#{TIME_GLOB}_#{DURATION_GLOB}".freeze
 
       def pending
         glob_recordings(FILENAME_GLOB + '.*')

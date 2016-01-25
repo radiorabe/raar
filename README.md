@@ -15,5 +15,5 @@ RAAR ist eine Ruby on Rails Applikation zum Verwalten und Durchstöbern eines Au
 ## Lizenz
 
 RAAR ist unter der GNU Affero General Public License veröffentlicht.
-Copyright 2015 Radio Rabe.
+Copyright 2015-2016 Radio Rabe.
 Siehe `LICENSE` für weitere Informationen.

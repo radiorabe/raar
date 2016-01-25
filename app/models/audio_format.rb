@@ -19,7 +19,7 @@ class AudioFormat
       bitrate == other.bitrate &&
       channels == other.channels
   end
-  alias_method :eql?, :==
+  alias eql? ==
 
   def hash
     [codec, bitrate, channels].hash

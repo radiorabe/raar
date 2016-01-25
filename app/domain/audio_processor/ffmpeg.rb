@@ -34,7 +34,7 @@ module AudioProcessor
     end
 
     def bitrate
-      audio.audio_bitrate
+      audio.audio_bitrate / 1000
     end
 
     def channels
