@@ -21,6 +21,9 @@ class Broadcast < ActiveRecord::Base
 
   before_validation :set_show_label_if_empty
 
+  scope :list, -> { order('broadcasts.started_at DESC') }
+
+
   def to_s
     I18n.l(started_at)
   end

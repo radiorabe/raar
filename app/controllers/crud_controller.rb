@@ -6,7 +6,7 @@ class CrudController < ListController
   # POST /users
   def create
     if entry.save
-      render json: entry, status: :created, location: entry
+      render json: entry, status: :created, location: entry_url
     else
       render json: entry.errors, status: :unprocessable_entity
     end
@@ -30,6 +30,11 @@ class CrudController < ListController
 
   def fetch_entry
     params[:id] ? super : model_class.new(model_params)
+  end
+
+  def entry_url
+    prefix = self.class.name.deconstantize.underscore.gsub('/', '_')
+    send("#{prefix}_#{entry.class.model_name.singular_route_key}_url", entry)
   end
 
   # Only allow a trusted parameter "white list" through.

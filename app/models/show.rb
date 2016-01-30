@@ -15,6 +15,8 @@ class Show < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
 
+  scope :list, -> { order(:name) }
+
   def to_s
     name
   end

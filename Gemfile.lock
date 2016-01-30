@@ -118,6 +118,7 @@ GEM
     powerpack (0.1.1)
     rack (2.0.0.alpha)
       json
+    rack-cors (0.4.0)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.0.beta1.1)
@@ -199,6 +200,7 @@ DEPENDENCIES
   exception_notification
   mocha
   pg
+  rack-cors
   rails (>= 5.0.0.beta1)
   rails-erd
   rails-i18n
@@ -210,4 +212,4 @@ DEPENDENCIES
   tzinfo-data
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

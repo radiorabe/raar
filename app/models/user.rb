@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
 
   validates :username, presence: true, uniqueness: true
 
+  scope :list, -> { order(:last_name, :first_name, :username) }
+
   def to_s
     username
   end

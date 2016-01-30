@@ -5,8 +5,7 @@ class ListController < ApplicationController
 
   # GET /users
   def index
-    entries = model_class.all
-    render json: entries
+    render json: fetch_entries
   end
 
   # GET /users/1
@@ -19,6 +18,10 @@ class ListController < ApplicationController
   def entry
     instance_variable_get(:"@#{ivar_name}") ||
       instance_variable_set(:"@#{ivar_name}", fetch_entry)
+  end
+
+  def fetch_entries
+    model_class.list
   end
 
   def fetch_entry
