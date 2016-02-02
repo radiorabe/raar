@@ -23,7 +23,6 @@ class Broadcast < ActiveRecord::Base
 
   scope :list, -> { order('broadcasts.started_at DESC') }
 
-
   def to_s
     I18n.l(started_at)
   end

@@ -18,4 +18,12 @@ class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
   include CustomAssertions
 
+  def json
+    @json ||= JSON.parse(response.body)
+  end
+
+  def json_attrs(attr)
+    json['data'].collect { |s| s['attributes'][attr.to_s] }
+  end
+
 end

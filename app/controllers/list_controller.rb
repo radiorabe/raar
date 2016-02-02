@@ -1,16 +1,19 @@
 # A generic controller to display entries of a certain model class.
 class ListController < ApplicationController
 
-  delegate :model_class, :model_identifier, to: 'self.class'
+  prepend Searchable
+
+  delegate :model_class, :model_identifier, :model_serializer,
+           to: 'self.class'
 
   # GET /users
   def index
-    render json: fetch_entries
+    render json: fetch_entries, each_serializer: model_serializer
   end
 
   # GET /users/1
   def show
-    render json: entry
+    render json: entry, serializer: model_serializer
   end
 
   private
@@ -43,6 +46,10 @@ class ListController < ApplicationController
     # I.e., the symbol of the underscored model name.
     def model_identifier
       @model_identifier ||= model_class.model_name.param_key
+    end
+
+    def model_serializer
+      @model_serializer ||= "#{name.deconstantize}::#{model_class.name}Serializer".constantize
     end
 
   end

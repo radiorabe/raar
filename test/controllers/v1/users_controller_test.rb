@@ -5,13 +5,12 @@ module V1
 
     test 'GET index returns list of all users' do
       get :index
-      assert_equal ['admin', 'speedee'],
-                   JSON.parse(response.body).collect { |s| s['username'] }
+      assert_equal ['admin', 'speedee'], json_attrs(:username)
     end
 
     test 'GET show returns user' do
       get :show, params: { id: users(:admin).id }
-      assert_equal 'admin', JSON.parse(response.body)['username']
+      assert_equal 'admin', json['data']['attributes']['username']
     end
 
     test 'POST create adds new user' do

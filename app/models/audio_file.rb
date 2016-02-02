@@ -24,6 +24,8 @@ class AudioFile < ActiveRecord::Base
   validates :path, :bitrate, :channels, presence: true
   validates :path, uniqueness: true
 
+  scope :list, -> { order('codec, bitrate DESC, channels DESC') }
+
   def absolute_path
     FileStore::Structure.new(self).absolute_path
   end

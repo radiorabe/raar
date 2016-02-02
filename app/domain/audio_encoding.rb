@@ -2,7 +2,8 @@
 module AudioEncoding
 
   def self.fetch(codec)
-    list.detect { |c| c.codec == codec } || fail(ArgumentError, "Unknown codec #{codec}")
+    list.detect { |c| c.codec == codec.to_s.strip } ||
+      fail(ArgumentError, "Unknown codec #{codec}")
   end
 
   def self.list
@@ -11,5 +12,5 @@ module AudioEncoding
 
 end
 
-require_relative 'audio_encoding/mp3'
-require_relative 'audio_encoding/flac'
+require_dependency 'audio_encoding/mp3'
+require_dependency 'audio_encoding/flac'

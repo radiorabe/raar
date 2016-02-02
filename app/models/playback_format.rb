@@ -22,12 +22,12 @@ class PlaybackFormat < ActiveRecord::Base
 
   validates :name,
             presence: true,
-            uniqueness: true,
+            uniqueness: { scope: :codec },
             format: { with: /\A[a-z0-9_]*\z/, message: :identifier_format }
-  validates :audio_format, :bitrate, :channels, presence: true
+  validates :codec, :bitrate, :channels, presence: true
 
   def to_s
-    name
+    "#{name}.#{audio_format.file_extension}"
   end
 
 end

@@ -12,8 +12,10 @@
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #
-class UserSerializer < ActiveModel::Serializer
+module V1
+  class UserSerializer < ApplicationSerializer
 
-  attributes :id, :username, :first_name, :last_name, :groups, :api_key, :api_key_expires_at
+    attributes :id, :username, :first_name, :last_name, :groups, :api_key, :api_key_expires_at
 
+  end
 end

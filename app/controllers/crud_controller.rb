@@ -6,7 +6,7 @@ class CrudController < ListController
   # POST /users
   def create
     if entry.save
-      render json: entry, status: :created, location: entry_url
+      render json: entry, status: :created, location: entry_url, serializer: model_serializer
     else
       render json: entry.errors, status: :unprocessable_entity
     end
@@ -15,7 +15,7 @@ class CrudController < ListController
   # PATCH/PUT /users/1
   def update
     if entry.update(model_params)
-      render json: entry
+      render json: entry, serializer: model_serializer
     else
       render json: entry.errors, status: :unprocessable_entity
     end
@@ -33,7 +33,7 @@ class CrudController < ListController
   end
 
   def entry_url
-    prefix = self.class.name.deconstantize.underscore.gsub('/', '_')
+    prefix = self.class.name.deconstantize.underscore.tr('/', '_')
     send("#{prefix}_#{entry.class.model_name.singular_route_key}_url", entry)
   end
 
