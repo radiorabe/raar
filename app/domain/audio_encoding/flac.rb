@@ -7,5 +7,7 @@ module AudioEncoding
 
     self.file_extension = 'flac'
 
+    self.mime_type = 'audio/flac'
+
   end
 end

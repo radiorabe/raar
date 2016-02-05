@@ -6,6 +6,10 @@ module AudioEncoding
       fail(ArgumentError, "Unknown codec #{codec}")
   end
 
+  def self.for_extension(file_extension)
+    list.detect { |e| e.file_extension == file_extension.to_s.strip }
+  end
+
   def self.list
     AudioEncoding::Base.subclasses
   end

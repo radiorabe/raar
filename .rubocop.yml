@@ -20,7 +20,7 @@ Metrics/ClassLength:
   Max: 200
 
 Metrics/MethodLength:
-  Max: 8
+  Max: 10
 
 Style/Documentation:
   Enabled: false

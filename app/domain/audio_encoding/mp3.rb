@@ -7,5 +7,7 @@ module AudioEncoding
 
     self.file_extension = 'mp3'
 
+    self.mime_type = 'audio/mpeg3'
+
   end
 end

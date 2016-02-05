@@ -2,7 +2,8 @@
 class AudioFormat
 
   attr_reader :codec, :bitrate, :channels
-  delegate :file_extension, to: :encoding
+
+  delegate :file_extension, :mime_type, to: :encoding
 
   def initialize(codec, bitrate, channels)
     @codec = codec

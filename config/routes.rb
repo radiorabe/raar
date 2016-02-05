@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       resources :audio_files, only: :index
     end
 
-    get 'audio_files/:year/:month/:day/:hour-:min(-:sec)_:playback_format.:format',
+    get 'audio_files/:year/:month/:day/:hour:min(:sec)_:playback_format.:format',
         to: 'audio_files#show',
         as: :audio_file,
         year: /\d{4}/,

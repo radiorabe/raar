@@ -23,8 +23,36 @@ class AudioFile < ActiveRecord::Base
 
   validates :path, :bitrate, :channels, presence: true
   validates :path, uniqueness: true
+  validates :playback_format_id, uniqueness: { scope: :broadcast_id, allow_nil: true }
 
   scope :list, -> { order('codec, bitrate DESC, channels DESC') }
+
+  class << self
+
+    def at(timestamp)
+      joins(:broadcast)
+        .where('broadcasts.started_at <= ? AND broadcasts.finished_at > ?', timestamp, timestamp)
+    end
+
+    # Get the best quality file for the given timestamp and codec.
+    def best_at(timestamp, codec)
+      at(timestamp).where(codec: codec).order('bitrate DESC, channels DESC').first
+    end
+
+    # Get file for the given playback_format. If it does not exist,
+    # return the next lower quality file with the same codec.
+    def playback_format_at(timestamp, playback_format)
+      entry = at(timestamp).find_by(playback_format_id: playback_format.id)
+      return entry if entry
+
+      where('(bitrate = ? AND channels <= ?) OR bitrate < ?',
+            playback_format.bitrate,
+            playback_format.channels,
+            playback_format.bitrate)
+        .best_at(timestamp, playback_format.codec)
+    end
+
+  end
 
   def absolute_path
     FileStore::Structure.new(self).absolute_path

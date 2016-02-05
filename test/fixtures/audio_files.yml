@@ -37,7 +37,7 @@ info_april_low:
 
 g9s_mai_high:
   broadcast: g9s_mai
-  path: 2013/05/20/2013-05-20T200000+0200_120.192_2.mp3
+  path: 2013/05/20/2013-05-20T200000+0200_180.192_2.mp3
   codec: mp3
   bitrate: 192
   channels: 2
@@ -45,7 +45,7 @@ g9s_mai_high:
 
 g9s_mai_low:
   broadcast: g9s_mai
-  path: 2013/05/20/2013-05-20T200000+0200_120.128_2.mp3
+  path: 2013/05/20/2013-05-20T200000+0200_180.128_2.mp3
   codec: mp3
   bitrate: 128
   channels: 2
