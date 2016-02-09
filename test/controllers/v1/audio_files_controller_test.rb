@@ -10,9 +10,9 @@ module V1
       get :index, params: { broadcast_id: broadcasts(:info_april).id }
 
       assert_equal [320, 192, 96], json_attrs(:bitrate)
-      assert_equal ['http://localhost:3000/v1/audio_files/2013/04/10/110000_best.mp3',
-                    'http://localhost:3000/v1/audio_files/2013/04/10/110000_high.mp3',
-                    'http://localhost:3000/v1/audio_files/2013/04/10/110000_low.mp3'],
+      assert_equal ['http://example.com/v1/audio_files/2013/04/10/110000_best.mp3',
+                    'http://example.com/v1/audio_files/2013/04/10/110000_high.mp3',
+                    'http://example.com/v1/audio_files/2013/04/10/110000_low.mp3'],
                     json_attrs(:url)
     end
 

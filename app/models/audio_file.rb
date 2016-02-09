@@ -30,8 +30,7 @@ class AudioFile < ActiveRecord::Base
   class << self
 
     def at(timestamp)
-      joins(:broadcast)
-        .where('broadcasts.started_at <= ? AND broadcasts.finished_at > ?', timestamp, timestamp)
+      joins(:broadcast).merge(Broadcast.at(timestamp))
     end
 
     # Get the best quality file for the given timestamp and codec.

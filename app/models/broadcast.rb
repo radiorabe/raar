@@ -21,7 +21,17 @@ class Broadcast < ActiveRecord::Base
 
   before_validation :set_show_label_if_empty
 
-  scope :list, -> { order('broadcasts.started_at DESC') }
+  scope :list, -> { order('broadcasts.started_at') }
+
+  class << self
+    def at(timestamp)
+      where('broadcasts.started_at <= ? AND broadcasts.finished_at > ?', timestamp, timestamp)
+    end
+
+    def within(start, finish)
+      where('broadcasts.finished_at > ? AND broadcasts.started_at < ?', start, finish)
+    end
+  end
 
   def to_s
     I18n.l(started_at)

@@ -10,15 +10,15 @@ Rails.application.routes.draw do
       resources :audio_files, only: :index
     end
 
-    get 'audio_files/:year/:month/:day/:hour:min(:sec)_:playback_format.:format',
-        to: 'audio_files#show',
-        as: :audio_file,
-        year: /\d{4}/,
-        month: /\d{2}/,
-        day: /\d{2}/,
-        hour: /\d{2}/,
-        min: /\d{2}/,
-        sec: /\d{2}/
+    constraints(year: /\d{4}/, month: /\d{2}/, day: /\d{2}/,
+                hour: /\d{2}/, min: /\d{2}/, sec: /\d{2}/) do
+      get 'broadcasts/:year/:month(/:day(/:hour(:min(:sec))))',
+          to: 'broadcasts#index'
+
+      get 'audio_files/:year/:month/:day/:hour:min(:sec)_:playback_format.:format',
+          to: 'audio_files#show',
+          as: :audio_file
+    end
 
     resources :users
   end
