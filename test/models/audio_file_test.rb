@@ -67,4 +67,21 @@ class AudioFileTest < ActiveSupport::TestCase
                  AudioFile.playback_format_at(file.broadcast.started_at, playback_formats(:low))
   end
 
+  test '.only_public contains only file with same or smaller bitrate' do
+    assert_equal audio_files(:info_april_high, :info_april_low),
+                 broadcasts(:info_april).audio_files.only_public.list
+  end
+
+  test '#public? is true if bitrate is smaller than max_public_bitrate' do
+    assert audio_files(:info_april_low).public?
+  end
+
+  test '#public? is true if bitrate is same as max_public_bitrate' do
+    assert audio_files(:info_april_high).public?
+  end
+
+  test '#public? is false if bitrate is higher than max_public_bitrate' do
+    assert !audio_files(:info_april_best).public?
+  end
+
 end

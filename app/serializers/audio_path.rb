@@ -10,8 +10,12 @@ class AudioPath
 
   def url_params
     timestamp_params.merge(
-      playback_format: audio_file.playback_format.try(:name) || BEST_FORMAT,
-      format: audio_file.audio_format.file_extension)
+      playback_format: playback_format,
+      format: file_extension)
+  end
+
+  def playback_format
+    audio_file.playback_format.try(:name) || BEST_FORMAT
   end
 
   private
@@ -24,6 +28,10 @@ class AudioPath
     %w(year month day hour min sec).each_with_object({}) do |key, hash|
       hash[key.to_sym] = format('%02d', timestamp.send(key))
     end
+  end
+
+  def file_extension
+    audio_file.audio_format.file_extension
   end
 
 end

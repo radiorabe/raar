@@ -3,6 +3,8 @@ require 'test_helper'
 module V1
   class UsersControllerTest < ActionController::TestCase
 
+    setup :login_as_admin
+
     test 'GET index returns list of all users' do
       get :index
       assert_equal ['admin', 'speedee'], json_attrs(:username)

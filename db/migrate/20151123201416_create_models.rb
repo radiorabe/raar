@@ -1,18 +1,18 @@
 class CreateModels < ActiveRecord::Migration
   def change
     create_table :users do |t|
-      t.string :username, null: false, unique: true
+      t.string :username, null: false, index: { unique: true }
       t.string :first_name
       t.string :last_name
       t.string :groups
-      t.string :api_key
+      t.string :api_key, null: false, index: { unique: true }
       t.datetime :api_key_expires_at
 
       t.timestamps
     end
 
     create_table :profiles do |t|
-      t.string :name, null: false, unqiue: true
+      t.string :name, null: false, index: { unique: true }
       t.text :description
       t.boolean :default, null: false, default: false
 
@@ -37,7 +37,7 @@ class CreateModels < ActiveRecord::Migration
     end
 
     create_table :playback_formats do |t|
-      t.string :name, null: false, unique: true
+      t.string :name, null: false, index: { unique: true }
       t.text :description
       t.string :codec, null: false
       t.integer :bitrate, null: false
@@ -47,7 +47,7 @@ class CreateModels < ActiveRecord::Migration
     end
 
     create_table :shows do |t|
-      t.string :name, null: false, unique: true
+      t.string :name, null: false, index: { unique: true }
       t.text :details
       t.references :profile, null: false, index: true, foreign_key: { on_delete: :restrict }
     end
@@ -55,15 +55,15 @@ class CreateModels < ActiveRecord::Migration
     create_table :broadcasts do |t|
       t.references :show, null: false, index: true, foreign_key: { on_delete: :restrict }
       t.string :label, null: false
-      t.datetime :started_at, null: false, unique: true
-      t.datetime :finished_at, null: false, unique: true
+      t.datetime :started_at, null: false, index: { unique: true }
+      t.datetime :finished_at, null: false, index: { unique: true }
       t.string :people
       t.text :details
     end
 
     create_table :audio_files do |t|
       t.references :broadcast, null: false, index: true, foreign_key: { on_delete: :restrict }
-      t.string :path, null: false, unique: true
+      t.string :path, null: false, index: { unique: true }
       t.string :codec, null: false
       t.integer :bitrate, null: false
       t.integer :channels, null: false

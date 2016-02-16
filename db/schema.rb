@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(version: 20151123201416) do
     t.integer  "initial_bitrate",    null: false
     t.integer  "initial_channels",   null: false
     t.integer  "max_public_bitrate"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["profile_id"], name: "index_archive_formats_on_profile_id"
   end
 
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20151123201416) do
     t.integer  "playback_format_id"
     t.datetime "created_at",         null: false
     t.index ["broadcast_id"], name: "index_audio_files_on_broadcast_id"
+    t.index ["path"], name: "index_audio_files_on_path", unique: true
     t.index ["playback_format_id"], name: "index_audio_files_on_playback_format_id"
   end
 
@@ -43,7 +44,9 @@ ActiveRecord::Schema.define(version: 20151123201416) do
     t.datetime "finished_at", null: false
     t.string   "people"
     t.text     "details"
+    t.index ["finished_at"], name: "index_broadcasts_on_finished_at", unique: true
     t.index ["show_id"], name: "index_broadcasts_on_show_id"
+    t.index ["started_at"], name: "index_broadcasts_on_started_at", unique: true
   end
 
   create_table "downgrade_actions", force: :cascade do |t|
@@ -60,22 +63,25 @@ ActiveRecord::Schema.define(version: 20151123201416) do
     t.string   "codec",       null: false
     t.integer  "bitrate",     null: false
     t.integer  "channels",    null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["name"], name: "index_playback_formats_on_name", unique: true
   end
 
   create_table "profiles", force: :cascade do |t|
     t.string   "name",                        null: false
     t.text     "description"
     t.boolean  "default",     default: false, null: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["name"], name: "index_profiles_on_name", unique: true
   end
 
   create_table "shows", force: :cascade do |t|
     t.string  "name",       null: false
     t.text    "details"
     t.integer "profile_id", null: false
+    t.index ["name"], name: "index_shows_on_name", unique: true
     t.index ["profile_id"], name: "index_shows_on_profile_id"
   end
 
@@ -84,10 +90,12 @@ ActiveRecord::Schema.define(version: 20151123201416) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "groups"
-    t.string   "api_key"
+    t.string   "api_key",            null: false
     t.datetime "api_key_expires_at"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["api_key"], name: "index_users_on_api_key", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
 end

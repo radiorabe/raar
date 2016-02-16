@@ -5,9 +5,23 @@ module V1
     THE_FUTURE_PATH = Rails.root.join('public', 'the_future.mp3')
 
     def show
+      if file_playable?
+        send_audio(entry.absolute_path, entry.audio_format.mime_type)
+      else
+        handle_unplayable
+      end
+    end
+
+    private
+
+    def file_playable?
+      entry && (entry.public? || current_user)
+    end
+
+    def handle_unplayable
       if timestamp < Time.zone.now
         if entry
-          send_audio(entry.absolute_path, entry.audio_format.mime_type)
+          head :unauthorized
         else
           send_missing(NOT_FOUND_PATH)
         end
@@ -16,10 +30,12 @@ module V1
       end
     end
 
-    private
-
     def send_missing(path)
-      send_audio(path, AudioEncoding::Mp3.mime_type, 404)
+      if File.exist?(path)
+        send_audio(path, AudioEncoding::Mp3.mime_type, 404)
+      else
+        head :not_found
+      end
     end
 
     def send_audio(path, mime, status = 200)
@@ -32,8 +48,13 @@ module V1
     end
 
     def fetch_entries
-      super.where(broadcast_id: params[:broadcast_id])
-           .includes(:playback_format, :broadcast)
+      entries = super.where(broadcast_id: params[:broadcast_id])
+                     .includes(:playback_format, :broadcast)
+      if current_user
+        entries
+      else
+        entries.only_public
+      end
     end
 
     def fetch_entry
