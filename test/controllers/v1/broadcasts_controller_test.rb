@@ -38,6 +38,23 @@ module V1
                    json_attrs(:label)
     end
 
+    test 'GET index with show_id and time parts resolves params correctly' do
+      assert_routing({ path: 'v1/shows/42/broadcasts/2013/05/20', method: :get },
+                     { controller: 'v1/broadcasts', action: 'index', show_id: '42',
+                       year: '2013', month: '05', day: '20' })
+    end
+
+    test 'GET index only with show_id resolves params correctly' do
+      assert_routing({ path: 'v1/shows/42/broadcasts', method: :get },
+                     { controller: 'v1/broadcasts', action: 'index', show_id: '42' })
+    end
+
+    test 'GET index with only year resolves params correctly' do
+      assert_routing({ path: 'v1/broadcasts/2013', method: :get },
+                     { controller: 'v1/broadcasts', action: 'index',
+                       year: '2013' })
+    end
+
     test 'GET index with time parts up to month resolves params correctly' do
       assert_routing({ path: 'v1/broadcasts/2013/05', method: :get },
                      { controller: 'v1/broadcasts', action: 'index',
@@ -66,11 +83,6 @@ module V1
       assert_routing({ path: 'v1/broadcasts/2013/05/20/201534', method: :get },
                      { controller: 'v1/broadcasts', action: 'index',
                        year: '2013', month: '05', day: '20', hour: '20', min: '15', sec: '34' })
-    end
-
-    test 'GET show returns broadcast' do
-      get :show, params: { show_id: shows(:info).id, id: broadcasts(:info_mai).id }
-      assert_equal 'Info Mai', json['data']['attributes']['label']
     end
 
   end

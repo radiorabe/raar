@@ -8,10 +8,5 @@ module V1
       assert_equal ['Geschäch9schlimmers', 'Info', 'Klangbecken'], json_attrs(:name)
     end
 
-    test 'GET show returns show' do
-      get :show, params: { id: shows(:info).id }
-      assert_equal 'Info', json['data']['attributes']['name']
-    end
-
   end
 end

@@ -3,7 +3,5 @@ module V1
 
     attributes :id, :name, :details
 
-    belongs_to :profile
-
   end
 end

@@ -5,6 +5,12 @@ module V1
 
     self.search_columns = %w(label people details shows.name shows.details)
 
+    before_action :assert_params_given, only: :index
+
+    def index
+      render json: fetch_entries, each_serializer: model_serializer, include: [:show]
+    end
+
     private
 
     def fetch_entries
@@ -34,9 +40,13 @@ module V1
       # TODO: handle timezone/DST
       Time.zone.local(*parts)
     rescue ArgumentError
-      raise(ActionController::RoutingError,
-            "No route matches [#{request.headers['REQUEST_METHOD']}] " +
-            request.headers['PATH_INFO'].inspect)
+      not_found
+    end
+
+    def assert_params_given
+      if params[:show_id].blank? && params[:year].blank? && params[:q].blank?
+        not_found
+      end
     end
 
   end
