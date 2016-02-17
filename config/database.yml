@@ -11,10 +11,10 @@ default: &default
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
   timeout: 5000
+  host: <%= ENV['RAAR_DB_HOST'] %>
+  port: <%= ENV['RAAR_DB_PORT'] %>
   username: <%= ENV['RAAR_DB_USERNAME'] %>
   password: <%= ENV['RAAR_DB_PASSWORD'] %>
-  port: <%= ENV['RAAR_DB_PORT'] %>
-  host: <%= ENV['RAAR_DB_HOST'] %>
 
 development:
   <<: *default
