@@ -54,7 +54,8 @@ class AudioFile < ActiveRecord::Base
     def only_public
       joins(broadcast: { show: { profile: :archive_formats } })
         .where('archive_formats.codec = audio_files.codec')
-        .where('archive_formats.max_public_bitrate >= audio_files.bitrate')
+        .where('archive_formats.max_public_bitrate IS NULL OR ' \
+               'archive_formats.max_public_bitrate >= audio_files.bitrate')
     end
 
   end
@@ -77,7 +78,8 @@ class AudioFile < ActiveRecord::Base
       .joins(profile: { shows: :broadcasts })
       .where(broadcasts: { id: broadcast_id })
       .where(archive_formats: { codec: codec })
-      .where('archive_formats.max_public_bitrate >= ?', bitrate)
+      .where('archive_formats.max_public_bitrate IS NULL OR ' \
+             'archive_formats.max_public_bitrate >= ?', bitrate)
       .exists?
   end
 

@@ -5,14 +5,16 @@
 
 RAAR is a ruby application to manage and browse an audio archive.
 
-## Key Concepts
+It consists of three main parts:
 
-
+* The importer adds existing audio recordings and their metadata to the archive.
+* The downgrader reduces the audio quality of archived files after defined periods of time.
+* A REST API gives access to the archived audio, the metadata and the archive configuration.
 
 ## Digging deeper
 
+* [Architecture](doc/architecture.md)
 * [Setup](doc/setup.md)
-* [Configuration](doc/configuration.md)
 * [API](doc/api.md)
 * [Import](doc/import.md)
 * [Downgrade](doc/downgrade.md)

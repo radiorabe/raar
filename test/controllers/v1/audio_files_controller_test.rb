@@ -28,6 +28,19 @@ module V1
                     json_attrs(:url)
     end
 
+    test 'GET index without max_public_bitrate returns complete list for broadcast for guest user' do
+      archive_formats(:important_mp3).update!(max_public_bitrate: nil)
+
+      get :index, params: { broadcast_id: broadcasts(:info_april).id }
+
+      assert_equal [320, 192, 96], json_attrs(:bitrate)
+      assert_equal %w(best high low), json_attrs(:playback_format)
+      assert_equal ['http://example.com/v1/audio_files/2013/04/10/110000_best.mp3',
+                    'http://example.com/v1/audio_files/2013/04/10/110000_high.mp3',
+                    'http://example.com/v1/audio_files/2013/04/10/110000_low.mp3'],
+                    json_attrs(:url)
+    end
+
     test 'GET show for non-public file returns 404' do
       get :show,
           params: {
@@ -46,6 +59,25 @@ module V1
     test 'GET show for public file returns audio file' do
       @path = audio_files(:info_april_high).absolute_path
       touch_path
+      get :show,
+          params: {
+            year: '2013',
+            month: '04',
+            day: '10',
+            hour: '11',
+            min: '00',
+            sec: '00',
+            playback_format: 'high',
+            format: 'mp3' }
+
+      assert_response 200
+      assert_equal AudioEncoding::Mp3.mime_type, response.headers['Content-Type']
+    end
+
+    test 'GET show for file with no max_public_bitrate set returns audio file' do
+      @path = audio_files(:info_april_high).absolute_path
+      touch_path
+      archive_formats(:important_mp3).update!(max_public_bitrate: nil)
       get :show,
           params: {
             year: '2013',

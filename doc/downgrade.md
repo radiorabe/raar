@@ -6,4 +6,4 @@ This executable lives in `bin/downgrade` and may be called by a cron job:
 
     bash -l -c '$RAAR_HOME/bin/downgrade >> /dev/null 2>&1'
 
-See [Configuration](configuration.md) for details on the downgrade settings.
+See [Architecture](architecture.md) for details on the downgrade settings.
