@@ -5,6 +5,9 @@
 * ruby >= 2.2.0
 * postgresql
 * ffmpeg >= 2.7.0
+* apache httpd
+* mod_xsendfile
+* freeipa
 
 ## Configuration
 
@@ -36,6 +39,7 @@ The following environment variables may be used to configure RAAR. They are all 
 | Name | Description | Default |
 | --- | --- | --- |
 | RAAR_HOST_NAME | The host name where the API is running at. | - |
+| RAAR_BASE_PATH | The URL base path where the API is running at. | - |
 | RAAR_ADMIN_GROUPS | A comma-separated list of user groups the will have admin privileges. | admin,root |
 
 ### Import

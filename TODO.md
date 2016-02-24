@@ -6,6 +6,7 @@
 * add mp3 tags on import
 * add request caching
 * document api with swagger
+* add login api endpoint?
 * extend api for configuration
 
 

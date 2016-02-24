@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
+  root to: 'v1/apidocs#index'
+
   namespace :v1 do
+    root to: 'apidocs#index'
+
     resources :shows, only: :index
 
     resources :broadcasts, only: [] do

@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
 
   include Authenticatable
+  include Swagger::Blocks
 
   private
 

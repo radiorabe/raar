@@ -7,6 +7,104 @@ module V1
 
     before_action :assert_params_given, only: :index
 
+    swagger_path '/v1/broadcasts' do
+      operation :get do
+        key :description, 'Searches and returns a list of broadcasts.'
+
+        parameter name: :q,
+                  in: :query,
+                  description: 'Query string to search for in broadcast labels/people/details ' \
+                               'or show names/details',
+                  required: true,
+                  type: :string
+
+        response 200 do
+          key '$ref', '#/responses/broadcast_list'
+        end
+      end
+    end
+
+    swagger_path '/v1/broadcasts/{year}/{month}/{day}/{hour}{minute}{second}' do
+      operation :get do
+        key :description, 'Returns a list of broadcasts at the given date/time span.'
+
+        parameter name: :year,
+                  in: :path,
+                  description: 'The four-digit year to get the broadcasts for.',
+                  required: true,
+                  type: :integer
+
+        parameter name: :month,
+                  in: :path,
+                  description: 'Optional two-digit month to get the broadcasts for. ' \
+                               'Requires all preceeding parameters.',
+                  required: true, # false, actually. Swagger path params must be required.
+                  type: :integer
+
+        parameter name: :day,
+                  in: :path,
+                  description: 'Optional two-digit day to get the broadcasts for. ' \
+                               'Requires all preceeding parameters.',
+                  required: true, # false, actually. Swagger path params must be required.
+                  type: :integer
+
+        parameter name: :hour,
+                  in: :path,
+                  description: 'Optional two-digit hour to get the broadcasts for. ' \
+                               'Requires all preceeding parameters.',
+                  required: true, # false, actually. Swagger path params must be required.
+                  type: :integer
+
+        parameter name: :minute,
+                  in: :path,
+                  description: 'Optional two-digit minute to get the broadcasts for. ' \
+                               'Requires all preceeding parameters.',
+                  required: true, # false, actually. Swagger path params must be required.
+                  type: :integer
+
+        parameter name: :second,
+                  in: :path,
+                  description: 'Optional two-digit second to get the broadcast for. ' \
+                               'Requires all preceeding parameters.',
+                  required: true, # false, actually. Swagger path params must be required.
+                  type: :integer
+
+        parameter name: :q,
+                  in: :query,
+                  description: 'Query string to search for in broadcast labels/people/details ' \
+                               'or show names/details',
+                  required: false,
+                  type: :string
+
+        response 200 do
+          key '$ref', '#/responses/broadcast_list'
+        end
+      end
+    end
+
+    swagger_path '/v1/shows/{show_id}/broadcasts' do
+      operation :get do
+        key :description, 'Returns a list of broadcasts of the given show.'
+
+        parameter name: :show_id,
+                  in: :path,
+                  description: 'Id of the show to list the broadcasts for',
+                  required: true,
+                  type: :integer
+
+        parameter name: :q,
+                  in: :query,
+                  description: 'Query string to search for in broadcast labels/people/details ' \
+                               'or show names/details',
+                  required: false,
+                  type: :string
+
+        response 200 do
+          key '$ref', '#/responses/broadcast_list'
+        end
+      end
+    end
+
     def index
       render json: fetch_entries, each_serializer: model_serializer, include: [:show]
     end
