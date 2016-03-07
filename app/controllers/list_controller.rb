@@ -24,15 +24,19 @@ class ListController < ApplicationController
   end
 
   def fetch_entries
-    model_class.list
+    model_scope.list
   end
 
   def fetch_entry
-    model_class.find(params[:id])
+    model_scope.find(params[:id])
   end
 
   def ivar_name
     model_class.model_name.param_key
+  end
+
+  def model_scope
+    model_class
   end
 
   class << self

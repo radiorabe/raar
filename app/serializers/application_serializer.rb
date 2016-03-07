@@ -4,7 +4,7 @@ class ApplicationSerializer < ActiveModel::Serializer
   include Swagger::Blocks
 
   class << self
-    
+
     def json_api_swagger_schema(&block)
       swagger_schema(name.gsub(/Serializer$/, '')) do
         property :id, type: :integer

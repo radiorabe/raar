@@ -10,6 +10,7 @@ module V1
     swagger_path '/v1/broadcasts' do
       operation :get do
         key :description, 'Searches and returns a list of broadcasts.'
+        key :tags, [:broadcast, :public]
 
         parameter name: :q,
                   in: :query,
@@ -27,6 +28,7 @@ module V1
     swagger_path '/v1/broadcasts/{year}/{month}/{day}/{hour}{minute}{second}' do
       operation :get do
         key :description, 'Returns a list of broadcasts at the given date/time span.'
+        key :tags, [:broadcast, :public]
 
         parameter name: :year,
                   in: :path,
@@ -85,10 +87,11 @@ module V1
     swagger_path '/v1/shows/{show_id}/broadcasts' do
       operation :get do
         key :description, 'Returns a list of broadcasts of the given show.'
+        key :tags, [:broadcast, :public]
 
         parameter name: :show_id,
                   in: :path,
-                  description: 'Id of the show to list the broadcasts for',
+                  description: 'ID of the show to list the broadcasts for',
                   required: true,
                   type: :integer
 

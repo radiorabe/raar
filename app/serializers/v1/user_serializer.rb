@@ -15,7 +15,23 @@
 module V1
   class UserSerializer < ApplicationSerializer
 
-    attributes :id, :username, :first_name, :last_name, :groups, :api_key, :api_key_expires_at
+    json_api_swagger_schema do
+      property :attributes, type: :object do
+        property :username, type: :string
+        property :first_name, type: :string
+        property :last_name, type: :string
+        property :groups, type: :array, items: { type: :string }
+        property :api_key, type: :string
+        property :api_key_expires_at, type: :string, format: :dateTime
+      end
+    end
+
+    attributes :id, :username, :first_name, :last_name, :groups, :api_key, :api_key_expires_at,
+               :created_at, :updated_at
+
+    def groups
+      object.group_list
+    end
 
   end
 end

@@ -4,6 +4,93 @@ module V1
     NOT_FOUND_PATH = Rails.root.join('public', 'not_found.mp3')
     THE_FUTURE_PATH = Rails.root.join('public', 'the_future.mp3')
 
+    swagger_path '/v1/broadcasts/{broadcast_id}/audio_files' do
+      operation :get do
+        key :description, 'Returns a list of available audio files for a given broadcast.'
+        key :tags, [:audio_file, :public]
+
+        parameter name: :broadcast_id,
+                  in: :path,
+                  description: 'Id of the broadcast to list the audio files for.',
+                  required: true,
+                  type: :integer
+
+        response 200 do
+          key :description, 'successfull operation'
+          schema do
+            property :data, type: :array do
+              items '$ref' => 'V1::AudioFile'
+            end
+          end
+        end
+      end
+    end
+
+    swagger_path '/v1/audio_files/{year}/{month}/{day}/{hour}{minute}{second}_' \
+                 '{playback_format}.{format}' do
+      operation :get do
+        key :description, 'Returns an audio file in the requested format.'
+        key :produces, AudioEncoding.list.collect(&:mime_type)
+        key :tags, [:audio_file, :public]
+
+        parameter name: :year,
+                  in: :path,
+                  description: 'Four-digit year to get the audio file for.',
+                  required: true,
+                  type: :integer
+
+        parameter name: :month,
+                  in: :path,
+                  description: 'Two-digit month to get the audio file for.',
+                  required: true,
+                  type: :integer
+
+        parameter name: :day,
+                  in: :path,
+                  description: 'Two-digit day to get the audio file for.',
+                  required: true,
+                  type: :integer
+
+        parameter name: :hour,
+                  in: :path,
+                  description: 'Two-digit hour to get the audio file for.',
+                  required: true,
+                  type: :integer
+
+        parameter name: :minute,
+                  in: :path,
+                  description: 'Two-digit minute to get the audio file for.',
+                  required: true,
+                  type: :integer
+
+        parameter name: :second,
+                  in: :path,
+                  description: 'Optional two-digit second to get the audio file for.',
+                  required: true, # false, actually. Swagger path params must be required.
+                  type: :integer
+
+        parameter name: :playback_format,
+                  in: :path,
+                  description: 'Name of the playback format to get the audio file for. ' \
+                               "Use '#{AudioPath::BEST_FORMAT}' to get the best available quality.",
+                  required: true,
+                  type: :string
+
+        parameter name: :format,
+                  in: :path,
+                  description: 'File extension of the audio encoding to get the audio file for.',
+                  required: true,
+                  type: :string
+
+        response 200 do
+          key :description, 'successfull operation'
+          schema do
+            key :type, :file
+          end
+        end
+      end
+    end
+
     def show
       if file_playable?
         send_audio(entry.absolute_path, entry.audio_format.mime_type)

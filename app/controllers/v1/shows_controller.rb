@@ -5,11 +5,12 @@ module V1
 
     swagger_path '/v1/shows' do
       operation :get do
-        key :description, 'Returns a list of shows'
+        key :description, 'Returns a list of shows.'
+        key :tags, [:show, :public]
 
         parameter name: :q,
                   in: :query,
-                  description: 'Query string to search for in show names or details',
+                  description: 'Query string to search for in show names or details.',
                   required: false,
                   type: :string
 

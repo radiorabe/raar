@@ -1,6 +1,16 @@
 module V1
   class AudioFileSerializer < ApplicationSerializer
 
+    json_api_swagger_schema do
+      property :attributes, type: :object do
+        property :codec, type: :string
+        property :bitrates, type: :integer
+        property :channels, type: :integer
+        property :url, type: :string
+        property :playback_format, type: :string
+      end
+    end
+
     attributes :codec, :bitrate, :channels, :playback_format, :url
 
     def url

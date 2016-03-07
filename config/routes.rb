@@ -23,6 +23,17 @@ Rails.application.routes.draw do
     end
 
     resources :users
+
+    resources :audio_encodings, only: :index
+
+    resources :profiles do
+      resources :archive_formats do
+        resources :downgrade_actions
+      end
+    end
+
+    resources :playback_formats
+
   end
 
 end

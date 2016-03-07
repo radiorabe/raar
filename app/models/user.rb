@@ -50,6 +50,15 @@ class User < ActiveRecord::Base
     (listify(groups) & listify(Rails.application.secrets.admin_groups)).present?
   end
 
+  def groups=(value)
+    value = value.join(',') if value.is_a?(Array)
+    super(value)
+  end
+
+  def group_list
+    listify(groups)
+  end
+
   private
 
   def listify(string)

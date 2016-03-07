@@ -3,11 +3,28 @@ module V1
 
     # A list of all classes that have swagger_* declarations.
     SWAGGERED_CLASSES = [
+      # paths
       self,
-      V1::ShowsController,
+      V1::ArchiveFormatsController,
+      V1::AudioEncodingsController,
+      V1::AudioFilesController,
       V1::BroadcastsController,
+      V1::DowngradeActionsController,
+      V1::PlaybackFormatsController,
+      V1::ProfilesController,
+      V1::ShowsController,
+      V1::UsersController,
+      # entities
+      V1::ArchiveFormatSerializer,
+      V1::AudioEncodingSerializer,
+      V1::AudioFileSerializer,
+      V1::BroadcastSerializer,
+      V1::DowngradeActionSerializer,
+      V1::PlaybackFormatSerializer,
+      V1::ProfileSerializer,
       V1::ShowSerializer,
-      V1::BroadcastSerializer
+      V1::UserSerializer,
+      V1::UnprocessableEntitySerializer
     ].freeze
 
     swagger_root do
@@ -15,11 +32,13 @@ module V1
       info do
         key :version, '1.0'
         key :title, 'RAAR Radio Archive API'
-        key :description, 'RAAR Radio Archive API'
+        key :description,
+            'RAAR Radio Archive API. ' \
+            'Some endpoints are public, other are restricted to admins.'
         license name: 'AGPL'
       end
-      key :consumes, ['application/json']
-      key :produces, ['application/json']
+      key :consumes, ['application/vnd.api+json']
+      key :produces, ['application/vnd.api+json']
 
       response :broadcast_list do
         key :description, 'successfull operation'
