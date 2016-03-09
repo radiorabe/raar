@@ -28,7 +28,7 @@ class ListController < ApplicationController
   end
 
   def fetch_entry
-    model_scope.find(params[:id])
+    model_scope.find(params.fetch(:id))
   end
 
   def ivar_name

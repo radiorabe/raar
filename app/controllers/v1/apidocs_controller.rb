@@ -10,6 +10,7 @@ module V1
       V1::AudioFilesController,
       V1::BroadcastsController,
       V1::DowngradeActionsController,
+      V1::LoginController,
       V1::PlaybackFormatsController,
       V1::ProfilesController,
       V1::ShowsController,

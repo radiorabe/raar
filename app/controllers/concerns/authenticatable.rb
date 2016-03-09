@@ -4,6 +4,7 @@ module Authenticatable
 
   def require_authentication
     unless current_user
+      headers['WWW-Authenticate'] = %(Token realm="Application")
       render json: { errors: 'Not authenticated' }, status: :unauthorized
     end
   end

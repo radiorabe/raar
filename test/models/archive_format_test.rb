@@ -15,9 +15,21 @@
 require 'test_helper'
 
 class ArchiveFormatTest < ActiveSupport::TestCase
-  test "all fixtures valid" do
+
+  test 'all fixtures valid' do
      ArchiveFormat.all.each do |e|
        assert_valid e
      end
   end
+
+  test 'validates available bitrates' do
+    entry = ArchiveFormat.new(codec: 'mp3', initial_bitrate: 123, initial_channels: 6)
+    assert_not_valid entry, :initial_bitrate, :initial_channels, :profile
+  end
+
+  test 'validates available codecs' do
+    entry = ArchiveFormat.new(codec: 'mp4', initial_bitrate: 96, initial_channels: 2)
+    assert_not_valid entry, :codec, :profile
+  end
+
 end

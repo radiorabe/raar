@@ -11,7 +11,17 @@ module V1
       end
     end
 
+    type 'audio_encoding'
+
+    # Delegate is required here as AudioEncoding is not directly Active Model Serializable.
+    delegate :codec, :file_extension, :mime_type, :bitrates, :channels,
+             to: :object
+
     attributes :codec, :file_extension, :mime_type, :bitrates, :channels
+
+    def id
+      codec
+    end
 
   end
 end

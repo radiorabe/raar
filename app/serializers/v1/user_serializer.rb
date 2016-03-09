@@ -23,11 +23,14 @@ module V1
         property :groups, type: :array, items: { type: :string }
         property :api_key, type: :string
         property :api_key_expires_at, type: :string, format: :dateTime
+        property :admin, type: :boolean
       end
     end
 
-    attributes :id, :username, :first_name, :last_name, :groups, :api_key, :api_key_expires_at,
-               :created_at, :updated_at
+    attributes :id, :username, :first_name, :last_name, :groups,
+               :api_key, :api_key_expires_at, :created_at, :updated_at
+
+    attribute :admin?, key: :admin
 
     def groups
       object.group_list

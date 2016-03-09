@@ -27,4 +27,6 @@ class ArchiveFormat < ActiveRecord::Base
   validates :max_public_bitrate,
             numericality: { only_integer: true, greater_or_equal_to: 0, allow_blank: true }
 
+  scope :list, -> { order(:codec) }
+
 end

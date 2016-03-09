@@ -5,6 +5,7 @@ class CrudController < ListController
 
   # POST /users
   def create
+    build_entry
     if entry.save
       render json: entry, status: :created, location: entry_url, serializer: model_serializer
     else
@@ -32,13 +33,13 @@ class CrudController < ListController
 
   private
 
-  def fetch_entry
-    params[:id] ? super : model_scope.new(model_params)
-  end
-
   def entry_url
     prefix = self.class.name.deconstantize.underscore.tr('/', '_')
     send("#{prefix}_#{entry.class.model_name.singular_route_key}_url", entry)
+  end
+
+  def build_entry
+    instance_variable_set(:"@#{ivar_name}", model_scope.new(model_params))
   end
 
   # Only allow a trusted parameter "white list" through.

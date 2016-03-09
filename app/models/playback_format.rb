@@ -26,8 +26,10 @@ class PlaybackFormat < ActiveRecord::Base
             format: { with: /\A[a-z0-9_]*\z/, message: :identifier_format }
   validates :codec, :bitrate, :channels, presence: true
 
+  scope :list, -> { order(:name, :codec) }
+
   def to_s
-    "#{name}.#{audio_format.file_extension}"
+    "#{name}.#{codec}"
   end
 
 end

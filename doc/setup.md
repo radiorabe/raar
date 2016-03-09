@@ -41,6 +41,7 @@ The following environment variables may be used to configure RAAR. They are all 
 | RAAR_HOST_NAME | The host name where the API is running at. | - |
 | RAAR_BASE_PATH | The URL base path where the API is running at. | - |
 | RAAR_ADMIN_GROUPS | A comma-separated list of user groups the will have admin privileges. | admin,root |
+| DAYS_TO_EXPIRE_API_KEY | Number of days before API keys are expired. Leave empty to never expire keys. | - |
 
 ### Import
 

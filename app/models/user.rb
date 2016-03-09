@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
         user.groups = groups
         user.first_name = first_name
         user.last_name = last_name
+        user.reset_api_key_expires_at
         user.save!
       end
     end
@@ -57,6 +58,17 @@ class User < ActiveRecord::Base
 
   def group_list
     listify(groups)
+  end
+
+  def regenerate_api_key!
+    self.api_key = self.class.generate_unique_secure_token
+    reset_api_key_expires_at
+    save!
+  end
+
+  def reset_api_key_expires_at
+    days = Rails.application.secrets.days_to_expire_api_key
+    self.api_key_expires_at = days.present? ? Time.zone.today + days.to_i.days : nil
   end
 
   private

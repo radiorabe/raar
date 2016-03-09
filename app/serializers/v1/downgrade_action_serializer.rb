@@ -3,13 +3,13 @@ module V1
 
     json_api_swagger_schema do
       property :attributes, type: :object do
-        property :month, type: :integer
+        property :months, type: :integer
         property :bitrate, type: :integer
         property :channels, type: :integer
       end
     end
 
-    attributes :id, :month, :bitrate, :channels
+    attributes :id, :months, :bitrate, :channels
 
   end
 end

@@ -24,4 +24,6 @@ class DowngradeAction < ActiveRecord::Base
 
   delegate :codec, to: :archive_format
 
+  scope :list, -> { order(:months) }
+
 end

@@ -19,6 +19,10 @@ module V1
       profile.archive_formats
     end
 
+    def entry_url
+      v1_profile_archive_format_url(profile, entry)
+    end
+
     def profile
       @profile ||= Profile.find(params[:profile_id])
     end

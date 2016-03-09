@@ -24,6 +24,10 @@ module V1
       archive_format.downgrade_actions
     end
 
+    def entry_url
+      v1_profile_archive_format_downgrade_action_url(profile, archive_format, entry)
+    end
+
     def archive_format
       @archive_format ||= profile.archive_formats.find(params[:archive_format_id])
     end

@@ -18,16 +18,15 @@ class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
   include CustomAssertions
 
-  def json
-    @json ||= JSON.parse(response.body)
-  end
+end
 
-  def json_attrs(attr)
-    json['data'].collect { |s| s['attributes'][attr.to_s] }
-  end
+class ActionController::TestCase < ActiveSupport::TestCase
+
+  include JsonResponse
 
   def login(username = 'speedee')
     request.env['REMOTE_USER'] = username
+    request.env['REMOTE_USER_GROUPS'] = nil
   end
 
   def login_as_admin
@@ -35,4 +34,10 @@ class ActiveSupport::TestCase
     request.env['REMOTE_USER_GROUPS'] = 'admin'
   end
 
+end
+
+class ActionDispatch::IntegrationTest < ActiveSupport::TestCase
+
+  include JsonResponse
+  
 end

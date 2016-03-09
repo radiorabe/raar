@@ -3,7 +3,7 @@ module WithAudioFormat
   extend ActiveSupport::Concern
 
   def audio_encoding
-    AudioEncoding.fetch(codec)
+    AudioEncoding[codec]
   end
 
   # Methods for validating the audio format attributes.
@@ -31,13 +31,15 @@ module WithAudioFormat
 
     def validate_bitrate(bitrate_attr)
       validates bitrate_attr,
-                inclusion: { in: -> (e) { e.audio_encoding.try(:bitrates) || [] },
+                inclusion: { in: -> (e) { e.audio_encoding.bitrates },
+                             if: :audio_encoding,
                              allow_blank: true }
     end
 
     def validate_channels(channels_attr)
       validates channels_attr,
-                inclusion: { in: -> (e) { e.audio_encoding.try(:channels) || [] },
+                inclusion: { in: -> (e) { e.audio_encoding.channels },
+                             if: :audio_encoding,
                              allow_blank: true }
     end
 
