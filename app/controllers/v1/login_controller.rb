@@ -21,15 +21,7 @@ module V1
                   required: true,
                   type: :string
 
-        response 200 do
-          key :description, 'successfull operation'
-          schema do
-            property :data, type: :array do
-              items '$ref' => 'V1::User'
-            end
-          end
-        end
-
+        response_entity('V1::User')
         response 401 do
           key :description, 'not authorized'
         end

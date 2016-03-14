@@ -6,9 +6,10 @@
 #  name        :string           not null
 #  description :text
 #  default     :boolean          default(FALSE), not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  created_at  :datetime
+#  updated_at  :datetime
 #
+
 class Profile < ActiveRecord::Base
 
   has_many :shows, dependent: :restrict_with_error

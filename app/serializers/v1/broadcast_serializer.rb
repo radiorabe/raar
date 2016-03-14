@@ -2,7 +2,7 @@ module V1
   class BroadcastSerializer < ApplicationSerializer
 
     json_api_swagger_schema do
-      property :attributes, type: :object do
+      property :attributes do
         property :label, type: :string
         property :started_at, type: :string, format: 'date-time'
         property :finished_at, type: :string, format: 'date-time'

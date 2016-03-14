@@ -15,20 +15,8 @@ module V1
         key :description, 'Regenerates the api key of the given user.'
         key :tags, [:user, :admin]
 
-        parameter name: :id,
-                  in: :path,
-                  description: 'ID of the user to regenerate the api key for.',
-                  required: true,
-                  type: :integer
-
-        response 200 do
-          key :description, 'successfull operation'
-          schema do
-            property :data, type: :array do
-              items '$ref' => 'V1::User'
-            end
-          end
-        end
+        parameter_id('user', 'regenerate the api key for')
+        response_entity('V1::User')
       end
     end
 

@@ -8,8 +8,8 @@
 #  codec       :string           not null
 #  bitrate     :integer          not null
 #  channels    :integer          not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  created_at  :datetime
+#  updated_at  :datetime
 #
 
 class PlaybackFormat < ActiveRecord::Base

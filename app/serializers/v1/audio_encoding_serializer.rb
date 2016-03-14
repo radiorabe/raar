@@ -2,12 +2,18 @@ module V1
   class AudioEncodingSerializer < ApplicationSerializer
 
     json_api_swagger_schema do
-      property :attributes, type: :object do
+      property :attributes do
         property :codec, type: :string
         property :file_extension, type: :string
         property :mime_type, type: :string
-        property :bitrates, type: :array, items: { type: :integer }
-        property :channels, type: :array, items: { type: :integer }
+        property :bitrates,
+                 type: :array,
+                 items: { type: :integer },
+                 description: 'Possible bitrates in kbps.'
+        property :channels,
+                 type: :array,
+                 items: { type: :integer },
+                 description: 'Possible number of channels.'
       end
     end
 

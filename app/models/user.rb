@@ -7,11 +7,12 @@
 #  first_name         :string
 #  last_name          :string
 #  groups             :string
-#  api_key            :string
+#  api_key            :string           not null
 #  api_key_expires_at :datetime
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
+#  created_at         :datetime
+#  updated_at         :datetime
 #
+
 class User < ActiveRecord::Base
 
   has_secure_token :api_key

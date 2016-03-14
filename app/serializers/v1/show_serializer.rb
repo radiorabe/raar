@@ -2,7 +2,7 @@ module V1
   class ShowSerializer < ApplicationSerializer
 
     json_api_swagger_schema do
-      property :attributes, type: :object do
+      property :attributes do
         property :name, type: :string
         property :details, type: :string
       end

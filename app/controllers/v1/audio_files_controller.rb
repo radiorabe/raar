@@ -15,14 +15,7 @@ module V1
                   required: true,
                   type: :integer
 
-        response 200 do
-          key :description, 'successfull operation'
-          schema do
-            property :data, type: :array do
-              items '$ref' => 'V1::AudioFile'
-            end
-          end
-        end
+        response_entities('V1::AudioFile')
       end
     end
 
@@ -84,9 +77,7 @@ module V1
 
         response 200 do
           key :description, 'successfull operation'
-          schema do
-            key :type, :file
-          end
+          schema type: :file
         end
       end
     end

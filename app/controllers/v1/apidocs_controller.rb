@@ -41,14 +41,11 @@ module V1
       key :consumes, ['application/vnd.api+json']
       key :produces, ['application/vnd.api+json']
 
-      response :broadcast_list do
-        key :description, 'successfull operation'
+      response :unprocessable_entity do
+        key :description, 'unprocessable entity'
         schema do
-          property :data, type: :array do
-            items '$ref' => 'V1::Broadcast'
-          end
-          property :included, type: :array do
-            items '$ref' => 'V1::Show'
+          property :errors, type: :array do
+            items '$ref' => 'V1::UnprocessableEntity'
           end
         end
       end

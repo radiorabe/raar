@@ -8,8 +8,8 @@
 #  initial_bitrate    :integer          not null
 #  initial_channels   :integer          not null
 #  max_public_bitrate :integer
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
+#  created_at         :datetime
+#  updated_at         :datetime
 #
 
 important_mp3:

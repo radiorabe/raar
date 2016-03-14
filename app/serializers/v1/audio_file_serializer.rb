@@ -2,7 +2,7 @@ module V1
   class AudioFileSerializer < ApplicationSerializer
 
     json_api_swagger_schema do
-      property :attributes, type: :object do
+      property :attributes do
         property :codec, type: :string
         property :bitrates, type: :integer
         property :channels, type: :integer

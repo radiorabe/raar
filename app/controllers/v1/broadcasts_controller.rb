@@ -7,6 +7,37 @@ module V1
 
     before_action :assert_params_given, only: :index
 
+    # Convenience module to extract common swagger documentation in this controller.
+    module SwaggerOperationMethods
+
+      def parameter_date(name)
+        parameter name: name,
+                  in: :path,
+                  description: "Optional two-digit #{name} to get the broadcasts for. " \
+                               'Requires all preceeding parameters.',
+                  required: true, # false, actually. Swagger path params must be required.
+                  type: :integer
+      end
+
+      # rubocop:disable Metrics/MethodLength
+      def response_broadcasts
+        response 200 do
+          key :description, 'successfull operation'
+          schema do
+            property :data, type: :array do
+              items '$ref' => 'V1::Broadcast'
+            end
+            property :included, type: :array do
+              items '$ref' => 'V1::Show'
+            end
+          end
+        end
+      end
+      # rubocop:enable Metrics/MethodLength
+
+    end
+    include_missing(Swagger::Blocks::OperationNode, SwaggerOperationMethods)
+
     swagger_path '/v1/broadcasts' do
       operation :get do
         key :description, 'Searches and returns a list of broadcasts.'
@@ -19,9 +50,7 @@ module V1
                   required: true,
                   type: :string
 
-        response 200 do
-          key '$ref', '#/responses/broadcast_list'
-        end
+        response_broadcasts
       end
     end
 
@@ -36,40 +65,11 @@ module V1
                   required: true,
                   type: :integer
 
-        parameter name: :month,
-                  in: :path,
-                  description: 'Optional two-digit month to get the broadcasts for. ' \
-                               'Requires all preceeding parameters.',
-                  required: true, # false, actually. Swagger path params must be required.
-                  type: :integer
-
-        parameter name: :day,
-                  in: :path,
-                  description: 'Optional two-digit day to get the broadcasts for. ' \
-                               'Requires all preceeding parameters.',
-                  required: true, # false, actually. Swagger path params must be required.
-                  type: :integer
-
-        parameter name: :hour,
-                  in: :path,
-                  description: 'Optional two-digit hour to get the broadcasts for. ' \
-                               'Requires all preceeding parameters.',
-                  required: true, # false, actually. Swagger path params must be required.
-                  type: :integer
-
-        parameter name: :minute,
-                  in: :path,
-                  description: 'Optional two-digit minute to get the broadcasts for. ' \
-                               'Requires all preceeding parameters.',
-                  required: true, # false, actually. Swagger path params must be required.
-                  type: :integer
-
-        parameter name: :second,
-                  in: :path,
-                  description: 'Optional two-digit second to get the broadcast for. ' \
-                               'Requires all preceeding parameters.',
-                  required: true, # false, actually. Swagger path params must be required.
-                  type: :integer
+        parameter_date :month
+        parameter_date :day
+        parameter_date :hour
+        parameter_date :minute
+        parameter_date :second
 
         parameter name: :q,
                   in: :query,
@@ -78,9 +78,7 @@ module V1
                   required: false,
                   type: :string
 
-        response 200 do
-          key '$ref', '#/responses/broadcast_list'
-        end
+        response_broadcasts
       end
     end
 
@@ -102,9 +100,7 @@ module V1
                   required: false,
                   type: :string
 
-        response 200 do
-          key '$ref', '#/responses/broadcast_list'
-        end
+        response_broadcasts
       end
     end
 

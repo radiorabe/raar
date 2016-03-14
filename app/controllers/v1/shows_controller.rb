@@ -14,14 +14,7 @@ module V1
                   required: false,
                   type: :string
 
-        response 200 do
-          key :description, 'successfull operation'
-          schema do
-            property :data, type: :array do
-              items '$ref' => 'V1::Show'
-            end
-          end
-        end
+        response_entities('V1::Show')
       end
     end
 

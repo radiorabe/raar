@@ -8,14 +8,7 @@ module V1
         key :description, 'Returns a list of available audio encodings.'
         key :tags, [:audio_encoding, :admin]
 
-        response 200 do
-          key :description, 'successfull operation'
-          schema do
-            property :data, type: :array do
-              items '$ref' => 'V1::AudioEncoding'
-            end
-          end
-        end
+        response_entities('V1::AudioEncoding')
       end
     end
 
