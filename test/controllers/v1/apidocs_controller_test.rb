@@ -5,7 +5,7 @@ module V1
 
     test 'GET index returns json' do
       get :index
-      assert_equal 19, json['paths'].size
+      assert_equal 20, json['paths'].size
       assert_equal 10, json['definitions'].size
     end
 

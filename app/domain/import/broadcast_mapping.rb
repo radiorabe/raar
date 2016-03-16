@@ -76,7 +76,6 @@ module Import
     def fetch_show(attrs = {})
       Show.where(name: attrs.fetch(:name)).first_or_initialize.tap do |show|
         show.attributes = attrs
-        show.profile ||= Profile.default
       end
     end
 

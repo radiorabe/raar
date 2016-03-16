@@ -15,10 +15,22 @@ class Show < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
 
+  before_validation :set_default_profile_id
+
   scope :list, -> { order(:name) }
 
   def to_s
     name
+  end
+
+  def profile
+    super || Profile.default
+  end
+
+  private
+
+  def set_default_profile_id
+    self.profile_id ||= Profile.default.id
   end
 
 end

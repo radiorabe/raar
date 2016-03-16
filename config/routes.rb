@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   namespace :v1 do
     root to: 'apidocs#index'
 
-    resources :shows, only: :index
+    resources :shows
 
     resources :broadcasts, only: [] do
       resources :audio_files, only: :index
@@ -15,7 +15,8 @@ Rails.application.routes.draw do
     constraints(year: /\d{4}/, month: /\d{2}/, day: /\d{2}/,
                 hour: /\d{2}/, min: /\d{2}/, sec: /\d{2}/) do
       get '(/shows/:show_id)/broadcasts(/:year(/:month(/:day(/:hour(:min(:sec))))))',
-          to: 'broadcasts#index'
+          to: 'broadcasts#index',
+          as: :broadcasts
 
       get 'audio_files/:year/:month/:day/:hour:min(:sec)_:playback_format.:format',
           to: 'audio_files#show',

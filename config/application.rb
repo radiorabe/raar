@@ -36,6 +36,12 @@ module Raar
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    routes.default_url_options = {
+      protocol: Rails.application.secrets.ssl ? 'https' : 'http',
+      host: Rails.application.secrets.host_name,
+      script_name: Rails.application.secrets.base_path
+    }
+
     config.to_prepare do
       # Define default classes.
       AudioProcessor.klass ||= AudioProcessor::Ffmpeg

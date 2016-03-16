@@ -6,8 +6,11 @@ module V1
 
     self.permitted_attrs = [:username, :first_name, :last_name, :groups]
 
+    self.search_columns = %w(username first_name last_name)
+
     crud_swagger_paths(route_prefix: '/v1',
                        data_class: 'V1::User',
+                       query_param: true,
                        tags: [:admin])
 
     swagger_path('/v1/users/{id}/api_key') do

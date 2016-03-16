@@ -15,9 +15,8 @@ class ApplicationSerializer < ActiveModel::Serializer
 
   end
 
-  def default_url_options(options = {})
-    options[:host] ||= Rails.application.secrets.host_name
-    options
+  def admin?
+    current_user && current_user.admin?
   end
 
 end

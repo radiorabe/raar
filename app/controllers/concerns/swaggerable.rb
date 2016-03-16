@@ -20,22 +20,32 @@ module Swaggerable
       model_name = options[:model_name] || model_class.model_name.human.downcase
       model_name_plural = options[:model_name_plural] || model_name.pluralize
       tags = [model_identifier] + Array(options[:tags])
+      tags_read = tags + Array(options[:tags_read])
+      tags_write = tags + Array(options[:tags_write])
       data_class = options.fetch(:data_class)
       prefix_parameters = Array(options[:prefix_parameters])
 
       swagger_path("#{route_prefix}/#{route_key}") do
         operation :get do
           key :description, "Returns a list of #{model_name_plural}."
-          key :tags, tags
+          key :tags, tags_read
 
           path_parameters(prefix_parameters)
+
+          if options[:query_param]
+            parameter name: :q,
+                      in: :query,
+                      description: 'Query string to search for.',
+                      required: false,
+                      type: :string
+          end
 
           response_entities(data_class)
         end
 
         operation :post do
           key :description, "Creates a new #{model_name}."
-          key :tags, tags
+          key :tags, tags_write
 
           path_parameters(prefix_parameters)
           parameter_attrs(model_name, 'create', data_class)
@@ -48,7 +58,7 @@ module Swaggerable
       swagger_path("#{route_prefix}/#{route_key}/{id}") do
         operation :get do
           key :description, "Returns a single #{model_name}."
-          key :tags, tags
+          key :tags, tags_read
 
           path_parameters(prefix_parameters)
           parameter_id(model_name, 'fetch')
@@ -58,7 +68,7 @@ module Swaggerable
 
         operation :patch do
           key :description, "Updates an existing #{model_name}."
-          key :tags, tags
+          key :tags, tags_write
 
           path_parameters(prefix_parameters)
           parameter_id(model_name, 'update')
@@ -70,7 +80,7 @@ module Swaggerable
 
         operation :delete do
           key :description, "Deletes an existing #{model_name}."
-          key :tags, tags
+          key :tags, tags_write
 
           path_parameters(prefix_parameters)
           parameter_id(model_name, 'delete')
