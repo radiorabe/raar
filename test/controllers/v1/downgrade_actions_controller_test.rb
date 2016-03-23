@@ -69,7 +69,7 @@ module V1
               profile_id: profiles(:default).id,
               archive_format_id: archive_formats(:default_mp3).id,
               data: { attributes: { months: 6, bitrate: 224 } } }
-      assert_response 200
+      assert_response 200, response.body
       assert_equal 6, json['data']['attributes']['months']
       assert_equal 224, json['data']['attributes']['bitrate']
       assert_equal 6, entry.reload.months

@@ -6,10 +6,12 @@ module V1
         property :months, type: :integer
         property :bitrate,
                  type: :integer,
-                 description: 'See audio_encodings of archive_format.codec for possible values.'
+                 description: 'See audio_encodings of archive_format.codec for possible values.' \
+                              'Set to null to entirely delete the files after this many months.'
         property :channels,
                  type: :integer,
-                 description: 'See audio_encodings for archive_format.codec for possible values.'
+                 description: 'See audio_encodings for archive_format.codec for possible values.' \
+                              'Set to null to entirely delete the files after this many months.'
       end
     end
 

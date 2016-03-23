@@ -21,11 +21,87 @@
 
 de:
   activerecord:
+    models:
+      archive_format:
+        one: Archivierungs Format
+        other: Archivierungs Formate
+      audio_files:
+        one: Audio Datei
+        other: Audio Dateien
+      broadcasts:
+        one: Ausstrahlung
+        other: Ausstrahlungen
+      downgrade_action:
+        one: Reduktionsereignis
+        other: Reduktionsereignisse
+      playback_format:
+        one: Wiedergabeformat
+        other: Wiedergabeformate
+      profile:
+        one: Profil
+        other: Profile
+      show:
+        one: Sendung
+        other: Sendungen
+      user:
+        one: Benutzer_in
+        other: Benutzer_innen
+
+    attributes:
+      archive_format:
+        codec: Codec
+        initial_bitrate: Initiale Bitrate
+        initial_channels: Initiale Kanäle
+        max_public_bitrate: Maximale öffentliche Bitrate
+      audio_file:
+        path: Pfad
+        codec: Codec
+        bitrate: Bitrate
+        channels: Kanäle
+        playback_format: Wiedergabeformat
+        playback_format_id: Wiedergabeformat
+      broadcast:
+        label: Bezeichnung
+        started_at: Beginn
+        finished_at: Ende
+        people: Sendungsmachende
+        details: Details
+      downgrade_action:
+        months: Monate
+        bitrate: Bitrate
+        channels: Kanäle
+      playback_format:
+        name: Name
+        description: Beschreibung
+        codec: Codec
+        bitrate: Bitrate
+        channels: Kanäle
+      profiles:
+        name: Name
+        description: Beschreibung
+        default: Standard
+      shows:
+        name: Name
+        details: Details
+        profile: Profil
+        profile_id: Profil
+      user:
+        username: Benutzername
+        first_name: Vorname
+        last_name: Nachname
+        groups: Gruppen
+        api_key: API Schlüssel
+        api_key_expires_at: API Schlüssel Ablaufdatum
+
     errors:
       messages:
         identifier_format: darf nur die Zeichen a-z, 0-9 und '_' enthalten.
+        must_decrease: muss mit der Zeit kleiner werden.
+        must_not_change: darf nicht verändert werden.
       models:
         profile:
           attributes:
             default:
               must_exist: muss definiert sein.
+        downgrade_action:
+          delete_must_be_last: Löschen darf erst am Ende aller Aktionen geschehen.

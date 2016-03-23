@@ -1,7 +1,6 @@
 namespace :erd do
   task :options => :customize
   task :customize do
-    #require Rails.root.join('lib', 'tasks', 'rails_erd_patch.rb')
     FileUtils.mkdir_p(Rails.root.join('doc'))
     ENV['attributes']  ||= 'content,inheritance,foreign_keys,timestamps'
     ENV['indirect']    ||= 'false'
@@ -9,5 +8,7 @@ namespace :erd do
     ENV['notation']    ||= 'uml'
     ENV['filename']    ||= 'doc/models'
     ENV['filetype']    ||= 'png'
+    ENV['exclude']     ||= 'ActiveRecord::InternalMetadata,ActiveRecord::SchemaMigration,' \
+                           'Airtime::Show,Airtime::ShowInstance'
   end
 end

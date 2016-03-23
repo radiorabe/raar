@@ -5,7 +5,8 @@ module V1
       property :attributes do
         property :codec,
                  type: :string,
-                 description: 'See audio_encodings for possible values.'
+                 description: 'See audio_encodings for possible values. ' \
+                              'This attribute may only be set on create.'
         property :initial_bitrate,
                  type: :integer,
                  description: 'See audio_encodings of selected codec for possible values.'

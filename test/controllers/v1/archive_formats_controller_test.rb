@@ -55,12 +55,12 @@ module V1
             params: {
               id: entry.id,
               profile_id: profiles(:default).id,
-              data: { attributes: { codec: 'flac', initial_bitrate: 1 } } }
+              data: { attributes: { codec: 'mp3', initial_bitrate: 224 } } }
       assert_response 200
-      assert_equal 'flac', json['data']['attributes']['codec']
-      assert_equal 1, json['data']['attributes']['initial_bitrate']
-      assert_equal 'flac', entry.reload.codec
-      assert_equal 1, entry.initial_bitrate
+      assert_equal 'mp3', json['data']['attributes']['codec']
+      assert_equal 224, json['data']['attributes']['initial_bitrate']
+      assert_equal 'mp3', entry.reload.codec
+      assert_equal 224, entry.initial_bitrate
     end
 
     test 'PATCH update fails for invalid params' do

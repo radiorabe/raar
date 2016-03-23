@@ -3,7 +3,9 @@ module V1
 
     json_api_swagger_schema do
       property :attributes do
-        property :name, type: :string
+        property :name,
+                 type: :string,
+                 description: 'Name used in audio URLs, only allows a-z, 0-9 and _.'
         property :description, type: :string
         property :codec,
                  type: :string,

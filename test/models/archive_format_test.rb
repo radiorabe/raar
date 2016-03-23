@@ -32,4 +32,15 @@ class ArchiveFormatTest < ActiveSupport::TestCase
     assert_not_valid entry, :codec, :profile
   end
 
+  test 'codec is not changeable anymore' do
+    p = Profile.create!(name: 'test')
+    entry = ArchiveFormat.create!(profile: p,
+                                  codec: 'mp3',
+                                  initial_bitrate: 96,
+                                  initial_channels: 2)
+    entry.codec = 'flac'
+    entry.initial_bitrate = 1
+    assert_not_valid entry, :codec
+  end
+
 end
