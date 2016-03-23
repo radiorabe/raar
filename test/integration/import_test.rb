@@ -7,8 +7,6 @@ class ImportTest < ActiveSupport::TestCase
 
   teardown :clear_archive_dir
 
-  self.use_transactional_tests = false
-
   # Travis has ffmpeg 0.8.17, which reports "Unknown input format: 'lavfi'"
   unless ENV['TRAVIS']
     test 'imports recordings as broadcasts' do

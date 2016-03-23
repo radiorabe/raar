@@ -2,13 +2,10 @@ require 'test_helper'
 
 class DowngradeTest < ActiveSupport::TestCase
 
-  self.use_transactional_tests = false
-
   # Travis has ffmpeg 0.8.17, which reports "Unknown input format: 'lavfi'"
   unless ENV['TRAVIS']
 
     test 'downgrades and ereases all pending files' do
-
       FileUtils.rm_rf(FileStore::Structure.home)
       AudioGenerator.new.silent_files_for_audio_files
 
@@ -16,7 +13,8 @@ class DowngradeTest < ActiveSupport::TestCase
       assert_equal 4, file_count('2013', '05', '20')
 
       assert_difference('AudioFile.count', -3) do
-        system Rails.root.join('bin', 'downgrade').to_s
+        require 'downgrade'
+        Downgrade.run
       end
 
       assert_equal 3, file_count('2013', '04', '10')
