@@ -6,7 +6,7 @@ module AudioEncoding
   end
 
   def self.fetch(codec)
-    self[codec] || fail(ArgumentError, "Unknown codec #{codec}")
+    self[codec] || raise(ArgumentError, "Unknown codec #{codec}")
   end
 
   def self.for_extension(file_extension)

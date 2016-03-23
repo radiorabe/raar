@@ -22,7 +22,7 @@ module Import
     # :started_at and :finished_at keys must be included.
     # This method may only be called after a show is set.
     def assign_broadcast(attrs = {})
-      fail(KeyError, 'show attrs must be set beforehand') unless @show
+      raise(KeyError, 'show attrs must be set beforehand') unless @show
       @broadcast = fetch_broadcast(attrs)
     end
 

@@ -12,7 +12,7 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
                  first_name: 'Pit',
                  last_name: 'Foo' } } }.to_json,
            headers: {
-             'CONTENT_TYPE' => 'application/vnd.api+json' },
+             'CONTENT_TYPE' => 'application/json' },
            env: {
              'REMOTE_USER' => 'frosch',
              'REMOTE_USER_GROUPS' => 'admin' }
@@ -32,7 +32,7 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
                  first_name: 'Pit',
                  last_name: 'Foo' } } }.to_json,
            headers: {
-             'CONTENT_TYPE' => 'application/vnd.api+json',
+             'CONTENT_TYPE' => 'application/json',
              'HTTP_AUTHORIZATION' => auth }
       assert_response 201
     end
@@ -50,7 +50,7 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
                  first_name: 'Pit',
                  last_name: 'Foo' } } }.to_json,
            headers: {
-             'CONTENT_TYPE' => 'application/vnd.api+json' }
+             'CONTENT_TYPE' => 'application/json' }
       assert_response 201
     end
     assert_equal 'foo', json['data']['attributes']['username']
@@ -66,7 +66,7 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
                  first_name: 'Pit',
                  last_name: 'Foo' } } }.to_json,
            headers: {
-             'CONTENT_TYPE' => 'application/vnd.api+json' }
+             'CONTENT_TYPE' => 'application/json' }
       assert_response 401
     end
   end

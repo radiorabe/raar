@@ -68,7 +68,7 @@ module AudioProcessor
     def run_command(command)
       FFMPEG.logger.info("Running command...\n#{command}\n")
       out, status = Open3.capture2e(command)
-      fail("#{command} failed with status #{status}:\n#{out}") unless status == 0
+      raise("#{command} failed with status #{status}:\n#{out}") unless status == 0
     end
 
     def codec_options(audio_format)

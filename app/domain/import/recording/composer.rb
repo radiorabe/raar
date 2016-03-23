@@ -31,10 +31,10 @@ module Import
 
       def check_arguments
         unless mapping.complete?
-          fail(ArgumentError, 'broadcast mapping must be complete')
+          raise(ArgumentError, 'broadcast mapping must be complete')
         end
         if (recordings - mapping.recordings).present?
-          fail(ArgumentError, 'recordings must be part of the broadcast mapping')
+          raise(ArgumentError, 'recordings must be part of the broadcast mapping')
         end
       end
 

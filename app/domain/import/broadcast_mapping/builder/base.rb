@@ -26,15 +26,15 @@ module Import
         private
 
         def build_mappings
-          fail(NotImplementedError)
+          raise(NotImplementedError)
         end
 
         def check_intervals(recordings)
           recordings.group_by(&:started_at).each do |time, variants|
             durations = variants.collect(&:duration).uniq
             unless durations.size == 1
-              fail(ArgumentError,
-                   "Recordings at #{time} must all have the same durations: #{durations.inspect}.")
+              raise(ArgumentError,
+                    "Recordings at #{time} must all have the same durations: #{durations.inspect}.")
             end
           end
         end

@@ -147,7 +147,7 @@ module V1
 
     def detect_codec
       encoding = AudioEncoding.for_extension(params[:format])
-      fail ActionController::UnknownFormat unless encoding
+      raise ActionController::UnknownFormat unless encoding
       encoding.codec
     end
 

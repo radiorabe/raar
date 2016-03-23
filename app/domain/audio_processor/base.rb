@@ -9,31 +9,31 @@ module AudioProcessor
     end
 
     def transcode(_new_path, _audio_format)
-      fail(NotImplementedError)
+      raise(NotImplementedError)
     end
 
     def trim(_new_path, _start, _duration)
-      fail(NotImplementedError)
+      raise(NotImplementedError)
     end
 
     def concat(_new_path, _others)
-      fail(NotImplementedError)
+      raise(NotImplementedError)
     end
 
     def bitrate
-      fail(NotImplementedError)
+      raise(NotImplementedError)
     end
 
     def channels
-      fail(NotImplementedError)
+      raise(NotImplementedError)
     end
 
     def codec
-      fail(NotImplementedError)
+      raise(NotImplementedError)
     end
 
     def duration
-      fail(NotImplementedError)
+      raise(NotImplementedError)
     end
 
   end
