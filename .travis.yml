@@ -1,13 +1,16 @@
 language: ruby
 
 rvm:
- - "2.2.3"
+ - '2.2.4'
 
 env:
   global:
     - RAAR_DB_ADAPTER=postgresql
     - RAAR_DB_NAME=raar_test
     - RAAR_DB_USERNAME=postgres
+    - AIRTIME_DB_ADAPTER=postgresql
+    - AIRTIME_DB_NAME=airtime_test
+    - AIRTIME_DB_USERNAME=postgres
 
 sudo: false
 
@@ -22,6 +25,6 @@ addons:
       - ffmpeg
 
 before_script:
-  - psql -c 'create database raar_test;' -U postgres
+  - psql -c 'create database raar_test; create database airtime_test;' -U postgres
 
 script: bundle exec rails test
