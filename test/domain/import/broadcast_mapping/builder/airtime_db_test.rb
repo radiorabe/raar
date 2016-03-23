@@ -24,20 +24,20 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     morgen = Airtime::Show.create!(name: 'Morgen', description: 'La mañana')
     info = Airtime::Show.create!(name: 'Info', description: 'Rabe Info')
     becken = Airtime::Show.create!(name: 'Klangbecken', description: 'Only Hits')
-    morgen.show_instances.create!(starts: Time.local(2016, 1, 1, 8),
-                                  ends: Time.local(2016, 1, 1, 11),
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 8),
+                                  ends: Time.zone.local(2016, 1, 1, 11),
                                   created: Time.zone.now)
-    morgen.show_instances.create!(starts: Time.local(2016, 1, 2, 8),
-                                  ends: Time.local(2016, 1, 2, 11),
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 2, 8),
+                                  ends: Time.zone.local(2016, 1, 2, 11),
                                   created: Time.zone.now)
-    info.show_instances.create!(starts: Time.local(2016, 1, 1, 11),
-                                ends: Time.local(2016, 1, 1, 11, 30),
+    info.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 11),
+                                ends: Time.zone.local(2016, 1, 1, 11, 30),
                                 created: Time.zone.now)
-    becken.show_instances.create!(starts: Time.local(2016, 1, 1, 0),
-                                  ends: Time.local(2016, 1, 1, 8),
+    becken.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 0),
+                                  ends: Time.zone.local(2016, 1, 1, 8),
                                   created: Time.zone.now)
-    becken.show_instances.create!(starts: Time.local(2016, 1, 1, 11, 30),
-                                  ends: Time.local(2016, 1, 1, 13),
+    becken.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 11, 30),
+                                  ends: Time.zone.local(2016, 1, 1, 13),
                                   created: Time.zone.now)
 
     builder = new_builder(recordings)
@@ -51,8 +51,8 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert morgen_map.show.new_record?
     assert_equal morgen.name, morgen_map.broadcast.label
     assert_equal morgen.description, morgen_map.broadcast.details
-    assert_equal Time.local(2016, 1, 1, 8), morgen_map.broadcast.started_at
-    assert_equal Time.local(2016, 1, 1, 11), morgen_map.broadcast.finished_at
+    assert_equal Time.zone.local(2016, 1, 1, 8), morgen_map.broadcast.started_at
+    assert_equal Time.zone.local(2016, 1, 1, 11), morgen_map.broadcast.finished_at
     assert morgen_map.broadcast.new_record?
     assert !morgen_map.complete?
     assert_equal [file('2016-01-01T090000+0100_060.mp3'),
@@ -61,15 +61,15 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
 
     info_map = mappings.second
     assert_equal info.name, info_map.show.name
-    assert_equal Time.local(2016, 1, 1, 11), info_map.broadcast.started_at
+    assert_equal Time.zone.local(2016, 1, 1, 11), info_map.broadcast.started_at
     assert info_map.complete?
     assert_equal [file('2016-01-01T110000+0100_060.mp3')],
                  info_map.recordings.collect(&:path)
 
     becken_map = mappings.third
     assert_equal becken.name, becken_map.show.name
-    assert_equal Time.local(2016, 1, 1, 11, 30), becken_map.broadcast.started_at
-    assert_equal Time.local(2016, 1, 1, 13), becken_map.broadcast.finished_at
+    assert_equal Time.zone.local(2016, 1, 1, 11, 30), becken_map.broadcast.started_at
+    assert_equal Time.zone.local(2016, 1, 1, 13), becken_map.broadcast.finished_at
     assert !becken_map.complete?
     assert_equal [file('2016-01-01T110000+0100_060.mp3')],
                  becken_map.recordings.collect(&:path)
@@ -80,17 +80,17 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
                                   '2016-01-01T100000+0100_060.mp3',
                                   '2016-01-01T080000+0100_060.mp3')
     morgen = Airtime::Show.create!(name: 'Morgen')
-    morgen.show_instances.create!(starts: Time.local(2016, 1, 1, 7),
-                                  ends: Time.local(2016, 1, 1, 8),
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 7),
+                                  ends: Time.zone.local(2016, 1, 1, 8),
                                   created: Time.zone.now)
-    morgen.show_instances.create!(starts: Time.local(2016, 1, 1, 8),
-                                  ends: Time.local(2016, 1, 1, 10, 30),
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 8),
+                                  ends: Time.zone.local(2016, 1, 1, 10, 30),
                                   created: Time.zone.now)
-    morgen.show_instances.create!(starts: Time.local(2016, 1, 1, 10, 30),
-                                  ends: Time.local(2016, 1, 1, 11),
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 10, 30),
+                                  ends: Time.zone.local(2016, 1, 1, 11),
                                   created: Time.zone.now)
-    morgen.show_instances.create!(starts: Time.local(2016, 1, 1, 11),
-                                  ends: Time.local(2016, 1, 1, 12),
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 11),
+                                  ends: Time.zone.local(2016, 1, 1, 12),
                                   created: Time.zone.now)
 
     builder = new_builder(recordings)
@@ -100,8 +100,8 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
 
     map8 = mappings.first
     assert_equal morgen.name, map8.show.name
-    assert_equal Time.local(2016, 1, 1, 8), map8.broadcast.started_at
-    assert_equal Time.local(2016, 1, 1, 10, 30), map8.broadcast.finished_at
+    assert_equal Time.zone.local(2016, 1, 1, 8), map8.broadcast.started_at
+    assert_equal Time.zone.local(2016, 1, 1, 10, 30), map8.broadcast.finished_at
     assert map8.complete?
     assert_equal [file('2016-01-01T080000+0100_060.mp3'),
                   file('2016-01-01T090000+0100_060.mp3'),
@@ -110,8 +110,8 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
 
     map10 = mappings.second
     assert_equal morgen.name, map8.show.name
-    assert_equal Time.local(2016, 1, 1, 10, 30), map10.broadcast.started_at
-    assert_equal Time.local(2016, 1, 1, 11), map10.broadcast.finished_at
+    assert_equal Time.zone.local(2016, 1, 1, 10, 30), map10.broadcast.started_at
+    assert_equal Time.zone.local(2016, 1, 1, 11), map10.broadcast.finished_at
     assert map10.complete?
     assert_equal [file('2016-01-01T100000+0100_060.mp3')],
                  map10.recordings.collect(&:path)
@@ -120,14 +120,14 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
   test 'recording is mapped to single broadcasts' do
     recordings = build_recordings('2016-01-01T090000+0100_060.mp3')
     morgen = Airtime::Show.create!(name: 'Morgen')
-    morgen.show_instances.create!(starts: Time.local(2016, 1, 1, 8),
-                                  ends: Time.local(2016, 1, 1, 9),
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 8),
+                                  ends: Time.zone.local(2016, 1, 1, 9),
                                   created: Time.zone.now)
-    morgen.show_instances.create!(starts: Time.local(2016, 1, 1, 9),
-                                  ends: Time.local(2016, 1, 1, 10),
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 9),
+                                  ends: Time.zone.local(2016, 1, 1, 10),
                                   created: Time.zone.now)
-    morgen.show_instances.create!(starts: Time.local(2016, 1, 1, 10),
-                                  ends: Time.local(2016, 1, 1, 11),
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 10),
+                                  ends: Time.zone.local(2016, 1, 1, 11),
                                   created: Time.zone.now)
 
     builder = new_builder(recordings)
@@ -137,8 +137,8 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
 
     map = mappings.first
     assert_equal morgen.name, map.show.name
-    assert_equal Time.local(2016, 1, 1, 9), map.broadcast.started_at
-    assert_equal Time.local(2016, 1, 1, 10), map.broadcast.finished_at
+    assert_equal Time.zone.local(2016, 1, 1, 9), map.broadcast.started_at
+    assert_equal Time.zone.local(2016, 1, 1, 10), map.broadcast.finished_at
     assert map.complete?
     assert_equal [file('2016-01-01T090000+0100_060.mp3')],
                  map.recordings.collect(&:path)

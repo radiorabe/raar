@@ -23,24 +23,18 @@ module WithAudioFormat
 
       validates bitrate_attr, channels_attr,
                 numericality: { only_integer: true, greater_than: 0, allow_blank: true }
-      validate_bitrate(bitrate_attr)
-      validate_channels(channels_attr)
+      validate_encoding_attr(bitrate_attr, :bitrates)
+      validate_encoding_attr(channels_attr, :channels)
     end
 
     private
 
-    def validate_bitrate(bitrate_attr)
-      validates bitrate_attr,
-                inclusion: { in: -> (e) { e.audio_encoding.bitrates },
-                             if: :audio_encoding,
-                             allow_blank: true }
-    end
-
-    def validate_channels(channels_attr)
-      validates channels_attr,
-                inclusion: { in: -> (e) { e.audio_encoding.channels },
-                             if: :audio_encoding,
-                             allow_blank: true }
+    def validate_encoding_attr(attr, encoding_field)
+      validates attr,
+                inclusion: {
+                  in: -> (e) { e.audio_encoding.send(encoding_field) },
+                  if: :audio_encoding,
+                  allow_blank: true }
     end
 
   end
