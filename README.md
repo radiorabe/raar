@@ -14,7 +14,8 @@ It consists of three main parts:
 ## Digging deeper
 
 * [Architecture](doc/architecture.md)
-* [Setup](doc/setup.md)
+* [Development](doc/development.md)
+* [Deployment](doc/deployment.md)
 * [API](doc/api.md)
 * [Import](doc/import.md)
 * [Downgrade](doc/downgrade.md)

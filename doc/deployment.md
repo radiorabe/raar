@@ -1,6 +1,8 @@
-# Setup
+# Deployment
 
 ## System Dependencies
+
+The following software must be installed on your system:
 
 * ruby >= 2.2.0
 * postgresql
