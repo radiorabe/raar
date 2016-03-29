@@ -85,7 +85,7 @@ class Import::ArchiverTest < ActiveSupport::TestCase
               '2013',
               '06',
               '19',
-              "2013-06-19T200000+0200_120.#{bitrate}_#{channels}.mp3")
+              "2013-06-19T200000+0200_120_g9s_is_just_a_test.#{bitrate}k_#{channels}.mp3")
   end
 
 end

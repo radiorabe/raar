@@ -40,8 +40,17 @@ module FileStore
     end
 
     def filename
-      "#{timestamp.iso8601.tr(':', '')}_#{format('%03d', duration)}." \
-      "#{audio_file.bitrate}_#{audio_file.channels}.#{extension}"
+      "#{timestamp.iso8601.tr(':', '')}_#{format('%03d', duration)}_#{broadcast_name}." \
+      "#{audio_file.bitrate}k_#{audio_file.channels}.#{extension}"
+    end
+
+    def broadcast_name
+      audio_file.broadcast.label
+                .downcase
+                .tr('äàâçéèêëïîöôóßüûú', 'aaaceeeeiiooosuuu')
+                .gsub(/[^a-z0-9]+/, ' ')
+                .strip
+                .tr(' ', '_')[0..60]
     end
 
     def extension

@@ -22,7 +22,7 @@ The following steps are performed during the import process. The respective Clas
 
 1. The import is started (`Import.run`).
 1. Find all recordings in the `IMPORT_DIRECTORIES` (`Import::Recording::Finder#pending`).
-1. Based on the timestamps given in the recording file names, map the recordings to their respective broadcasts (`Import::BroadcastMapping::Builder#run`). Different strategies would be possible, currently, this data is fetched directly for an Airtime database (`Import::BroadcastMapping::Builder::AirtimeDb`).
+1. Based on the timestamps given in the recording file names, map the recordings to their respective broadcasts (`Import::BroadcastMapping::Builder#run`). Different strategies would be possible by implementing different `Import::BroadcastMapping::Builder`s. Currently, this data is fetched directly for an Airtime database (`Import::BroadcastMapping::Builder::AirtimeDb`).
 1. For each broadcast mapping, do the following (`Import::Importer#run`):
 1. If the recordings do not cover the entire broadcast duration, cancel and retry later.
 1. Select the best recording for a given time (`Import::Recording::Chooser#best`).

@@ -14,14 +14,14 @@
 
 info_april_best:
   broadcast: info_april
-  path: 2013/04/10/2013-04-10T110000+0200_030.320_2.mp3
+  path: 2013/04/10/2013-04-10T110000+0200_030_info_april.320k_2.mp3
   codec: mp3
   bitrate: 320
   channels: 2
 
 info_april_high:
   broadcast: info_april
-  path: 2013/04/10/2013-04-10T110000+0200_030.192_2.mp3
+  path: 2013/04/10/2013-04-10T110000+0200_030_info_april.192k_2.mp3
   codec: mp3
   bitrate: 192
   channels: 2
@@ -29,7 +29,7 @@ info_april_high:
 
 info_april_low:
   broadcast: info_april
-  path: 2013/04/10/2013-04-10T110000+0200_030.96_1.mp3
+  path: 2013/04/10/2013-04-10T110000+0200_030_info_april.96k_1.mp3
   codec: mp3
   bitrate: 96
   channels: 1
@@ -37,7 +37,7 @@ info_april_low:
 
 g9s_mai_high:
   broadcast: g9s_mai
-  path: 2013/05/20/2013-05-20T200000+0200_180.192_2.mp3
+  path: 2013/05/20/2013-05-20T200000+0200_180_g9s_shizzle_edition.192k_2.mp3
   codec: mp3
   bitrate: 192
   channels: 2
@@ -45,7 +45,7 @@ g9s_mai_high:
 
 g9s_mai_low:
   broadcast: g9s_mai
-  path: 2013/05/20/2013-05-20T200000+0200_180.128_2.mp3
+  path: 2013/05/20/2013-05-20T200000+0200_180_g9s_shizzle_edition.128k_2.mp3
   codec: mp3
   bitrate: 128
   channels: 2
@@ -53,7 +53,7 @@ g9s_mai_low:
 
 klangbecken_mai1_best:
   broadcast: klangbecken_mai1
-  path: 2013/05/20/2013-05-20T113000+0200_510.192_2.mp3
+  path: 2013/05/20/2013-05-20T113000+0200_510_klangbecken.192k_2.mp3
   codec: mp3
   bitrate: 192
   channels: 2
@@ -61,7 +61,7 @@ klangbecken_mai1_best:
 
 klangbecken_mai1_low:
   broadcast: klangbecken_mai1
-  path: 2013/05/20/2013-05-20T113000+0200_510.96_1.mp3
+  path: 2013/05/20/2013-05-20T113000+0200_510_klangbecken.96k_1.mp3
   codec: mp3
   bitrate: 96
   channels: 1
