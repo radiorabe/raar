@@ -20,6 +20,10 @@ module AudioProcessor
       raise(NotImplementedError)
     end
 
+    def tag(title, artist, album, year)
+      raise(NotImplementedError)
+    end
+
     def bitrate
       raise(NotImplementedError)
     end

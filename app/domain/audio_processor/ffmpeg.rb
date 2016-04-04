@@ -13,13 +13,9 @@ module AudioProcessor
 
     def trim(new_path, start, duration)
       assert_directory(new_path)
-      audio.transcode(new_path,
-                      seek_time: start,
-                      duration: duration,
-                      audio_codec: codec,
-                      audio_bitrate: bitrate,
-                      audio_channels: channels,
-                      validate: true)
+      preserving_transcode(new_path,
+                           seek_time: start,
+                           duration: duration)
     end
 
     def concat(new_path, other_paths)
@@ -33,8 +29,19 @@ module AudioProcessor
       end
     end
 
+    def tag(title, artist, album, year)
+      work_file = Tempfile.new(['tagged', File.extname(file)])
+      begin
+        preserving_transcode(work_file.path,
+                             custom: metadata_args(title, artist, album, year))
+        FileUtils.mv(work_file.path, file, force: true)
+      ensure
+        work_file.unlink
+      end
+    end
+
     def bitrate
-      audio.audio_bitrate / 1000
+      audio.audio_bitrate / 1000 if audio.audio_bitrate
     end
 
     def channels
@@ -55,13 +62,23 @@ module AudioProcessor
       @audio ||= FFMPEG::Movie.new(file)
     end
 
+    def preserving_transcode(new_path, options = {})
+      audio.transcode(new_path,
+                      options.reverse_merge(
+                        duration: duration,
+                        audio_codec: codec,
+                        audio_bitrate: bitrate,
+                        audio_channels: channels,
+                        validate: true))
+    end
+
     def create_list_file(file, paths)
       entries = paths.collect { |p| "file '#{p}'" }
       File.write(file, entries.join("\n"))
     end
 
     def concat_audio(new_path, list_file)
-      run_command("#{FFMPEG.ffmpeg_binary} -y -f concat -i \"#{list_file.path}\" " \
+      run_command("#{FFMPEG.ffmpeg_binary} -y -f concat -safe 0 -i \"#{list_file.path}\" " \
                   "-c copy #{Shellwords.escape(new_path)}")
     end
 
@@ -69,6 +86,13 @@ module AudioProcessor
       FFMPEG.logger.info("Running command...\n#{command}\n")
       out, status = Open3.capture2e(command)
       raise("#{command} failed with status #{status}:\n#{out}") unless status == 0
+    end
+
+    def metadata_args(title, artist, album, year)
+      "-metadata title=\"#{title}\" " \
+      "-metadata artist=\"#{artist}\" " \
+      "-metadata album=\"#{album}\" " \
+      "-metadata date=\"#{year}\" "
     end
 
     def codec_options(audio_format)

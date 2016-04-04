@@ -34,6 +34,10 @@ class AudioGenerator
     cmd = "ffmpeg -y -f lavfi -i anullsrc=r=44100:cl=stereo -t #{duration} " \
           "-acodec #{audio_format.codec} -v error "
     cmd += "-b:a #{audio_format.bitrate}k " if audio_format.bitrate
+    cmd += "-metadata title=\"Title 'yeah'!\" " \
+           "-metadata artist=\"Ärtist Ünknöwn\" " \
+           "-metadata album=\"Albüm\" " \
+           "-metadata date=\"2016\" "
     cmd += path
     Rails.logger.debug("Create silent file: #{cmd}")
     Open3.popen3(cmd) do |i, o, e, t|

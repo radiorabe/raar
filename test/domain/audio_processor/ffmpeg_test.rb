@@ -23,12 +23,18 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       assert_in_delta 3, processor(:klangbecken_mai1_best).duration, 0.1
     end
 
-    test 'downgrades mp3 file' do
+    test 'downgrades mp3 file with tags' do
       file = Tempfile.new(['low', '.mp3'])
       begin
         low = processor(:klangbecken_mai1_best).transcode(file.path, AudioFormat.new('mp3', 56, 1))
         assert_equal 56000, low.audio_bitrate
         assert_equal 1, low.audio_channels
+
+        tags = read_tags(file.path)
+        assert_equal "Title 'yeah'!", tags[:title]
+        assert_equal "Ärtist Ünknöwn", tags[:artist]
+        assert_equal "Albüm", tags[:album]
+        assert_equal "2016", tags[:date]
       ensure
         file.unlink
       end
@@ -75,8 +81,36 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       end
     end
 
+    test 'tags mp3 file without changing other stuff' do
+      mp3 = Tempfile.new(['source', '.mp3'])
+      File.delete(mp3.path) if File.exists?(mp3.path)
+      begin
+        AudioGenerator.new.silent_file(AudioFormat.new('mp3', 192, 2), mp3.path)
+        p = AudioProcessor::Ffmpeg.new(mp3.path)
+        p.tag("title 'yeah!'", 'artist', 'Albüm', '2016')
+        tags = read_tags(mp3.path)
+        assert_equal "title 'yeah!'", tags[:title]
+        assert_equal 'artist', tags[:artist]
+        assert_equal 'Albüm', tags[:album]
+        assert_equal '2016', tags[:date]
+        p = AudioProcessor::Ffmpeg.new(mp3.path)
+        assert_equal 3, p.duration.round
+        assert_equal 192, p.bitrate
+      ensure
+        mp3.unlink
+      end
+    end
+
     def processor(audio_file)
       AudioProcessor::Ffmpeg.new(audio_files(audio_file).absolute_path)
+    end
+
+    def read_tags(path)
+      command = "#{FFMPEG.ffprobe_binary} -i #{Shellwords.escape(path)} -print_format json -show_format"
+      out, err, status = Open3.capture3(command)
+      json = MultiJson.load(out, symbolize_keys: true)
+      assert json[:format].key?(:tags), json
+      json[:format][:tags]
     end
 
   end # unless TRAVIS
