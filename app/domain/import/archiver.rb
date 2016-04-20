@@ -46,7 +46,16 @@ module Import
     def transcode(audio_file)
       AudioProcessor.new(master).transcode(
         audio_file.absolute_path,
-        audio_file.audio_format)
+        audio_file.audio_format,
+        tags)
+    end
+
+    def tags
+      b = mapping.broadcast
+      { title: "#{b.label} @ #{I18n.l(b.started_at)}",
+        album: b.show.name,
+        artist: b.people,
+        year: b.started_at.year }
     end
 
     def archive_formats

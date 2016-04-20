@@ -4,11 +4,17 @@ module AudioProcessor
   # Specific processor class working with FFmpeg backend.
   class Ffmpeg < Base
 
-    def transcode(new_path, audio_format)
+    # The possible ID3 tags and their corresponding ffmpeg metadata names.
+    METADATA_TAGS = { title: :title,
+                      artist: :artist,
+                      album: :album,
+                      year: :date }.freeze
+
+    def transcode(new_path, audio_format, tags = {})
       options = codec_options(audio_format)
       assert_directory(new_path)
       audio.transcode(new_path,
-                      options.merge(validate: true))
+                      options.merge(validate: true, custom: metadata_args(tags)))
     end
 
     def trim(new_path, start, duration)
@@ -29,11 +35,10 @@ module AudioProcessor
       end
     end
 
-    def tag(title, artist, album, year)
+    def tag(tags)
       work_file = Tempfile.new(['tagged', File.extname(file)])
       begin
-        preserving_transcode(work_file.path,
-                             custom: metadata_args(title, artist, album, year))
+        preserving_transcode(work_file.path, custom: metadata_args(tags))
         FileUtils.mv(work_file.path, file, force: true)
       ensure
         work_file.unlink
@@ -88,11 +93,10 @@ module AudioProcessor
       raise("#{command} failed with status #{status}:\n#{out}") unless status == 0
     end
 
-    def metadata_args(title, artist, album, year)
-      "-metadata title=\"#{title}\" " \
-      "-metadata artist=\"#{artist}\" " \
-      "-metadata album=\"#{album}\" " \
-      "-metadata date=\"#{year}\" "
+    def metadata_args(tags)
+      tags.slice(*METADATA_TAGS.keys).collect do |tag, value|
+        "-metadata #{METADATA_TAGS[tag]}=\"#{value}\" "
+      end.join(' ')
     end
 
     def codec_options(audio_format)

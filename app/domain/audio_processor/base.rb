@@ -8,7 +8,7 @@ module AudioProcessor
       @file = file
     end
 
-    def transcode(_new_path, _audio_format)
+    def transcode(_new_path, _audio_format, _tags = {})
       raise(NotImplementedError)
     end
 
@@ -20,7 +20,7 @@ module AudioProcessor
       raise(NotImplementedError)
     end
 
-    def tag(title, artist, album, year)
+    def tag(_tags)
       raise(NotImplementedError)
     end
 

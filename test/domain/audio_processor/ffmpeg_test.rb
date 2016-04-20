@@ -23,7 +23,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       assert_in_delta 3, processor(:klangbecken_mai1_best).duration, 0.1
     end
 
-    test 'downgrades mp3 file with tags' do
+    test 'downgrades mp3 file, preserving tags' do
       file = Tempfile.new(['low', '.mp3'])
       begin
         low = processor(:klangbecken_mai1_best).transcode(file.path, AudioFormat.new('mp3', 56, 1))
@@ -35,6 +35,26 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
         assert_equal "Ärtist Ünknöwn", tags[:artist]
         assert_equal "Albüm", tags[:album]
         assert_equal "2016", tags[:date]
+      ensure
+        file.unlink
+      end
+    end
+
+    test 'downgrades mp3 file, changing tags' do
+      file = Tempfile.new(['low', '.mp3'])
+      begin
+        low = processor(:klangbecken_mai1_best)
+                .transcode(file.path,
+                           AudioFormat.new('mp3', 56, 1),
+                           { title: 'Hölidüli', year: '2010', album: nil })
+        assert_equal 56000, low.audio_bitrate
+        assert_equal 1, low.audio_channels
+
+        tags = read_tags(file.path)
+        assert_equal "Hölidüli", tags[:title]
+        assert_equal "Ärtist Ünknöwn", tags[:artist]
+        assert_equal nil, tags[:album]
+        assert_equal "2010", tags[:date]
       ensure
         file.unlink
       end
@@ -87,7 +107,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       begin
         AudioGenerator.new.silent_file(AudioFormat.new('mp3', 192, 2), mp3.path)
         p = AudioProcessor::Ffmpeg.new(mp3.path)
-        p.tag("title 'yeah!'", 'artist', 'Albüm', '2016')
+        p.tag(title: "title 'yeah!'", artist: 'artist', album: 'Albüm', year: '2016')
         tags = read_tags(mp3.path)
         assert_equal "title 'yeah!'", tags[:title]
         assert_equal 'artist', tags[:artist]

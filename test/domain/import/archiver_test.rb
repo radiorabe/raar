@@ -94,7 +94,11 @@ class Import::ArchiverTest < ActiveSupport::TestCase
     audio_processor.
       expects(:transcode).
       with(format_file(bitrate, channels),
-           AudioFormat.new('mp3', bitrate, channels))
+           AudioFormat.new('mp3', bitrate, channels),
+           title: 'G9S is just a test @ Mittwoch, 19. Juni 2013, 20:00 Uhr',
+           album: 'Geschäch9schlimmers',
+           artist: nil,
+           year: 2013)
   end
 
   def format_file(bitrate, channels)
