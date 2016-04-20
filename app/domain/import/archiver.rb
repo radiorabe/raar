@@ -54,7 +54,17 @@ module Import
     end
 
     def playback_formats
-      @playback_formats ||= PlaybackFormat.all
+      @playback_formats ||= PlaybackFormat.where(formats_covered_by_archive_formats)
+    end
+
+    def formats_covered_by_archive_formats
+      [''].tap do |condition|
+        archive_formats.each do |f|
+          condition.first << ' OR ' if condition.first.present?
+          condition.first << '(codec = ? AND ((bitrate = ? AND channels <= ?) OR bitrate <= ?))'
+          condition.push(f.codec, f.initial_bitrate, f.initial_channels, f.initial_bitrate)
+        end
+      end
     end
 
   end

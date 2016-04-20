@@ -55,9 +55,9 @@ If the bitrate is set to `nil`, the audio files will be entirely deleted after t
 
 #### Playback Formats
 
-Additionally to the archive formats, a set of playback formats may be defined. They are supposed to provide uniform audio qualities for archive listeners. Playback formats are therefore independent of profiles and the same for all shows/broadcasts. For each playback format, an audio file is created when a broadcast is imported.
+Additionally to the archive formats, a set of playback formats may be defined. They are supposed to provide uniform audio qualities for archive listeners across different shows/broadcasts. As long as there is an archive format for a given codec in the show's profile, audio files for all corresponding playback formats (with equal or lower initial bitrates) are created when a broadcast is imported.
 
-Still, when a downgrade action takes place for a given codec, it does not stop from the playback format and does remove all audio files with higher bitrates. When a certain playback format file is requested and not available, the audio file with the same codec and the highest bitrate below the playback format bitrate is served.
+However, when a downgrade action takes place for a given codec, it does not stop from the playback format and does remove all audio files with higher bitrates. When a certain playback format file is requested and not available, the audio file with the same codec and the highest bitrate below the playback format bitrate is served.
 
 ## Data Model
 

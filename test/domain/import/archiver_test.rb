@@ -42,6 +42,23 @@ class Import::ArchiverTest < ActiveSupport::TestCase
     assert_equal playback_formats(:high), high.playback_format
   end
 
+  test 'only creates audio file for playback formats equal or smaller than archive format' do
+    archive_formats(:default_mp3).update!(initial_bitrate: 160)
+    expect_transcode(160, 2)
+    expect_transcode(96, 1)
+
+    assert_difference('AudioFile.count', 2) do
+      assert_difference('Broadcast.count', 1) do
+        archiver.run
+      end
+    end
+
+    files = mapping.broadcast.audio_files
+    assert_equal 2, files.count
+    high = files.detect { |f| f.bitrate == 160 }
+    assert_equal nil, high.playback_format
+  end
+
   test 'not audio files are created if master is nil' do
     AudioProcessor.expects(:new).never
     archiver = Import::Archiver.new(mapping, nil)
