@@ -18,6 +18,11 @@ If you are working on the code, always assure that it corresponds to the officia
 
     $ rubocop
 
+To update the generated ERD or swagger.json in `doc/`, the following Rake tasks are here to help:
+
+    $ rails erd swagger:json
+
+
 ## Source Structure
 
 RAAR is essentially a Rails application. If you are not yet, you may get familiar with the framework here: http://guides.rubyonrails.org.
