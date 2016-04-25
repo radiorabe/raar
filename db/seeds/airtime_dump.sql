@@ -33,7 +33,7 @@ CREATE TABLE cc_show_instances (
 );
 
 
-INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (1, 'test 1', '', '', '', 'ffffff', 'b76c23', 'f', 'f', '', '', 'f', 't');
+INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (1, 'Klangbecken', '', '', '', 'ffffff', 'b76c23', 'f', 'f', '', '', 'f', 't');
 INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (3, 'test 0', '', '', '', 'ffffff', 'b76c22', 'f', 'f', '', '', 'f', 't');
 INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (4, 'Unbenannte Sendung', '', '', '', '', '', 'f', 'f', '', '', 'f', 't');
 INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (5, 'Unbenannte Sendung', '', '', '', '', '', 'f', 'f', '', '', 'f', 't');
@@ -48,7 +48,7 @@ INSERT INTO cc_show (id, name, url, genre, description, color, background_color,
 INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (14, 'Unbenannte Sendung', '', '', '', '', '', 'f', 'f', '', '', 'f', 't');
 INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (15, 'Unbenannte Sendung', '', '', '', '', '', 'f', 'f', '', '', 'f', 't');
 INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (16, 'Groovexpress Pilot', '', '', '', '000000', '4333b8', 'f', 'f', '', '', 'f', 't');
-INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (17, 'Klangecken', '', '', '', 'ff0000', '237bdd', 'f', 'f', '', '', 'f', 't');
+INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (17, 'Klangecken 2', '', '', '', 'ff0000', '237bdd', 'f', 'f', '', '', 'f', 't');
 INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (18, 'Unbenannte Sendung', '', '', '', '', '', 'f', 'f', '', '', 'f', 't');
 INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (19, 'Unbenannte Sendung', '', '', '', '', '', 'f', 'f', '', '', 'f', 't');
 INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (20, 'Unbenannte Sendung', '', '', '', '', '', 'f', 'f', '', '', 'f', 't');
@@ -72,6 +72,28 @@ INSERT INTO cc_show (id, name, url, genre, description, color, background_color,
 INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (40, 'Unbenannte Sendung', '', '', 'test', '', '', 'f', 'f', '', '', 'f', 't');
 INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (41, 'Unbenannte Sendung', '', '', '', '', '', 'f', 'f', '', '', 'f', 't');
 INSERT INTO cc_show (id, name, url, genre, description, color, background_color, live_stream_using_airtime_auth, live_stream_using_custom_auth, live_stream_user, live_stream_pass, linked, is_linkable) VALUES (42, 'Archive Tester', '', '', 'jada jada', '000000', 'a9b61d', 'f', 'f', '', '', 'f', 't');
+
+INSERT INTO cc_show (id, name, genre, description) VALUES (43, 'Dancefloor', 'Electronic', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (44, 'Galaxy Space Night', 'Electronic', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (45, 'Jazz am Sunntig', '', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (46, 'Radio Silbergrau', '', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (47, 'Pars Ava', '', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (48, 'Onda Libera', '', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (49, 'Best Of', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (50, 'Balgarski Tschass', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (51, 'Jadran', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (52, 'Gay Radio', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (53, 'unerhörtes-ungehörtes', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (54, 'der Morgen', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (55, 'Info', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (56, '70-80-90-Mambo!', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (57, 'The Vidiot', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (58, 'ganzOhr', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (59, 'HellasRadio', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (60, 'Lost in Disco', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (61, 'Bärner Schlagerwelt', 'Rock', '');
+INSERT INTO cc_show (id, name, genre, description) VALUES (62, 'Worldwyld', 'Rock', '');
+
 
 
 INSERT INTO cc_show_instances (id, starts, ends, show_id, record, rebroadcast, instance_id, file_id, time_filled, created, last_scheduled, modified_instance) VALUES (18, '2014-05-01 08:30:00', '2014-05-01 09:30:00', 18, 0, 0, NULL, NULL, '01:00:44.3', '2014-05-01 08:12:32', '2014-05-01 08:13:39', 'f');
@@ -128,3 +150,32 @@ INSERT INTO cc_show_instances (id, starts, ends, show_id, record, rebroadcast, i
 INSERT INTO cc_show_instances (id, starts, ends, show_id, record, rebroadcast, instance_id, file_id, time_filled, created, last_scheduled, modified_instance) VALUES (51, '2015-12-24 13:00:00', '2015-12-24 14:00:00', 42, 0, 0, NULL, NULL, '00:00:00', '2015-11-11 20:50:47', NULL, 'f');
 INSERT INTO cc_show_instances (id, starts, ends, show_id, record, rebroadcast, instance_id, file_id, time_filled, created, last_scheduled, modified_instance) VALUES (52, '2015-12-31 13:00:00', '2015-12-31 14:00:00', 42, 0, 0, NULL, NULL, '00:00:00', '2015-11-11 20:50:47', NULL, 'f');
 INSERT INTO cc_show_instances (id, starts, ends, show_id, record, rebroadcast, instance_id, file_id, time_filled, created, last_scheduled, modified_instance) VALUES (53, '2016-01-07 13:00:00', '2016-01-07 14:00:00', 42, 0, 0, NULL, NULL, '00:00:00', '2015-11-11 20:50:47', NULL, 'f');
+
+-- times in utc (- 2 hours)
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-16 18:00:00', '2016-04-16 19:00:00', 43, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-16 19:00:00', '2016-04-17 01:00:00', 44, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-17 01:00:00', '2016-04-17 08:00:00', 1, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-17 08:00:00', '2016-04-17 09:00:00', 45, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-17 09:00:00', '2016-04-17 10:00:00', 46, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-17 10:00:00', '2016-04-17 11:00:00', 47, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-17 11:00:00', '2016-04-17 12:00:00', 48, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-17 12:00:00', '2016-04-17 13:00:00', 1, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-17 13:00:00', '2016-04-17 15:00:00', 49, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-17 15:00:00', '2016-04-17 16:00:00', 50, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-17 16:00:00', '2016-04-17 17:00:00', 51, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-17 17:00:00', '2016-04-17 19:00:00', 52, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-17 19:00:00', '2016-04-17 21:00:00', 53, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-17 21:00:00', '2016-04-18 06:00:00', 1, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 06:00:00', '2016-04-18 09:00:00', 54, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 09:00:00', '2016-04-18 09:30:00', 55, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 09:30:00', '2016-04-18 11:00:00', 1, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 11:00:00', '2016-04-18 14:00:00', 56, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 14:00:00', '2016-04-18 15:00:00', 1, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 15:00:00', '2016-04-18 16:00:00', 57, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 16:00:00', '2016-04-18 16:30:00', 55, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 16:30:00', '2016-04-18 17:00:00', 58, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 17:00:00', '2016-04-18 18:00:00', 59, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 18:00:00', '2016-04-18 19:00:00', 60, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 19:00:00', '2016-04-18 20:00:00', 61, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 20:00:00', '2016-04-18 21:00:00', 62, date('now'));
+INSERT INTO cc_show_instances (starts, ends, show_id, created) VALUES ('2016-04-18 21:00:00', '2016-04-19 06:00:00', 1, date('now'));

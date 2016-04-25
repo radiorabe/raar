@@ -3,7 +3,7 @@ require 'test_helper'
 class Import::ArchiverTest < ActiveSupport::TestCase
 
   test 'creates and persists all defined archive formats' do
-    expect_transcode(320, 2)
+    expect_transcode(256, 2)
     expect_transcode(192, 2)
     expect_transcode(96, 1)
 
@@ -15,7 +15,7 @@ class Import::ArchiverTest < ActiveSupport::TestCase
 
     files = mapping.broadcast.audio_files
     assert_equal 3, files.count
-    best = files.detect { |f| f.bitrate == 320 }
+    best = files.detect { |f| f.bitrate == 256 }
     assert_equal 2, best.channels
     assert_equal nil, best.playback_format
     high = files.detect { |f| f.bitrate == 192 }

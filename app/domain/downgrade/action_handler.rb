@@ -47,6 +47,7 @@ module Downgrade
         handle(file)
       end
     rescue StandardError => e
+      error(e)
       ExceptionNotifier.notify_exception(e, data: { audio_file: file, downgrade_action: action })
     end
 
@@ -57,7 +58,7 @@ module Downgrade
     end
 
     def inform(file, action)
-      super("#{action} of #{file.broadcast.show} at #{file.broadcast.started_at.to_s(:db)}")
+      super("#{action} of #{file.broadcast.show} at #{file.broadcast.started_at}")
     end
 
   end

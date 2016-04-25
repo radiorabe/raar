@@ -19,7 +19,7 @@ module Import
       import_into_archive(master)
       mark_recordings_as_imported
     rescue StandardError => e
-      Rails.logger.error(e)
+      error(e)
       ExceptionNotifier.notify_exception(e, data: { mapping: mapping })
     end
 
@@ -73,7 +73,8 @@ module Import
     end
 
     def import_into_archive(master)
-      Archiver.new(mapping, master).run
+      Archiver.new(mapping, master.path).run
+      master.unlink if master.respond_to?(:unlink)
       inform("Broadcast #{mapping} successfully imported.")
     end
 

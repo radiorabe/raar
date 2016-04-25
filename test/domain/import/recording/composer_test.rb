@@ -5,7 +5,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
   test 'returns single recording if times correspond to mapping' do
     composer = build_composer('2013-06-12T200000+0200_120.mp3')
     expect_duration(mapping.recordings.first.path, 120)
-    assert_equal '2013-06-12T200000+0200_120.mp3', composer.compose
+    assert_equal '2013-06-12T200000+0200_120.mp3', composer.compose.path
   end
 
   test 'returns trimmed single recording if it is longer' do
@@ -150,7 +150,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
     expect_duration(mapping.recordings.last.path, 60)
     expect_duration(mapping.recordings.first.path, 5)
-    assert_equal mapping.recordings.last.path, composer.compose
+    assert_equal mapping.recordings.last.path, composer.compose.path
   end
 
   test 'returns merged recording if last is longer' do

@@ -22,13 +22,13 @@ important_mp3:
 default_mp3:
   profile: default
   codec: mp3
-  initial_bitrate: 320
+  initial_bitrate: 256
   initial_channels: 2
   max_public_bitrate: 96
 
 unimportant_mp3:
   profile: unimportant
   codec: mp3
-  initial_bitrate: 192
+  initial_bitrate: 160
   initial_channels: 2
   max_public_bitrate: 96

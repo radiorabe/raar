@@ -23,7 +23,7 @@ class DowngradeActionTest < ActiveSupport::TestCase
     af = archive_formats(:unimportant_mp3)
     action = af.downgrade_actions.build(months: 2, bitrate: 224, channels: 2) # bitrate bigger
     assert_not_valid action, :bitrate
-    action.bitrate = 192 # equal
+    action.bitrate = 160 # equal
     assert_valid action
     action.channels = 5 # channels bigger
     assert_not_valid action, :channels

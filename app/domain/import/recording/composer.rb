@@ -17,6 +17,7 @@ module Import
         check_arguments
       end
 
+      # Compose the recordings and return the resulting file.
       def compose
         if first_equal?
           file_with_maximum_duration(first)
@@ -105,7 +106,7 @@ module Import
         if recording.audio_duration_too_long?
           trim_available(recording, 0, recording.duration)
         else
-          recording.path
+          recording
         end
       end
 
@@ -119,7 +120,7 @@ module Import
       def trim(file, start, duration)
         new_tempfile.tap do |target_file|
           proc = AudioProcessor.new(file)
-          proc.trim(target_file, start, duration)
+          proc.trim(target_file.path, start, duration)
         end
       end
 
@@ -127,13 +128,13 @@ module Import
         return list.first if list.size <= 1
 
         new_tempfile.tap do |target_file|
-          proc = AudioProcessor.new(list[0])
-          proc.concat(target_file, list[1..-1])
+          proc = AudioProcessor.new(list[0].path)
+          proc.concat(target_file.path, list[1..-1].collect(&:path))
         end
       end
 
       def new_tempfile
-        Tempfile.new(['master', File.extname(first.path)]).path
+        Tempfile.new(['master', File.extname(first.path)])
       end
 
     end

@@ -2,7 +2,6 @@
 
 ## Code
 
-* add mp3 tags on import
 * proper json api error serialization (https://github.com/rails-api/active_model_serializers/pull/1004,
   https://github.com/rails-api/active_model_serializers/blob/master/docs/jsonapi/errors.md)
 * swaggerize authorization, document api

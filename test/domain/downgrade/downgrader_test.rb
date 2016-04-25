@@ -17,7 +17,7 @@ module Downgrade
                                bitrate: 224,
                                channels: 2)
       home = FileStore::Structure.home
-      path = File.join('2012', '12', '12', '2012-12-12T200000+0100_120_geschach9schlimmers.192k_2.mp3')
+      path = File.join('2012', '12', '12', '2012-12-12T200000+0100_120_geschaech9schlimmers.192k_2.mp3')
 
       AudioProcessor::Ffmpeg.any_instance.
         expects(:transcode).

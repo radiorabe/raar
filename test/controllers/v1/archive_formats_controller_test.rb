@@ -71,7 +71,7 @@ module V1
               data: { attributes: { initial_bitrate: 123 } } }
       assert_response 422
       assert_match /kein gültiger Wert/, response.body
-      assert_equal 320, entry.reload.initial_bitrate
+      assert_equal 256, entry.reload.initial_bitrate
     end
 
     test 'DELETE destroy removes existing entry' do

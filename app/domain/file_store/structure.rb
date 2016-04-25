@@ -45,12 +45,10 @@ module FileStore
     end
 
     def broadcast_name
-      audio_file.broadcast.label
-                .downcase
-                .tr('äàâçéèêëïîöôóßüûú', 'aaaceeeeiiooosuuu')
-                .gsub(/[^a-z0-9]+/, ' ')
-                .strip
-                .tr(' ', '_')[0..60]
+      ascii = ActiveSupport::Inflector.transliterate(audio_file.broadcast.label.downcase)
+      ascii.gsub(/[^a-z0-9]+/, ' ')
+           .strip
+           .tr(' ', '_')[0..60]
     end
 
     def extension
