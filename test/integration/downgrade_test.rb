@@ -2,6 +2,8 @@ require 'test_helper'
 
 class DowngradeTest < ActiveSupport::TestCase
 
+  self.use_transactional_fixtures = false
+
   # Travis has ffmpeg 0.8.17, which reports "Unknown input format: 'lavfi'"
   unless ENV['TRAVIS']
 
@@ -13,7 +15,7 @@ class DowngradeTest < ActiveSupport::TestCase
       assert_equal 4, file_count('2013', '05', '20')
 
       assert_difference('AudioFile.count', -3) do
-        require 'downgrade'
+        require 'downgrade' # load main module file
         Downgrade.run
       end
 

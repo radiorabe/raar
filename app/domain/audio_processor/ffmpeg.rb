@@ -1,5 +1,6 @@
 module AudioProcessor
   FFMPEG.logger = Rails.logger
+  # FFMPEG.logger = Logger.new('/dev/null')
 
   # Specific processor class working with FFmpeg backend.
   class Ffmpeg < Base
@@ -58,7 +59,8 @@ module AudioProcessor
     end
 
     def duration
-      audio.duration
+      # audio.duration is not accurate
+      @duration ||= accurate_duration
     end
 
     private
@@ -70,10 +72,7 @@ module AudioProcessor
     def preserving_transcode(new_path, options = {})
       audio.transcode(new_path,
                       options.reverse_merge(
-                        duration: duration,
-                        audio_codec: codec,
-                        audio_bitrate: bitrate,
-                        audio_channels: channels,
+                        audio_codec: 'copy',
                         validate: true))
     end
 
@@ -87,10 +86,25 @@ module AudioProcessor
                   "-c copy #{Shellwords.escape(new_path)}")
     end
 
+    def accurate_duration
+      out = run_command("#{FFMPEG.ffmpeg_binary} -i #{Shellwords.escape(file)} " \
+                        '-acodec copy -f null -')
+      segments = out.scan(/\btime=(\d+)\:(\d\d)\:(\d\d(\.\d+)?)\b/)
+      raise("Could not determine duration for #{file}: #{out}") if segments.blank?
+      number_of_seconds(segments.last)
+    end
+
+    def number_of_seconds(segments)
+      (segments[0].to_i.hours +
+       segments[1].to_i.minutes +
+       segments[2].to_f.seconds).to_f.round
+    end
+
     def run_command(command)
       FFMPEG.logger.info("Running command...\n#{command}\n")
       out, status = Open3.capture2e(command)
       raise("#{command} failed with status #{status}:\n#{out}") unless status == 0
+      out
     end
 
     def metadata_args(tags)

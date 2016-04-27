@@ -52,3 +52,4 @@ The following environment variables may be used to configure RAAR. They are all 
 | IMPORT_DIRECTORIES | A comma-separated list of directories where the original recordings to import are found. | - |
 | DAYS_TO_KEEP_IMPORTED | Number of days to keep the original recordings, before they are deleted. | 1 |
 | DAYS_TO_FINISH_IMPORT | Number of days before a warning is produced because of unimported recordings. | 1 |
+| PARALLEL_TRANSCODINGS | Number of threads to use for audio transcoding. | 1 |

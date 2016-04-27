@@ -11,6 +11,14 @@ module Downgrade
 
     delegate :bitrate, :channels, to: :action
 
+    def process_files
+      pending_files.find_in_batches(batch_size: 100) do |list|
+        Parallelizer.new(list).run do |file|
+          safe_handle(file)
+        end
+      end
+    end
+
     def pending_files
       super.where('audio_files.bitrate > ? OR audio_files.channels > ?', bitrate, channels)
     end

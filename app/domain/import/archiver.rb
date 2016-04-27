@@ -20,11 +20,16 @@ module Import
     private
 
     def create_archive_files
-      audio_formats.each do |format|
-        file = build_audio_file(format)
-        link_to_playback_format(file)
-        inform("Creating audio file #{file.absolute_path} from master recording.")
+      Parallelizer.new(build_audio_files).run do |file|
         transcode(file)
+      end
+    end
+
+    def build_audio_files
+      audio_formats.collect do |audio_format|
+        build_audio_file(audio_format).tap do |file|
+          link_to_playback_format(file)
+        end
       end
     end
 
@@ -44,6 +49,7 @@ module Import
     end
 
     def transcode(audio_file)
+      inform("Creating audio file #{audio_file.absolute_path} from master recording.")
       AudioProcessor.new(master).transcode(
         audio_file.absolute_path,
         audio_file.audio_format,
