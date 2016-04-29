@@ -9,7 +9,7 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: 16
+  pool: <%= (ENV['PARALLEL_TRANSCODINGS'] || 4) + 1 %>
   timeout: 5000
   host: <%= ENV['RAAR_DB_HOST'] %>
   port: <%= ENV['RAAR_DB_PORT'] %>
@@ -34,7 +34,7 @@ production:
 # Connection configuration to read show information out of the airtime database
 airtime:
   adapter: <%= ENV['AIRTIME_DB_ADAPTER'] || 'sqlite3' %>
-  pool: 5
+  pool: 2
   timeout: 5000
   username: <%= ENV['AIRTIME_DB_USERNAME'] %>
   password: <%= ENV['AIRTIME_DB_PASSWORD'] %>

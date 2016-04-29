@@ -54,7 +54,7 @@ module Downgrade
     def remove(file)
       FileUtils.rm(file.absolute_path) if File.exist?(file.absolute_path)
       file.destroy!
-      inform(file, "Deleted #{file.audio_format}/#{file.bitrate}/#{file.channels}")
+      inform(file, "Deleted #{file.codec}/#{file.bitrate}/#{file.channels}")
     end
 
     def inform(file, action)

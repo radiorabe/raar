@@ -32,7 +32,7 @@
   "paths": {
     "/v1/profiles/{profile_id}/archive_formats": {
       "get": {
-        "description": "Returns a list of archivierungs formats.",
+        "description": "Returns a list of archive formats.",
         "tags": [
           "archive_format",
           "admin"
@@ -44,6 +44,20 @@
             "type": "integer",
             "in": "path",
             "required": true
+          },
+          {
+            "name": "page[number]",
+            "in": "query",
+            "description": "Query string to specify the page number of the archive format list.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page[size]",
+            "in": "query",
+            "description": "Maximum number of archive formats that are returned per page. Defaults to 50, maximum is 500.",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -63,7 +77,7 @@
         }
       },
       "post": {
-        "description": "Creates a new archivierungs format.",
+        "description": "Creates a new archive format.",
         "tags": [
           "archive_format",
           "admin"
@@ -79,7 +93,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Attributes defining the archivierungs format to create.",
+            "description": "Attributes defining the archive format to create.",
             "required": true,
             "schema": {
               "properties": {
@@ -109,7 +123,7 @@
     },
     "/v1/profiles/{profile_id}/archive_formats/{id}": {
       "get": {
-        "description": "Returns a single archivierungs format.",
+        "description": "Returns a single archive format.",
         "tags": [
           "archive_format",
           "admin"
@@ -125,7 +139,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the archivierungs format to fetch.",
+            "description": "ID of the archive format to fetch.",
             "required": true,
             "type": "integer"
           }
@@ -144,7 +158,7 @@
         }
       },
       "patch": {
-        "description": "Updates an existing archivierungs format.",
+        "description": "Updates an existing archive format.",
         "tags": [
           "archive_format",
           "admin"
@@ -160,14 +174,14 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the archivierungs format to update.",
+            "description": "ID of the archive format to update.",
             "required": true,
             "type": "integer"
           },
           {
             "name": "body",
             "in": "body",
-            "description": "Attributes defining the archivierungs format to update.",
+            "description": "Attributes defining the archive format to update.",
             "required": true,
             "schema": {
               "properties": {
@@ -195,7 +209,7 @@
         }
       },
       "delete": {
-        "description": "Deletes an existing archivierungs format.",
+        "description": "Deletes an existing archive format.",
         "tags": [
           "archive_format",
           "admin"
@@ -211,7 +225,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the archivierungs format to delete.",
+            "description": "ID of the archive format to delete.",
             "required": true,
             "type": "integer"
           }
@@ -264,6 +278,20 @@
             "description": "Id of the broadcast to list the audio files for.",
             "required": true,
             "type": "integer"
+          },
+          {
+            "name": "page[number]",
+            "in": "query",
+            "description": "Query string to specify the page number of the audio file list.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page[size]",
+            "in": "query",
+            "description": "Maximum number of audio files that are returned per page. Defaults to 50, maximum is 500.",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -376,6 +404,20 @@
             "description": "Query string to search for in broadcast labels/people/details or show names/details",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "page[number]",
+            "in": "query",
+            "description": "Query string to specify the page number of the broadcast list.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page[size]",
+            "in": "query",
+            "description": "Maximum number of broadcasts that are returned per page. Defaults to 50, maximum is 500.",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -457,6 +499,20 @@
             "description": "Query string to search for in broadcast labels/people/details or show names/details",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "page[number]",
+            "in": "query",
+            "description": "Query string to specify the page number of the broadcast list.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page[size]",
+            "in": "query",
+            "description": "Maximum number of broadcasts that are returned per page. Defaults to 50, maximum is 500.",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -503,6 +559,20 @@
             "description": "Query string to search for in broadcast labels/people/details or show names/details",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "page[number]",
+            "in": "query",
+            "description": "Query string to specify the page number of the broadcast list.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page[size]",
+            "in": "query",
+            "description": "Maximum number of broadcasts that are returned per page. Defaults to 50, maximum is 500.",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -530,7 +600,7 @@
     },
     "/v1/profiles/{profile_id}/archive_formats/{archive_format_id}/downgrade_actions": {
       "get": {
-        "description": "Returns a list of reduktionsereignis.",
+        "description": "Returns a list of downgrade actions.",
         "tags": [
           "downgrade_action",
           "admin"
@@ -549,6 +619,20 @@
             "type": "integer",
             "in": "path",
             "required": true
+          },
+          {
+            "name": "page[number]",
+            "in": "query",
+            "description": "Query string to specify the page number of the downgrade action list.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page[size]",
+            "in": "query",
+            "description": "Maximum number of downgrade actions that are returned per page. Defaults to 50, maximum is 500.",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -568,7 +652,7 @@
         }
       },
       "post": {
-        "description": "Creates a new reduktionsereignis.",
+        "description": "Creates a new downgrade action.",
         "tags": [
           "downgrade_action",
           "admin"
@@ -591,7 +675,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Attributes defining the reduktionsereignis to create.",
+            "description": "Attributes defining the downgrade action to create.",
             "required": true,
             "schema": {
               "properties": {
@@ -621,7 +705,7 @@
     },
     "/v1/profiles/{profile_id}/archive_formats/{archive_format_id}/downgrade_actions/{id}": {
       "get": {
-        "description": "Returns a single reduktionsereignis.",
+        "description": "Returns a single downgrade action.",
         "tags": [
           "downgrade_action",
           "admin"
@@ -644,7 +728,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the reduktionsereignis to fetch.",
+            "description": "ID of the downgrade action to fetch.",
             "required": true,
             "type": "integer"
           }
@@ -663,7 +747,7 @@
         }
       },
       "patch": {
-        "description": "Updates an existing reduktionsereignis.",
+        "description": "Updates an existing downgrade action.",
         "tags": [
           "downgrade_action",
           "admin"
@@ -686,14 +770,14 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the reduktionsereignis to update.",
+            "description": "ID of the downgrade action to update.",
             "required": true,
             "type": "integer"
           },
           {
             "name": "body",
             "in": "body",
-            "description": "Attributes defining the reduktionsereignis to update.",
+            "description": "Attributes defining the downgrade action to update.",
             "required": true,
             "schema": {
               "properties": {
@@ -721,7 +805,7 @@
         }
       },
       "delete": {
-        "description": "Deletes an existing reduktionsereignis.",
+        "description": "Deletes an existing downgrade action.",
         "tags": [
           "downgrade_action",
           "admin"
@@ -744,7 +828,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the reduktionsereignis to delete.",
+            "description": "ID of the downgrade action to delete.",
             "required": true,
             "type": "integer"
           }
@@ -803,10 +887,26 @@
     },
     "/v1/playback_formats": {
       "get": {
-        "description": "Returns a list of wiedergabeformats.",
+        "description": "Returns a list of playback formats.",
         "tags": [
           "playback_format",
           "admin"
+        ],
+        "parameters": [
+          {
+            "name": "page[number]",
+            "in": "query",
+            "description": "Query string to specify the page number of the playback format list.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page[size]",
+            "in": "query",
+            "description": "Maximum number of playback formats that are returned per page. Defaults to 50, maximum is 500.",
+            "required": false,
+            "type": "string"
+          }
         ],
         "responses": {
           "200": {
@@ -825,7 +925,7 @@
         }
       },
       "post": {
-        "description": "Creates a new wiedergabeformat.",
+        "description": "Creates a new playback format.",
         "tags": [
           "playback_format",
           "admin"
@@ -834,7 +934,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Attributes defining the wiedergabeformat to create.",
+            "description": "Attributes defining the playback format to create.",
             "required": true,
             "schema": {
               "properties": {
@@ -864,7 +964,7 @@
     },
     "/v1/playback_formats/{id}": {
       "get": {
-        "description": "Returns a single wiedergabeformat.",
+        "description": "Returns a single playback format.",
         "tags": [
           "playback_format",
           "admin"
@@ -873,7 +973,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the wiedergabeformat to fetch.",
+            "description": "ID of the playback format to fetch.",
             "required": true,
             "type": "integer"
           }
@@ -892,7 +992,7 @@
         }
       },
       "patch": {
-        "description": "Updates an existing wiedergabeformat.",
+        "description": "Updates an existing playback format.",
         "tags": [
           "playback_format",
           "admin"
@@ -901,14 +1001,14 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the wiedergabeformat to update.",
+            "description": "ID of the playback format to update.",
             "required": true,
             "type": "integer"
           },
           {
             "name": "body",
             "in": "body",
-            "description": "Attributes defining the wiedergabeformat to update.",
+            "description": "Attributes defining the playback format to update.",
             "required": true,
             "schema": {
               "properties": {
@@ -936,7 +1036,7 @@
         }
       },
       "delete": {
-        "description": "Deletes an existing wiedergabeformat.",
+        "description": "Deletes an existing playback format.",
         "tags": [
           "playback_format",
           "admin"
@@ -945,7 +1045,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the wiedergabeformat to delete.",
+            "description": "ID of the playback format to delete.",
             "required": true,
             "type": "integer"
           }
@@ -962,10 +1062,26 @@
     },
     "/v1/profiles": {
       "get": {
-        "description": "Returns a list of profils.",
+        "description": "Returns a list of profiles.",
         "tags": [
           "profile",
           "admin"
+        ],
+        "parameters": [
+          {
+            "name": "page[number]",
+            "in": "query",
+            "description": "Query string to specify the page number of the profile list.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page[size]",
+            "in": "query",
+            "description": "Maximum number of profiles that are returned per page. Defaults to 50, maximum is 500.",
+            "required": false,
+            "type": "string"
+          }
         ],
         "responses": {
           "200": {
@@ -984,7 +1100,7 @@
         }
       },
       "post": {
-        "description": "Creates a new profil.",
+        "description": "Creates a new profile.",
         "tags": [
           "profile",
           "admin"
@@ -993,7 +1109,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Attributes defining the profil to create.",
+            "description": "Attributes defining the profile to create.",
             "required": true,
             "schema": {
               "properties": {
@@ -1023,7 +1139,7 @@
     },
     "/v1/profiles/{id}": {
       "get": {
-        "description": "Returns a single profil.",
+        "description": "Returns a single profile.",
         "tags": [
           "profile",
           "admin"
@@ -1032,7 +1148,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the profil to fetch.",
+            "description": "ID of the profile to fetch.",
             "required": true,
             "type": "integer"
           }
@@ -1051,7 +1167,7 @@
         }
       },
       "patch": {
-        "description": "Updates an existing profil.",
+        "description": "Updates an existing profile.",
         "tags": [
           "profile",
           "admin"
@@ -1060,14 +1176,14 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the profil to update.",
+            "description": "ID of the profile to update.",
             "required": true,
             "type": "integer"
           },
           {
             "name": "body",
             "in": "body",
-            "description": "Attributes defining the profil to update.",
+            "description": "Attributes defining the profile to update.",
             "required": true,
             "schema": {
               "properties": {
@@ -1095,7 +1211,7 @@
         }
       },
       "delete": {
-        "description": "Deletes an existing profil.",
+        "description": "Deletes an existing profile.",
         "tags": [
           "profile",
           "admin"
@@ -1104,7 +1220,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the profil to delete.",
+            "description": "ID of the profile to delete.",
             "required": true,
             "type": "integer"
           }
@@ -1121,7 +1237,7 @@
     },
     "/v1/shows": {
       "get": {
-        "description": "Returns a list of sendungs.",
+        "description": "Returns a list of shows.",
         "tags": [
           "show",
           "public"
@@ -1131,6 +1247,20 @@
             "name": "q",
             "in": "query",
             "description": "Query string to search for.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page[number]",
+            "in": "query",
+            "description": "Query string to specify the page number of the show list.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page[size]",
+            "in": "query",
+            "description": "Maximum number of shows that are returned per page. Defaults to 50, maximum is 500.",
             "required": false,
             "type": "string"
           }
@@ -1152,7 +1282,7 @@
         }
       },
       "post": {
-        "description": "Creates a new sendung.",
+        "description": "Creates a new show.",
         "tags": [
           "show",
           "admin"
@@ -1161,7 +1291,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Attributes defining the sendung to create.",
+            "description": "Attributes defining the show to create.",
             "required": true,
             "schema": {
               "properties": {
@@ -1191,7 +1321,7 @@
     },
     "/v1/shows/{id}": {
       "get": {
-        "description": "Returns a single sendung.",
+        "description": "Returns a single show.",
         "tags": [
           "show",
           "public"
@@ -1200,7 +1330,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the sendung to fetch.",
+            "description": "ID of the show to fetch.",
             "required": true,
             "type": "integer"
           }
@@ -1219,7 +1349,7 @@
         }
       },
       "patch": {
-        "description": "Updates an existing sendung.",
+        "description": "Updates an existing show.",
         "tags": [
           "show",
           "admin"
@@ -1228,14 +1358,14 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the sendung to update.",
+            "description": "ID of the show to update.",
             "required": true,
             "type": "integer"
           },
           {
             "name": "body",
             "in": "body",
-            "description": "Attributes defining the sendung to update.",
+            "description": "Attributes defining the show to update.",
             "required": true,
             "schema": {
               "properties": {
@@ -1263,7 +1393,7 @@
         }
       },
       "delete": {
-        "description": "Deletes an existing sendung.",
+        "description": "Deletes an existing show.",
         "tags": [
           "show",
           "admin"
@@ -1272,7 +1402,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the sendung to delete.",
+            "description": "ID of the show to delete.",
             "required": true,
             "type": "integer"
           }
@@ -1289,7 +1419,7 @@
     },
     "/v1/users": {
       "get": {
-        "description": "Returns a list of benutzer_ins.",
+        "description": "Returns a list of users.",
         "tags": [
           "user",
           "admin"
@@ -1299,6 +1429,20 @@
             "name": "q",
             "in": "query",
             "description": "Query string to search for.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page[number]",
+            "in": "query",
+            "description": "Query string to specify the page number of the user list.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page[size]",
+            "in": "query",
+            "description": "Maximum number of users that are returned per page. Defaults to 50, maximum is 500.",
             "required": false,
             "type": "string"
           }
@@ -1320,7 +1464,7 @@
         }
       },
       "post": {
-        "description": "Creates a new benutzer_in.",
+        "description": "Creates a new user.",
         "tags": [
           "user",
           "admin"
@@ -1329,7 +1473,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Attributes defining the benutzer_in to create.",
+            "description": "Attributes defining the user to create.",
             "required": true,
             "schema": {
               "properties": {
@@ -1359,7 +1503,7 @@
     },
     "/v1/users/{id}": {
       "get": {
-        "description": "Returns a single benutzer_in.",
+        "description": "Returns a single user.",
         "tags": [
           "user",
           "admin"
@@ -1368,7 +1512,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the benutzer_in to fetch.",
+            "description": "ID of the user to fetch.",
             "required": true,
             "type": "integer"
           }
@@ -1387,7 +1531,7 @@
         }
       },
       "patch": {
-        "description": "Updates an existing benutzer_in.",
+        "description": "Updates an existing user.",
         "tags": [
           "user",
           "admin"
@@ -1396,14 +1540,14 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the benutzer_in to update.",
+            "description": "ID of the user to update.",
             "required": true,
             "type": "integer"
           },
           {
             "name": "body",
             "in": "body",
-            "description": "Attributes defining the benutzer_in to update.",
+            "description": "Attributes defining the user to update.",
             "required": true,
             "schema": {
               "properties": {
@@ -1431,7 +1575,7 @@
         }
       },
       "delete": {
-        "description": "Deletes an existing benutzer_in.",
+        "description": "Deletes an existing user.",
         "tags": [
           "user",
           "admin"
@@ -1440,7 +1584,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the benutzer_in to delete.",
+            "description": "ID of the user to delete.",
             "required": true,
             "type": "integer"
           }

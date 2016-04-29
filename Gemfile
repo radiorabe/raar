@@ -7,6 +7,7 @@ gem 'pg'
 gem 'exception_notification'
 gem 'streamio-ffmpeg'
 gem 'rails-i18n'
+gem 'kaminari'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

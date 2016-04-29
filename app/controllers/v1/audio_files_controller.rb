@@ -15,6 +15,19 @@ module V1
                   required: true,
                   type: :integer
 
+        parameter name: 'page[number]',
+                  in: :query,
+                  description: 'Query string to specify the page number of the audio file list.',
+                  required: false,
+                  type: :string
+
+        parameter name: 'page[size]',
+                  in: :query,
+                  description: 'Maximum number of audio files that are returned per page. ' \
+                               'Defaults to 50, maximum is 500.',
+                  required: false,
+                  type: :string
+
         response_entities('V1::AudioFile')
       end
     end

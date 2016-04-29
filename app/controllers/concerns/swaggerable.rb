@@ -17,7 +17,8 @@ module Swaggerable
     def crud_swagger_paths(options = {})
       route_prefix = options[:route_prefix]
       route_key = options[:route_key] || model_class.model_name.route_key
-      model_name = options[:model_name] || model_class.model_name.human.downcase
+      model_name = options[:model_name] ||
+                   model_class.model_name.singular.humanize(capitalize: false)
       model_name_plural = options[:model_name_plural] || model_name.pluralize
       tags = [model_identifier] + Array(options[:tags])
       tags_read = tags + Array(options[:tags_read])
@@ -39,6 +40,20 @@ module Swaggerable
                       required: false,
                       type: :string
           end
+
+          parameter name: 'page[number]',
+                    in: :query,
+                    description: "Query string to specify the page number of the #{model_name} " \
+                                 'list.',
+                    required: false,
+                    type: :string
+
+          parameter name: 'page[size]',
+                    in: :query,
+                    description: "Maximum number of #{model_name_plural} that are returned " \
+                                 'per page. Defaults to 50, maximum is 500.',
+                    required: false,
+                    type: :string
 
           response_entities(data_class)
         end

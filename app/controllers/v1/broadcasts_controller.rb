@@ -50,6 +50,19 @@ module V1
                   required: true,
                   type: :string
 
+        parameter name: 'page[number]',
+                  in: :query,
+                  description: 'Query string to specify the page number of the broadcast list.',
+                  required: false,
+                  type: :string
+
+        parameter name: 'page[size]',
+                  in: :query,
+                  description: 'Maximum number of broadcasts that are returned per page. ' \
+                               'Defaults to 50, maximum is 500.',
+                  required: false,
+                  type: :string
+
         response_broadcasts
       end
     end
@@ -78,6 +91,19 @@ module V1
                   required: false,
                   type: :string
 
+        parameter name: 'page[number]',
+                  in: :query,
+                  description: 'Query string to specify the page number of the broadcast list.',
+                  required: false,
+                  type: :string
+
+        parameter name: 'page[size]',
+                  in: :query,
+                  description: 'Maximum number of broadcasts that are returned per page. ' \
+                               'Defaults to 50, maximum is 500.',
+                  required: false,
+                  type: :string
+
         response_broadcasts
       end
     end
@@ -97,6 +123,19 @@ module V1
                   in: :query,
                   description: 'Query string to search for in broadcast labels/people/details ' \
                                'or show names/details',
+                  required: false,
+                  type: :string
+
+        parameter name: 'page[number]',
+                  in: :query,
+                  description: 'Query string to specify the page number of the broadcast list.',
+                  required: false,
+                  type: :string
+
+        parameter name: 'page[size]',
+                  in: :query,
+                  description: 'Maximum number of broadcasts that are returned per page. ' \
+                               'Defaults to 50, maximum is 500.',
                   required: false,
                   type: :string
 
