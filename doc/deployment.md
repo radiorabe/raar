@@ -13,7 +13,7 @@ The following software must be installed on your system:
 
 ## Configuration
 
-The system configuration is done with environment variables that must be available to the corresponding processes.
+The system configuration is done with environment variables that must be available to the corresponding processes. The variable `RAILS_ENV` must be set to `production` in all cases.
 
 The following environment variables may be used to configure RAAR. They are all read into the application in `config/secrets.yml`, except for the database settings in `config/database.yml`.
 
@@ -28,6 +28,7 @@ The following environment variables may be used to configure RAAR. They are all 
 | RAAR_DB_USERNAME | The username used to connect to the database. | - |
 | RAAR_DB_PASSWORD | The password used to connect to the database. | - |
 | RAAR_DB_ADAPTER | The database adapter name, e.g. `postgresql`. | sqlite3 |
+| RAAR_LOG | Where to log messages. Either 'syslog', 'stdout' or empty to use the rails defaults (`log/production.log`). | - |
 | AIRTIME_DB_NAME | The airtime database name to connect to. | - |
 | AIRTIME_DB_HOST | The airtime database host to connect to. | - |
 | AIRTIME_DB_PORT | The airtime database port to connect to. | - |
@@ -42,6 +43,7 @@ The following environment variables may be used to configure RAAR. They are all 
 | --- | --- | --- |
 | RAAR_HOST_NAME | The host name where the API is running at. | - |
 | RAAR_BASE_PATH | The URL base path where the API is running at. | - |
+| RAAR_SSL | Whether the API is running on HTTPS or HTTP. | false |
 | RAAR_ADMIN_GROUPS | A comma-separated list of user groups the will have admin privileges. | admin,root |
 | DAYS_TO_EXPIRE_API_KEY | Number of days before API keys are expired. Leave empty to never expire keys. | - |
 

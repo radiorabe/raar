@@ -39,14 +39,19 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   # Use a different logger for distributed setups.
-  require 'syslog/logger'
-  config.logger =
-    case $PROGRAM_NAME
-    when /import$/ then Syslog::Logger.new('raar-import')
-    when /downgrade$/ then Syslog::Logger.new('raar-downgrade')
-    else ActiveSupport::TaggedLogging.new(Syslog::Logger.new('raar-api'))
-    end
-
+  case ENV['RAAR_LOG'].to_s.downcase
+  when'syslog'
+    require 'syslog/logger'
+    config.logger =
+      case $PROGRAM_NAME
+      when /import$/ then Syslog::Logger.new('raar-import')
+      when /downgrade$/ then Syslog::Logger.new('raar-downgrade')
+      else ActiveSupport::TaggedLogging.new(Syslog::Logger.new('raar-api'))
+      end
+  when 'stdout'
+    config.logger =  ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+  end
+  
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
