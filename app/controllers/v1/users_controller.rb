@@ -20,6 +20,8 @@ module V1
 
         parameter_id('user', 'regenerate the api key for')
         response_entity('V1::User')
+
+        security_infos([:admin])
       end
     end
 

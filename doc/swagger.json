@@ -14,6 +14,18 @@
   "produces": [
     "application/vnd.api+json"
   ],
+  "securityDefinitions": {
+    "http_token": {
+      "type": "basic",
+      "description": "API key is passed as HTTP token authentication"
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "query",
+      "description": "API key is passed as query parameter"
+    }
+  },
   "responses": {
     "unprocessable_entity": {
       "description": "unprocessable entity",
@@ -74,7 +86,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "post": {
         "description": "Creates a new archive format.",
@@ -118,7 +142,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/profiles/{profile_id}/archive_formats/{id}": {
@@ -155,7 +191,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "patch": {
         "description": "Updates an existing archive format.",
@@ -206,7 +254,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "delete": {
         "description": "Deletes an existing archive format.",
@@ -237,7 +297,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/audio_encodings": {
@@ -261,7 +333,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/broadcasts/{broadcast_id}/audio_files": {
@@ -649,7 +733,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "post": {
         "description": "Creates a new downgrade action.",
@@ -700,7 +796,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/profiles/{profile_id}/archive_formats/{archive_format_id}/downgrade_actions/{id}": {
@@ -744,7 +852,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "patch": {
         "description": "Updates an existing downgrade action.",
@@ -802,7 +922,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "delete": {
         "description": "Deletes an existing downgrade action.",
@@ -840,7 +972,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/login": {
@@ -922,7 +1066,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "post": {
         "description": "Creates a new playback format.",
@@ -959,7 +1115,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/playback_formats/{id}": {
@@ -989,7 +1157,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "patch": {
         "description": "Updates an existing playback format.",
@@ -1033,7 +1213,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "delete": {
         "description": "Deletes an existing playback format.",
@@ -1057,7 +1249,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/profiles": {
@@ -1097,7 +1301,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "post": {
         "description": "Creates a new profile.",
@@ -1134,7 +1350,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/profiles/{id}": {
@@ -1164,7 +1392,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "patch": {
         "description": "Updates an existing profile.",
@@ -1208,7 +1448,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "delete": {
         "description": "Deletes an existing profile.",
@@ -1232,7 +1484,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/shows": {
@@ -1316,7 +1580,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/shows/{id}": {
@@ -1390,7 +1666,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "delete": {
         "description": "Deletes an existing show.",
@@ -1414,7 +1702,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/users": {
@@ -1461,7 +1761,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "post": {
         "description": "Creates a new user.",
@@ -1498,7 +1810,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/users/{id}": {
@@ -1528,7 +1852,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "patch": {
         "description": "Updates an existing user.",
@@ -1572,7 +1908,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       },
       "delete": {
         "description": "Deletes an existing user.",
@@ -1596,7 +1944,19 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     },
     "/v1/users/{id}/api_key": {
@@ -1626,7 +1986,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_key": [
+
+            ]
+          }
+        ]
       }
     }
   },

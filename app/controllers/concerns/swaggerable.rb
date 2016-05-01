@@ -56,6 +56,8 @@ module Swaggerable
                     type: :string
 
           response_entities(data_class)
+
+          security_infos(tags_read)
         end
 
         operation :post do
@@ -67,6 +69,8 @@ module Swaggerable
 
           response_entity(data_class, 201)
           response_unprocessable
+
+          security_infos(tags_write)
         end
       end
 
@@ -79,6 +83,8 @@ module Swaggerable
           parameter_id(model_name, 'fetch')
 
           response_entity(data_class)
+
+          security_infos(tags_read)
         end
 
         operation :patch do
@@ -91,6 +97,8 @@ module Swaggerable
 
           response_entity(data_class)
           response_unprocessable
+
+          security_infos(tags_write)
         end
 
         operation :delete do
@@ -105,6 +113,8 @@ module Swaggerable
           end
 
           response_unprocessable
+
+          security_infos(tags_write)
         end
       end
     end
@@ -138,6 +148,12 @@ module Swaggerable
           end
         end
       end
+    end
+
+    def security_infos(tags)
+      return unless tags.include?(:admin)
+      security http_token: []
+      security api_key: []
     end
 
     def response_entity(data_class, status = 200)

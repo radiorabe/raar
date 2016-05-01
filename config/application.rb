@@ -33,6 +33,8 @@ module Raar
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    config.middleware.insert_before Rack::ETag, Rack::Deflater
+
     routes.default_url_options = {
       protocol: Rails.application.secrets.ssl ? 'https' : 'http',
       host: Rails.application.secrets.host_name,

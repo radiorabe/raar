@@ -41,6 +41,17 @@ module V1
       key :consumes, ['application/vnd.api+json']
       key :produces, ['application/vnd.api+json']
 
+      security_definition :http_token do
+        key :type, :basic
+        key :description, 'API key is passed as HTTP token authentication'
+      end
+      security_definition :api_key do
+        key :type, :apiKey
+        key :name, :api_key
+        key :in, :query
+        key :description, 'API key is passed as query parameter'
+      end
+
       response :unprocessable_entity do
         key :description, 'unprocessable entity'
         schema do

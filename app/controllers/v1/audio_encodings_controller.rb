@@ -9,6 +9,9 @@ module V1
         key :tags, [:audio_encoding, :admin]
 
         response_entities('V1::AudioEncoding')
+
+        security http_token: []
+        security api_key: []
       end
     end
 
