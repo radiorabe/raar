@@ -17,7 +17,7 @@ class Show < ActiveRecord::Base
 
   before_validation :set_default_profile_id
 
-  scope :list, -> { order(:name) }
+  scope :list, -> { order('LOWER(name)') }
 
   def to_s
     name

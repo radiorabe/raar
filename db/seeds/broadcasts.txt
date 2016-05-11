@@ -1,0 +1,79 @@
+0	08:00	11:00	der Morgen
+0	11:00	12:00	RaBe-Info
+0	12:00	13:00	Klangbecken
+0	13:00	16:00	70-80-90-Mambo!
+0	16:00	18:00	Klangbecken
+0	18:00	18:30	RaBe-Info (w)
+0	18:30	19:00	ganzOhr (w)
+0	19:00	20:00	Espaço Brasil
+0	20:00	21:00	die80er.ch
+0	21:00	22:00	Stadtgschichte
+0	22:00	23:00	Worldwyld
+0	23:00	09:00	Klangbecken
+
+1	09:00	11:00	der Morgen
+1	11:00	12:00	RaBe-Info
+1	12:00	14:00	Klangbecken
+1	14:00	16:00	Drivin' Home
+1	16:00	17:00	Klangbecken
+1	17:00	18:00	Radio Silbergrau
+1	18:00	18:30	RaBe-Info (w)
+1	18:30	19:00	ganzOhr
+1	19:00	20:00	Stimme der Kutüsch
+1	20:00	21:00	AbbAZappA
+1	21:00	22:00	Groovэxpress
+1	22:00	00:00	Spazz-Time Kontinuum
+
+2	00:00	09:00	Klangbecken
+2	09:00	11:00	der Morgen
+2	11:00	12:00	RaBe-Info & Subkutan
+2	12:00	13:00	Stadtgespräch
+2	13:00	14:00	Klangbecken
+2	14:00	15:00	Riffs
+2	15:00	16:00	Klangbecken
+2	16:00	18:00	unerhörtes-ungehörtes
+2	18:00	19:00	RaBe-Info & Subkutan (w)
+2	19:00	20:00	RadioActivos
+2	20:00	21:00	Las Venas Abiertas
+2	21:00	23:00	Ready to Rock
+2	23:00	00:00	Radio Goethe
+
+3	00:00	09:00	Klangbecken
+3	09:00	12:00	der Morgen
+3	12:00	14:00	Supernova
+3	14:00	18:00	Bärner Schlagerwelt
+3	18:00	19:00	Klangbecken
+3	19:00	20:00	Carnotzet Voltaire
+3	20:00	22:00	Radieschen
+3	22:00	23:00	Amplifier
+3	23:00	09:00	Klangbecken
+
+4	09:00	12:00	der Morgen
+4	12:00	14:00	UrbanWolf
+4	14:00	16:00	Radio Sur le Pont & The Vidiot
+4	16:00	18:00	Radieschen
+4	18:00	19:00	Klangbecken
+4	19:00	20:00	El Gato Calculista
+4	20:00	22:00	Gschächnütschlimmers
+4	22:00	02:00	Multiversum
+
+5	02:00	08:00	Klangbecken
+5	08:00	12:00	der Morgen
+5	12:00	14:00	Piazza Italia
+5	14:00	16:00	die80er.ch
+5	16:00	18:00	Gschächnütschlimmers
+5	18:00	19:00	Stereo Freeze
+5	19:00	20:00	House Music DJ Lord
+5	20:00	21:00	Klangbecken
+5	21:00	04:00	Galaxy Space Night
+
+6	04:00	10:00	Klangbecken
+6	10:00	11:00	Jazz am Sunntig
+6	11:00	12:00	lila_blue(s) (w)
+6	12:00	15:00	Gay Radio
+6	15:00	17:00	Blues Zeppelin
+6	17:00	18:00	Onda Libera
+6	18:00	19:00	Jadran
+6	19:00	21:00	Gay Radio
+6	21:00	23:00	RaBass
+6	23:00	08:00	Klangbecken

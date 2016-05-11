@@ -5,3 +5,6 @@
 Rake.application['db:fixtures:load'].invoke
 
 system 'sqlite3 db/airtime_development.sqlite3 < db/seeds/airtime_dump.sql'
+
+require Rails.root.join('db', 'seeds', 'broadcast_seeder')
+BroadcastSeeder.new.run
