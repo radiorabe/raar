@@ -150,7 +150,7 @@ module V1
     private
 
     def fetch_entries
-      scope = super.joins(:show)
+      scope = super.joins(:show).includes(:show)
       scope = scope.within(*start_finish) if params[:year]
       scope = scope.where(show_id: params[:show_id]) if params[:show_id]
       scope
