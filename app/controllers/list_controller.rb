@@ -29,12 +29,9 @@ class ListController < ApplicationController
 
   def paginate(scope)
     page = params[:page]
-    if page
-      per = [(page[:size] || 50).to_i, 500].min
-      scope.page(page[:number]).per(per)
-    else
-      scope
-    end
+    page = { number: page.to_i } unless page.is_a?(ActionController::Parameters)
+    per = [(page[:size] || 50).to_i, 500].min
+    scope.page(page[:number]).per(per)
   end
 
   def fetch_entry
