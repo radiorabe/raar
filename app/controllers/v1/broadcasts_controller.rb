@@ -63,6 +63,13 @@ module V1
                   required: false,
                   type: :string
 
+        parameter name: 'sort',
+                  in: :query,
+                  description: 'Name of the sort field, optionally prefixed with a `-` for ' \
+                               'descending order.',
+                  required: false,
+                  type: :string
+
         response_broadcasts
       end
     end
@@ -104,6 +111,13 @@ module V1
                   required: false,
                   type: :string
 
+        parameter name: 'sort',
+                  in: :query,
+                  description: 'Name of the sort field, optionally prefixed with a `-` for ' \
+                               'descending order.',
+                  required: false,
+                  type: :string
+
         response_broadcasts
       end
     end
@@ -136,6 +150,13 @@ module V1
                   in: :query,
                   description: 'Maximum number of broadcasts that are returned per page. ' \
                                'Defaults to 50, maximum is 500.',
+                  required: false,
+                  type: :string
+
+        parameter name: 'sort',
+                  in: :query,
+                  description: 'Name of the sort field, optionally prefixed with a `-` for ' \
+                               'descending order.',
                   required: false,
                   type: :string
 

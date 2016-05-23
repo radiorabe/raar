@@ -2,6 +2,7 @@
 class ListController < ApplicationController
 
   prepend Searchable
+  prepend Sortable
 
   delegate :model_class, :model_identifier, :model_serializer,
            to: 'self.class'

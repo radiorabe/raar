@@ -55,6 +55,13 @@ module Swaggerable
                     required: false,
                     type: :string
 
+          parameter name: 'sort',
+                    in: :query,
+                    description: 'Name of the sort field, optionally prefixed with a `-` for ' \
+                                 'descending order.',
+                    required: false,
+                    type: :string
+
           response_entities(data_class)
 
           security_infos(tags_read)

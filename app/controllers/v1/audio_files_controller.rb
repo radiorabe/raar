@@ -28,6 +28,13 @@ module V1
                   required: false,
                   type: :string
 
+        parameter name: 'sort',
+                  in: :query,
+                  description: 'Name of the sort field, optionally prefixed with a `-` for ' \
+                               'descending order.',
+                  required: false,
+                  type: :string
+
         response_entities('V1::AudioFile')
       end
     end

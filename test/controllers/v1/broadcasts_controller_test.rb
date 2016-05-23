@@ -8,6 +8,26 @@ module V1
       assert_equal ['Info April', 'Info Mai'], json_attrs(:label)
     end
 
+    test 'GET index returns list of all broadcasts of the given show, respecting descending sort order' do
+      get :index, params: { show_id: shows(:info).id, sort: '-started_at' }
+      assert_equal ['Info Mai', 'Info April'], json_attrs(:label)
+    end
+
+    test 'GET index returns list of all broadcasts of the given show, respecting ascending sort order' do
+      get :index, params: { show_id: shows(:info).id, sort: 'label' }
+      assert_equal ['Info April', 'Info Mai'], json_attrs(:label)
+    end
+
+    test 'GET index returns bad request if sort is invalid' do
+      get :index, params: { show_id: shows(:info).id, sort: 'show' }
+      assert_equal 400, response.status
+    end
+
+    test 'GET index returns bad request if sort contains multiple values' do
+      get :index, params: { show_id: shows(:info).id, sort: '-started_at,label' }
+      assert_equal 400, response.status
+    end
+
     test 'GET index with search param returns filtered list' do
       broadcasts(:klangbecken_mai1).update(label: 'Klangecken Mai')
       get :index, params: { show_id: shows(:info).id, q: 'Mai' }

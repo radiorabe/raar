@@ -1,4 +1,3 @@
-
 # The search functionality for the index table.
 # Define an array of searchable string columns in your subclassing
 # controllers using the class attribute +search_columns+.
