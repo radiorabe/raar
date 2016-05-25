@@ -1,9 +1,6 @@
 # RAAR Import
 
 The importer takes care of adding recorded audio files into the archive database.
-It's main executable lives in `bin/import` and may be called by a cron job:
-
-    bash -l -c '$RAAR_HOME/bin/import >> /dev/null 2>&1'
 
 See [Architecture](architecture.md) for details on the import settings.
 

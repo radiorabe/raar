@@ -55,3 +55,19 @@ The following environment variables may be used to configure RAAR. They are all 
 | DAYS_TO_KEEP_IMPORTED | Number of days to keep the original recordings, before they are deleted. | 1 |
 | DAYS_TO_FINISH_IMPORT | Number of days before a warning is produced because of unimported recordings. | 1 |
 | PARALLEL_TRANSCODINGS | Number of threads to use for audio transcoding. | 1 |
+
+## Cron Jobs
+
+The import and downgrade executables live in `bin/import` and `bin/downgrade`, respectively. The may be run by two separate cron jobs, houry and daily based on your average broadcast duration.
+
+    bash -l -c '$RAAR_HOME/bin/import >> /dev/null 2>&1'
+
+    bash -l -c '$RAAR_HOME/bin/downgrade >> /dev/null 2>&1'
+
+It is essential that the environment variables defined above are available to the processes.
+
+## Free IPA
+
+In order for the authentication to work with username and password, Free IPA may be configured to capture `POST` requests to `v1/login`. The form parameters `username` and `password` are provided. The application expects `REMOTE_USER`, `REMOTE_USER_GROUPS`, `REMOTE_USER_FIRST_NAME`, `REMOTE_USER_LAST_NAME` or `EXTERNAL_AUTH_ERROR` headers to be set. If the `REMOTE_USER` is set, a user object with the generated API token is returned.
+
+If no Free IPA is configured, authentication is still possible by API token. The users must be created and the tokens must be distributed manually in this case.
