@@ -9,6 +9,7 @@ The following software must be installed on your system:
 * ffmpeg >= 2.7.0
 * apache httpd
 * mod_xsendfile
+* [mod_passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/apache/oss/el7/install_passenger.html)
 * freeipa
 
 ## Configuration
