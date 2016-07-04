@@ -61,7 +61,8 @@ module Import
       recordings.select(&:audio_duration_too_short?).each do |r|
         ExceptionNotifier.notify_exception(
           Recording::TooShortError.new(r),
-          data: { mapping: mapping })
+          data: { mapping: mapping }
+        )
       end
     end
 

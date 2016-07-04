@@ -11,7 +11,8 @@ class AudioPath
   def url_params
     timestamp_params.merge(
       playback_format: playback_format,
-      format: file_extension)
+      format: file_extension
+    )
   end
 
   def playback_format

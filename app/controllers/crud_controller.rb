@@ -9,7 +9,9 @@ class CrudController < ListController
     if entry.save
       render json: entry, status: :created, location: entry_url, serializer: model_serializer
     else
-      render json: entry.errors, status: :unprocessable_entity
+      render json: entry,
+             status: :unprocessable_entity,
+             serializer: ActiveModel::Serializer::ErrorSerializer
     end
   end
 
@@ -18,7 +20,9 @@ class CrudController < ListController
     if entry.update(model_params)
       render json: entry, serializer: model_serializer
     else
-      render json: entry.errors, status: :unprocessable_entity
+      render json: entry,
+             status: :unprocessable_entity,
+             serializer: ActiveModel::Serializer::ErrorSerializer
     end
   end
 
@@ -27,7 +31,9 @@ class CrudController < ListController
     if entry.destroy
       head 204
     else
-      render json: entry.errors, status: :unprocessable_entity
+      render json: entry,
+             status: :unprocessable_entity,
+             serializer: ActiveModel::Serializer::ErrorSerializer
     end
   end
 

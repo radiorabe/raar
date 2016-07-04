@@ -73,7 +73,8 @@ module AudioProcessor
       audio.transcode(new_path,
                       options.reverse_merge(
                         audio_codec: 'copy',
-                        validate: true))
+                        validate: true
+                      ))
     end
 
     def create_list_file(file, paths)
@@ -117,7 +118,8 @@ module AudioProcessor
       options = {
         audio_codec: audio_format.codec,
         audio_bitrate: audio_format.bitrate,
-        audio_channels: audio_format.channels }
+        audio_channels: audio_format.channels
+      }
       options.delete(:audio_bitrate) if audio_format.codec == 'flac'
       options
     end

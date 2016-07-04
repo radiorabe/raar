@@ -27,7 +27,8 @@ module Import
         def assign_show(mapping, instance)
           mapping.assign_show(
             name: instance.show.name.strip,
-            details: instance.show.description)
+            details: instance.show.description
+          )
         end
 
         def assign_broadcast(mapping, instance)
@@ -36,7 +37,8 @@ module Import
             details: instance.show.description,
             started_at: instance.starts,
             finished_at: instance.ends,
-            people: '')
+            people: ''
+          )
         end
 
         def fetch_show_instances

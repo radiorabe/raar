@@ -13,7 +13,7 @@ module FileStore
                            bitrate: 224,
                            channels: 2)
       path = FileStore::Structure.new(file).relative_path
-      assert_equal '2012/05/12/2012-05-12T200000+0200_120_gschaechnuet_chlimmers.224k_2.mp3', path
+      assert_equal '2012/05/12/2012-05-12T200000+0200_120_gschachnut_chlimmers.224k_2.mp3', path
     end
 
   end

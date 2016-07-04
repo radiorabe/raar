@@ -34,7 +34,8 @@ module WithAudioFormat
                 inclusion: {
                   in: -> (e) { e.audio_encoding.send(encoding_field) },
                   if: :audio_encoding,
-                  allow_blank: true }
+                  allow_blank: true
+                }
     end
 
   end

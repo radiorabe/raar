@@ -4,8 +4,10 @@ module V1
     include Swagger::Blocks
 
     swagger_schema('V1::UnprocessableEntity') do
-      # TODO: fix
-      property :errors, type: :string
+      property :source do
+        property :pointer, type: :string
+      end
+      property :details, type: :string
     end
 
   end

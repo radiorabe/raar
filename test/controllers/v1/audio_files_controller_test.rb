@@ -11,7 +11,7 @@ module V1
       get :index, params: { broadcast_id: broadcasts(:info_april).id }
 
       assert_equal [320, 192, 96], json_attrs(:bitrate)
-      assert_equal %w(best high low), json_attrs(:playback_format)
+      assert_equal %w(best high low), json_attrs('playback-format')
       assert_equal ['http://example.com/v1/audio_files/2013/04/10/110000_best.mp3',
                     'http://example.com/v1/audio_files/2013/04/10/110000_high.mp3',
                     'http://example.com/v1/audio_files/2013/04/10/110000_low.mp3'],
@@ -22,7 +22,7 @@ module V1
       get :index, params: { broadcast_id: broadcasts(:info_april).id }
 
       assert_equal [192, 96], json_attrs(:bitrate)
-      assert_equal %w(high low), json_attrs(:playback_format)
+      assert_equal %w(high low), json_attrs('playback-format')
       assert_equal ['http://example.com/v1/audio_files/2013/04/10/110000_high.mp3',
                     'http://example.com/v1/audio_files/2013/04/10/110000_low.mp3'],
                     json_attrs(:url)
@@ -34,7 +34,7 @@ module V1
       get :index, params: { broadcast_id: broadcasts(:info_april).id }
 
       assert_equal [320, 192, 96], json_attrs(:bitrate)
-      assert_equal %w(best high low), json_attrs(:playback_format)
+      assert_equal %w(best high low), json_attrs('playback-format')
       assert_equal ['http://example.com/v1/audio_files/2013/04/10/110000_best.mp3',
                     'http://example.com/v1/audio_files/2013/04/10/110000_high.mp3',
                     'http://example.com/v1/audio_files/2013/04/10/110000_low.mp3'],

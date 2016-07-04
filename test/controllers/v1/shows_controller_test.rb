@@ -111,7 +111,7 @@ module V1
               id: shows(:info).id,
               data: { attributes: { name: 'Klangbecken' } } }
       assert_response 422
-      assert_match /bereits vergeben/, response.body
+      assert_match /taken/, response.body
       assert_equal 'Info', shows(:info).reload.name
     end
 

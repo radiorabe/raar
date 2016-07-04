@@ -66,7 +66,7 @@ module V1
               id: users(:speedee).id,
               data: { attributes: { first_name: 'Spee', last_name: 'Dee' } } }
       assert_response 200
-      assert_equal 'Spee', json['data']['attributes']['first_name']
+      assert_equal 'Spee', json['data']['attributes']['first-name']
       assert_equal 'Spee', users(:speedee).reload.first_name
       assert_equal 'Dee', users(:speedee).last_name
     end
@@ -77,7 +77,7 @@ module V1
               id: users(:speedee).id,
               data: { attributes: { username: 'admin' } } }
       assert_response 422
-      assert_match /bereits vergeben/, response.body
+      assert_match /taken/, response.body
       assert_equal 'speedee', users(:speedee).reload.username
     end
 
@@ -87,7 +87,7 @@ module V1
       put :regenerate_api_key, params: { id: user.id }
       assert_response 200
       assert_not_equal key, user.reload.api_key
-      assert_equal user.api_key, json['data']['attributes']['api_key']
+      assert_equal user.api_key, json['data']['attributes']['api-key']
     end
 
     test 'DELETE destroy removes existing user' do

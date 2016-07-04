@@ -47,7 +47,7 @@ module V1
                   bitrate: '123' } } }
         assert_response 422
       end
-      assert_match /muss ausgefüllt werden/, response.body
+      assert_match /can't be blank/, response.body
     end
 
     test 'PATCH update updates existing entry' do
@@ -66,7 +66,7 @@ module V1
               id: entry.id,
               data: { attributes: { bitrate: '123' } } }
       assert_response 422
-      assert_match /ist kein gültiger Wert/, response.body
+      assert_match /not included/, response.body
       assert_equal 96, entry.reload.bitrate
     end
 

@@ -62,7 +62,7 @@ module V1
               id: entry.id,
               data: { attributes: { name: 'Unimportant' } } }
       assert_response 422
-      assert_match /bereits vergeben/, response.body
+      assert_match /taken/, response.body
       assert_equal 'Important', entry.reload.name
     end
 
@@ -79,7 +79,7 @@ module V1
         delete :destroy, params: { id: entry.id }
       end
       assert_response 422
-      assert_match /restrict_dependent_destroy/, response.body
+      assert_match /dependent shows/, response.body
     end
 
     private

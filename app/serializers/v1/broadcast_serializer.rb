@@ -3,11 +3,11 @@ module V1
 
     json_api_swagger_schema do
       property :attributes do
-        property :label, type: :string
-        property :started_at, type: :string, format: 'date-time'
-        property :finished_at, type: :string, format: 'date-time'
-        property :people, type: :string
-        property :details, type: :string
+        property 'label', type: :string
+        property 'started-at', type: :string, format: 'date-time'
+        property 'finished-at', type: :string, format: 'date-time'
+        property 'people', type: :string
+        property 'details', type: :string
       end
       property :relationships do
         property :show do

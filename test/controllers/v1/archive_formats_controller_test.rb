@@ -58,7 +58,7 @@ module V1
               data: { attributes: { codec: 'mp3', initial_bitrate: 224 } } }
       assert_response 200
       assert_equal 'mp3', json['data']['attributes']['codec']
-      assert_equal 224, json['data']['attributes']['initial_bitrate']
+      assert_equal 224, json['data']['attributes']['initial-bitrate']
       assert_equal 'mp3', entry.reload.codec
       assert_equal 224, entry.initial_bitrate
     end
@@ -70,7 +70,7 @@ module V1
               profile_id: profiles(:default).id,
               data: { attributes: { initial_bitrate: 123 } } }
       assert_response 422
-      assert_match /kein gültiger Wert/, response.body
+      assert_match /not included/, response.body
       assert_equal 256, entry.reload.initial_bitrate
     end
 

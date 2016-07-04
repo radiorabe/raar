@@ -2087,15 +2087,15 @@
               "type": "string",
               "description": "See audio_encodings for possible values. This attribute may only be set on create."
             },
-            "initial_bitrate": {
+            "initial-bitrate": {
               "type": "integer",
               "description": "See audio_encodings of selected codec for possible values."
             },
-            "initial_channels": {
+            "initial-channels": {
               "type": "integer",
               "description": "See audio_encodings of selected codec for possible values."
             },
-            "max_public_bitrate": {
+            "max-public-bitrate": {
               "type": "integer",
               "description": "See audio_encodings of selected codec for possible values."
             },
@@ -2126,10 +2126,10 @@
             "codec": {
               "type": "string"
             },
-            "file_extension": {
+            "file-extension": {
               "type": "string"
             },
-            "mime_type": {
+            "mime-type": {
               "type": "string"
             },
             "bitrates": {
@@ -2172,7 +2172,7 @@
             "url": {
               "type": "string"
             },
-            "playback_format": {
+            "playback-format": {
               "type": "string"
             }
           }
@@ -2192,11 +2192,11 @@
             "label": {
               "type": "string"
             },
-            "started_at": {
+            "started-at": {
               "type": "string",
               "format": "date-time"
             },
-            "finished_at": {
+            "finished-at": {
               "type": "string",
               "format": "date-time"
             },
@@ -2282,12 +2282,12 @@
               "type": "integer",
               "description": "See audio_encodings of selected codec for possible values."
             },
-            "created_at": {
+            "created-at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
             },
-            "updated_at": {
+            "updated-at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
@@ -2315,12 +2315,12 @@
             "default": {
               "type": "boolean"
             },
-            "created_at": {
+            "created-at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
             },
-            "updated_at": {
+            "updated-at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
@@ -2380,10 +2380,10 @@
             "username": {
               "type": "string"
             },
-            "first_name": {
+            "first-name": {
               "type": "string"
             },
-            "last_name": {
+            "last-name": {
               "type": "string"
             },
             "groups": {
@@ -2392,11 +2392,11 @@
                 "type": "string"
               }
             },
-            "api_key": {
+            "api-key": {
               "type": "string",
               "readOnly": true
             },
-            "api_key_expires_at": {
+            "api-key-expires-at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
@@ -2405,12 +2405,12 @@
               "type": "boolean",
               "readOnly": true
             },
-            "created_at": {
+            "created-at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
             },
-            "updated_at": {
+            "updated-at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
@@ -2421,7 +2421,14 @@
     },
     "V1::UnprocessableEntity": {
       "properties": {
-        "errors": {
+        "source": {
+          "properties": {
+            "pointer": {
+              "type": "string"
+            }
+          }
+        },
+        "details": {
           "type": "string"
         }
       }

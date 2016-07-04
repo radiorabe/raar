@@ -53,12 +53,13 @@ module Import
       AudioProcessor.new(master).transcode(
         audio_file.absolute_path,
         audio_file.audio_format,
-        tags)
+        tags
+      )
     end
 
     def tags
       b = mapping.broadcast
-      { title: "#{b.label} @ #{I18n.l(b.started_at)}",
+      { title: "#{b.label} @ #{I18n.l(b.started_at, locale: :de)}",
         album: b.show.name,
         artist: b.people,
         year: b.started_at.year }

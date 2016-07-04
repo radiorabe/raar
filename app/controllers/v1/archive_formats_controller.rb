@@ -11,7 +11,8 @@ module V1
                        prefix_parameters: [
                          { name: :profile_id,
                            description: 'ID of the profile this archive format belongs to.',
-                           type: :integer }])
+                           type: :integer }
+                       ])
 
     private
 

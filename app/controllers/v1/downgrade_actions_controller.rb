@@ -16,7 +16,8 @@ module V1
                          { name: :archive_format_id,
                            description: 'ID of the archive format this downgrade actions ' \
                                         'belongs to.',
-                           type: :integer }])
+                           type: :integer }
+                       ])
 
     private
 

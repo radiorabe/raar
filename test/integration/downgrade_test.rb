@@ -2,7 +2,7 @@ require 'test_helper'
 
 class DowngradeTest < ActiveSupport::TestCase
 
-  self.use_transactional_fixtures = false
+  self.use_transactional_tests = false
 
   # Travis has ffmpeg 0.8.17, which reports "Unknown input format: 'lavfi'"
   unless ENV['TRAVIS']

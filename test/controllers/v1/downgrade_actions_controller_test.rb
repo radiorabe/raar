@@ -84,7 +84,7 @@ module V1
               archive_format_id: archive_formats(:default_mp3).id,
               data: { attributes: { bitrate: 123 } } }
       assert_response 422
-      assert_match /kein gültiger Wert/, response.body
+      assert_match /not included/, response.body
       assert_equal 192, entry.reload.bitrate
     end
 

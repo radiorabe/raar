@@ -3,14 +3,14 @@ module V1
 
     json_api_swagger_schema do
       property :attributes do
-        property :codec, type: :string
-        property :file_extension, type: :string
-        property :mime_type, type: :string
-        property :bitrates,
+        property 'codec', type: :string
+        property 'file-extension', type: :string
+        property 'mime-type', type: :string
+        property 'bitrates',
                  type: :array,
                  items: { type: :integer },
                  description: 'Possible bitrates in kbps.'
-        property :channels,
+        property 'channels',
                  type: :array,
                  items: { type: :integer },
                  description: 'Possible number of channels.'
