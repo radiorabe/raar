@@ -3,15 +3,15 @@ module V1
 
     json_api_swagger_schema do
       property :attributes do
-        property 'username', type: :string
-        property 'first-name', type: :string
-        property 'last-name', type: :string
-        property 'groups', type: :array, items: { type: :string }
-        property 'api-key', type: :string, readOnly: true
-        property 'api-key-expires-at', type: :string, format: 'date-time', readOnly: true
-        property 'admin', type: :boolean, readOnly: true
-        property 'created-at', type: :string, format: 'date-time', readOnly: true
-        property 'updated-at', type: :string, format: 'date-time', readOnly: true
+        property :username, type: :string
+        property :first_name, type: :string
+        property :last_name, type: :string
+        property :groups, type: :array, items: { type: :string }
+        property :api_key, type: :string, readOnly: true
+        property :api_key_expires_at, type: :string, format: 'date-time', readOnly: true
+        property :admin, type: :boolean, readOnly: true
+        property :created_at, type: :string, format: 'date-time', readOnly: true
+        property :updated_at, type: :string, format: 'date-time', readOnly: true
       end
     end
 

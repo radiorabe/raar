@@ -3,11 +3,11 @@ module V1
 
     json_api_swagger_schema do
       property :attributes do
-        property 'name', type: :string
-        property 'description', type: :string
-        property 'default', type: :boolean
-        property 'created-at', type: :string, format: 'date-time', readOnly: true
-        property 'updated-at', type: :string, format: 'date-time', readOnly: true
+        property :name, type: :string
+        property :description, type: :string
+        property :default, type: :boolean
+        property :created_at, type: :string, format: 'date-time', readOnly: true
+        property :updated_at, type: :string, format: 'date-time', readOnly: true
       end
     end
 

@@ -2087,15 +2087,15 @@
               "type": "string",
               "description": "See audio_encodings for possible values. This attribute may only be set on create."
             },
-            "initial-bitrate": {
+            "initial_bitrate": {
               "type": "integer",
               "description": "See audio_encodings of selected codec for possible values."
             },
-            "initial-channels": {
+            "initial_channels": {
               "type": "integer",
               "description": "See audio_encodings of selected codec for possible values."
             },
-            "max-public-bitrate": {
+            "max_public_bitrate": {
               "type": "integer",
               "description": "See audio_encodings of selected codec for possible values."
             },
@@ -2126,10 +2126,10 @@
             "codec": {
               "type": "string"
             },
-            "file-extension": {
+            "file_extension": {
               "type": "string"
             },
-            "mime-type": {
+            "mime_type": {
               "type": "string"
             },
             "bitrates": {
@@ -2172,7 +2172,7 @@
             "url": {
               "type": "string"
             },
-            "playback-format": {
+            "playback_format": {
               "type": "string"
             }
           }
@@ -2192,11 +2192,11 @@
             "label": {
               "type": "string"
             },
-            "started-at": {
+            "started_at": {
               "type": "string",
               "format": "date-time"
             },
-            "finished-at": {
+            "finished_at": {
               "type": "string",
               "format": "date-time"
             },
@@ -2282,12 +2282,12 @@
               "type": "integer",
               "description": "See audio_encodings of selected codec for possible values."
             },
-            "created-at": {
+            "created_at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
             },
-            "updated-at": {
+            "updated_at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
@@ -2315,12 +2315,12 @@
             "default": {
               "type": "boolean"
             },
-            "created-at": {
+            "created_at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
             },
-            "updated-at": {
+            "updated_at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
@@ -2380,10 +2380,10 @@
             "username": {
               "type": "string"
             },
-            "first-name": {
+            "first_name": {
               "type": "string"
             },
-            "last-name": {
+            "last_name": {
               "type": "string"
             },
             "groups": {
@@ -2392,11 +2392,11 @@
                 "type": "string"
               }
             },
-            "api-key": {
+            "api_key": {
               "type": "string",
               "readOnly": true
             },
-            "api-key-expires-at": {
+            "api_key_expires_at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
@@ -2405,12 +2405,12 @@
               "type": "boolean",
               "readOnly": true
             },
-            "created-at": {
+            "created_at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true
             },
-            "updated-at": {
+            "updated_at": {
               "type": "string",
               "format": "date-time",
               "readOnly": true

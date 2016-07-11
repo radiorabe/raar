@@ -3,21 +3,21 @@ module V1
 
     json_api_swagger_schema do
       property :attributes do
-        property 'codec',
+        property :codec,
                  type: :string,
                  description: 'See audio_encodings for possible values. ' \
                               'This attribute may only be set on create.'
-        property 'initial-bitrate',
+        property :initial_bitrate,
                  type: :integer,
                  description: 'See audio_encodings of selected codec for possible values.'
-        property 'initial-channels',
+        property :initial_channels,
                  type: :integer,
                  description: 'See audio_encodings of selected codec for possible values.'
-        property 'max-public-bitrate',
+        property :max_public_bitrate,
                  type: :integer,
                  description: 'See audio_encodings of selected codec for possible values.'
-        property 'created_at', type: :string, format: 'date-time', readOnly: true
-        property 'updated_at', type: :string, format: 'date-time', readOnly: true
+        property :created_at, type: :string, format: 'date-time', readOnly: true
+        property :updated_at, type: :string, format: 'date-time', readOnly: true
       end
     end
 

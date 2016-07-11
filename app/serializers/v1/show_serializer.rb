@@ -3,8 +3,8 @@ module V1
 
     json_api_swagger_schema do
       property :attributes do
-        property 'name', type: :string
-        property 'details', type: :string
+        property :name, type: :string
+        property :details, type: :string
       end
       property :relationships do
         property :profile do

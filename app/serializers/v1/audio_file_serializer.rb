@@ -3,11 +3,11 @@ module V1
 
     json_api_swagger_schema do
       property :attributes do
-        property 'codec', type: :string
-        property 'bitrates', type: :integer
-        property 'channels', type: :integer
-        property 'url', type: :string
-        property 'playback-format', type: :string
+        property :codec, type: :string
+        property :bitrates, type: :integer
+        property :channels, type: :integer
+        property :url, type: :string
+        property :playback_format, type: :string
       end
     end
 
