@@ -137,12 +137,32 @@ module V1
     end
 
     def send_audio(path, mime, status = 200)
-      # TODO: possible the specify offset if timestamp is after started_at?
-      send_file(path,
-                type: mime,
-                status: status,
-                disposition: :inline,
-                url_based_filename: true)
+      if request.headers['HTTP_RANGE'] && Rails.env.development?
+        send_range(path, mime)
+      else
+        send_file(path, send_file_options(path, mime, status))
+      end
+    end
+
+    def send_range(path, mime)
+      size = File.size(path)
+      bytes = Rack::Utils.byte_ranges(request.headers, size)[0]
+
+      set_range_headers(bytes, size)
+      send_data(IO.binread(path, bytes.size, bytes.begin), send_file_options(path, mime, 206))
+    end
+
+    def set_range_headers(bytes, size)
+      response.header['Accept-Ranges'] = 'bytes'
+      response.header['Content-Range'] = "bytes #{bytes.begin}-#{bytes.end}/#{size}"
+      response.header['Content-Length'] = bytes.size.to_s
+    end
+
+    def send_file_options(path, mime, status)
+      { type: mime,
+        status: status,
+        disposition: :inline,
+        filename: File.basename(path) }
     end
 
     def fetch_entries
