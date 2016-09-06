@@ -52,16 +52,16 @@ module V1
 
         parameter name: 'page[number]',
                   in: :query,
-                  description: 'Query string to specify the page number of the broadcast list.',
+                  description: 'The page number of the broadcast list.',
                   required: false,
-                  type: :string
+                  type: :integer
 
         parameter name: 'page[size]',
                   in: :query,
                   description: 'Maximum number of broadcasts that are returned per page. ' \
                                'Defaults to 50, maximum is 500.',
                   required: false,
-                  type: :string
+                  type: :integer
 
         parameter name: 'sort',
                   in: :query,
@@ -100,16 +100,16 @@ module V1
 
         parameter name: 'page[number]',
                   in: :query,
-                  description: 'Query string to specify the page number of the broadcast list.',
+                  description: 'The page number of the broadcast list.',
                   required: false,
-                  type: :string
+                  type: :integer
 
         parameter name: 'page[size]',
                   in: :query,
                   description: 'Maximum number of broadcasts that are returned per page. ' \
                                'Defaults to 50, maximum is 500.',
                   required: false,
-                  type: :string
+                  type: :integer
 
         parameter name: 'sort',
                   in: :query,
@@ -142,16 +142,16 @@ module V1
 
         parameter name: 'page[number]',
                   in: :query,
-                  description: 'Query string to specify the page number of the broadcast list.',
+                  description: 'The page number of the broadcast list.',
                   required: false,
-                  type: :string
+                  type: :integer
 
         parameter name: 'page[size]',
                   in: :query,
                   description: 'Maximum number of broadcasts that are returned per page. ' \
                                'Defaults to 50, maximum is 500.',
                   required: false,
-                  type: :string
+                  type: :integer
 
         parameter name: 'sort',
                   in: :query,

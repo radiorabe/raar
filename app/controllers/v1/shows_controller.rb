@@ -3,15 +3,37 @@ module V1
 
     self.search_columns = %w(name details)
 
+    self.sort_mappings = { last_broadcast_at: 'MAX(broadcasts.started_at)' }
+
     before_action :require_admin, except: [:index, :show]
 
     crud_swagger_paths(route_prefix: '/v1',
                        data_class: 'V1::Show',
-                       query_param: true,
                        tags_read: [:public],
-                       tags_write: [:admin])
+                       tags_write: [:admin],
+                       query_params: [
+                         { name: :q,
+                           description: 'Query string to search for.' },
+                         { name: :since,
+                           description: 'Filter the shows by date of their last broadcast.',
+                           format: :date }
+                       ])
 
     private
+
+    def fetch_entries
+      if params[:since] || sort_with_order.first == 'last_broadcast_at'
+        with_last_broadcast(super)
+      else
+        super
+      end
+    end
+
+    def with_last_broadcast(scope)
+      scope = scope.left_joins(:broadcasts).group('shows.id')
+      scope = scope.having('MAX(broadcasts.started_at) > ?', params[:since]) if params[:since]
+      scope
+    end
 
     # Only allow a trusted parameter "white list" through.
     def model_params

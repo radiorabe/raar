@@ -33,27 +33,26 @@ module Swaggerable
 
           path_parameters(prefix_parameters)
 
-          if options[:query_param]
-            parameter name: :q,
-                      in: :query,
-                      description: 'Query string to search for.',
-                      required: false,
-                      type: :string
+          Array(options[:query_params]).each do |p|
+            parameter p.reverse_merge(
+              in: :query,
+              required: false,
+              type: :string
+            )
           end
 
           parameter name: 'page[number]',
                     in: :query,
-                    description: "Query string to specify the page number of the #{model_name} " \
-                                 'list.',
+                    description: "The page number of the #{model_name} list.",
                     required: false,
-                    type: :string
+                    type: :integer
 
           parameter name: 'page[size]',
                     in: :query,
                     description: "Maximum number of #{model_name_plural} that are returned " \
                                  'per page. Defaults to 50, maximum is 500.',
                     required: false,
-                    type: :string
+                    type: :integer
 
           parameter name: 'sort',
                     in: :query,

@@ -17,6 +17,30 @@ module V1
       assert_equal ['Geschäch9schlimmers', 'Klangbecken'], json_attrs(:name)
     end
 
+    test 'GET index with since param returns list of matching shows' do
+      login(nil)
+      get :index, params: { since: '2013-06-01' }
+      assert_equal ['Geschäch9schlimmers'], json_attrs(:name)
+    end
+
+    test 'GET index with long-ago since param returns all shows' do
+      login(nil)
+      get :index, params: { since: '2013-05-20', page: { number: 1, size: 2 } }
+      assert_equal ['Geschäch9schlimmers', 'Info'], json_attrs(:name)
+    end
+
+    test 'GET index with sort by last_broadcast_at returns ordered list' do
+      login(nil)
+      get :index, params: { sort: '-last_broadcast_at' }
+      assert_equal ['Geschäch9schlimmers', 'Klangbecken', 'Info'], json_attrs(:name)
+    end
+
+    test 'GET index with since param and sort by last_broadcast_at returns ordered list' do
+      login(nil)
+      get :index, params: { since: '2013-06-01', sort: '-last_broadcast_at' }
+      assert_equal ['Geschäch9schlimmers'], json_attrs(:name)
+    end
+
     test 'GET show returns with profile as admin' do
       get :show, params: { id: shows(:info).id }
       assert_equal 'Info', json['data']['attributes']['name']
