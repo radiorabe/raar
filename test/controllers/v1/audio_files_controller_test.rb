@@ -16,6 +16,8 @@ module V1
                     'http://example.com/v1/audio_files/2013/04/10/110000_high.mp3',
                     'http://example.com/v1/audio_files/2013/04/10/110000_low.mp3'],
                     json_attrs(:url)
+      json_links = json['data'].collect { |s| s['links']['self'] }
+      assert_equal json_attrs(:url), json_links
     end
 
     test 'GET index returns public list for broadcast for guest user' do

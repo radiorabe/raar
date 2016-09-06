@@ -19,10 +19,15 @@ module V1
         property :created_at, type: :string, format: 'date-time', readOnly: true
         property :updated_at, type: :string, format: 'date-time', readOnly: true
       end
+      property :links do
+        property :self, type: :string, format: 'url', readOnly: true
+      end
     end
 
     attributes :id, :codec, :initial_bitrate, :initial_channels, :max_public_bitrate,
                :created_at, :updated_at
+
+    link(:self) { v1_profile_archive_format_url(object.profile_id, object) }
 
   end
 end

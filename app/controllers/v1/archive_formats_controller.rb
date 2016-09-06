@@ -16,6 +16,10 @@ module V1
 
     private
 
+    def fetch_entries
+      super.includes(:profile)
+    end
+
     def model_scope
       profile.archive_formats
     end

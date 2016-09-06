@@ -13,6 +13,7 @@ class DowngradeAction < ActiveRecord::Base
   include WithAudioFormat
 
   belongs_to :archive_format
+  has_one :profile, through: :archive_format
 
   composed_of_audio_format
 

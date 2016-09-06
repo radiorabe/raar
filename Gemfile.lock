@@ -162,7 +162,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_model_serializers (~> 0.10.0.rc2)
+  active_model_serializers
   byebug
   exception_notification
   kaminari

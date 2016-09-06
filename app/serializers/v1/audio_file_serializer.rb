@@ -9,9 +9,15 @@ module V1
         property :url, type: :string
         property :playback_format, type: :string
       end
+      property :links do
+        property :self, type: :string, format: 'url', readOnly: true
+      end
     end
 
     attributes :codec, :bitrate, :channels, :playback_format, :url
+
+    # duplication required as we are in a different scope inside the link block.
+    link(:self) { v1_audio_file_url(AudioPath.new(object).url_params) }
 
     def url
       v1_audio_file_url(audio_path.url_params)

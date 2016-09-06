@@ -2118,6 +2118,15 @@
               "readOnly": true
             }
           }
+        },
+        "links": {
+          "properties": {
+            "self": {
+              "type": "string",
+              "format": "url",
+              "readOnly": true
+            }
+          }
         }
       }
     },
@@ -2182,6 +2191,15 @@
             },
             "playback_format": {
               "type": "string"
+            }
+          }
+        },
+        "links": {
+          "properties": {
+            "self": {
+              "type": "string",
+              "format": "url",
+              "readOnly": true
             }
           }
         }
@@ -2258,6 +2276,15 @@
               "description": "See audio_encodings for archive_format.codec for possible values.Set to null to entirely delete the files after this many months."
             }
           }
+        },
+        "links": {
+          "properties": {
+            "self": {
+              "type": "string",
+              "format": "url",
+              "readOnly": true
+            }
+          }
         }
       }
     },
@@ -2301,6 +2328,15 @@
               "readOnly": true
             }
           }
+        },
+        "links": {
+          "properties": {
+            "self": {
+              "type": "string",
+              "format": "url",
+              "readOnly": true
+            }
+          }
         }
       }
     },
@@ -2331,6 +2367,15 @@
             "updated_at": {
               "type": "string",
               "format": "date-time",
+              "readOnly": true
+            }
+          }
+        },
+        "links": {
+          "properties": {
+            "self": {
+              "type": "string",
+              "format": "url",
               "readOnly": true
             }
           }
@@ -2370,6 +2415,15 @@
                   }
                 }
               }
+            }
+          }
+        },
+        "links": {
+          "properties": {
+            "self": {
+              "type": "string",
+              "format": "url",
+              "readOnly": true
             }
           }
         }
@@ -2421,6 +2475,15 @@
             "updated_at": {
               "type": "string",
               "format": "date-time",
+              "readOnly": true
+            }
+          }
+        },
+        "links": {
+          "properties": {
+            "self": {
+              "type": "string",
+              "format": "url",
               "readOnly": true
             }
           }

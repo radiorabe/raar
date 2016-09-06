@@ -13,7 +13,7 @@ gem 'kaminari'
 # gem 'capistrano-rails', group: :development
 
 # Use ActiveModelSerializers to serialize JSON responses
-gem 'active_model_serializers', '~> 0.10.0.rc2'
+gem 'active_model_serializers'
 
 # document API with swagger
 gem 'swagger-blocks'

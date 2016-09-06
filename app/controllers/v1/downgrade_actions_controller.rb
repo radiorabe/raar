@@ -21,6 +21,10 @@ module V1
 
     private
 
+    def fetch_entries
+      super.includes(:profile, :archive_format)
+    end
+
     def model_scope
       archive_format.downgrade_actions
     end

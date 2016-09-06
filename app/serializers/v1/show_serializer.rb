@@ -14,14 +14,16 @@ module V1
           end
         end
       end
+      property :links do
+        property :self, type: :string, format: 'url', readOnly: true
+      end
     end
 
     attributes :id, :name, :details
 
     belongs_to :profile, serializer: V1::ProfileSerializer, if: :admin?
 
-    # TODO: uncomment in next version of ams & add to all other serializers
-    # link(:self) { v1_show_url(object) }
+    link(:self) { v1_show_url(object) }
 
   end
 end

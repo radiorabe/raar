@@ -192,7 +192,6 @@ module V1
     end
 
     def timestamp
-      # TODO: handle timezone/DST
       @timestamp ||=
         Time.zone.local(*params.values_at(:year, :month, :day, :hour, :min, :sec))
     rescue ArgumentError

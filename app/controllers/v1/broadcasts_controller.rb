@@ -194,7 +194,6 @@ module V1
     end
 
     def get_timestamp(parts)
-      # TODO: handle timezone/DST
       Time.zone.local(*parts)
     rescue ArgumentError
       not_found
