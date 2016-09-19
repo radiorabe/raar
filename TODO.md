@@ -2,6 +2,7 @@
 
 ## Code
 
+* assert maximally one import/downgrade process runs at the same time
 * document setup
 
 
