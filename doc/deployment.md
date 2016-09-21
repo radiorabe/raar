@@ -61,11 +61,11 @@ The following environment variables may be used to configure RAAR. They are all 
 
 The import and downgrade executables live in `bin/import` and `bin/downgrade`, respectively. The may be run by two separate cron jobs, houry and daily based on your average broadcast duration.
 
-    bash -l -c '$RAAR_HOME/bin/import >> /dev/null 2>&1'
+    bash -l -c 'flock -xn tmp/pids/import.lock -c bin/import >> /dev/null 2>&1'
 
-    bash -l -c '$RAAR_HOME/bin/downgrade >> /dev/null 2>&1'
+    bash -l -c 'flock -xn tmp/pids/downgrade.lock -c bin/downgrade >> /dev/null 2>&1'
 
-It is essential that the environment variables defined above are available to the processes.
+The cron jobs should run as the application user in its home directory (`$RAAR_HOME`). It is essential that the environment variables defined above are available to the processes.
 
 ## Free IPA
 

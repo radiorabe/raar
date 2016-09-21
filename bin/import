@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 
 # Imports all pending recordings that form a complete broadcast.
-# Schedule in cron with `bash -l -c 'app_root/bin/import >> /dev/null 2>&1'`
-# and make sure all required environment variables are set.
+# See doc/deployment.md for how to schedule this command with cron.
 
 require File.expand_path('../../config/environment', __FILE__)
 
