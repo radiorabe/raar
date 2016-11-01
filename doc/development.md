@@ -31,7 +31,7 @@ The project is structured into the following directories:
 
 * `app/` The source code, separated in the following sub-directories:
   * `controllers/` The Rails  [controllers](http://api.rubyonrails.org/classes/ActionController/Base.html) responsible for processing the API requests.
-  * `domain/` The application specific business logic:
+  * `services/` The application specific business services:
     * `audio_encoding/` Defines the audio encodings available for the archive. New encoding formats may be added here.
     * `audio_processor/` Abstracts the interface to the tool that does the actual audio processing. There may be different implementations to choose from in the future. Currently, only FFMPEG is supported.
     * `downgrade/` The logic of the downgrade process.
