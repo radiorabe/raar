@@ -3,6 +3,7 @@
 ## Code
 
 * document setup
+* avoid timing attack for token auth
 
 
 ## Setup

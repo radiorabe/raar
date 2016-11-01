@@ -34,9 +34,9 @@ class User < ActiveRecord::Base
       return if username.blank?
 
       User.where(username: username).first_or_initialize.tap do |user|
-        user.groups = groups
-        user.first_name = first_name
-        user.last_name = last_name
+        user.groups = groups if groups.present?
+        user.first_name = first_name if first_name.present?
+        user.last_name = last_name if last_name.present?
         user.reset_api_key_expires_at
         user.save!
       end

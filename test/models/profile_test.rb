@@ -38,11 +38,22 @@ class ProfileTest < ActiveSupport::TestCase
     assert_valid p
   end
 
-  test 'default profile my be created' do
+  test 'default profile may be created' do
     p = Profile.new(name: 'foo', default: true)
     assert_valid p
     p.save!
     assert_equal false, profiles(:default).default
   end
 
+  test 'default profile may not be destroyed' do
+    p = Profile.create!(name: 'foo', default: true)
+    assert !p.destroy
+    assert p.errors[:default].present?
+  end
+
+  test 'non-default profile may be destroyed' do
+    p = Profile.create!(name: 'foo', default: false)
+    assert p.destroy
+  end
+  
 end

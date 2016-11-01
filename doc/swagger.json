@@ -1080,6 +1080,13 @@
         ],
         "parameters": [
           {
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "name": "q",
+            "description": "Query string to search for."
+          },
+          {
             "name": "page[number]",
             "in": "query",
             "description": "The page number of the playback format list.",
@@ -1321,6 +1328,13 @@
           "admin"
         ],
         "parameters": [
+          {
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "name": "q",
+            "description": "Query string to search for."
+          },
           {
             "name": "page[number]",
             "in": "query",

@@ -16,6 +16,8 @@ class ArchiveFormat < ActiveRecord::Base
 
   include WithAudioFormat
 
+  attr_readonly :codec
+
   belongs_to :profile
 
   has_many :downgrade_actions, dependent: :destroy
@@ -26,14 +28,7 @@ class ArchiveFormat < ActiveRecord::Base
   validates :codec, uniqueness: { scope: :profile_id }
   validates :max_public_bitrate,
             numericality: { only_integer: true, greater_or_equal_to: 0, allow_blank: true }
-  validate :assert_codec_is_unchanged, if: :codec_changed?, on: :update
 
   scope :list, -> { order(:codec) }
-
-  private
-
-  def assert_codec_is_unchanged
-    errors.add(:codec, :must_not_change)
-  end
 
 end

@@ -18,8 +18,6 @@ module Raar
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    config.autoload_paths += %W(#{config.root}/app/domain)
-
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake time:zones:all" for a time zone names list. Default is UTC.
     config.time_zone = 'Bern'
@@ -40,11 +38,5 @@ module Raar
       host: Rails.application.secrets.host_name,
       script_name: Rails.application.secrets.base_path
     }
-
-    config.to_prepare do
-      # Define default classes.
-      AudioProcessor.klass ||= AudioProcessor::Ffmpeg
-      Import::BroadcastMapping::Builder.klass ||= Import::BroadcastMapping::Builder::AirtimeDb
-    end
   end
 end

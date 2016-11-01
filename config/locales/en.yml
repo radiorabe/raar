@@ -31,5 +31,6 @@ en:
           attributes:
             default:
               must_exist: must be defined
+              must_not_be_deleted: must not be deleted
         downgrade_action:
           delete_must_be_last: delete must be the last action

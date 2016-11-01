@@ -21,6 +21,7 @@ class Profile < ActiveRecord::Base
 
   # If we set a new default, remove flag from other instances.
   after_save :clear_defaults, if: :default
+  before_destroy :protect_default
 
   scope :list, -> { order('LOWER(name)') }
 
@@ -44,6 +45,13 @@ class Profile < ActiveRecord::Base
 
   def assert_exactly_one_default_profile_exists
     errors.add(:default, :must_exist) if default_changed? && !default
+  end
+
+  def protect_default
+    if default
+      errors.add(:default, :must_not_be_deleted)
+      throw(:abort)
+    end
   end
 
 end
