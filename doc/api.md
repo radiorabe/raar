@@ -7,4 +7,4 @@ The API is documented with [Swagger](http://swagger.io). The current definition 
 
 ## Authentication
 
-Authentication works over an API token passed as HTTP authorization token, as described in `swagger.json`. If Free IPA is configured, a successfull `POST` request to `v1/login` with `username` and `password` would return this token.
+Authentication works over an API token passed as HTTP authorization token, as described in `swagger.json`. The token may be passed in a HTTP header (`Authorization: Token token="abc"`) or as a query parameter (`?api_key=abc`). If Free IPA is configured, a successfull `POST` request to `v1/login` with `username` and `password` will return the user object containing this token.

@@ -17,13 +17,13 @@
   "securityDefinitions": {
     "http_token": {
       "type": "basic",
-      "description": "API key is passed as HTTP token authentication"
+      "description": "API key is passed as HTTP token authentication header: `Authorization: Token token=\"abc\"`"
     },
     "api_key": {
       "type": "apiKey",
       "name": "api_key",
       "in": "query",
-      "description": "API key is passed as query parameter"
+      "description": "API key is passed as a query parameter"
     }
   },
   "responses": {

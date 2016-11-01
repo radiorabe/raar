@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
     def with_api_key(key)
       return if key.blank?
 
+      # FIXME: This call is vulnerable to timing attacks.
       where('api_key_expires_at IS NULL OR api_key_expires_at > ?', Time.zone.now)
         .find_by_api_key(key)
     end
