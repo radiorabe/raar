@@ -9,9 +9,6 @@ gem 'streamio-ffmpeg'
 gem 'rails-i18n'
 gem 'kaminari'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 # Use ActiveModelSerializers to serialize JSON responses
 gem 'active_model_serializers'
 
@@ -24,6 +21,9 @@ gem 'rack-cors', require: 'rack/cors'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
+# Include bundler for packaging
+gem 'bundler'
+
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
@@ -32,6 +32,10 @@ group :development, :test do
 end
 
 group :development do
+  # Use Capistrano for deployment
+  gem 'capistrano-rails'
+  gem 'capistrano-rails-artifact'
+  gem 'capistrano-passenger'
   # Use puma as the development server
   gem 'puma'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

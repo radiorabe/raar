@@ -15,8 +15,11 @@
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
+/config/deploy/*
+/build
 !/log/.keep
 !/tmp/.keep
+!/config/deploy/production.example.rb
 /*.mp3
 
 /test/coverage
