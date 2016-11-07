@@ -21,9 +21,6 @@ gem 'rack-cors', require: 'rack/cors'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-# Include bundler for packaging
-gem 'bundler'
-
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'

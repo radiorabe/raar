@@ -188,7 +188,6 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
-  bundler
   byebug
   capistrano-passenger
   capistrano-rails
