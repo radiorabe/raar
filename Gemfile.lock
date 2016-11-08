@@ -64,8 +64,6 @@ GEM
     capistrano-rails (1.2.0)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
-    capistrano-rails-artifact (1.1.0)
-      capistrano (~> 3.0)
     choice (0.2.0)
     concurrent-ruby (1.0.2)
     docile (1.1.5)
@@ -191,7 +189,6 @@ DEPENDENCIES
   byebug
   capistrano-passenger
   capistrano-rails
-  capistrano-rails-artifact
   exception_notification
   kaminari
   mocha

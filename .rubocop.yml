@@ -9,6 +9,7 @@ AllCops:
     - test/**/*
     - vendor/**/*
     - tmp/**/*
+    - build/**/*
 
 Rails:
   Enabled: true

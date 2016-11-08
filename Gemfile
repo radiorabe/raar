@@ -31,13 +31,13 @@ end
 group :development do
   # Use Capistrano for deployment
   gem 'capistrano-rails'
-  gem 'capistrano-rails-artifact'
   gem 'capistrano-passenger'
   # Use puma as the development server
   gem 'puma'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'rails-erd'
+  gem 'rubocop'
 
   # Loading the listen gem enables an evented file system monitor. Check
   # https://github.com/guard/listen#listen-adapters if on Windows or *BSD.
@@ -47,8 +47,4 @@ end
 group :test do
   gem 'mocha'
   gem 'simplecov'
-end
-
-group :metrics do
-  gem 'rubocop'
 end

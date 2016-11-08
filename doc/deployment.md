@@ -77,12 +77,39 @@ If no Free IPA is configured, authentication is still possible by API token. The
 
 ### Servers-side
 
+Perform the following steps on a CentOS or the corresponding ones on a different system:
+
+* Add your SSH public key to the authorized keys.
 * `useradd --home-dir /var/www/raar --create-home --user-group raar`
 * `usermod -a -G raar <your-ssh-user>`
 * `chmod g+w /var/www/raar`
-* `gem install bundler`
-* `yum install rh-ruby22-ruby-devel`
+* `yum install gcc glibc-headers rh-ruby22-ruby-devel httpd mod_xsendfile postgresql-devel libxml2-devel libxslt-devel ffmpeg`
+* Install Passenger according to these [instructions](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/apache/oss/el7/install_passenger.html).
+* `gem install bundler --no-ri --no-rdoc`
 * Add `/opt/rh/rh-ruby22/root/usr/local/bin` to PATH in `/opt/rh/rh-ruby22/enable`
+* Create `/var/www/raar/.bash_profile` with all environment variables required for configuration.
+* Create `/etc/httpd/conf.d/raar_env.inc` with `SetEnv` statements with the same values as before.
+* Create `/etc/httpd/conf.d/raar.conf` with the following contents:
+
+    <VirtualHost *:80>
+
+        ServerName raar
+        ServerAlias archiv.rabe.ch
+
+        SetEnv GEM_HOME /var/www/raar/shared/bundle/ruby/gems
+        DocumentRoot /var/www/raar/current/public
+        PassengerMinInstances 2
+
+        ErrorLog /var/www/raar/shared/log/httpd_error.log
+        CustomLog /var/www/raar/shared/log/httpd_access.log combined
+        <Directory "/var/www/raar/current/public/">
+            AllowOverride None
+        </Directory>
+
+        Include conf.d/raar_env.inc
+
+    </VirtualHost>
+
 
 ### Developer-side
 
