@@ -9,7 +9,7 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= (ENV['PARALLEL_TRANSCODINGS'] || 4) + 1 %>
+  pool: <%= [ENV['PARALLEL_TRANSCODINGS'].to_i, 4].max + 1 %>
   timeout: 5000
   host: <%= ENV['RAAR_DB_HOST'] %>
   port: <%= ENV['RAAR_DB_PORT'] %>
