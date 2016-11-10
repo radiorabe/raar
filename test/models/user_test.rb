@@ -23,25 +23,34 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test '.with_api_key is nil if key is nil' do
-    assert_equal nil, User.with_api_key(nil)
+  test '.with_api_token is nil if key is nil' do
+    assert_equal nil, User.with_api_token(nil)
   end
 
-  test '.with_api_key returns user if expires at is nil' do
+  test '.with_api_token returns user if expires at is nil' do
     user = users(:speedee)
-    assert_equal user, User.with_api_key(user.api_key)
+    assert_equal user, User.with_api_token(user.api_token)
   end
 
-  test '.with_api_key returns user if expires at is in the future' do
+  test '.with_api_token returns nil if only id is given' do
+    user = users(:speedee)
+    assert_equal nil, User.with_api_token(user.id.to_s)
+  end
+
+  test '.with_api_token returns nil if arbitrary string is given' do
+    assert_equal nil, User.with_api_token('jada$jada')
+  end
+
+  test '.with_api_token returns user if expires at is in the future' do
     user = users(:speedee)
     user.update!(api_key_expires_at: 1.day.from_now)
-    assert_equal user, User.with_api_key(user.api_key)
+    assert_equal user, User.with_api_token(user.api_token)
   end
 
-  test '.with_api_key returns nil if expires at is in the past' do
+  test '.with_api_token returns nil if expires at is in the past' do
     user = users(:speedee)
     user.update!(api_key_expires_at: 1.day.ago)
-    assert_equal nil, User.with_api_key(user.api_key)
+    assert_equal nil, User.with_api_token(user.api_token)
   end
 
   test '.from_remote returns nil if username is nil' do

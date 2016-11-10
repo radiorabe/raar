@@ -44,14 +44,14 @@ module V1
       security_definition :http_token do
         key :type, :basic
         key :description,
-            'API key is passed as HTTP token authentication header: ' \
+            'API token is passed as HTTP token authentication header: ' \
             '`Authorization: Token token="abc"`'
       end
-      security_definition :api_key do
+      security_definition :api_token do
         key :type, :apiKey
-        key :name, :api_key
+        key :name, :api_token
         key :in, :query
-        key :description, 'API key is passed as a query parameter'
+        key :description, 'API token is passed as a query parameter'
       end
 
       response :unprocessable_entity do

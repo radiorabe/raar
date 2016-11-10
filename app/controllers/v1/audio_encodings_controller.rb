@@ -11,7 +11,7 @@ module V1
         response_entities('V1::AudioEncoding')
 
         security http_token: []
-        security api_key: []
+        security api_token: []
       end
     end
 

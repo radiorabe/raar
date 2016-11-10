@@ -7,7 +7,7 @@ module V1
         property :first_name, type: :string
         property :last_name, type: :string
         property :groups, type: :array, items: { type: :string }
-        property :api_key, type: :string, readOnly: true
+        property :api_token, type: :string, readOnly: true
         property :api_key_expires_at, type: :string, format: 'date-time', readOnly: true
         property :admin, type: :boolean, readOnly: true
         property :created_at, type: :string, format: 'date-time', readOnly: true
@@ -19,7 +19,7 @@ module V1
     end
 
     attributes :id, :username, :first_name, :last_name, :groups,
-               :api_key, :api_key_expires_at, :created_at, :updated_at
+               :api_token, :api_key_expires_at, :created_at, :updated_at
 
     attribute :admin?, key: :admin
 

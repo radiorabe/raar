@@ -159,7 +159,7 @@ module Swaggerable
     def security_infos(tags)
       return unless tags.include?(:admin)
       security http_token: []
-      security api_key: []
+      security api_token: []
     end
 
     def response_entity(data_class, status = 200)

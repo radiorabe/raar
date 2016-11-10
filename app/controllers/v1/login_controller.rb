@@ -5,7 +5,7 @@ module V1
       operation :post do
         key :description,
             'Login with username and password. ' \
-            'Returns the user object including the api_key for further requests.'
+            'Returns the user object including the api_token for further requests.'
         key :tags, [:user]
         key :consumes, ['application/x-www-form-urlencoded']
 

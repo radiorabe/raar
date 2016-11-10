@@ -87,7 +87,7 @@ module V1
       put :regenerate_api_key, params: { id: user.id }
       assert_response 200
       assert_not_equal key, user.reload.api_key
-      assert_equal user.api_key, json['data']['attributes']['api_key']
+      assert_equal user.api_token, json['data']['attributes']['api_token']
     end
 
     test 'DELETE destroy removes existing user' do

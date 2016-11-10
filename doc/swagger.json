@@ -17,13 +17,13 @@
   "securityDefinitions": {
     "http_token": {
       "type": "basic",
-      "description": "API key is passed as HTTP token authentication header: `Authorization: Token token=\"abc\"`"
+      "description": "API token is passed as HTTP token authentication header: `Authorization: Token token=\"abc\"`"
     },
-    "api_key": {
+    "api_token": {
       "type": "apiKey",
-      "name": "api_key",
+      "name": "api_token",
       "in": "query",
-      "description": "API key is passed as a query parameter"
+      "description": "API token is passed as a query parameter"
     }
   },
   "responses": {
@@ -101,7 +101,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -157,7 +157,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -206,7 +206,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -269,7 +269,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -312,7 +312,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -348,7 +348,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -783,7 +783,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -846,7 +846,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -902,7 +902,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -972,7 +972,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1022,7 +1022,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1031,7 +1031,7 @@
     },
     "/v1/login": {
       "post": {
-        "description": "Login with username and password. Returns the user object including the api_key for further requests.",
+        "description": "Login with username and password. Returns the user object including the api_token for further requests.",
         "tags": [
           "user"
         ],
@@ -1130,7 +1130,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1179,7 +1179,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1221,7 +1221,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1277,7 +1277,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1313,7 +1313,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1379,7 +1379,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1428,7 +1428,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1470,7 +1470,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1526,7 +1526,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1562,7 +1562,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1673,7 +1673,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1759,7 +1759,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1795,7 +1795,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1861,7 +1861,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1910,7 +1910,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -1952,7 +1952,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -2008,7 +2008,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -2044,7 +2044,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -2086,7 +2086,7 @@
             ]
           },
           {
-            "api_key": [
+            "api_token": [
 
             ]
           }
@@ -2468,7 +2468,7 @@
                 "type": "string"
               }
             },
-            "api_key": {
+            "api_token": {
               "type": "string",
               "readOnly": true
             },

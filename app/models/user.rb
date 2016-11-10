@@ -23,12 +23,14 @@ class User < ActiveRecord::Base
 
   class << self
 
-    def with_api_key(key)
-      return if key.blank?
+    def with_api_token(token)
+      return if token.blank?
 
-      # FIXME: This call is vulnerable to timing attacks.
-      where('api_key_expires_at IS NULL OR api_key_expires_at > ?', Time.zone.now)
-        .find_by_api_key(key)
+      id, key = token.split('$')
+      key = key.presence || '[blank]'
+      user = User.where('api_key_expires_at IS NULL OR api_key_expires_at > ?', Time.zone.now)
+                 .find_by_id(id)
+      user if user && ActiveSupport::SecurityUtils.secure_compare(key, user.api_key)
     end
 
     def from_remote(username, groups, first_name, last_name)
@@ -60,6 +62,10 @@ class User < ActiveRecord::Base
 
   def group_list
     listify(groups)
+  end
+
+  def api_token
+    "#{id}$#{api_key}"
   end
 
   def regenerate_api_key!

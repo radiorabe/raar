@@ -25,7 +25,7 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
 
   test 'POST create user with HTTP TOKEN with json api body adds new user' do
     assert_difference('User.count', 1) do
-      auth = ActionController::HttpAuthentication::Token.encode_credentials(users(:admin).api_key)
+      auth = ActionController::HttpAuthentication::Token.encode_credentials(users(:admin).api_token)
       post '/v1/users',
            params: {
              data: {
@@ -46,7 +46,7 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
     assert_difference('User.count', 1) do
       post '/v1/users',
            params: {
-             api_key: users(:admin).api_key,
+             api_token: users(:admin).api_token,
              data: {
                attributes: {
                  username: 'foo',
