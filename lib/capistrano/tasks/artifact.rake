@@ -14,26 +14,27 @@ namespace :artifact do
         when 'xz' then 'J'
         end
 
-      file_location = "/tmp/raar-build/raar.tar.#{compression}"
-      execute :mkdir, '-p', File.dirname(file_location)
-      execute :rm, "-f #{file_location}"
+      file = "raar-#{fetch(:current_revision, 1).strip}.tar.#{compression}"
+      folder = '/tmp/raar-build'
+      path = "#{folder}/#{file}"
+      puts path
 
-      upload! archive, file_location
+      # upload artifact if not present yet
+      execute :mkdir, '-p', folder
+      unless test("[ -f '#{path}' ]")
+        execute :rm, "-f #{folder}/*"
+        upload! archive, path
+      end
 
+      # explode artifact to release_path
       execute :mkdir, '-p', release_path
       within release_path do
-        execute :tar, "-x#{tar_option}f '#{file_location}'"
+        execute :tar, "-x#{tar_option}f '#{path}'"
       end
-      execute :rm, file_location
     end
   end
 
   desc 'Determine the revision that will be deployed'
   task :set_current_revision do
-    on release_roles(:all) do
-      within release_path do
-        set :current_revision, capture(:cat, 'REVISION')
-      end
-    end
   end
 end
