@@ -2,6 +2,8 @@ require 'simplecov'
 SimpleCov.start 'rails' do
   coverage_dir 'test/coverage'
 end
+require 'coveralls'
+Coveralls.wear!
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
@@ -39,5 +41,5 @@ end
 class ActionDispatch::IntegrationTest < ActiveSupport::TestCase
 
   include JsonResponse
-  
+
 end

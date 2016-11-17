@@ -45,6 +45,7 @@ group :development do
 end
 
 group :test do
+  gem 'coveralls'
   gem 'mocha'
   gem 'simplecov'
 end

@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/radiorabe/raar.svg)](https://travis-ci.org/radiorabe/raar)
 [![Code Climate](https://codeclimate.com/github/radiorabe/raar/badges/gpa.svg)](https://codeclimate.com/github/radiorabe/raar)
+[![Coverage Status](https://coveralls.io/repos/github/radiorabe/raar/badge.svg?branch=master)](https://coveralls.io/github/radiorabe/raar?branch=master)
 
 RAAR is a ruby application to manage and browse an audio archive.
 
