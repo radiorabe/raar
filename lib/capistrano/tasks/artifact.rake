@@ -6,7 +6,7 @@ namespace :artifact do
   desc 'Copy repo to releases'
   task :create_release do
     on release_roles(:all) do
-      archive = fetch(:artifact_file, 'build/raar.tar.gz')
+      archive = fetch(:artifact_file, 'dist/raar.tar.gz')
       compression = fetch(:artifact_compression, 'gz')
       tar_option =
         case compression

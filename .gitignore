@@ -16,7 +16,7 @@
 /log/*
 /tmp/*
 /config/deploy/*
-/build
+/dist
 !/log/.keep
 !/tmp/.keep
 !/config/deploy/production.example.rb

@@ -29,3 +29,15 @@ before_script:
   - psql -c 'create database airtime_test;' -U postgres
 
 script: bundle exec rails test
+
+deploy:
+  provider: releases
+  api_key:
+    secure: GVYf9iZlDgNZyKN3RcPkwqJ+IbNPbZl0kzAT3VrM4BciiH/uguP/GrquOF/OZ4vo+VILNE30m0SwtxosPkuE3zpeK4+BXvXIye6PVJu3sqV7ULGPpi/NJKoYp2m45i7IlDkhYmhtv8VirOxdPpzQlP+2mug7xc8e5BQUpWePop5vrFQG8kBJWvTkJseTHnV7wRS+XOgf9qkDBOGYa263DdLao3j4zh8k3o7qzdcYuKEDpIgNmdfXS0zpIAp5dUqZ/NGCbNSIstgDnrzmg/vR7YlapobBXiTYX8OArERefvQa2P33+mBNrS/hK0UyVD2N585Dk9uGuiW4aJrhH2HORXQBRCMI1Mw/J5jnWAoUE5ofsZW+yt7Nwmaf45Je16QTLqCM1om3KLiOD2psKyGufTmrU8cai/Z014LXw3nU8M9XlGFfAvksn0sdRup0mDNjei6j1zJcPYjmkZ2pxfJHs/7Pjys9xTJMKiDbmFZ/uzO9s0dnwxnIJIgWvaw59hGC4RvlycZPYvcdS0odcwU7fP3fS0R/qi0do0i18gSEV63b0ip4CqQ0bfz8s6yPPC/GvzORndYYDibIzI9n2xXd/48Dite+liKrG09MRkbK5jKwbkAUm0uQmpy0oXQMf97SnEqZ/UVLc+fCH1zvlURdHTgm/XoB6x5PN6GjztIpYZs=
+  file: dist/raar.tar.gz
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: radiorabe/raar
+  before_deploy:
+    - bundle exec rails package
