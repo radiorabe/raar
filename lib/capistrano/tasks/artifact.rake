@@ -14,10 +14,9 @@ namespace :artifact do
         when 'xz' then 'J'
         end
 
-      file = "raar-#{fetch(:current_revision, 1).strip}.tar.#{compression}"
+      file = "raar-#{fetch(:current_revision, 'CUSTOM')}.tar.#{compression}"
       folder = '/tmp/raar-build'
       path = "#{folder}/#{file}"
-      puts path
 
       # upload artifact if not present yet
       execute :mkdir, '-p', folder
