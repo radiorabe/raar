@@ -1,0 +1,11 @@
+# /etc/systemd/system/raar-import.service
+
+[Unit]
+Description=Raar audio archive import
+
+[Service]
+Type=simple
+User=raar
+Environment="RAAR_LOG=stdout"
+EnvironmentFile=/var/www/raar/.env
+ExecStart=/usr/bin/scl enable rh-ruby22 -- /var/www/raar/current/bin/import

@@ -18,6 +18,8 @@ The system configuration is done with environment variables that must be availab
 
 The following environment variables may be used to configure RAAR. They are all read into the application in `config/secrets.yml`, except for the database settings in `config/database.yml`.
 
+An easy way to manage these values is to create a `~/.env` file with several `VAR=value` assignments in the home directory of the system user the application is running as. The assignments then may easily be loaded from `.bashrc` (`export $(cat .env | xargs)`) or as environment files (e.g. by systemd).
+
 ### Common
 
 | Name | Description | Default |
@@ -67,6 +69,15 @@ The import and downgrade executables live in `bin/import` and `bin/downgrade`, r
 
 The cron jobs should run as the application user in its home directory (`$RAAR_HOME`). It is essential that the environment variables defined above are available to the processes.
 
+## Systemd Timers
+
+As an alternative to cron jobs, the import and downgrade executables may also be run as Systemd timers. Copy the files from `config/systemd/*` to `/etc/systemd/system/`, make adjustments matching your deployment environment and run the following commands as root to start the timers:
+
+    systemctl enable raar-import.timer
+    systemctl enable raar-downgrade.timer
+    systemctl start raar-import.timer
+    systemctl start raar-downgrade.timer
+
 ## Free IPA
 
 In order for the authentication to work with username and password, Free IPA may be configured to capture `POST` requests to `v1/login`. The form parameters `username` and `password` are provided. The application expects `REMOTE_USER`, `REMOTE_USER_GROUPS`, `REMOTE_USER_FIRST_NAME`, `REMOTE_USER_LAST_NAME` or `EXTERNAL_AUTH_ERROR` headers to be set. If the `REMOTE_USER` is set, a user object with the generated API token is returned.
@@ -87,39 +98,58 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 * Add `/opt/rh/rh-ruby22/root/usr/local/bin` to PATH in `/opt/rh/rh-ruby22/enable`
 * `gem install bundler --no-ri --no-rdoc`
 * Install Passenger according to these [instructions](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/apache/oss/el7/install_passenger.html).
-* Create `/var/www/raar/.bashrc` with all environment variables required for configuration.
+* Create `/var/www/raar/.env` with all environment variables required for configuration.
+* Create `/var/www/raar/.bashrc` with the following content:
+
+    alias rails='bundle exec rails'
+
+    source /opt/rh/rh-ruby22/enable
+
+    export $(cat .env | xargs)
+
 * Create `/var/www/raar/.bash_profile` containing `source ~/.bashrc`.
 * Create `/etc/httpd/conf.d/raar_env.inc` with `SetEnv` statements with the same values as before.
-* Create `/etc/httpd/conf.d/raar.conf` with the following contents:
+* Create `/etc/httpd/conf.d/raar.conf` with the following content:
 
-<VirtualHost *:80>
+    <VirtualHost *:80>
 
-    ServerName raar
-    ServerAlias archiv.rabe.ch
+        ServerName raar
+        ServerAlias archiv.rabe.ch
 
-    DocumentRoot /var/www/raar-ui
+        DocumentRoot /var/www/raar-ui
 
-    Alias /api /var/www/raar/current/public
-    <Location /api>
-        PassengerBaseURI /api
-        PassengerAppRoot /var/www/raar/current
-        PassengerRuby /opt/rh/rh-ruby22/root/usr/bin/ruby
-        PassengerMinInstances 2
-    </Location>
+        Alias /api /var/www/raar/current/public
+        <Location /api>
+            PassengerBaseURI /api
+            PassengerAppRoot /var/www/raar/current
+            PassengerRuby /opt/rh/rh-ruby22/root/usr/bin/ruby
+            PassengerMinInstances 2
+        </Location>
 
-    <Directory "/var/www/raar/current/public/">
-        AllowOverride None
-        Allow from all
-        Options -MultiViews
-    </Directory>
+        <Directory "/var/www/raar/current/public/">
+            AllowOverride None
+            Allow from all
+            Options -MultiViews
+        </Directory>
 
-    Include conf.d/raar_env.inc
+        Include conf.d/raar_env.inc
 
-</VirtualHost>
+    </VirtualHost>
 
+* Restart Apache: `systemctl restart httpd`.
+* Deploy the application to `/var/www/raar/current` as described below.
+* Copy all files from `config/systemd` to `/etc/systemd/system`.
+* Enable and start Systemd timers for the import and downgrade services:
+
+    systemctl enable raar-import.timer
+    systemctl enable raar-downgrade.timer
+    systemctl start raar-import.timer
+    systemctl start raar-downgrade.timer
+
+* View logs with `journalctl -u "raar-*" -f`.
 
 ### Developer-side
 
 * Copy `config/deploy/production.example.rb` to `config/deploy/production.rb` and add your server.
-* Add the raar user created above as well.
+* Add the `raar` user created above as well.
 * Run `cap production deploy`

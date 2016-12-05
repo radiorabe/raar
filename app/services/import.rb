@@ -9,7 +9,7 @@ module Import
     mappings.each { |b| Importer.new(b).run }
     Recording::Cleaner.new.run
   rescue Exception => e
-    Rails.logger.error("FATAL: #{e}")
+    Rails.logger.error("FATAL: #{e}\n  #{e.backtrace.join("\n  ")}")
     ExceptionNotifier.notify_exception(e)
   end
 

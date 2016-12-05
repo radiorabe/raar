@@ -1,0 +1,12 @@
+# /etc/systemd/system/raar-downgrade.timer
+# sudo systemctl enable raar-downgrade.timer
+# sudo systemctl start raar-downgrade.timer
+
+[Unit]
+Description=Raar audio archive downgrade
+
+[Timer]
+OnCalendar=03:15
+
+[Install]
+WantedBy=timers.target

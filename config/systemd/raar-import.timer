@@ -1,0 +1,12 @@
+# /etc/systemd/system/raar-import.timer
+# sudo systemctl enable raar-import.timer
+# sudo systemctl start raar-import.timer
+
+[Unit]
+Description=Raar audio archive import
+
+[Timer]
+OnCalendar=*:05,20,35,50
+
+[Install]
+WantedBy=timers.target

@@ -2,14 +2,14 @@ AllCops:
   DisplayCopNames: true
   Exclude:
     - Rakefile
-    - db/**/*
-    - config/**/*
-    - lib/tasks/**/*
     - bin/**/*
+    - config/**/*
+    - db/**/*
+    - dist/**/*
+    - lib/tasks/**/*
     - test/**/*
-    - vendor/**/*
     - tmp/**/*
-    - build/**/*
+    - vendor/**/*
 
 Rails:
   Enabled: true

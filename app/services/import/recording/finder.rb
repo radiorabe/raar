@@ -20,7 +20,8 @@ module Import
       end
 
       def import_directories
-        Rails.application.secrets.import_directories
+        Rails.application.secrets.import_directories ||
+          raise('IMPORT_DIRECTORIES not set!')
       end
 
       private
