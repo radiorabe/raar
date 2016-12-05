@@ -101,50 +101,50 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 * Create `/var/www/raar/.env` with all environment variables required for configuration.
 * Create `/var/www/raar/.bashrc` with the following content:
 
-    alias rails='bundle exec rails'
+      alias rails='bundle exec rails'
 
-    source /opt/rh/rh-ruby22/enable
+      source /opt/rh/rh-ruby22/enable
 
-    export $(cat .env | xargs)
+      export $(cat .env | xargs)
 
 * Create `/var/www/raar/.bash_profile` containing `source ~/.bashrc`.
 * Create `/etc/httpd/conf.d/raar_env.inc` with `SetEnv` statements with the same values as before.
 * Create `/etc/httpd/conf.d/raar.conf` with the following content:
 
-    <VirtualHost *:80>
+      <VirtualHost *:80>
 
-        ServerName raar
-        ServerAlias archiv.rabe.ch
+          ServerName raar
+          ServerAlias archiv.rabe.ch
 
-        DocumentRoot /var/www/raar-ui
+          DocumentRoot /var/www/raar-ui
 
-        Alias /api /var/www/raar/current/public
-        <Location /api>
-            PassengerBaseURI /api
-            PassengerAppRoot /var/www/raar/current
-            PassengerRuby /opt/rh/rh-ruby22/root/usr/bin/ruby
-            PassengerMinInstances 2
-        </Location>
+          Alias /api /var/www/raar/current/public
+          <Location /api>
+              PassengerBaseURI /api
+              PassengerAppRoot /var/www/raar/current
+              PassengerRuby /opt/rh/rh-ruby22/root/usr/bin/ruby
+              PassengerMinInstances 2
+          </Location>
 
-        <Directory "/var/www/raar/current/public/">
-            AllowOverride None
-            Allow from all
-            Options -MultiViews
-        </Directory>
+          <Directory "/var/www/raar/current/public/">
+              AllowOverride None
+              Allow from all
+              Options -MultiViews
+          </Directory>
 
-        Include conf.d/raar_env.inc
+          Include conf.d/raar_env.inc
 
-    </VirtualHost>
+      </VirtualHost>
 
 * Restart Apache: `systemctl restart httpd`.
 * Deploy the application to `/var/www/raar/current` as described below.
 * Copy all files from `config/systemd` to `/etc/systemd/system`.
 * Enable and start Systemd timers for the import and downgrade services:
 
-    systemctl enable raar-import.timer
-    systemctl enable raar-downgrade.timer
-    systemctl start raar-import.timer
-    systemctl start raar-downgrade.timer
+      systemctl enable raar-import.timer
+      systemctl enable raar-downgrade.timer
+      systemctl start raar-import.timer
+      systemctl start raar-downgrade.timer
 
 * View logs with `journalctl -u "raar-*" -f`.
 
