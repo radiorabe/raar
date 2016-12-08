@@ -1030,6 +1030,27 @@
       }
     },
     "/v1/login": {
+      "get": {
+        "description": "Get the user object of the currently logged in user.",
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/V1::User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "not authorized"
+          }
+        }
+      },
       "post": {
         "description": "Login with username and password. Returns the user object including the api_token for further requests.",
         "tags": [

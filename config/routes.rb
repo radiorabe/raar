@@ -23,7 +23,7 @@ Rails.application.routes.draw do
           as: :audio_file
     end
 
-    post 'login', to: 'login#login'
+    match 'login', via: [:get, :post], to: 'login#login'
 
     resources :users do
       put :api_key, to: 'users#regenerate_api_key', on: :member

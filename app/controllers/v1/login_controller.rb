@@ -2,6 +2,17 @@ module V1
   class LoginController < ApplicationController
 
     swagger_path('/v1/login') do
+      operation :get do
+        key :description,
+            'Get the user object of the currently logged in user.'
+        key :tags, [:user]
+
+        response_entity('V1::User')
+        response 401 do
+          key :description, 'not authorized'
+        end
+      end
+
       operation :post do
         key :description,
             'Login with username and password. ' \
@@ -28,9 +39,9 @@ module V1
       end
     end
 
-    # PUT /login: Placeholder login action to act as FreeIPA endpoint.
+    # GET/POST /login: Placeholder login action to act as FreeIPA endpoint.
     def login
-      if request.headers['REMOTE_USER'].present?
+      if current_user
         render json: current_user, serializer: V1::UserSerializer
       else
         render json: { errors: request.headers['EXTERNAL_AUTH_ERROR'] || 'Not authenticated' },
