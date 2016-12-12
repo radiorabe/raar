@@ -2,15 +2,13 @@
 
 ## Code
 
-* document setup
+* add download option for audio files
 
 
 ## Setup
 
-* Automatic Deployment
 * Zabbix
 * FreeIPA Apache Config
 * SSL Certificate (Let's encrypt)
 * Recording with Liquidsoap
 * Recording from outgoing stream
-* Airtime DB Connection
