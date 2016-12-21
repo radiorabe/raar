@@ -76,10 +76,8 @@ The cron jobs should run as the application user in its home directory (`$RAAR_H
 As an alternative to cron jobs, the import and downgrade executables may also be run as Systemd timers. Copy the files from `config/systemd/*` to `/etc/systemd/system/`, make adjustments matching your deployment environment and run the following commands as root to start the timers:
 
 ```bash
-systemctl enable raar-import.timer
-systemctl enable raar-downgrade.timer
-systemctl start raar-import.timer
-systemctl start raar-downgrade.timer
+systemctl enable --now raar-import.timer
+systemctl enable --now raar-downgrade.timer
 ```
 
 ## Free IPA
@@ -150,10 +148,8 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 * Enable and start Systemd timers for the import and downgrade services:
 
   ```bash
-  systemctl enable raar-import.timer
-  systemctl enable raar-downgrade.timer
-  systemctl start raar-import.timer
-  systemctl start raar-downgrade.timer
+  systemctl enable --now raar-import.timer
+  systemctl enable --now raar-downgrade.timer
   ```
 
 * View logs with `journalctl -u "raar-*" -f`.
