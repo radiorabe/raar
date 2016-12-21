@@ -94,6 +94,7 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 
 * `useradd --home-dir /var/www/raar --create-home --user-group raar`
 * `usermod -a -G raar <your-ssh-user>`
+* `usermod -a -G raar apache`
 * `chmod g+w /var/www/raar`
 * Add your SSH public key to `/var/www/raar/.ssh/authorized_keys`.
 * `yum install gcc glibc-headers rh-ruby22-ruby-devel httpd mod_xsendfile postgresql-devel libxml2-devel libxslt-devel ffmpeg`
@@ -135,6 +136,8 @@ Perform the following steps on a CentOS or the corresponding ones on a different
           AllowOverride None
           Allow from all
           Options -MultiViews
+          XSendFile on
+          XSendFilePath /path/to/archive/home
       </Directory>
 
       Include conf.d/raar_env.inc
