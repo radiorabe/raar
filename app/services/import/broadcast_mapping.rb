@@ -58,10 +58,10 @@ module Import
 
     # Do the assigned recordings cover the entire duration of the broadcast?
     def complete?
-      finish = started_at
+      finish = started_at + Recording::DURATION_TOLERANCE.seconds
       @recordings.sort_by(&:started_at).all? do |r|
         adjacent = r.started_at <= finish
-        finish = r.finished_at
+        finish = r.finished_at + Recording::DURATION_TOLERANCE.seconds
         adjacent
       end && finish >= finished_at
     end

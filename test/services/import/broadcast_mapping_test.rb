@@ -165,6 +165,13 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
     assert !mapping.complete?
   end
 
+  test '#complete? is true if recordings have minimal gap' do
+    assign_broadcast
+    mapping.add_recording_if_overlapping(Import::Recording.new('2013-06-12T200000+0200_060.mp3'))
+    mapping.add_recording_if_overlapping(Import::Recording.new('2013-06-12T210003+0200_060.mp3'))
+    assert mapping.complete?
+  end
+
   private
 
   def mapping

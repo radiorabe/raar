@@ -27,8 +27,8 @@ module Import
 
     def ready_for_import?
       recordings? &&
-        mapping_complete? &&
-        !mapping_imported?
+        !mapping_imported? &&
+        mapping_complete?
     end
 
     def recordings?
