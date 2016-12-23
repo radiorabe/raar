@@ -21,9 +21,11 @@ module Import
 
       def warn_for_old_unimported
         Finder.new.pending.each do |recording|
-          if older_than?(recording, days_to_finish_import)
-            ExceptionNotifier.notify_exception(UnimportedWarning.new(recording))
-          end
+          next unless older_than?(recording, days_to_finish_import)
+
+          exception = UnimportedWarning.new(recording)
+          error(exception.message)
+          ExceptionNotifier.notify_exception(exception)
         end
       end
 

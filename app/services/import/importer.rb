@@ -59,10 +59,9 @@ module Import
 
     def warn_for_too_short_recordings(recordings)
       recordings.select(&:audio_duration_too_short?).each do |r|
-        ExceptionNotifier.notify_exception(
-          Recording::TooShortError.new(r),
-          data: { mapping: mapping }
-        )
+        exception = Recording::TooShortError.new(r)
+        error(exception.message)
+        ExceptionNotifier.notify_exception(exception, data: { mapping: mapping })
       end
     end
 
