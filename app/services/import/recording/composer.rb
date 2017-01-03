@@ -80,6 +80,8 @@ module Import
         list << last_file_in_list
 
         concat(list.compact)
+      ensure
+        list.each { |file| file.unlink if file.respond_to?(:unlink) }
       end
 
       def first_file_in_list
