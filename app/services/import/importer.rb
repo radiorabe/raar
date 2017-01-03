@@ -21,6 +21,8 @@ module Import
     rescue StandardError => e
       error("#{e}\n  #{e.backtrace.join("\n  ")}")
       ExceptionNotifier.notify_exception(e, data: { mapping: mapping })
+    ensure
+      master.unlink if master.respond_to?(:unlink)
     end
 
     private
@@ -74,7 +76,6 @@ module Import
 
     def import_into_archive(master)
       Archiver.new(mapping, master.path).run
-      master.unlink if master.respond_to?(:unlink)
       inform("Broadcast #{mapping} successfully imported.")
     end
 

@@ -49,9 +49,9 @@ Rails.application.configure do
       else ActiveSupport::TaggedLogging.new(Syslog::Logger.new('raar-api'))
       end
   when 'stdout'
-    config.logger =  ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+    config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
   end
-  
+
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 

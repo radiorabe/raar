@@ -3,6 +3,7 @@
 ## Code
 
 * add download option for audio files
+* create adjust playback formats script to update old playback formats to the current ones
 
 
 ## Setup

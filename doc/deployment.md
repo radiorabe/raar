@@ -101,6 +101,7 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 * Add `/opt/rh/rh-ruby22/root/usr/local/bin` to PATH in `/opt/rh/rh-ruby22/enable`
 * `gem install bundler --no-ri --no-rdoc`
 * Install Passenger according to these [instructions](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/apache/oss/el7/install_passenger.html).
+* Build Passenger native support: `/usr/bin/scl enable rh-ruby22 "ruby /usr/bin/passenger-config build-native-support"`
 * Create `/var/www/raar/.env` with all environment variables required for configuration.
 * Create `/var/www/raar/.bashrc` with the following content:
 
@@ -109,7 +110,7 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 
   source /opt/rh/rh-ruby22/enable
 
-  export $(cat .env | xargs)
+  export $(cat ~/.env | xargs)
   ```
 
 * Create `/var/www/raar/.bash_profile` containing `source ~/.bashrc`.
