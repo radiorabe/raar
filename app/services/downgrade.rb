@@ -7,7 +7,7 @@ module Downgrade
     Downgrader.run
     Ereaser.run
   rescue Exception => e
-    Rails.logger.error("FATAL: #{e}")
+    Rails.logger.error("FATAL #{e}\n  #{e.backtrace.join("\n  ")}")
     ExceptionNotifier.notify_exception(e)
   end
 

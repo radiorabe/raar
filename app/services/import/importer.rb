@@ -19,7 +19,7 @@ module Import
       import_into_archive(master)
       mark_recordings_as_imported
     rescue StandardError => e
-      error(e)
+      error("#{e}\n  #{e.backtrace.join("\n  ")}")
       ExceptionNotifier.notify_exception(e, data: { mapping: mapping })
     end
 

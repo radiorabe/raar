@@ -15,7 +15,7 @@ module Loggable
   end
 
   def log(level, msg)
-    Rails.logger.add(Logger.const_get(level), "#{level} #{Time.zone.now} #{msg}")
+    Rails.logger.add(Logger.const_get(level), "#{level} #{msg}")
   end
 
 end
