@@ -36,7 +36,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
         assert_equal "Albüm", tags[:album]
         assert_equal "2016", tags[:date]
       ensure
-        file.unlink
+        file.close!
       end
     end
 
@@ -56,7 +56,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
         assert_equal nil, tags[:album]
         assert_equal "2010", tags[:date]
       ensure
-        file.unlink
+        file.close!
       end
     end
 
@@ -67,7 +67,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
         assert_equal 1, part.duration.round
         assert_equal 192000, part.audio_bitrate
       ensure
-        file.unlink
+        file.close!
       end
     end
 
@@ -83,7 +83,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
         assert_equal 9, merge.duration.round
         assert_equal 192000, merge.audio_bitrate
       ensure
-        file.unlink
+        file.close!
       end
     end
 
@@ -97,7 +97,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
         assert_equal 2, output.audio_channels
         assert_equal 'mp3', output.audio_codec
       ensure
-        mp3.unlink
+        mp3.close!
       end
     end
 
@@ -117,7 +117,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
         assert_equal 3, p.duration.round
         assert_equal 192, p.bitrate
       ensure
-        mp3.unlink
+        mp3.close!
       end
     end
 

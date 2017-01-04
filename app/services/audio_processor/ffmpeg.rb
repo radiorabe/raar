@@ -32,7 +32,7 @@ module AudioProcessor
         create_list_file(list_file, [audio.path, *other_paths])
         concat_audio(new_path, list_file)
       ensure
-        list_file.unlink
+        list_file.close!
       end
     end
 
@@ -42,7 +42,7 @@ module AudioProcessor
         preserving_transcode(work_file.path, custom: metadata_args(tags))
         FileUtils.mv(work_file.path, file, force: true)
       ensure
-        work_file.unlink
+        work_file.close!
       end
     end
 

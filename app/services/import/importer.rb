@@ -22,7 +22,7 @@ module Import
       error("#{e}\n  #{e.backtrace.join("\n  ")}")
       ExceptionNotifier.notify_exception(e, data: { mapping: mapping })
     ensure
-      master.unlink if master.respond_to?(:unlink)
+      master.close! if master.respond_to?(:close!)
     end
 
     private

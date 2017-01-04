@@ -81,7 +81,7 @@ module Import
 
         concat(list.compact)
       ensure
-        list.each { |file| file.unlink if file.respond_to?(:unlink) }
+        list.each { |file| file.close! if file.respond_to?(:close!) }
       end
 
       def first_file_in_list
