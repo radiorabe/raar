@@ -11,14 +11,14 @@ class Import::ImporterTest < ActiveSupport::TestCase
   end
 
   test 'it does nothing if recordings are not complete' do
-    mapping.recordings << Import::Recording.new(file('2013-06-19T200000+0200_060.mp3'))
+    mapping.add_recording_if_overlapping(Import::Recording.new(file('2013-06-19T200000+0200_060.mp3')))
     Import::Archiver.expects(:new).never
     ExceptionNotifier.expects(:notify_exception).never
     importer.run
   end
 
   test 'it does nothing if broadcast is already imported' do
-    mapping.recordings << Import::Recording.new(file('2013-06-19T200000+0200_120.mp3'))
+    mapping.add_recording_if_overlapping(Import::Recording.new(file('2013-06-19T200000+0200_120.mp3')))
     mapping.broadcast.save!
     Import::Archiver.expects(:new).never
     ExceptionNotifier.expects(:notify_exception).never
@@ -61,6 +61,18 @@ class Import::ImporterTest < ActiveSupport::TestCase
     importer.run
     assert !File.exists?(f)
     assert File.exists?(file('2013-06-19T200000+0200_120_imported.mp3'))
+  end
+
+  test 'it notifies if broadcast is invalid' do
+    Broadcast.create!(show: shows(:g9s),
+                      started_at: Time.zone.local(2013, 6, 19, 20),
+                      finished_at: Time.zone.local(2013, 6, 19, 21))
+    mapping.add_recording_if_overlapping(Import::Recording.new(file('2013-06-19T200000+0200_120.mp3')))
+    Import::Archiver.expects(:new).never
+    ExceptionNotifier.expects(:notify_exception).with(
+      instance_of(ActiveRecord::RecordInvalid),
+      instance_of(Hash))
+    importer.run
   end
 
   private

@@ -30,11 +30,18 @@ module Import
     def ready_for_import?
       recordings? &&
         !mapping_imported? &&
-        mapping_complete?
+        mapping_complete? &&
+        broadcast_valid?
     end
 
     def recordings?
       mapping.recordings.present?
+    end
+
+    def mapping_imported?
+      mapping.imported?.tap do |imported|
+        warn("Broadcast #{mapping} is already imported.") if imported
+      end
     end
 
     def mapping_complete?
@@ -47,9 +54,15 @@ module Import
       end
     end
 
-    def mapping_imported?
-      mapping.imported?.tap do |imported|
-        warn("Broadcast #{mapping} is already imported.") if imported
+    def broadcast_valid?
+      broadcast = mapping.broadcast
+      broadcast.valid?.tap do |valid|
+        unless valid
+          error("Broadcast of #{broadcast.show} @ #{I18n.l(broadcast.started_at)} is invalid: " \
+                "#{broadcast.errors.full_messages.join(', ')}")
+          ExceptionNotifier.notify_exception(ActiveRecord::RecordInvalid.new(broadcast),
+                                             data: { mapping: mapping })
+        end
       end
     end
 
