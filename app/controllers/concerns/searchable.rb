@@ -19,10 +19,10 @@ module Searchable
 
   # Concat the word clauses with AND.
   def search_conditions
-    if search_support? && params[:q].present?
-      search_word_conditions.reduce do |query, condition|
-        query.and(condition)
-      end
+    return unless search_support? && params[:q].present?
+
+    search_word_conditions.reduce do |query, condition|
+      query.and(condition)
     end
   end
 

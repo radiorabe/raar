@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
       id, key = token.split('$')
       key = key.presence || '[blank]'
       user = User.where('api_key_expires_at IS NULL OR api_key_expires_at > ?', Time.zone.now)
-                 .find_by_id(id)
+                 .find_by(id: id)
       user if user && ActiveSupport::SecurityUtils.secure_compare(key, user.api_key)
     end
 

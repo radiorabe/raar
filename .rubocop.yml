@@ -14,11 +14,15 @@ AllCops:
 Rails:
   Enabled: true
 
-Metrics/LineLength:
-  Max: 100
+# Long Blocks used for swagger documentation, otherwise handled by method length.
+Metrics/BlockLength:
+  Enabled: false
 
 Metrics/ClassLength:
   Max: 200
+
+Metrics/LineLength:
+  Max: 100
 
 Metrics/MethodLength:
   Max: 10
@@ -31,6 +35,9 @@ Style/EmptyLinesAroundClassBody:
   Enabled: false
 
 Style/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Style/EmptyMethod:
   Enabled: false
 
 Style/GuardClause:

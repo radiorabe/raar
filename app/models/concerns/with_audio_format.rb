@@ -32,7 +32,7 @@ module WithAudioFormat
     def validate_encoding_attr(attr, encoding_field)
       validates attr,
                 inclusion: {
-                  in: -> (e) { e.audio_encoding.send(encoding_field) },
+                  in: ->(e) { e.audio_encoding.send(encoding_field) },
                   if: :audio_encoding,
                   allow_blank: true
                 }

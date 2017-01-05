@@ -5,9 +5,9 @@ gem 'rails', '5.0.0'
 gem 'pg'
 
 gem 'exception_notification'
-gem 'streamio-ffmpeg'
-gem 'rails-i18n'
 gem 'kaminari'
+gem 'rails-i18n'
+gem 'streamio-ffmpeg'
 
 # Use ActiveModelSerializers to serialize JSON responses
 gem 'active_model_serializers'
@@ -30,14 +30,14 @@ end
 
 group :development do
   # Use Capistrano for deployment
-  gem 'capistrano-rails'
   gem 'capistrano-passenger'
+  gem 'capistrano-rails'
   # Use puma as the development server
   gem 'puma'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
   gem 'rails-erd'
   gem 'rubocop'
+  gem 'spring'
 
   # Loading the listen gem enables an evented file system monitor. Check
   # https://github.com/guard/listen#listen-adapters if on Windows or *BSD.
