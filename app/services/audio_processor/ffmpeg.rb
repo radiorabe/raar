@@ -1,6 +1,6 @@
 module AudioProcessor
-  FFMPEG.logger = Rails.logger
-  # FFMPEG.logger = Logger.new('/dev/null')
+
+  FFMPEG.logger = Rails.env.development? ? Rails.logger : Logger.new('/dev/null')
 
   # Specific processor class working with FFmpeg backend.
   class Ffmpeg < Base
@@ -110,8 +110,8 @@ module AudioProcessor
 
     def metadata_args(tags)
       tags.slice(*METADATA_TAGS.keys).collect do |tag, value|
-        "-metadata #{METADATA_TAGS[tag]}=\"#{value}\" "
-      end.join(' ')
+        %W(-metadata #{METADATA_TAGS[tag]}=#{value})
+      end.flatten
     end
 
     def codec_options(audio_format)

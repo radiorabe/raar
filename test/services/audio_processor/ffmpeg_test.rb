@@ -107,9 +107,9 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       begin
         AudioGenerator.new.silent_file(AudioFormat.new('mp3', 192, 2), mp3.path)
         p = AudioProcessor::Ffmpeg.new(mp3.path)
-        p.tag(title: "title 'yeah!'", artist: 'artist', album: 'Albüm', year: '2016')
+        p.tag(title: "title \"yeah!\"", artist: 'artist', album: 'Albüm', year: '2016')
         tags = read_tags(mp3.path)
-        assert_equal "title 'yeah!'", tags[:title]
+        assert_equal "title \"yeah!\"", tags[:title]
         assert_equal 'artist', tags[:artist]
         assert_equal 'Albüm', tags[:album]
         assert_equal '2016', tags[:date]
