@@ -11,10 +11,7 @@ module V1
     crud_swagger_paths(route_prefix: '/v1',
                        data_class: 'V1::User',
                        tags: [:admin],
-                       query_params: [
-                         { name: :q,
-                           description: 'Query string to search for.' }
-                       ])
+                       query_params: [:q])
 
     swagger_path('/v1/users/{id}/api_key') do
       operation :put do

@@ -12,8 +12,7 @@ module V1
                        tags_read: [:public],
                        tags_write: [:admin],
                        query_params: [
-                         { name: :q,
-                           description: 'Query string to search for.' },
+                         :q,
                          { name: :since,
                            description: 'Filter the shows by date of their last broadcast.',
                            format: :date }

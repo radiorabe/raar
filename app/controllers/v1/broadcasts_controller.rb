@@ -36,39 +36,17 @@ module V1
       # rubocop:enable Metrics/MethodLength
 
     end
-    include_missing(Swagger::Blocks::OperationNode, SwaggerOperationMethods)
+    include_missing(Swagger::Blocks::Nodes::OperationNode, SwaggerOperationMethods)
 
     swagger_path '/v1/broadcasts' do
       operation :get do
         key :description, 'Searches and returns a list of broadcasts.'
         key :tags, [:broadcast, :public]
 
-        parameter name: :q,
-                  in: :query,
-                  description: 'Query string to search for in broadcast labels/people/details ' \
-                               'or show names/details',
-                  required: true,
-                  type: :string
-
-        parameter name: 'page[number]',
-                  in: :query,
-                  description: 'The page number of the broadcast list.',
-                  required: false,
-                  type: :integer
-
-        parameter name: 'page[size]',
-                  in: :query,
-                  description: 'Maximum number of broadcasts that are returned per page. ' \
-                               'Defaults to 50, maximum is 500.',
-                  required: false,
-                  type: :integer
-
-        parameter name: 'sort',
-                  in: :query,
-                  description: 'Name of the sort field, optionally prefixed with a `-` for ' \
-                               'descending order.',
-                  required: false,
-                  type: :string
+        parameter :q
+        parameter :page_number
+        parameter :page_size
+        parameter :sort
 
         response_broadcasts
       end
@@ -91,32 +69,10 @@ module V1
         parameter_date :minute
         parameter_date :second
 
-        parameter name: :q,
-                  in: :query,
-                  description: 'Query string to search for in broadcast labels/people/details ' \
-                               'or show names/details',
-                  required: false,
-                  type: :string
-
-        parameter name: 'page[number]',
-                  in: :query,
-                  description: 'The page number of the broadcast list.',
-                  required: false,
-                  type: :integer
-
-        parameter name: 'page[size]',
-                  in: :query,
-                  description: 'Maximum number of broadcasts that are returned per page. ' \
-                               'Defaults to 50, maximum is 500.',
-                  required: false,
-                  type: :integer
-
-        parameter name: 'sort',
-                  in: :query,
-                  description: 'Name of the sort field, optionally prefixed with a `-` for ' \
-                               'descending order.',
-                  required: false,
-                  type: :string
+        parameter :q
+        parameter :page_number
+        parameter :page_size
+        parameter :sort
 
         response_broadcasts
       end
@@ -133,32 +89,10 @@ module V1
                   required: true,
                   type: :integer
 
-        parameter name: :q,
-                  in: :query,
-                  description: 'Query string to search for in broadcast labels/people/details ' \
-                               'or show names/details',
-                  required: false,
-                  type: :string
-
-        parameter name: 'page[number]',
-                  in: :query,
-                  description: 'The page number of the broadcast list.',
-                  required: false,
-                  type: :integer
-
-        parameter name: 'page[size]',
-                  in: :query,
-                  description: 'Maximum number of broadcasts that are returned per page. ' \
-                               'Defaults to 50, maximum is 500.',
-                  required: false,
-                  type: :integer
-
-        parameter name: 'sort',
-                  in: :query,
-                  description: 'Name of the sort field, optionally prefixed with a `-` for ' \
-                               'descending order.',
-                  required: false,
-                  type: :string
+        parameter :q
+        parameter :page_number
+        parameter :page_size
+        parameter :sort
 
         response_broadcasts
       end

@@ -41,6 +41,36 @@
       }
     }
   },
+  "parameters": {
+    "page_number": {
+      "name": "page[number]",
+      "in": "query",
+      "description": "The page number of the list.",
+      "required": false,
+      "type": "integer"
+    },
+    "page_size": {
+      "name": "page[size]",
+      "in": "query",
+      "description": "Maximum number of entries that are returned per page. Defaults to 50, maximum is 500.",
+      "required": false,
+      "type": "integer"
+    },
+    "sort": {
+      "name": "sort",
+      "in": "query",
+      "description": "Name of the sort field, optionally prefixed with a `-` for descending order.",
+      "required": false,
+      "type": "string"
+    },
+    "q": {
+      "name": "q",
+      "in": "query",
+      "description": "Query string to search for.",
+      "required": false,
+      "type": "string"
+    }
+  },
   "paths": {
     "/v1/profiles/{profile_id}/archive_formats": {
       "get": {
@@ -58,25 +88,13 @@
             "required": true
           },
           {
-            "name": "page[number]",
-            "in": "query",
-            "description": "The page number of the archive format list.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_number"
           },
           {
-            "name": "page[size]",
-            "in": "query",
-            "description": "Maximum number of archive formats that are returned per page. Defaults to 50, maximum is 500.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_size"
           },
           {
-            "name": "sort",
-            "in": "query",
-            "description": "Name of the sort field, optionally prefixed with a `-` for descending order.",
-            "required": false,
-            "type": "string"
+            "$ref": "#/parameters/sort"
           }
         ],
         "responses": {
@@ -371,25 +389,13 @@
             "type": "integer"
           },
           {
-            "name": "page[number]",
-            "in": "query",
-            "description": "Query string to specify the page number of the audio file list.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_number"
           },
           {
-            "name": "page[size]",
-            "in": "query",
-            "description": "Maximum number of audio files that are returned per page. Defaults to 50, maximum is 500.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_size"
           },
           {
-            "name": "sort",
-            "in": "query",
-            "description": "Name of the sort field, optionally prefixed with a `-` for descending order.",
-            "required": false,
-            "type": "string"
+            "$ref": "#/parameters/sort"
           }
         ],
         "responses": {
@@ -497,32 +503,16 @@
         ],
         "parameters": [
           {
-            "name": "q",
-            "in": "query",
-            "description": "Query string to search for in broadcast labels/people/details or show names/details",
-            "required": true,
-            "type": "string"
+            "$ref": "#/parameters/q"
           },
           {
-            "name": "page[number]",
-            "in": "query",
-            "description": "The page number of the broadcast list.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_number"
           },
           {
-            "name": "page[size]",
-            "in": "query",
-            "description": "Maximum number of broadcasts that are returned per page. Defaults to 50, maximum is 500.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_size"
           },
           {
-            "name": "sort",
-            "in": "query",
-            "description": "Name of the sort field, optionally prefixed with a `-` for descending order.",
-            "required": false,
-            "type": "string"
+            "$ref": "#/parameters/sort"
           }
         ],
         "responses": {
@@ -599,32 +589,16 @@
             "type": "integer"
           },
           {
-            "name": "q",
-            "in": "query",
-            "description": "Query string to search for in broadcast labels/people/details or show names/details",
-            "required": false,
-            "type": "string"
+            "$ref": "#/parameters/q"
           },
           {
-            "name": "page[number]",
-            "in": "query",
-            "description": "The page number of the broadcast list.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_number"
           },
           {
-            "name": "page[size]",
-            "in": "query",
-            "description": "Maximum number of broadcasts that are returned per page. Defaults to 50, maximum is 500.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_size"
           },
           {
-            "name": "sort",
-            "in": "query",
-            "description": "Name of the sort field, optionally prefixed with a `-` for descending order.",
-            "required": false,
-            "type": "string"
+            "$ref": "#/parameters/sort"
           }
         ],
         "responses": {
@@ -666,32 +640,16 @@
             "type": "integer"
           },
           {
-            "name": "q",
-            "in": "query",
-            "description": "Query string to search for in broadcast labels/people/details or show names/details",
-            "required": false,
-            "type": "string"
+            "$ref": "#/parameters/q"
           },
           {
-            "name": "page[number]",
-            "in": "query",
-            "description": "The page number of the broadcast list.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_number"
           },
           {
-            "name": "page[size]",
-            "in": "query",
-            "description": "Maximum number of broadcasts that are returned per page. Defaults to 50, maximum is 500.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_size"
           },
           {
-            "name": "sort",
-            "in": "query",
-            "description": "Name of the sort field, optionally prefixed with a `-` for descending order.",
-            "required": false,
-            "type": "string"
+            "$ref": "#/parameters/sort"
           }
         ],
         "responses": {
@@ -740,25 +698,13 @@
             "required": true
           },
           {
-            "name": "page[number]",
-            "in": "query",
-            "description": "The page number of the downgrade action list.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_number"
           },
           {
-            "name": "page[size]",
-            "in": "query",
-            "description": "Maximum number of downgrade actions that are returned per page. Defaults to 50, maximum is 500.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_size"
           },
           {
-            "name": "sort",
-            "in": "query",
-            "description": "Name of the sort field, optionally prefixed with a `-` for descending order.",
-            "required": false,
-            "type": "string"
+            "$ref": "#/parameters/sort"
           }
         ],
         "responses": {
@@ -1101,32 +1047,16 @@
         ],
         "parameters": [
           {
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "name": "q",
-            "description": "Query string to search for."
+            "$ref": "#/parameters/q"
           },
           {
-            "name": "page[number]",
-            "in": "query",
-            "description": "The page number of the playback format list.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_number"
           },
           {
-            "name": "page[size]",
-            "in": "query",
-            "description": "Maximum number of playback formats that are returned per page. Defaults to 50, maximum is 500.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_size"
           },
           {
-            "name": "sort",
-            "in": "query",
-            "description": "Name of the sort field, optionally prefixed with a `-` for descending order.",
-            "required": false,
-            "type": "string"
+            "$ref": "#/parameters/sort"
           }
         ],
         "responses": {
@@ -1350,32 +1280,16 @@
         ],
         "parameters": [
           {
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "name": "q",
-            "description": "Query string to search for."
+            "$ref": "#/parameters/q"
           },
           {
-            "name": "page[number]",
-            "in": "query",
-            "description": "The page number of the profile list.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_number"
           },
           {
-            "name": "page[size]",
-            "in": "query",
-            "description": "Maximum number of profiles that are returned per page. Defaults to 50, maximum is 500.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_size"
           },
           {
-            "name": "sort",
-            "in": "query",
-            "description": "Name of the sort field, optionally prefixed with a `-` for descending order.",
-            "required": false,
-            "type": "string"
+            "$ref": "#/parameters/sort"
           }
         ],
         "responses": {
@@ -1599,11 +1513,7 @@
         ],
         "parameters": [
           {
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "name": "q",
-            "description": "Query string to search for."
+            "$ref": "#/parameters/q"
           },
           {
             "in": "query",
@@ -1614,25 +1524,13 @@
             "format": "date"
           },
           {
-            "name": "page[number]",
-            "in": "query",
-            "description": "The page number of the show list.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_number"
           },
           {
-            "name": "page[size]",
-            "in": "query",
-            "description": "Maximum number of shows that are returned per page. Defaults to 50, maximum is 500.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_size"
           },
           {
-            "name": "sort",
-            "in": "query",
-            "description": "Name of the sort field, optionally prefixed with a `-` for descending order.",
-            "required": false,
-            "type": "string"
+            "$ref": "#/parameters/sort"
           }
         ],
         "responses": {
@@ -1832,32 +1730,16 @@
         ],
         "parameters": [
           {
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "name": "q",
-            "description": "Query string to search for."
+            "$ref": "#/parameters/q"
           },
           {
-            "name": "page[number]",
-            "in": "query",
-            "description": "The page number of the user list.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_number"
           },
           {
-            "name": "page[size]",
-            "in": "query",
-            "description": "Maximum number of users that are returned per page. Defaults to 50, maximum is 500.",
-            "required": false,
-            "type": "integer"
+            "$ref": "#/parameters/page_size"
           },
           {
-            "name": "sort",
-            "in": "query",
-            "description": "Name of the sort field, optionally prefixed with a `-` for descending order.",
-            "required": false,
-            "type": "string"
+            "$ref": "#/parameters/sort"
           }
         ],
         "responses": {

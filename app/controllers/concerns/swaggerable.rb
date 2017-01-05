@@ -4,7 +4,7 @@ module Swaggerable
   included do
     include Swagger::Blocks
 
-    include_missing(Swagger::Blocks::OperationNode, OperationMethods)
+    include_missing(Swagger::Blocks::Nodes::OperationNode, OperationMethods)
   end
 
   module ClassMethods
@@ -34,32 +34,20 @@ module Swaggerable
           path_parameters(prefix_parameters)
 
           Array(options[:query_params]).each do |p|
-            parameter p.reverse_merge(
-              in: :query,
-              required: false,
-              type: :string
-            )
+            if p.is_a?(Hash)
+              parameter p.reverse_merge(
+                in: :query,
+                required: false,
+                type: :string
+              )
+            else
+              parameter p
+            end
           end
 
-          parameter name: 'page[number]',
-                    in: :query,
-                    description: "The page number of the #{model_name} list.",
-                    required: false,
-                    type: :integer
-
-          parameter name: 'page[size]',
-                    in: :query,
-                    description: "Maximum number of #{model_name_plural} that are returned " \
-                                 'per page. Defaults to 50, maximum is 500.',
-                    required: false,
-                    type: :integer
-
-          parameter name: 'sort',
-                    in: :query,
-                    description: 'Name of the sort field, optionally prefixed with a `-` for ' \
-                                 'descending order.',
-                    required: false,
-                    type: :string
+          parameter :page_number
+          parameter :page_size
+          parameter :sort
 
           response_entities(data_class)
 

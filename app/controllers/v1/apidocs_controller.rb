@@ -62,6 +62,40 @@ module V1
           end
         end
       end
+
+      parameter :page_number do
+        key :name, 'page[number]'
+        key :in, :query
+        key :description, 'The page number of the list.'
+        key :required, false
+        key :type, :integer
+      end
+
+      parameter :page_size do
+        key :name, 'page[size]'
+        key :in, :query
+        key :description,
+            'Maximum number of entries that are returned per page. Defaults to 50, maximum is 500.'
+        key :required, false
+        key :type, :integer
+      end
+
+      parameter :sort do
+        key :name, 'sort'
+        key :in, :query
+        key :description,
+            'Name of the sort field, optionally prefixed with a `-` for descending order.'
+        key :required, false
+        key :type, :string
+      end
+
+      parameter :q do
+        key :name, :q
+        key :in, :query
+        key :description, 'Query string to search for.'
+        key :required, false
+        key :type, :string
+      end
     end
 
     def index
