@@ -53,7 +53,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
         tags = read_tags(file.path)
         assert_equal "Hölidüli", tags[:title]
         assert_equal "Ärtist Ünknöwn", tags[:artist]
-        assert_equal nil, tags[:album]
+        assert_nil tags[:album]
         assert_equal "2010", tags[:date]
       ensure
         file.close!

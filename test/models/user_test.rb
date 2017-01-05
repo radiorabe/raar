@@ -24,7 +24,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '.with_api_token is nil if key is nil' do
-    assert_equal nil, User.with_api_token(nil)
+    assert_nil User.with_api_token(nil)
   end
 
   test '.with_api_token returns user if expires at is nil' do
@@ -34,11 +34,11 @@ class UserTest < ActiveSupport::TestCase
 
   test '.with_api_token returns nil if only id is given' do
     user = users(:speedee)
-    assert_equal nil, User.with_api_token(user.id.to_s)
+    assert_nil User.with_api_token(user.id.to_s)
   end
 
   test '.with_api_token returns nil if arbitrary string is given' do
-    assert_equal nil, User.with_api_token('jada$jada')
+    assert_nil User.with_api_token('jada$jada')
   end
 
   test '.with_api_token returns user if expires at is in the future' do
@@ -50,11 +50,11 @@ class UserTest < ActiveSupport::TestCase
   test '.with_api_token returns nil if expires at is in the past' do
     user = users(:speedee)
     user.update!(api_key_expires_at: 1.day.ago)
-    assert_equal nil, User.with_api_token(user.api_token)
+    assert_nil User.with_api_token(user.api_token)
   end
 
   test '.from_remote returns nil if username is nil' do
-    assert_equal nil, User.from_remote(nil, 'john', 'doe', 'chief')
+    assert_nil User.from_remote(nil, 'john', 'doe', 'chief')
   end
 
   test '.from_remote creates new user' do
@@ -124,7 +124,7 @@ class UserTest < ActiveSupport::TestCase
     user.regenerate_api_key!
     assert_not_equal key, user.api_key
     assert_equal({}, user.changes)
-    assert_equal nil, user.api_key_expires_at
+    assert_nil user.api_key_expires_at
   end
 
   test '#regenerate_api_key! updates expire date' do

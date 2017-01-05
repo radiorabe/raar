@@ -17,7 +17,7 @@ class Import::ArchiverTest < ActiveSupport::TestCase
     assert_equal 3, files.count
     best = files.detect { |f| f.bitrate == 256 }
     assert_equal 2, best.channels
-    assert_equal nil, best.playback_format
+    assert_nil best.playback_format
     high = files.detect { |f| f.bitrate == 192 }
     assert_equal playback_formats(:high), high.playback_format
     low = files.detect { |f| f.bitrate == 96 }
@@ -56,7 +56,7 @@ class Import::ArchiverTest < ActiveSupport::TestCase
     files = mapping.broadcast.audio_files
     assert_equal 2, files.count
     high = files.detect { |f| f.bitrate == 160 }
-    assert_equal nil, high.playback_format
+    assert_nil high.playback_format
   end
 
   test 'not audio files are created if master is nil' do

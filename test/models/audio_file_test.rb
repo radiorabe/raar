@@ -63,8 +63,7 @@ class AudioFileTest < ActiveSupport::TestCase
   test '.playback_format_at without matching format and no lower file returns nil' do
     file = audio_files(:g9s_mai_low)
     file.destroy!
-    assert_equal nil,
-                 AudioFile.playback_format_at(file.broadcast.started_at, playback_formats(:low))
+    assert_nil AudioFile.playback_format_at(file.broadcast.started_at, playback_formats(:low))
   end
 
   test '.only_public contains only file with same or smaller bitrate' do

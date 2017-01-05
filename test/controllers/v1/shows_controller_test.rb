@@ -51,7 +51,7 @@ module V1
       login(nil)
       get :show, params: { id: shows(:info).id }
       assert_equal 'Info', json['data']['attributes']['name']
-      assert_equal nil, json['data']['relationships']
+      assert_nil json['data']['relationships']
     end
 
     test 'GET create returns unauthorized if not logged in' do
