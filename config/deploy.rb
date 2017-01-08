@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.6.1'
+lock '3.7.1'
 
 set :application, 'raar'
 set :repo_url, 'git@github.com:radiorabe/raar.git'
@@ -13,7 +13,7 @@ set :deploy_to, '/var/www/raar'
 
 # Default value for :scm is :git
 # set :scm, :git
-set :scm, :artifact
+#set :scm, :artifact
 
 set :bundle_flags, '--deployment --quiet --local'
 
