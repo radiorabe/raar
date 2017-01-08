@@ -83,13 +83,12 @@ module AudioProcessor
     end
 
     def concat_audio(new_path, list_file)
-      run_command("#{FFMPEG.ffmpeg_binary} -y -f concat -safe 0 -i \"#{list_file.path}\" " \
-                  "-c copy #{Shellwords.escape(new_path)}")
+      run_command(FFMPEG.ffmpeg_binary, '-y', '-f', 'concat', '-safe', '0', '-i',
+                  list_file.path, '-c', 'copy', new_path)
     end
 
     def accurate_duration
-      out = run_command("#{FFMPEG.ffmpeg_binary} -i #{Shellwords.escape(file)} " \
-                        '-acodec copy -f null -')
+      out = run_command(FFMPEG.ffmpeg_binary, '-i', file, '-acodec', 'copy', '-f', 'null', '-')
       segments = out.scan(/\btime=(\d+)\:(\d\d)\:(\d\d(\.\d+)?)\b/)
       raise("Could not determine duration for #{file}: #{out}") if segments.blank?
       number_of_seconds(segments.last)
@@ -101,9 +100,9 @@ module AudioProcessor
        segments[2].to_f.seconds).to_f.round
     end
 
-    def run_command(command)
-      FFMPEG.logger.info("Running command...\n#{command}\n")
-      out, status = Open3.capture2e(command)
+    def run_command(*command)
+      FFMPEG.logger.info("Running command...\n#{command.join(' ')}\n")
+      out, status = Open3.capture2e(*command)
       raise("#{command} failed with status #{status}:\n#{out}") unless status.success?
       out
     end
