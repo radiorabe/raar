@@ -43,10 +43,10 @@ module Import
 
         def fetch_show_instances
           Airtime::ShowInstance
+            .list
             .where('starts < ? AND ends > ?',
                    recordings.last.finished_at,
                    recordings.first.started_at)
-            .order(:starts)
             .includes(:show)
         end
 

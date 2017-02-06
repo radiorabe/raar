@@ -50,6 +50,8 @@ module Airtime
 
     belongs_to :show
 
+    scope :list, -> { where(modified_instance: false).order(:starts) }
+
     # A little hack to avoid DangerousAttributeErrors with the #record column.
     # Should not create issues as we do not write to Airtime anyways.
     def self.dangerous_attribute_method?(name)
