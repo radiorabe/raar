@@ -9,6 +9,10 @@ module AudioEncoding
         name.demodulize.underscore
       end
 
+      def lossless?
+        bitrates.size == 1
+      end
+
     end
 
   end

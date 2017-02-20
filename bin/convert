@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+# Converts a directory of audio files into the archive.
+
+require File.expand_path('../../config/environment', __FILE__)
+
+Convert.run(ARGV[0])

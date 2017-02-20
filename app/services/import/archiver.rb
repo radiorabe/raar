@@ -5,11 +5,12 @@ module Import
 
     include Loggable
 
-    attr_reader :mapping, :master
+    attr_reader :mapping, :master, :options
 
-    def initialize(mapping, master)
+    def initialize(mapping, master, options = {})
       @mapping = mapping
       @master = master
+      @options = options
     end
 
     def run
@@ -34,7 +35,7 @@ module Import
     end
 
     def audio_formats
-      (archive_formats + playback_formats).collect(&:audio_format).uniq
+      (archive_audio_formats + playback_formats.collect(&:audio_format)).uniq
     end
 
     def build_audio_file(format)
@@ -65,8 +66,30 @@ module Import
         year: b.started_at.year }
     end
 
-    def archive_formats
-      mapping.profile.archive_formats
+    def archive_audio_formats
+      @archive_audio_formats ||=
+        if options[:limited_master]
+          limited_archive_audio_formats
+        else
+          actual_archive_audio_formats
+        end
+    end
+
+    def actual_archive_audio_formats
+      mapping.profile.archive_formats.collect(&:audio_format)
+    end
+
+    def limited_archive_audio_formats
+      processor = AudioProcessor.new(master)
+      actual_archive_audio_formats
+        .reject { |f| f.encoding.lossless? }
+        .collect { |f| limited_audio_format(f, processor.bitrate, processor.channels) }
+    end
+
+    def limited_audio_format(source, bitrate, channels)
+      AudioFormat.new(source.codec,
+                      [source.bitrate, bitrate].min,
+                      [source.channels, channels].min)
     end
 
     def playback_formats
@@ -75,10 +98,10 @@ module Import
 
     def formats_covered_by_archive_formats
       [''].tap do |condition|
-        archive_formats.each do |f|
+        archive_audio_formats.each do |f|
           condition.first << ' OR ' if condition.first.present?
           condition.first << '(codec = ? AND ((bitrate = ? AND channels <= ?) OR bitrate <= ?))'
-          condition.push(f.codec, f.initial_bitrate, f.initial_channels, f.initial_bitrate)
+          condition.push(f.codec, f.bitrate, f.channels, f.bitrate)
         end
       end
     end

@@ -5,10 +5,11 @@ module Import
 
     include Loggable
 
-    attr_reader :mapping
+    attr_reader :mapping, :options
 
-    def initialize(mapping)
+    def initialize(mapping, options = {})
       @mapping = mapping
+      @options = options
     end
 
     def run
@@ -72,14 +73,6 @@ module Import
       end
     end
 
-    def warn_for_too_short_recordings(recordings)
-      recordings.select(&:audio_duration_too_short?).each do |r|
-        exception = Recording::TooShortError.new(r)
-        error(exception.message)
-        ExceptionNotifier.notify_exception(exception, data: { mapping: mapping })
-      end
-    end
-
     def compose_master(recordings)
       warn_for_too_short_recordings(recordings)
       inform("Composing master file for broadcast #{mapping} out of the following recordings:\n" +
@@ -88,12 +81,20 @@ module Import
     end
 
     def import_into_archive(master)
-      Archiver.new(mapping, master.path).run
+      Archiver.new(mapping, master.path, options).run
       inform("Broadcast #{mapping} successfully imported.")
     end
 
     def mark_recordings_as_imported
       mapping.recordings.each(&:mark_imported)
+    end
+
+    def warn_for_too_short_recordings(recordings)
+      recordings.select(&:audio_duration_too_short?).each do |r|
+        exception = Recording::TooShortError.new(r)
+        error(exception.message)
+        ExceptionNotifier.notify_exception(exception, data: { mapping: mapping })
+      end
     end
 
   end

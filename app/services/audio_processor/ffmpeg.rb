@@ -12,10 +12,13 @@ module AudioProcessor
                       year: :date }.freeze
 
     def transcode(new_path, audio_format, tags = {})
-      options = codec_options(audio_format)
       assert_directory(new_path)
-      audio.transcode(new_path,
-                      options.merge(validate: true, custom: metadata_args(tags)))
+      if same_format?(audio_format)
+        preserving_transcode(new_path, custom: metadata_args(tags))
+      else
+        options = codec_options(audio_format).merge(validate: true, custom: metadata_args(tags))
+        audio.transcode(new_path, options)
+      end
     end
 
     def trim(new_path, start, duration)
@@ -119,8 +122,14 @@ module AudioProcessor
         audio_bitrate: audio_format.bitrate,
         audio_channels: audio_format.channels
       }
-      options.delete(:audio_bitrate) if audio_format.codec == 'flac'
+      options.delete(:audio_bitrate) if audio_format.encoding.lossless?
       options
+    end
+
+    def same_format?(audio_format)
+      audio_format.codec == codec &&
+        audio_format.channels == channels &&
+        (audio_format.encoding.lossless? || audio_format.bitrate == bitrate)
     end
 
     def assert_directory(file)
