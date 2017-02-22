@@ -151,7 +151,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
   end
 
   def build_recordings(*names)
-    names.collect { |f| Import::Recording.new(file(f)) }
+    names.collect { |f| Import::Recording::File.new(file(f)) }
   end
 
 end

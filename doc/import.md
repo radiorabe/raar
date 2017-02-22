@@ -27,3 +27,16 @@ The following steps are performed during the import process. The respective Clas
 1. Transcode the master file into the defined archive formats in the `ARCHIVE_HOME` directory and create the corresponding database entries (`Import::Archiver#run`).
 1. Mark the used recordings as imported (`Import::Recording#mark_imported`).
 1. Delete all old imported recordings as configured by `DAYS_TO_KEEP_IMPORTED` and warn about unimported recordings, via `DAYS_TO_FINISH_IMPORT` (`Import::Recording::Cleaner#run`).
+
+## Custom Import
+
+It is also possible to run an import with custom classes given by environment variables. To import all MP3 recordings from a given directory that contain the date, time and show name in their filename (i.e. without hitting Airtime), run:
+
+    BROADCAST_MAPPING_BUILDER=SelfContained \
+    RECORDING_FILE=Mp3Rec \
+    IMPORT_DIRECTORIES=/path/to/import \
+    DAYS_TO_FINISH_IMPORT='' \
+    DAYS_TO_KEEP_IMPORTED='' \
+    bin/import
+
+The show names from the file names may be mapped to real show names in `config/show_names.yml`.

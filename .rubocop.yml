@@ -26,6 +26,9 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Max: 10
+  
+Style/ClassVars:
+  Enabled: false
 
 Style/Documentation:
   Enabled: false

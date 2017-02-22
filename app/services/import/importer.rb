@@ -5,11 +5,10 @@ module Import
 
     include Loggable
 
-    attr_reader :mapping, :options
+    attr_reader :mapping
 
-    def initialize(mapping, options = {})
+    def initialize(mapping)
       @mapping = mapping
-      @options = options
     end
 
     def run
@@ -81,7 +80,7 @@ module Import
     end
 
     def import_into_archive(master)
-      Archiver.new(mapping, master.path, options).run
+      Archiver.new(mapping, master.path).run
       inform("Broadcast #{mapping} successfully imported.")
     end
 

@@ -70,6 +70,29 @@ class Import::ArchiverTest < ActiveSupport::TestCase
     end
   end
 
+  test 'only creates same or lower quality when master is lossy' do
+    Import::Recording::File.klass.stubs(lossy: true)
+    profiles(:default).archive_formats.create!(codec: 'flac', initial_bitrate: 1, initial_channels: 2)
+
+    expect_new_audio_processor
+    audio_processor.expects(:bitrate).returns(160)
+    audio_processor.expects(:channels).returns(2)
+
+    expect_transcode(160, 2)
+    expect_transcode(96, 1)
+
+    assert_difference('AudioFile.count', 2) do
+      assert_difference('Broadcast.count', 1) do
+        archiver.run
+      end
+    end
+
+    files = mapping.broadcast.audio_files
+    assert_equal 2, files.count
+    high = files.detect { |f| f.bitrate == 160 }
+    assert_nil high.playback_format
+  end
+
   private
 
   def archiver
@@ -89,8 +112,12 @@ class Import::ArchiverTest < ActiveSupport::TestCase
     @audio_processor ||= mock('processor')
   end
 
-  def expect_transcode(bitrate, channels)
+  def expect_new_audio_processor
     AudioProcessor.expects(:new).with('master.mp3').returns(audio_processor)
+  end
+
+  def expect_transcode(bitrate, channels)
+    expect_new_audio_processor
     audio_processor.
       expects(:transcode).
       with(format_file(bitrate, channels),

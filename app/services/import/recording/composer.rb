@@ -1,5 +1,5 @@
 module Import
-  class Recording
+  module Recording
 
     # From a list of recordings, split or join them to correspond to a single broadcast.
     # The recordings must overlap or correspond to the broadcast duration but must not be shorter.
@@ -136,7 +136,7 @@ module Import
       end
 
       def new_tempfile
-        Tempfile.new(['master', File.extname(first.path)])
+        Tempfile.new(['master', ::File.extname(first.path)])
       end
 
     end

@@ -11,14 +11,14 @@ class Import::ImporterTest < ActiveSupport::TestCase
   end
 
   test 'it does nothing if recordings are not complete' do
-    mapping.add_recording_if_overlapping(Import::Recording.new(file('2013-06-19T200000+0200_060.mp3')))
+    mapping.add_recording_if_overlapping(Import::Recording::File.new(file('2013-06-19T200000+0200_060.mp3')))
     Import::Archiver.expects(:new).never
     ExceptionNotifier.expects(:notify_exception).never
     importer.run
   end
 
   test 'it does nothing if broadcast is already imported' do
-    mapping.add_recording_if_overlapping(Import::Recording.new(file('2013-06-19T200000+0200_120.mp3')))
+    mapping.add_recording_if_overlapping(Import::Recording::File.new(file('2013-06-19T200000+0200_120.mp3')))
     mapping.broadcast.save!
     Import::Archiver.expects(:new).never
     ExceptionNotifier.expects(:notify_exception).never
@@ -27,7 +27,7 @@ class Import::ImporterTest < ActiveSupport::TestCase
 
   test 'creates database entries' do
     f = touch('2013-06-19T200000+0200_120.mp3')
-    mapping.add_recording_if_overlapping(Import::Recording.new(f))
+    mapping.add_recording_if_overlapping(Import::Recording::File.new(f))
     AudioProcessor::Ffmpeg.any_instance.expects(:duration).returns(120 * 60)
     AudioProcessor::Ffmpeg.any_instance.expects(:transcode).times(3)
     ExceptionNotifier.expects(:notify_exception).never
@@ -40,7 +40,7 @@ class Import::ImporterTest < ActiveSupport::TestCase
 
   test 'marks recordings as imported' do
     f = touch('2013-06-19T200000+0200_120.mp3')
-    mapping.add_recording_if_overlapping(Import::Recording.new(f))
+    mapping.add_recording_if_overlapping(Import::Recording::File.new(f))
     AudioProcessor::Ffmpeg.any_instance.expects(:duration).returns(120 * 60)
     AudioProcessor::Ffmpeg.any_instance.expects(:transcode).times(3)
     ExceptionNotifier.expects(:notify_exception).never
@@ -51,7 +51,7 @@ class Import::ImporterTest < ActiveSupport::TestCase
 
   test 'it notifies if recording is too short but still does import' do
     f = touch('2013-06-19T200000+0200_120.mp3')
-    r = Import::Recording.new(f)
+    r = Import::Recording::File.new(f)
     mapping.add_recording_if_overlapping(r)
     AudioProcessor::Ffmpeg.any_instance.expects(:duration).returns(110 * 60)
     AudioProcessor::Ffmpeg.any_instance.expects(:transcode).times(3)
@@ -67,7 +67,7 @@ class Import::ImporterTest < ActiveSupport::TestCase
     Broadcast.create!(show: shows(:g9s),
                       started_at: Time.zone.local(2013, 6, 19, 20),
                       finished_at: Time.zone.local(2013, 6, 19, 21))
-    mapping.add_recording_if_overlapping(Import::Recording.new(file('2013-06-19T200000+0200_120.mp3')))
+    mapping.add_recording_if_overlapping(Import::Recording::File.new(file('2013-06-19T200000+0200_120.mp3')))
     Import::Archiver.expects(:new).never
     ExceptionNotifier.expects(:notify_exception).with(
       instance_of(ActiveRecord::RecordInvalid),

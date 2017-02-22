@@ -1,5 +1,5 @@
 module Import
-  class Recording
+  module Recording
     class UnimportedWarning < StandardError
 
       attr_reader :recording

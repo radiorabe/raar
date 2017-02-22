@@ -1,5 +1,5 @@
 module Import
-  class Recording
+  module Recording
     # Compares an array of audio files and returns the best one.
     class Chooser
 

@@ -1,5 +1,5 @@
 module Import
-  class Recording
+  module Recording
     class TooShortError < StandardError
 
       attr_reader :recording

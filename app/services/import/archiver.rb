@@ -5,12 +5,11 @@ module Import
 
     include Loggable
 
-    attr_reader :mapping, :master, :options
+    attr_reader :mapping, :master
 
-    def initialize(mapping, master, options = {})
+    def initialize(mapping, master)
       @mapping = mapping
       @master = master
-      @options = options
     end
 
     def run
@@ -68,7 +67,7 @@ module Import
 
     def archive_audio_formats
       @archive_audio_formats ||=
-        if options[:limited_master]
+        if Recording::File.klass.lossy
           limited_archive_audio_formats
         else
           actual_archive_audio_formats

@@ -18,10 +18,10 @@ class ImportTest < ActiveSupport::TestCase
 
       ExceptionNotifier
         .expects(:notify_exception)
-        .with(Import::Recording::UnimportedWarning.new(Import::Recording.new(@f1)))
+        .with(Import::Recording::UnimportedWarning.new(Import::Recording::File.new(@f1)))
       ExceptionNotifier
         .expects(:notify_exception)
-        .with(Import::Recording::TooShortError.new(Import::Recording.new(@f4)), instance_of(Hash))
+        .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f4)), instance_of(Hash))
 
       assert_difference('Show.count', 1) do
         assert_difference('Broadcast.count', 2) do

@@ -60,6 +60,24 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       end
     end
 
+    test 'keeps same format mp3 file' do
+      file = Tempfile.new(['same', '.mp3'])
+      begin
+        same = processor(:klangbecken_mai1_best)
+                 .transcode(file.path, AudioFormat.new('mp3', 192, 2))
+        assert_equal 192000, same.audio_bitrate
+        assert_equal 2, same.audio_channels
+
+        tags = read_tags(file.path)
+        assert_equal "Title 'yeah'!", tags[:title]
+        assert_equal "Ärtist Ünknöwn", tags[:artist]
+        assert_equal "Albüm", tags[:album]
+        assert_equal "2016", tags[:date]
+      ensure
+        file.close!
+      end
+    end
+
     test 'trims mp3 file' do
       file = Tempfile.new(['part', '.mp3'])
       begin

@@ -55,9 +55,12 @@ An easy way to manage these values is to create a `~/.env` file with several `VA
 | Name | Description | Default |
 | --- | --- | --- |
 | IMPORT_DIRECTORIES | A comma-separated list of directories where the original recordings to import are found. | - |
-| DAYS_TO_KEEP_IMPORTED | Number of days to keep the original recordings, before they are deleted. | 1 |
-| DAYS_TO_FINISH_IMPORT | Number of days before a warning is produced because of unimported recordings. | 1 |
+| DAYS_TO_KEEP_IMPORTED | Number of days to keep the original recordings, before they are deleted. Recordings are never deleted if left empty. | - |
+| DAYS_TO_FINISH_IMPORT | Number of days before a warning is produced because of unimported recordings. No warnings are generated if left empty. | - |
 | PARALLEL_TRANSCODINGS | Number of threads to use for audio transcoding. | 1 |
+| AUDIO_PROCESSOR | Name of the audio processor class to use. | Ffmpeg |
+| BROADCAST_MAPPING_BUILDER | Name of the broadcast mapping builder class to use. | AirtimeDb |
+| RECORDING_FILE | Name of the recording file class to use. | Iso8601 |
 
 ## Cron Jobs
 

@@ -1,13 +1,13 @@
 module Import
-  class Recording
+  module Recording
 
     class Cleaner
 
       include Loggable
 
       def run
-        clear_old_imported
-        warn_for_old_unimported
+        clear_old_imported if days_to_keep_imported.present?
+        warn_for_old_unimported if days_to_finish_import.present?
       end
 
       def clear_old_imported
