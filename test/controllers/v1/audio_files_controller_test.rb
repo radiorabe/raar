@@ -43,7 +43,7 @@ module V1
                     json_attrs(:url)
     end
 
-    test 'GET show for non-public file returns 404' do
+    test 'GET show for non-public file returns 401' do
       get :show,
           params: {
             year: '2013',
@@ -74,6 +74,25 @@ module V1
 
       assert_response 200
       assert_equal AudioEncoding::Mp3.mime_type, response.headers['Content-Type']
+      assert_match 'inline', response.headers['Content-Disposition']
+    end
+
+    test 'GET show for public file with download flag returns 401' do
+      @path = audio_files(:info_april_high).absolute_path
+      touch_path
+      get :show,
+          params: {
+            year: '2013',
+            month: '04',
+            day: '10',
+            hour: '11',
+            min: '00',
+            sec: '00',
+            playback_format: 'high',
+            format: 'mp3',
+            download: 'true' }
+
+      assert_response 401
     end
 
     test 'GET show for file with no max_public_bitrate set returns audio file' do
@@ -95,7 +114,7 @@ module V1
       assert_equal AudioEncoding::Mp3.mime_type, response.headers['Content-Type']
     end
 
-    test 'GET show at start time returns audio file' do
+    test 'GET show logged in at start time returns audio file' do
       login
       get :show,
           params: {
@@ -112,7 +131,7 @@ module V1
       assert_equal AudioEncoding::Mp3.mime_type, response.headers['Content-Type']
     end
 
-    test 'GET show in the middle of broadcast returns audio file' do
+    test 'GET show logged in in the middle of broadcast returns audio file' do
       login
       get :show,
           params: {
@@ -127,7 +146,7 @@ module V1
       assert_response 200
     end
 
-    test 'GET show with best quality returns audio file' do
+    test 'GET show logged in with best quality returns audio file' do
       login
       get :show,
           params: {
@@ -140,6 +159,24 @@ module V1
             format: 'mp3' }
 
       assert_response 200
+      assert_match 'inline', response.headers['Content-Disposition']
+    end
+
+    test 'GET show logged in with best quality and download flag returns audio file' do
+      login
+      get :show,
+          params: {
+            year: '2013',
+            month: '05',
+            day: '20',
+            hour: '20',
+            min: '43',
+            playback_format: 'best',
+            format: 'mp3',
+            download: true }
+
+      assert_response 200
+      assert_match 'attachment', response.headers['Content-Disposition']
     end
 
     test 'GET show with invalid format returns 404' do

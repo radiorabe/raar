@@ -79,6 +79,13 @@ module V1
                   required: true,
                   type: :string
 
+        parameter name: :download,
+                  in: :query,
+                  description: 'Logged-in users may pass this flag to get the file with ' \
+                               'Content-Disposition attachment.',
+                  required: false,
+                  type: :boolean
+
         response 200 do
           key :description, 'successfull operation'
           schema type: :file
@@ -97,7 +104,7 @@ module V1
     private
 
     def file_playable?
-      entry && (entry.public? || current_user)
+      entry && ((entry.public? && !params[:download]) || current_user)
     end
 
     def handle_unplayable
@@ -114,13 +121,13 @@ module V1
 
     def send_missing(path)
       if File.exist?(path)
-        send_audio(path, AudioEncoding::Mp3.mime_type, 404)
+        send_audio(path, AudioEncoding::Mp3.mime_type, :not_found)
       else
         head :not_found
       end
     end
 
-    def send_audio(path, mime, status = 200)
+    def send_audio(path, mime, status = :ok)
       if request.headers['HTTP_RANGE'] && Rails.env.development?
         send_range(path, mime)
       else
@@ -145,7 +152,7 @@ module V1
     def send_file_options(path, mime, status)
       { type: mime,
         status: status,
-        disposition: :inline,
+        disposition: params[:download] ? :attachment : :inline,
         filename: File.basename(path) }
     end
 

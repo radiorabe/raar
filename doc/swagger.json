@@ -482,6 +482,13 @@
             "description": "File extension of the audio encoding to get the audio file for.",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "download",
+            "in": "query",
+            "description": "Logged-in users may pass this flag to get the file with Content-Disposition attachment.",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
