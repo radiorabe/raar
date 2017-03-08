@@ -85,7 +85,7 @@ systemctl enable --now raar-downgrade.timer
 
 ## Free IPA
 
-In order for the authentication to work with username and password, Free IPA may be configured to capture `POST` requests to `v1/login`. The form parameters `username` and `password` are provided. The application expects `REMOTE_USER`, `REMOTE_USER_GROUPS`, `REMOTE_USER_FIRST_NAME`, `REMOTE_USER_LAST_NAME` or `EXTERNAL_AUTH_ERROR` headers to be set. If the `REMOTE_USER` is set, a user object with the generated API token is returned.
+In order for the authentication to work with username and password, Free IPA may be configured to capture `POST` requests to `/login`. The form parameters `username` and `password` are provided. The application expects `REMOTE_USER`, `REMOTE_USER_GROUPS`, `REMOTE_USER_FIRST_NAME`, `REMOTE_USER_LAST_NAME` or `EXTERNAL_AUTH_ERROR` headers to be set. If the `REMOTE_USER` is set, a user object with the generated API token is returned.
 
 If no Free IPA is configured, authentication is still possible by API token. The users must be created and the tokens must be distributed manually in this case.
 

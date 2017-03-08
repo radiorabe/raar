@@ -9,13 +9,6 @@ module Authenticatable
     end
   end
 
-  def require_admin
-    require_authentication
-    if current_user && !current_user.admin?
-      render json: { errors: 'Forbidden' }, status: :forbidden
-    end
-  end
-
   def current_user
     if defined?(@current_user)
       @current_user

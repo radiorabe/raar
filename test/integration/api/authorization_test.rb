@@ -2,76 +2,56 @@ require 'test_helper'
 
 class AuthorizationTest < ActionDispatch::IntegrationTest
 
-  test 'POST create user as REMOTE USER with json body api creates REMOTE_USER and adds passed user' do
-    assert_difference('User.count', 2) do
-      post '/v1/users',
-           params: {
-             data: {
-               attributes: {
-                 username: 'foo',
-                 first_name: 'Pit',
-                 last_name: 'Foo' } } }.to_json,
-           headers: {
-             'CONTENT_TYPE' => 'application/vnd.api+json',
-             'ACCEPT' => 'application/vnd.api+json' },
-           env: {
-             'REMOTE_USER' => 'frosch',
-             'REMOTE_USER_GROUPS' => 'admin' }
-      assert_response 201
-      assert_equal 'application/vnd.api+json; charset=utf-8', response.headers['Content-Type']
-    end
-    assert_equal 'foo', json['data']['attributes']['username']
-  end
+  setup { touch_audio_file }
 
-  test 'POST create user with HTTP TOKEN with json api body adds new user' do
+  test 'GET show audio file as REMOTE USER is allowed and creates REMOTE_USER' do
     assert_difference('User.count', 1) do
-      auth = ActionController::HttpAuthentication::Token.encode_credentials(users(:admin).api_token)
-      post '/v1/users',
-           params: {
-             data: {
-               attributes: {
-                 username: 'foo',
-                 first_name: 'Pit',
-                 last_name: 'Foo' } } }.to_json,
-           headers: {
-             'CONTENT_TYPE' => 'application/vnd.api+json',
-             'HTTP_AUTHORIZATION' => auth }
-      assert_response 201
-      assert_equal 'application/vnd.api+json; charset=utf-8', response.headers['Content-Type']
+      get audio_path,
+          env: {
+            'REMOTE_USER' => 'frosch',
+            'REMOTE_USER_GROUPS' => 'admin' }
+      assert_response 200
     end
-    assert_equal 'foo', json['data']['attributes']['username']
   end
 
-  test 'POST create user with api_key param with json body adds new user' do
-    assert_difference('User.count', 1) do
-      post '/v1/users',
-           params: {
-             api_token: users(:admin).api_token,
-             data: {
-               attributes: {
-                 username: 'foo',
-                 first_name: 'Pit',
-                 last_name: 'Foo' } } }.to_json,
-           headers: {
-             'CONTENT_TYPE' => 'application/json' }
-      assert_response 201
-    end
-    assert_equal 'foo', json['data']['attributes']['username']
-  end
-
-  test 'POST create user without authorization fails' do
+  test 'GET show audio file with HTTP TOKEN is allowed' do
     assert_no_difference('User.count') do
-      post '/v1/users',
-           params: {
-             data: {
-               attributes: {
-                 username: 'foo',
-                 first_name: 'Pit',
-                 last_name: 'Foo' } } }.to_json,
-           headers: {
-             'CONTENT_TYPE' => 'application/vnd.api+json' }
+      auth = ActionController::HttpAuthentication::Token.encode_credentials(users(:admin).api_token)
+        get audio_path,
+            headers: {
+              'HTTP_AUTHORIZATION' => auth }
+      assert_response 200
+    end
+  end
+
+  test 'GET show audio file with api_key param is allowed' do
+    assert_no_difference('User.count') do
+      get "#{audio_path}?api_token=#{users(:admin).api_token}"
+      assert_response 200
+    end
+  end
+
+  test 'GET show audio file without authorization fails' do
+    assert_no_difference('User.count') do
+      get audio_path
       assert_response 401
     end
+  end
+
+  private
+
+  def touch_audio_file
+    path = audio_file.absolute_path
+    FileUtils.mkdir_p(File.dirname(path))
+    FileUtils.touch(path)
+  end
+
+  def audio_path
+    audio_file_path(AudioPath.new(audio_file).url_params)
+  end
+
+  def audio_file
+    audio_files(:info_april_best)
   end
 
 end
