@@ -12,7 +12,7 @@ module Admin
     end
 
     test 'GET index returns unauthorized if not logged in' do
-      login(nil)
+      logout
       get :index
       assert_response 401
     end

@@ -3,7 +3,7 @@
   "info": {
     "version": "1.0",
     "title": "RAAR Radio Archive API",
-    "description": "RAAR Radio Archive API. Some endpoints are public, other are restricted to admins.",
+    "description": "RAAR Radio Archive API. A public part allows querying shows, broadcasts and audio files. In the admin section, the archiving configuration may be managed.",
     "license": {
       "name": "AGPL"
     }
@@ -17,13 +17,17 @@
   "securityDefinitions": {
     "http_token": {
       "type": "basic",
-      "description": "API token is passed as HTTP token authentication header: `Authorization: Token token=\"abc\"`"
+      "description": "The API token may be passed as HTTP token authentication header: `Authorization: Token token=\"abc\"`. It may be obtained in the response body from a successfull /login request."
     },
     "api_token": {
       "type": "apiKey",
       "name": "api_token",
       "in": "query",
-      "description": "API token is passed as a query parameter"
+      "description": "The API token may be passed as a query parameter in the URL. It may be obtained in the response body from a successfull /login request."
+    },
+    "jwt_token": {
+      "type": "basic",
+      "description": "JWT token is passed as HTTP token authentication header: `Authorization: Token token=\"abc\"`. A JWT token is required for the /admin section and may be obtained in the X-Auth-Token Header from a successfull /login request as admin."
     }
   },
   "responses": {
@@ -111,7 +115,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/audio_files/{year}/{month}/{day}/{hour}{minute}{second}_{playback_format}.{format}": {
@@ -197,7 +213,19 @@
               "type": "file"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/broadcasts": {
@@ -383,7 +411,7 @@
     },
     "/login": {
       "get": {
-        "description": "Get the user object of the currently logged in user.",
+        "description": "Get the user object of the currently logged in user. The user may be identified by an API token, a JWT token or over FreeIPA.",
         "tags": [
           "user"
         ],
@@ -401,10 +429,27 @@
           "401": {
             "description": "not authorized"
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_token": [
+
+            ]
+          },
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "post": {
-        "description": "Login with username and password. Returns the user object including the api_token for further requests.",
+        "description": "Login with the FreeIPA username and password. Returns the user object including the api_token for further requests. If the user has admin priviledges, a X-Auth-Token header with a JWT token is returned to be used in the /admin section.",
         "tags": [
           "user"
         ],
@@ -442,11 +487,9 @@
             "description": "not authorized"
           }
         }
-      }
-    },
-    "/login/api_key": {
+      },
       "put": {
-        "description": "Regenerates the api key of the current user.",
+        "description": "Regenerates the api key of the current FreeIPA user.",
         "tags": [
           "user"
         ],
@@ -582,7 +625,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "post": {
         "description": "Creates a new archive format.",
@@ -626,7 +676,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/profiles/{profile_id}/archive_formats/{id}": {
@@ -663,7 +720,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "patch": {
         "description": "Updates an existing archive format.",
@@ -714,7 +778,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "delete": {
         "description": "Deletes an existing archive format.",
@@ -745,7 +816,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/audio_encodings": {
@@ -830,7 +908,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "post": {
         "description": "Creates a new downgrade action.",
@@ -881,7 +966,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/profiles/{profile_id}/archive_formats/{archive_format_id}/downgrade_actions/{id}": {
@@ -925,7 +1017,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "patch": {
         "description": "Updates an existing downgrade action.",
@@ -983,7 +1082,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "delete": {
         "description": "Deletes an existing downgrade action.",
@@ -1021,7 +1127,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/playback_formats": {
@@ -1059,7 +1172,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "post": {
         "description": "Creates a new playback format.",
@@ -1096,7 +1216,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/playback_formats/{id}": {
@@ -1126,7 +1253,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "patch": {
         "description": "Updates an existing playback format.",
@@ -1170,7 +1304,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "delete": {
         "description": "Deletes an existing playback format.",
@@ -1194,7 +1335,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/profiles": {
@@ -1232,7 +1380,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "post": {
         "description": "Creates a new profile.",
@@ -1269,7 +1424,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/profiles/{id}": {
@@ -1299,7 +1461,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "patch": {
         "description": "Updates an existing profile.",
@@ -1343,7 +1512,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "delete": {
         "description": "Deletes an existing profile.",
@@ -1367,7 +1543,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/shows": {
@@ -1402,7 +1585,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "post": {
         "description": "Creates a new show.",
@@ -1439,7 +1629,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/shows/{id}": {
@@ -1469,7 +1666,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "patch": {
         "description": "Updates an existing show.",
@@ -1513,7 +1717,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "delete": {
         "description": "Deletes an existing show.",
@@ -1537,7 +1748,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/users": {
@@ -1575,7 +1793,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "post": {
         "description": "Creates a new user.",
@@ -1612,7 +1837,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/users/{id}": {
@@ -1642,7 +1874,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "patch": {
         "description": "Updates an existing user.",
@@ -1686,7 +1925,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       },
       "delete": {
         "description": "Deletes an existing user.",
@@ -1710,7 +1956,14 @@
           "422": {
             "$ref": "#/responses/unprocessable_entity"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     }
   },

@@ -22,7 +22,7 @@ module Admin
     end
 
     test 'GET create returns unauthorized if not logged in' do
-      login(nil)
+      logout
       post :create
       assert_response 401
     end

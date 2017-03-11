@@ -2,6 +2,7 @@ module Admin
   class UsersController < CrudController
 
     include Admin::Authenticatable
+    include Admin::CrudSwag
 
     self.permitted_attrs = [:username, :first_name, :last_name, :groups]
 

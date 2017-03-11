@@ -37,7 +37,8 @@ class ApidocsController < ApplicationController
       key :title, 'RAAR Radio Archive API'
       key :description,
           'RAAR Radio Archive API. ' \
-          'Some endpoints are public, other are restricted to admins.'
+          'A public part allows querying shows, broadcasts and audio files. ' \
+          'In the admin section, the archiving configuration may be managed.'
       license name: 'AGPL'
     end
     key :consumes, ['application/vnd.api+json']
@@ -46,14 +47,27 @@ class ApidocsController < ApplicationController
     security_definition :http_token do
       key :type, :basic
       key :description,
-          'API token is passed as HTTP token authentication header: ' \
-          '`Authorization: Token token="abc"`'
+          'The API token may be passed as HTTP token authentication header: ' \
+          '`Authorization: Token token="abc"`. ' \
+          'It may be obtained in the response body from a successfull /login request.'
     end
+
     security_definition :api_token do
       key :type, :apiKey
       key :name, :api_token
       key :in, :query
-      key :description, 'API token is passed as a query parameter'
+      key :description,
+          'The API token may be passed as a query parameter in the URL. ' \
+          'It may be obtained in the response body from a successfull /login request.'
+    end
+
+    security_definition :jwt_token do
+      key :type, :basic
+      key :description,
+          'JWT token is passed as HTTP token authentication header: ' \
+          '`Authorization: Token token="abc"`. ' \
+          'A JWT token is required for the /admin section and ' \
+          'may be obtained in the X-Auth-Token Header from a successfull /login request as admin.'
     end
 
     response :unprocessable_entity do

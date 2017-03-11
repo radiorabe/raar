@@ -2,6 +2,7 @@ module Admin
   class ShowsController < CrudController
 
     include Admin::Authenticatable
+    include Admin::CrudSwag
 
     self.search_columns = %w(name details)
 

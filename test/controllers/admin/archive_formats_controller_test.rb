@@ -11,7 +11,7 @@ module Admin
     end
 
     test 'GET index returns unauthorized if not logged in' do
-      login(nil)
+      logout
       get :index, params: { profile_id: profiles(:default).id }
       assert_response 401
     end

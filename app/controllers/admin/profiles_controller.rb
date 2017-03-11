@@ -2,6 +2,7 @@ module Admin
   class ProfilesController < CrudController
 
     include Admin::Authenticatable
+    include Admin::CrudSwag
 
     self.permitted_attrs = [:name, :description, :default]
 

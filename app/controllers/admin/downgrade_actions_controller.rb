@@ -2,6 +2,7 @@ module Admin
   class DowngradeActionsController < CrudController
 
     include Admin::Authenticatable
+    include Admin::CrudSwag
 
     self.permitted_attrs = [:months, :bitrate, :channels]
 

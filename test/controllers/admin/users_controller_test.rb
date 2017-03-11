@@ -15,14 +15,14 @@ module Admin
       assert_equal 'admin', json['data']['attributes']['username']
     end
 
-    test 'GET show returns forbidden for regular user' do
+    test 'GET show returns unauthorized for api token' do
       login('speedee')
       get :show, params: { id: users(:admin).id }
-      assert_response 403
+      assert_response 401
     end
 
     test 'GET show returns unauthorized if not logged in' do
-      login(nil)
+      logout
       get :show, params: { id: users(:speedee).id }
       assert_response 401
     end

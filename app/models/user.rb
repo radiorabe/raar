@@ -21,32 +21,6 @@ class User < ActiveRecord::Base
 
   scope :list, -> { order(:last_name, :first_name, :username) }
 
-  class << self
-
-    def with_api_token(token)
-      return if token.blank?
-
-      id, key = token.split('$')
-      key = key.presence || '[blank]'
-      user = User.where('api_key_expires_at IS NULL OR api_key_expires_at > ?', Time.zone.now)
-                 .find_by(id: id)
-      user if user && ActiveSupport::SecurityUtils.secure_compare(key, user.api_key)
-    end
-
-    def from_remote(username, groups, first_name, last_name)
-      return if username.blank?
-
-      User.where(username: username).first_or_initialize.tap do |user|
-        user.groups = groups if groups.present?
-        user.first_name = first_name if first_name.present?
-        user.last_name = last_name if last_name.present?
-        user.reset_api_key_expires_at
-        user.save!
-      end
-    end
-
-  end
-
   def to_s
     username
   end

@@ -2,6 +2,7 @@ module Admin
   class PlaybackFormatsController < CrudController
 
     include Admin::Authenticatable
+    include Admin::CrudSwag
 
     self.permitted_attrs = [:name, :description, :codec, :bitrate, :channels]
 

@@ -48,7 +48,8 @@ An easy way to manage these values is to create a `~/.env` file with several `VA
 | RAAR_BASE_PATH | The URL base path where the API is running at. | - |
 | RAAR_SSL | Whether the API is running on HTTPS or HTTP. | false |
 | RAAR_ADMIN_GROUPS | A comma-separated list of user groups the will have admin privileges. | admin,root |
-| DAYS_TO_EXPIRE_API_KEY | Number of days before API keys are expired. Leave empty to never expire keys. | - |
+| DAYS_TO_EXPIRE_API_KEY | Number of days before API keys are expired. API keys are required to access higher-quality audio files and some advanced features. Leave empty to never expire keys. | - |
+| MINUTES_TO_EXPIRE_JWT_TOKEN | Number of minutes before JWT tokens are expired. JWTs are required to manage the archiving configuration in the admin section. | 60 |
 
 ### Import
 

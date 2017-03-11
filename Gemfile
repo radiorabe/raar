@@ -5,6 +5,7 @@ gem 'rails', '5.0.1'
 gem 'pg'
 
 gem 'exception_notification'
+gem 'jwt'
 gem 'kaminari'
 gem 'rails-i18n'
 gem 'streamio-ffmpeg'

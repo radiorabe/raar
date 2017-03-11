@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::API
 
-  include Authenticatable
   include Swaggerable
 
   private
@@ -9,6 +8,14 @@ class ApplicationController < ActionController::API
     raise(ActionController::RoutingError,
           "No route matches [#{request.headers['REQUEST_METHOD']}] " +
           request.headers['PATH_INFO'].inspect)
+  end
+
+  def current_user
+    defined?(@current_user) ? @current_user : @current_user = fetch_current_user
+  end
+
+  def fetch_current_user
+    Auth::ApiToken.new(request).fetch_user
   end
 
 end

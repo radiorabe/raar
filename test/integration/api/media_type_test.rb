@@ -15,8 +15,7 @@ class MediaTypeTest < ActionDispatch::IntegrationTest
              'CONTENT_TYPE' => 'application/vnd.api+json',
              'ACCEPT' => 'application/vnd.api+json' },
            env: {
-             'REMOTE_USER' => users(:admin).username,
-             'REMOTE_USER_GROUPS' => 'admin' }
+             'HTTP_AUTHORIZATION' => encode_token(Auth::Jwt.generate_token(users(:admin))) }
       assert_response 201
       assert_equal 'application/vnd.api+json; charset=utf-8', response.headers['Content-Type']
     end
@@ -36,8 +35,7 @@ class MediaTypeTest < ActionDispatch::IntegrationTest
            headers: {
              'CONTENT_TYPE' => 'application/json' },
            env: {
-             'REMOTE_USER' => users(:admin).username,
-             'REMOTE_USER_GROUPS' => 'admin' }
+             'HTTP_AUTHORIZATION' => encode_token(Auth::Jwt.generate_token(users(:admin))) }
       assert_response 201
     end
     assert_equal 'foo', json['data']['attributes']['username']

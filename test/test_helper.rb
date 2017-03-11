@@ -20,22 +20,36 @@ class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
   include CustomAssertions
 
+  def encode_token(token)
+    ActionController::HttpAuthentication::Token.encode_credentials(token)
+  end
+
 end
 
 class ActionController::TestCase < ActiveSupport::TestCase
 
   include JsonResponse
 
-  def login(username = 'speedee')
-    request.env['REMOTE_USER'] = username
-    request.env['REMOTE_USER_GROUPS'] = nil
+  def api_login
+    request.headers['']
+  end
+
+  def login(user = :speedee)
+    set_auth_token(users(user).api_token)
   end
 
   def login_as_admin
-    request.env['REMOTE_USER'] = 'admin'
-    request.env['REMOTE_USER_GROUPS'] = 'admin'
+    set_auth_token(Auth::Jwt.generate_token(users(:admin)))
   end
 
+  def logout
+    request.env['HTTP_AUTHORIZATION'] = nil
+  end
+
+  def set_auth_token(token)
+    request.env['HTTP_AUTHORIZATION'] = encode_token(token)
+  end
+  
 end
 
 class ActionDispatch::IntegrationTest < ActiveSupport::TestCase

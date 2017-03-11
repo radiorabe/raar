@@ -19,6 +19,9 @@ class AudioFilesController < ListController
       parameter :sort
 
       response_entities('AudioFile')
+
+      security http_token: []
+      security api_token: []
     end
   end
 
@@ -89,6 +92,9 @@ class AudioFilesController < ListController
         key :description, 'successfull operation'
         schema type: :file
       end
+
+      security http_token: []
+      security api_token: []
     end
   end
 

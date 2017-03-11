@@ -2,6 +2,7 @@ module Admin
   class ArchiveFormatsController < CrudController
 
     include Admin::Authenticatable
+    include Admin::CrudSwag
 
     self.permitted_attrs = [:codec, :initial_bitrate, :initial_channels, :max_public_bitrate]
 
