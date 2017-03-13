@@ -1,7 +1,7 @@
 class AudioFilesController < ListController
 
-  NOT_FOUND_PATH = Rails.root.join('public', 'not_found.mp3')
-  THE_FUTURE_PATH = Rails.root.join('public', 'the_future.mp3')
+  NOT_FOUND_PATH = Rails.root.join('public', 'system', 'not_found.mp3')
+  THE_FUTURE_PATH = Rails.root.join('public', 'system', 'the_future.mp3')
 
   swagger_path '/broadcasts/{broadcast_id}/audio_files' do
     operation :get do

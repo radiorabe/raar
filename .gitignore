@@ -24,5 +24,8 @@
 
 /test/coverage
 
+# Ignore shared public files
+/public/system
+
 # Ignore show name mapping
 /config/show_names.yml
