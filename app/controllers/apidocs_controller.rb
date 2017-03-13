@@ -15,6 +15,7 @@ class ApidocsController < ApplicationController
     Admin::ProfilesController,
     Admin::ShowsController,
     Admin::UsersController,
+    Admin::Shows::MergeController,
     # entities
     AudioFileSerializer,
     BroadcastSerializer,

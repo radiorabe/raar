@@ -37,7 +37,9 @@ Rails.application.routes.draw do
 
     resources :playback_formats
 
-    resources :shows
+    resources :shows do
+      post 'merge/:target_id', to: 'shows/merge#create', on: :member
+    end
   end
 
 end

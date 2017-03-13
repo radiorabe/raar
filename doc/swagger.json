@@ -1960,6 +1960,50 @@
           }
         ]
       }
+    },
+    "/admin/shows/{id}/merge/{target_id}": {
+      "post": {
+        "description": "Moves all broadcasts of a show to another and then removes the show. Responds with the target show.",
+        "tags": [
+          "show",
+          "admin"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the show to merge.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "target_id",
+            "in": "path",
+            "description": "ID of the target show for the broadcasts.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Admin::Show"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
+      }
     }
   },
   "definitions": {
