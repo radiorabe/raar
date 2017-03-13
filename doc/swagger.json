@@ -850,12 +850,7 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
-          },
-          {
-            "api_token": [
+            "jwt_token": [
 
             ]
           }

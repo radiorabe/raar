@@ -10,8 +10,7 @@ module Admin
 
         response_entities('Admin::AudioEncoding')
 
-        security http_token: []
-        security api_token: []
+        security jwt_token: []
       end
     end
 
