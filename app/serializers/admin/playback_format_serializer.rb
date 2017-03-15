@@ -26,7 +26,7 @@ module Admin
 
     attributes :id, :name, :description, :codec, :bitrate, :channels, :created_at, :updated_at
 
-    link(:self) { admin_playback_format_url(object) }
+    link(:self) { admin_playback_format_path(object) }
 
   end
 end

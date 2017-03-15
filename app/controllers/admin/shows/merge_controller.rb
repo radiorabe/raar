@@ -38,7 +38,7 @@ module Admin
       end
 
       def render_show(show)
-        render json: show, location: admin_show_url(show), serializer: Admin::ShowSerializer
+        render json: show, location: admin_show_path(show), serializer: Admin::ShowSerializer
       end
 
     end

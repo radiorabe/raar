@@ -21,7 +21,7 @@ module Admin
     attributes :id, :months, :bitrate, :channels
 
     link(:self) do
-      admin_profile_archive_format_downgrade_action_url(
+      admin_profile_archive_format_downgrade_action_path(
         object.profile,
         object.archive_format_id,
         object

@@ -16,10 +16,10 @@ class AudioFileSerializer < ApplicationSerializer
   attributes :codec, :bitrate, :channels, :playback_format, :url
 
   # duplication required as we are in a different scope inside the link block.
-  link(:self) { audio_file_url(AudioPath.new(object).url_params) }
+  link(:self) { audio_file_path(AudioPath.new(object).url_params) }
 
   def url
-    audio_file_url(audio_path.url_params)
+    audio_file_path(audio_path.url_params)
   end
 
   def playback_format

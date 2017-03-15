@@ -26,7 +26,7 @@ module Admin
     end
 
     def entry_url
-      admin_profile_archive_format_url(profile, entry)
+      admin_profile_archive_format_path(profile, entry)
     end
 
     def profile

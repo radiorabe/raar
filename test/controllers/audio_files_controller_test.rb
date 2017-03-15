@@ -11,9 +11,9 @@ class AudioFilesControllerTest < ActionController::TestCase
 
     assert_equal [320, 192, 96], json_attrs(:bitrate)
     assert_equal %w(best high low), json_attrs('playback_format')
-    assert_equal ['http://example.com/audio_files/2013/04/10/110000_best.mp3',
-                  'http://example.com/audio_files/2013/04/10/110000_high.mp3',
-                  'http://example.com/audio_files/2013/04/10/110000_low.mp3'],
+    assert_equal ['/audio_files/2013/04/10/110000_best.mp3',
+                  '/audio_files/2013/04/10/110000_high.mp3',
+                  '/audio_files/2013/04/10/110000_low.mp3'],
                   json_attrs(:url)
     json_links = json['data'].collect { |s| s['links']['self'] }
     assert_equal json_attrs(:url), json_links
@@ -24,8 +24,8 @@ class AudioFilesControllerTest < ActionController::TestCase
 
     assert_equal [192, 96], json_attrs(:bitrate)
     assert_equal %w(high low), json_attrs('playback_format')
-    assert_equal ['http://example.com/audio_files/2013/04/10/110000_high.mp3',
-                  'http://example.com/audio_files/2013/04/10/110000_low.mp3'],
+    assert_equal ['/audio_files/2013/04/10/110000_high.mp3',
+                  '/audio_files/2013/04/10/110000_low.mp3'],
                   json_attrs(:url)
   end
 
@@ -36,9 +36,9 @@ class AudioFilesControllerTest < ActionController::TestCase
 
     assert_equal [320, 192, 96], json_attrs(:bitrate)
     assert_equal %w(best high low), json_attrs('playback_format')
-    assert_equal ['http://example.com/audio_files/2013/04/10/110000_best.mp3',
-                  'http://example.com/audio_files/2013/04/10/110000_high.mp3',
-                  'http://example.com/audio_files/2013/04/10/110000_low.mp3'],
+    assert_equal ['/audio_files/2013/04/10/110000_best.mp3',
+                  '/audio_files/2013/04/10/110000_high.mp3',
+                  '/audio_files/2013/04/10/110000_low.mp3'],
                   json_attrs(:url)
   end
 

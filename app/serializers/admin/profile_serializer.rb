@@ -16,7 +16,7 @@ module Admin
 
     attributes :id, :name, :description, :default, :created_at, :updated_at
 
-    link(:self) { admin_profile_url(object) }
+    link(:self) { admin_profile_path(object) }
 
   end
 end

@@ -23,7 +23,7 @@ module Admin
 
     belongs_to :profile, serializer: ProfileSerializer
 
-    link(:self) { admin_show_url(object) }
+    link(:self) { admin_show_path(object) }
 
   end
 end

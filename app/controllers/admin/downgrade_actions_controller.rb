@@ -31,7 +31,7 @@ module Admin
     end
 
     def entry_url
-      admin_profile_archive_format_downgrade_action_url(profile, archive_format, entry)
+      admin_profile_archive_format_downgrade_action_path(profile, archive_format, entry)
     end
 
     def archive_format

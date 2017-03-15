@@ -21,7 +21,7 @@ module Admin
 
     attribute :admin?, key: :admin
 
-    link(:self) { admin_user_url(object) }
+    link(:self) { admin_user_path(object) }
 
     def groups
       object.group_list

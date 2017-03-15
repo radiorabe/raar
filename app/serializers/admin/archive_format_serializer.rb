@@ -27,7 +27,7 @@ module Admin
     attributes :id, :codec, :initial_bitrate, :initial_channels, :max_public_bitrate,
                :created_at, :updated_at
 
-    link(:self) { admin_profile_archive_format_url(object.profile_id, object) }
+    link(:self) { admin_profile_archive_format_path(object.profile_id, object) }
 
   end
 end

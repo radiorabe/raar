@@ -12,6 +12,6 @@ class ShowSerializer < ApplicationSerializer
 
   attributes :id, :name, :details
 
-  link(:self) { show_url(object) }
+  link(:self) { show_path(object) }
 
 end
