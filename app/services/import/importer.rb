@@ -40,7 +40,7 @@ module Import
 
     def mapping_imported?
       mapping.imported?.tap do |imported|
-        warn("Broadcast #{mapping} is already imported.") if imported
+        inform("Broadcast #{mapping} is already imported.") if imported
       end
     end
 
