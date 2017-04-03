@@ -5,6 +5,10 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
   include RecordingHelper
   include AirtimeHelper
 
+  teardown do
+    Rails.application.secrets.import_default_show_id = nil
+  end
+
   test 'returns no mappings without recordings' do
     builder = new_builder([])
     assert_equal [], builder.run
@@ -142,6 +146,81 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert map.complete?
     assert_equal [file('2016-01-01T090000+0100_060.mp3')],
                  map.recordings.collect(&:path)
+  end
+
+  test 'logs warnings for unmapped recordings' do
+    recordings = build_recordings('2016-01-01T080000+0100_060.mp3',
+                                  '2016-01-01T090000+0100_060.mp3',
+                                  '2016-01-01T100000+0100_060.mp3')
+    morgen = Airtime::Show.create!(name: 'Morgen')
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 7),
+                                  ends: Time.zone.local(2016, 1, 1, 8, 30),
+                                  created: Time.zone.now)
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 9),
+                                  ends: Time.zone.local(2016, 1, 1, 10, 30),
+                                  created: Time.zone.now)
+
+    Import::BroadcastMapping::Builder::AirtimeDb.any_instance
+      .expects(:warn)
+      .with('No broadcast found from Fri, 01 Jan 2016 08:30:00 +0100 to 09:00:00.')
+    Import::BroadcastMapping::Builder::AirtimeDb.any_instance
+      .expects(:warn)
+      .with('No broadcast found from Fri, 01 Jan 2016 10:30:00 +0100 to 11:00:00.')
+
+    builder = new_builder(recordings)
+    mappings = builder.run
+
+    assert_equal 2, mappings.size
+  end
+
+  test 'creates broadcast for default show for unmapped recordings' do
+    Rails.application.secrets.import_default_show_id = shows(:klangbecken).id
+    recordings = build_recordings('2016-01-01T080000+0100_060.mp3',
+                                  '2016-01-01T090000+0100_060.mp3',
+                                  '2016-01-01T100000+0100_060.mp3')
+    morgen = Airtime::Show.create!(name: 'Morgen')
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 7),
+                                  ends: Time.zone.local(2016, 1, 1, 8, 30),
+                                  created: Time.zone.now)
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 9),
+                                  ends: Time.zone.local(2016, 1, 1, 9, 30),
+                                  created: Time.zone.now)
+
+    Import::BroadcastMapping::Builder::AirtimeDb.any_instance
+      .expects(:warn)
+      .with('Creating default broadcast from Fri, 01 Jan 2016 08:30:00 +0100 to 09:00:00.')
+    Import::BroadcastMapping::Builder::AirtimeDb.any_instance
+      .expects(:warn)
+      .with('Creating default broadcast from Fri, 01 Jan 2016 09:30:00 +0100 to 11:00:00.')
+
+    builder = new_builder(recordings)
+    mappings = builder.run
+
+    assert_equal 4, mappings.size
+    assert_equal shows(:klangbecken).id, mappings.second.show.id
+    assert_equal Time.zone.local(2016, 1, 1, 8, 30), mappings.second.started_at
+    assert_equal Time.zone.local(2016, 1, 1, 9), mappings.second.finished_at
+    assert_equal shows(:klangbecken).id, mappings.last.show.id
+    assert_equal Time.zone.local(2016, 1, 1, 9, 30), mappings.last.started_at
+    assert_equal Time.zone.local(2016, 1, 1, 11), mappings.last.finished_at
+  end
+
+  test 'creates broadcast for default show for unmapped recordings for entire duration' do
+    Rails.application.secrets.import_default_show_id = shows(:klangbecken).id
+    recordings = build_recordings('2016-01-01T080000+0100_060.mp3',
+                                  '2016-01-01T090000+0100_060.mp3')
+
+    Import::BroadcastMapping::Builder::AirtimeDb.any_instance
+      .expects(:warn)
+      .with('Creating default broadcast from Fri, 01 Jan 2016 08:00:00 +0100 to 10:00:00.')
+
+    builder = new_builder(recordings)
+    mappings = builder.run
+
+    assert_equal 1, mappings.size
+    assert_equal shows(:klangbecken).id, mappings.first.show.id
+    assert_equal Time.zone.local(2016, 1, 1, 8), mappings.first.started_at
+    assert_equal Time.zone.local(2016, 1, 1, 10), mappings.first.finished_at
   end
 
   private

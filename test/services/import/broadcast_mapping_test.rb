@@ -22,6 +22,16 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
     assert_equal shows(:info), show
   end
 
+  test '#assign_show_attrs uses an existing show and keeps details' do
+    shows(:info).update!(details: 'RaBe Info')
+    mapping.assign_show(name: 'Info', details: 'Info')
+
+    assert_equal 'Info', show.name
+    assert_equal 'RaBe Info', show.details
+    assert_equal profiles(:important), show.profile
+    assert_equal shows(:info), show
+  end
+
   test '#assign_broadcast_attrs creates a new broadcast' do
     mapping.assign_show(name: 'Info')
     mapping.assign_broadcast(started_at: Time.local(2016, 1, 1, 11),

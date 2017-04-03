@@ -58,6 +58,7 @@ An easy way to manage these values is to create a `~/.env` file with several `VA
 | IMPORT_DIRECTORIES | A comma-separated list of directories where the original recordings to import are found. | - |
 | DAYS_TO_KEEP_IMPORTED | Number of days to keep the original recordings, before they are deleted. Recordings are never deleted if left empty. | - |
 | DAYS_TO_FINISH_IMPORT | Number of days before a warning is produced because of unimported recordings. No warnings are generated if left empty. | - |
+| IMPORT_DEFAULT_SHOW_ID | ID of the show record to use when no other broadcast mapping is found for a given period. Leave empty to generate no broadcasts if no mappings are found. | - |
 | PARALLEL_TRANSCODINGS | Number of threads to use for audio transcoding. | 1 |
 | AUDIO_PROCESSOR | Name of the audio processor class to use. | Ffmpeg |
 | BROADCAST_MAPPING_BUILDER | Name of the broadcast mapping builder class to use. | AirtimeDb |

@@ -7,9 +7,14 @@ class ImportTest < ActiveSupport::TestCase
 
   teardown :clear_archive_dir
 
+  teardown do
+    Rails.application.secrets.import_default_show_id = nil
+  end
+
   # Travis has ffmpeg 0.8.17, which reports "Unknown input format: 'lavfi'"
   unless ENV['TRAVIS']
     test 'imports recordings as broadcasts' do
+      Rails.application.secrets.import_default_show_id = shows(:klangbecken).id
       Time.zone.stubs(today: Time.local(2013, 6, 19),
                       now: Time.local(2013, 6, 19, 11))
       # build dummy recordings and broadcasts with a duration of two minutes
@@ -21,7 +26,7 @@ class ImportTest < ActiveSupport::TestCase
         .with(Import::Recording::UnimportedWarning.new(Import::Recording::File.new(@f1)))
       ExceptionNotifier
         .expects(:notify_exception)
-        .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f4)), instance_of(Hash))
+        .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f5)), instance_of(Hash))
 
       assert_difference('Show.count', 1) do
         assert_difference('Broadcast.count', 2) do
@@ -47,13 +52,15 @@ class ImportTest < ActiveSupport::TestCase
     touch('2013-06-19T080000+0200_060_imported.mp3')
     touch('2013-06-19T090000+0200_060_imported.mp3')
     @f1 = file('2013-06-10T100000+0200_002.mp3') # old unimported
-    @f2 = file('2013-06-19T100600+0200_002.mp3')
-    @f3 = file('2013-06-19T100800+0200_002.mp3')
-    @f4 = file('2013-06-19T101000+0200_002.mp3')
+    @f2 = file('2013-06-19T095800+0200_002.mp3')
+    @f3 = file('2013-06-19T100600+0200_002.mp3')
+    @f4 = file('2013-06-19T100800+0200_002.mp3')
+    @f5 = file('2013-06-19T101000+0200_002.mp3')
     AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f1, 120)
     AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f2, 120)
-    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f3, 130)
-    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f4, 110)
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f3, 120)
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f4, 130)
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f5, 110)
   end
 
   def build_airtime_entries

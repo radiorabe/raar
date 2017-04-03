@@ -2,7 +2,8 @@ module Import
   # A simple data holder for a single broadcast.
   class BroadcastMapping
 
-    attr_reader :show, :broadcast
+    attr_accessor :show
+    attr_reader :broadcast
 
     delegate :started_at, :finished_at, :duration,
              to: :broadcast, allow_nil: true
@@ -75,7 +76,7 @@ module Import
 
     def fetch_show(attrs = {})
       Show.where(name: attrs.fetch(:name)).first_or_initialize.tap do |show|
-        show.attributes = attrs
+        show.details ||= attrs[:details]
       end
     end
 

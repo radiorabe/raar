@@ -7,6 +7,8 @@ module Import
       # corresponding recordings.
       class Base
 
+        DURATION_TOLERANCE = 5.minutes
+
         include Loggable
 
         attr_reader :recordings
@@ -14,16 +16,24 @@ module Import
         def initialize(recordings)
           check_intervals(recordings)
           @recordings = recordings.sort_by(&:started_at)
-          @unmapped_recordings = @recordings.clone
         end
 
         def run
-          build_mappings.each { |m| add_corresponding_recordings(m) }.tap do |_|
-            warn_for_unmapped_recordings
+          return [] if recordings.blank?
+
+          build_allover_mappings.tap do |mappings|
+            mappings.each { |m| add_corresponding_recordings(m) }
           end
         end
 
         private
+
+        def build_allover_mappings
+          fill_gaps_with_default_show(build_mappings,
+                                      recordings.first.started_at,
+                                      recordings.last.finished_at)
+            .compact
+        end
 
         def build_mappings
           raise(NotImplementedError)
@@ -41,16 +51,49 @@ module Import
 
         def add_corresponding_recordings(mapping)
           recordings.each do |r|
-            if mapping.add_recording_if_overlapping(r)
-              @unmapped_recordings.delete(r)
-            end
+            mapping.add_recording_if_overlapping(r)
           end
         end
 
-        def warn_for_unmapped_recordings
-          if @unmapped_recordings.present?
-            warn("No corresponding broadcasts found for the following recordings:\n" +
-                 @unmapped_recordings.collect(&:path).join("\n"))
+        def fill_gaps_with_default_show(mappings, cut, fin)
+          [].tap do |all|
+            mappings.each do |m|
+              if m.started_at > cut + DURATION_TOLERANCE
+                all << handle_broadcast_gap(cut, m.started_at)
+              end
+              all << m
+              cut = m.finished_at
+            end
+            all << handle_broadcast_gap(cut, fin) if fin > cut + DURATION_TOLERANCE
+          end
+        end
+
+        def handle_broadcast_gap(started_at, finished_at)
+          at_period = "from #{I18n.l(started_at)} to #{I18n.l(finished_at, format: :time)}"
+          if default_show
+            warn("Creating default broadcast #{at_period}.")
+            build_default_mapping(started_at, finished_at)
+          else
+            warn("No broadcast found #{at_period}.")
+            nil
+          end
+        end
+
+        def build_default_mapping(started_at, finished_at)
+          Import::BroadcastMapping.new.tap do |mapping|
+            mapping.show = default_show
+            mapping.assign_broadcast(
+              label: default_show.name,
+              started_at: started_at,
+              finished_at: finished_at
+            )
+          end
+        end
+
+        def default_show
+          @default_show ||= begin
+            id = Rails.application.secrets.import_default_show_id
+            id.present? && Show.find(id)
           end
         end
 

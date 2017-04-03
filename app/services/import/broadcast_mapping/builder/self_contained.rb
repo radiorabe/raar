@@ -35,18 +35,15 @@ module Import
 
         def assign_show(mapping, broadcast_recordings)
           mapping.assign_show(
-            name: fetch_show_name(broadcast_recordings.first),
-            details: nil
+            name: fetch_show_name(broadcast_recordings.first)
           )
         end
 
         def assign_broadcast(mapping, broadcast_recordings)
           mapping.assign_broadcast(
             label: fetch_show_name(broadcast_recordings.first),
-            details: nil,
             started_at: broadcast_recordings.first.started_at,
-            finished_at: broadcast_recordings.last.finished_at,
-            people: nil
+            finished_at: broadcast_recordings.last.finished_at
           )
         end
 

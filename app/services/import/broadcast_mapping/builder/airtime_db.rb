@@ -14,7 +14,7 @@ module Import
         end
 
         def show_instances
-          @show_instances ||= recordings.present? ? fetch_show_instances : []
+          recordings.present? ? fetch_show_instances : []
         end
 
         def build_broadcast_mapping(instance)
