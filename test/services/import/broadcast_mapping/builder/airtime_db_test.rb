@@ -52,7 +52,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     morgen_map = mappings.first
     assert_equal morgen.name, morgen_map.show.name
     assert_equal morgen.description, morgen_map.show.details
-    assert morgen_map.show.new_record?
+    assert morgen_map.show.persisted?
     assert_equal morgen.name, morgen_map.broadcast.label
     assert_equal morgen.description, morgen_map.broadcast.details
     assert_equal Time.zone.local(2016, 1, 1, 8), morgen_map.broadcast.started_at

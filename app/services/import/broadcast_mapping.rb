@@ -75,8 +75,8 @@ module Import
     end
 
     def fetch_show(attrs = {})
-      Show.where(name: attrs.fetch(:name)).first_or_initialize.tap do |show|
-        show.details ||= attrs[:details]
+      Show.where(name: attrs.fetch(:name)).first_or_create.tap do |show|
+        show.details = attrs[:details] if attrs[:details].present?
       end
     end
 

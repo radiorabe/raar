@@ -28,7 +28,7 @@ class ImportTest < ActiveSupport::TestCase
         .expects(:notify_exception)
         .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f5)), instance_of(Hash))
 
-      assert_difference('Show.count', 1) do
+      assert_difference('Show.count', 2) do
         assert_difference('Broadcast.count', 2) do
           assert_difference('AudioFile.count', 6) do
             Import.run

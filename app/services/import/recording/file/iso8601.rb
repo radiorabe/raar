@@ -11,7 +11,7 @@ module Import
         IMPORTED_SUFFIX = '_imported'.freeze
         DATE_GLOB = '[12][019][0-9][0-9]-[0-1][0-9]-[0-3][0-9]'.freeze # yyyy-mm-dd
         TIME_GLOB = '[0-2][0-9][0-5][0-9][0-5][0-9]{+,-}[0-2][0-9][0-5]0'.freeze # HHMMSS+ZZZZ
-        DURATION_GLOB = '[0-9][0-9][0-9]'.freeze # ddd, minutes
+        DURATION_GLOB = DIGIT_GLOB * 3 # ddd, minutes
         FILENAME_GLOB = "#{DATE_GLOB}T#{TIME_GLOB}_#{DURATION_GLOB}".freeze
 
         self.pending_glob = FILENAME_GLOB + '.*'

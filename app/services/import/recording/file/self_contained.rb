@@ -3,17 +3,7 @@ module Import
     module File
       class SelfContained < Base
 
-        class_attribute :extension
-
         attr_reader :show_name
-
-        class << self
-
-          def pending_glob
-            "*.#{extension}"
-          end
-
-        end
 
         def sequel?(other)
           other &&

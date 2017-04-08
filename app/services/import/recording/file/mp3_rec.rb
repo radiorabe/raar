@@ -6,8 +6,8 @@ module Import
       # mp3rec-05-5-20170203-090000-3600-sec-der_morgen.wav.mp3
       class Mp3Rec < SelfContained
 
-        self.extension = 'mp3'
         self.lossy = true
+        self.pending_glob = "*#{DIGIT_GLOB * 8}-#{DIGIT_GLOB * 6}-#{DIGIT_GLOB * 4}-sec-*.mp3"
 
         def started_at
           @started_at ||= Time.zone.parse(filename_parts[1].tr('-', ' '))

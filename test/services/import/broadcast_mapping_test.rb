@@ -10,7 +10,7 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
     assert_equal 'Morgen', show.name
     assert_equal 'La mañana', show.details
     assert_equal profiles(:default), show.profile
-    assert show.new_record?
+    assert show.persisted?
   end
 
   test '#assign_show_attrs uses an existing show' do
@@ -22,12 +22,12 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
     assert_equal shows(:info), show
   end
 
-  test '#assign_show_attrs uses an existing show and keeps details' do
+  test '#assign_show_attrs uses an existing show and updates details' do
     shows(:info).update!(details: 'RaBe Info')
     mapping.assign_show(name: 'Info', details: 'Info')
 
     assert_equal 'Info', show.name
-    assert_equal 'RaBe Info', show.details
+    assert_equal 'Info', show.details
     assert_equal profiles(:important), show.profile
     assert_equal shows(:info), show
   end

@@ -7,6 +7,8 @@ module Import
       # time and duration).
       class Base
 
+        DIGIT_GLOB = '[0-9]'.freeze
+
         include Loggable
 
         class_attribute :pending_glob, :imported_glob, :lossy
