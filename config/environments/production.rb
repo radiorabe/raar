@@ -39,7 +39,7 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   # Use a different logger for distributed setups.
-  case ENV['RAAR_LOG'].to_s.downcase
+  case ENV['RAAR_LOG'].to_s.downcase.strip
   when'syslog'
     require 'syslog/logger'
     config.logger =
@@ -50,6 +50,13 @@ Rails.application.configure do
       end
   when 'stdout'
     config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+  when /.+/
+    file = ENV['RAAR_LOG'].to_s
+    FileUtils.mkdir_p(File.dirname(file))
+    config.logger = ActiveSupport::TaggedLogging.new(Logger.new(file))
+    config.logger.formatter = proc do |severity, datetime, progname, msg|
+      "#{severity} [#{datetime.strftime('%Y-%m-%d %H:%M:%S.%6N')}]: #{msg}\n"
+    end
   end
 
   # Use a different cache store in production.
