@@ -4,13 +4,13 @@
 
 The following software must be installed on your system:
 
-* ruby >= 2.2.0
-* postgresql
-* ffmpeg >= 2.7.0
-* apache httpd
+* Ruby >= 2.2.0
+* PostgreSQL
+* Ffmpeg >= 2.7.0
+* Apache HTTPD
 * mod_xsendfile
 * [mod_passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/apache/oss/el7/install_passenger.html)
-* freeipa
+* FreeIPA
 
 ## Configuration
 
@@ -91,9 +91,10 @@ In order for the authentication to work with username and password, Free IPA may
 
 If no Free IPA is configured, authentication is still possible by API token. The users must be created and the tokens must be distributed manually in this case.
 
+
 ## Deployement via Capistrano
 
-### Servers-side
+### Server-side
 
 Perform the following steps on a CentOS or the corresponding ones on a different system:
 
@@ -130,6 +131,10 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 
       DocumentRoot /var/www/raar-ui
 
+      <Directory "/var/www/raar-ui">
+          AllowOverride all
+      </Directory>
+
       Alias /api /var/www/raar/current/public
       <Location /api>
           PassengerBaseURI /api
@@ -161,7 +166,55 @@ Perform the following steps on a CentOS or the corresponding ones on a different
   systemctl enable --now raar-downgrade.timer
   ```
 
-* View logs with `journalctl -u "raar-*" -f`.
+To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication and do:
+
+* `yum install mod_auth_gssapi mod_authnz_pam mod_intercept_form_submit sssd-dbus mod_lookup_identity`
+* Create `/etc/pam.d/raar` with the following contents:
+
+  ```bash
+  auth     required  pam_sss.so
+  account  required  pam_sss.so
+  ```
+
+* Add the following to `/etc/httpd/conf.d/raar.conf`:
+
+  ```xml
+  LoadModule auth_gssapi_module modules/mod_auth_gssapi.so
+  LoadModule authnz_pam_module modules/mod_authnz_pam.so
+  LoadModule intercept_form_submit_module modules/mod_intercept_form_submit.so
+  LoadModule lookup_identity_module modules/mod_lookup_identity.so
+
+  <Location /api/login>
+    <If "%{REQUEST_METHOD} == 'GET'">
+      AuthType GSSAPI
+      AuthName "Kerberos Login"
+      GssapiCredStore keytab:/etc/http.keytab
+      require pam-account raar
+      ErrorDocument 401 "{ errors: 'Not authenticated' }"
+    </If>
+  </Location>
+
+  <Location /api/login>
+    <If "%{REQUEST_METHOD} == 'POST'">
+      InterceptFormPAMService raar
+      InterceptFormLogin username
+      InterceptFormPassword password
+      InterceptFormClearRemoteUserForSkipped on
+      InterceptFormPasswordRedact on
+      InterceptFormLoginRealms <your.realm.org> ''
+    </If>
+
+    LookupUserAttr givenname REMOTE_USER_FIRST_NAME
+    LookupUserAttr sn REMOTE_USER_LAST_NAME
+    LookupUserGroups REMOTE_USER_GROUPS ","
+  </Location>
+  ```
+
+* `setsebool -P allow_httpd_mod_auth_pam 1`.
+* Restart Apache: `systemctl restart httpd`.
+
+View logs with `journalctl -u "raar-*" -f` and `journalctl -u httpd -f`.
+
 
 ### Developer-side
 
