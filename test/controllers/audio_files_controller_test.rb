@@ -11,12 +11,20 @@ class AudioFilesControllerTest < ActionController::TestCase
 
     assert_equal [320, 192, 96], json_attrs(:bitrate)
     assert_equal %w(best high low), json_attrs('playback_format')
+    token = users(:speedee).api_token.gsub('$', '%24')
+    json_links = json['data'].map { |s| s['links'] }
     assert_equal ['/audio_files/2013/04/10/110000_best.mp3',
                   '/audio_files/2013/04/10/110000_high.mp3',
                   '/audio_files/2013/04/10/110000_low.mp3'],
-                  json_attrs(:url)
-    json_links = json['data'].collect { |s| s['links']['self'] }
-    assert_equal json_attrs(:url), json_links
+                 json_links.map { |l| l['self'] }
+    assert_equal ["/audio_files/2013/04/10/110000_best.mp3?api_token=#{token}",
+                  '/audio_files/2013/04/10/110000_high.mp3',
+                  '/audio_files/2013/04/10/110000_low.mp3'],
+                 json_links.map { |l| l['play'] }
+    assert_equal ["/audio_files/2013/04/10/110000_best.mp3?api_token=#{token}&download=true",
+                  "/audio_files/2013/04/10/110000_high.mp3?api_token=#{token}&download=true",
+                  "/audio_files/2013/04/10/110000_low.mp3?api_token=#{token}&download=true"],
+                 json_links.map { |l| l['download'] }
   end
 
   test 'GET index returns public list for broadcast for guest user' do
@@ -24,9 +32,15 @@ class AudioFilesControllerTest < ActionController::TestCase
 
     assert_equal [192, 96], json_attrs(:bitrate)
     assert_equal %w(high low), json_attrs('playback_format')
+    json_links = json['data'].map { |s| s['links'] }
     assert_equal ['/audio_files/2013/04/10/110000_high.mp3',
                   '/audio_files/2013/04/10/110000_low.mp3'],
-                  json_attrs(:url)
+                 json_links.map { |l| l['self'] }
+    assert_equal ['/audio_files/2013/04/10/110000_high.mp3',
+                  '/audio_files/2013/04/10/110000_low.mp3'],
+                 json_links.map { |l| l['play'] }
+    assert_equal [nil, nil],
+                 json_links.map { |l| l['download'] }
   end
 
   test 'GET index without max_public_bitrate returns complete list for broadcast for guest user' do
@@ -36,10 +50,15 @@ class AudioFilesControllerTest < ActionController::TestCase
 
     assert_equal [320, 192, 96], json_attrs(:bitrate)
     assert_equal %w(best high low), json_attrs('playback_format')
+    json_links = json['data'].map { |s| s['links'] }
     assert_equal ['/audio_files/2013/04/10/110000_best.mp3',
                   '/audio_files/2013/04/10/110000_high.mp3',
                   '/audio_files/2013/04/10/110000_low.mp3'],
-                  json_attrs(:url)
+                 json_links.map { |l| l['self'] }
+    assert_equal ['/audio_files/2013/04/10/110000_best.mp3',
+                  '/audio_files/2013/04/10/110000_high.mp3',
+                  '/audio_files/2013/04/10/110000_low.mp3'],
+                 json_links.map { |l| l['play'] }
   end
 
   test 'GET show for non-public file returns 401' do

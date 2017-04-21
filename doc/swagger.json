@@ -2026,9 +2026,6 @@
             "channels": {
               "type": "integer"
             },
-            "url": {
-              "type": "string"
-            },
             "playback_format": {
               "type": "string"
             }
@@ -2037,6 +2034,16 @@
         "links": {
           "properties": {
             "self": {
+              "type": "string",
+              "format": "url",
+              "readOnly": true
+            },
+            "play": {
+              "type": "string",
+              "format": "url",
+              "readOnly": true
+            },
+            "download": {
               "type": "string",
               "format": "url",
               "readOnly": true
