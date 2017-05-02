@@ -5,7 +5,7 @@
 The following software must be installed on your system:
 
 * Ruby >= 2.2.0
-* PostgreSQL
+* PostgreSQL >= 8.0
 * Ffmpeg >= 2.7.0
 * Apache HTTPD
 * mod_xsendfile
@@ -92,7 +92,7 @@ In order for the authentication to work with username and password, Free IPA may
 If no Free IPA is configured, authentication is still possible by API token. The users must be created and the tokens must be distributed manually in this case.
 
 
-## Deployement via Capistrano
+## Deployement with Apache/Passenger and Capistrano
 
 ### Server-side
 
@@ -217,11 +217,20 @@ To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication a
 * `setsebool -P allow_httpd_mod_auth_pam 1`.
 * Restart Apache: `systemctl restart httpd`.
 
-View logs with `journalctl -u "raar-*" -f` and `journalctl -u httpd -f`.
+
+In order to configure SELinux, do:
+
+* `semanage fcontext -a -t httpd_sys_rw_content_t /var/www/raar/shared/log/`
+* `semanage fcontext -a -t httpd_sys_script_exec_t "/var/www/raar/shared/bundle/ruby/extensions/x86_64-linux(/.*)?"`
+* `restorecon -Rv /var/www/raar/shared/log`
+* `restorecon -Rv /var/www/raar/shared/bundle/ruby/extensions/x86_64-linux`
+
+
+View systemd logs with `journalctl -u "raar-*" -f` and `journalctl -u httpd -f`.
 
 
 ### Developer-side
 
 * Copy `config/deploy/production.example.rb` to `config/deploy/production.rb` and add your server.
 * Add the `raar` user created above as well.
-* Run `cap production deploy`
+* Run `cap production deploy` in the raar home folder on your machine.
