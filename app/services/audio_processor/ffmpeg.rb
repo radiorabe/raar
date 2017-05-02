@@ -112,7 +112,7 @@ module AudioProcessor
 
     def metadata_args(tags)
       tags.slice(*METADATA_TAGS.keys).collect do |tag, value|
-        %W(-metadata #{METADATA_TAGS[tag]}=#{value})
+        %W[-metadata #{METADATA_TAGS[tag]}=#{value}]
       end.flatten
     end
 

@@ -42,7 +42,7 @@ class DowngradeAction < ActiveRecord::Base
   private
 
   def assert_decreasing_actions
-    %w(bitrate channels).each do |attr|
+    %w[bitrate channels].each do |attr|
       errors.add(attr, :must_decrease) if non_decreasing_actions(attr).exists?
     end
   end

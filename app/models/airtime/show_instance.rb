@@ -55,7 +55,7 @@ module Airtime
     # A little hack to avoid DangerousAttributeErrors with the #record column.
     # Should not create issues as we do not write to Airtime anyways.
     def self.dangerous_attribute_method?(name)
-      !%w(record_changed?).include?(name.to_s) && super
+      !%w[record_changed?].include?(name.to_s) && super
     end
 
   end

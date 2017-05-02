@@ -125,33 +125,39 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 
   ```xml
   <VirtualHost *:80>
+    ServerName raar
+    ServerAlias archiv.rabe.ch
 
-      ServerName raar
-      ServerAlias archiv.rabe.ch
+    Redirect permanent / https://archiv.rabe.ch/
+  </VirtualHost>
 
-      DocumentRoot /var/www/raar-ui
+  <VirtualHost _default_:443>
+    ServerName archiv.rabe.ch
+    NSSNickname archiv.rabe.ch
 
-      <Directory "/var/www/raar-ui">
-          AllowOverride all
-      </Directory>
+    DocumentRoot /var/www/raar-ui
 
-      Alias /api /var/www/raar/current/public
-      <Location /api>
-          PassengerBaseURI /api
-          PassengerAppRoot /var/www/raar/current
-          PassengerRuby /opt/rh/rh-ruby22/root/usr/bin/ruby
-          PassengerMinInstances 2
-      </Location>
+    <Directory "/var/www/raar-ui">
+      AllowOverride all
+    </Directory>
 
-      <Directory "/var/www/raar/current/public/">
-          AllowOverride None
-          Allow from all
-          Options -MultiViews
-          XSendFile on
-          XSendFilePath /path/to/archive/home
-      </Directory>
+    Alias /api /var/www/raar/current/public
+    <Location /api>
+        PassengerBaseURI /api
+        PassengerAppRoot /var/www/raar/current
+        PassengerRuby /opt/rh/rh-ruby22/root/usr/bin/ruby
+        PassengerMinInstances 2
+    </Location>
 
-      Include conf.d/raar_env.inc
+    <Directory "/var/www/raar/current/public/">
+        AllowOverride None
+        Allow from all
+        Options -MultiViews
+        XSendFile on
+        XSendFilePath /path/to/archive/home
+    </Directory>
+
+    Include conf.d/raar_env.inc
 
   </VirtualHost>
   ```
@@ -192,9 +198,7 @@ To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication a
       require pam-account raar
       ErrorDocument 401 "{ errors: 'Not authenticated' }"
     </If>
-  </Location>
 
-  <Location /api/login>
     <If "%{REQUEST_METHOD} == 'POST'">
       InterceptFormPAMService raar
       InterceptFormLogin username

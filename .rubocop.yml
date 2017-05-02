@@ -13,6 +13,9 @@ AllCops:
 
 Rails:
   Enabled: true
+  
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
 
 # Long Blocks used for swagger documentation, otherwise handled by method length.
 Metrics/BlockLength:
@@ -45,6 +48,9 @@ Style/EmptyMethod:
 
 Style/GuardClause:
   MinBodyLength: 3
+
+Style/SymbolArray:
+  Enabled: false
 
 Rails/Delegate:
   Enabled: false

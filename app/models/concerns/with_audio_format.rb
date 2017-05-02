@@ -11,7 +11,7 @@ module WithAudioFormat
 
     def composed_of_audio_format(bitrate_attr = :bitrate, channels_attr = :channels)
       composed_of :audio_format,
-                  mapping: [%w(codec codec),
+                  mapping: [%w[codec codec],
                             [bitrate_attr, :bitrate],
                             [channels_attr, :channels]]
 

@@ -2,7 +2,7 @@ class BroadcastsController < ListController
 
   TIME_PARTS = [:year, :month, :day, :hour, :min, :sec].freeze
 
-  self.search_columns = %w(label people details shows.name shows.details)
+  self.search_columns = %w[label people details shows.name shows.details]
 
   before_action :assert_params_given, only: :index
 

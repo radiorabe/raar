@@ -26,7 +26,7 @@ class AudioPath
   end
 
   def timestamp_params
-    %w(year month day hour min sec).each_with_object({}) do |key, hash|
+    %w[year month day hour min sec].each_with_object({}) do |key, hash|
       hash[key.to_sym] = format('%02d', timestamp.send(key))
     end
   end

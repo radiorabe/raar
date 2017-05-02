@@ -1,6 +1,6 @@
 class ShowsController < ListController
 
-  self.search_columns = %w(name details)
+  self.search_columns = %w[name details]
 
   self.sort_mappings = { last_broadcast_at: 'MAX(broadcasts.started_at)' }
 

@@ -4,7 +4,7 @@ module Admin
     include Admin::Authenticatable
     include Admin::CrudSwag
 
-    self.search_columns = %w(name details)
+    self.search_columns = %w[name details]
 
     crud_swagger_paths(route_prefix: '/admin',
                        data_class: 'Admin::Show',

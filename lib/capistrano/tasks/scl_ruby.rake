@@ -22,7 +22,7 @@ end
 
 namespace :load do
   task :defaults do
-    set :scl_map_bins, %w(gem rake ruby bundle)
+    set :scl_map_bins, %w[gem rake ruby bundle]
     set :scl_ruby_home, '/opt/rh/rh-ruby22'
   end
 end
