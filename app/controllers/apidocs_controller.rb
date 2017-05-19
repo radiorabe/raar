@@ -10,6 +10,7 @@ class ApidocsController < ApplicationController
     ShowsController,
     Admin::ArchiveFormatsController,
     Admin::AudioEncodingsController,
+    Admin::BroadcastsController,
     Admin::DowngradeActionsController,
     Admin::PlaybackFormatsController,
     Admin::ProfilesController,

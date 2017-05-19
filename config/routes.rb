@@ -29,6 +29,8 @@ Rails.application.routes.draw do
 
     resources :audio_encodings, only: :index
 
+    resources :broadcasts, only: [:show, :update]
+
     resources :profiles do
       resources :archive_formats do
         resources :downgrade_actions
