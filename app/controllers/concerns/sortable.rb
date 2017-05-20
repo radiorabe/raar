@@ -32,8 +32,16 @@ module Sortable
   def sort_expression
     sort, order = sort_with_order
     col = sort_mappings_with_indifferent_access[sort] ||
-          "#{model_class.table_name}.#{sort}"
+          default_sort_expression(sort)
     "#{col} #{order}"
+  end
+
+  def default_sort_expression(column)
+    expression = "#{model_class.table_name}.#{column}"
+    if [:string, :text].include?(model_class.columns_hash[column].try(:type))
+      expression = "LOWER(#{expression})"
+    end
+    expression
   end
 
   # Split the sort param into sort field and order.
