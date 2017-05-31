@@ -27,6 +27,7 @@ module Auth
        h['REMOTE_USER_GROUPS'],
        h['REMOTE_USER_FIRST_NAME'],
        h['REMOTE_USER_LAST_NAME']]
+        .map { |str| str && str.force_encoding('UTF-8') }
     end
 
   end

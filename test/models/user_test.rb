@@ -31,7 +31,7 @@ class UserTest < ActiveSupport::TestCase
 
   test '#admin? is true if all groups are present' do
     user = users(:admin)
-    user.groups = 'root, admin'
+    user.groups = 'root, admins'
     assert user.admin?
   end
 
@@ -49,7 +49,7 @@ class UserTest < ActiveSupport::TestCase
 
   test '#group_list returns array' do
     user = users(:admin)
-    assert_equal %w(admin grooveexpress), user.group_list
+    assert_equal %w(admins grooveexpress), user.group_list
   end
 
   test '#groups= serializes arrays' do

@@ -16,7 +16,7 @@
 admin:
   username: admin
   api_key: <%= SecureRandom.base58(24) %>
-  groups: admin, grooveexpress
+  groups: admins, grooveexpress
 
 speedee:
   username: speedee
