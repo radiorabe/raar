@@ -92,9 +92,7 @@ In order for the authentication to work with username and password, Free IPA may
 If no Free IPA is configured, authentication is still possible by API token. The users must be created and the tokens must be distributed manually in this case.
 
 
-## Deployement with Apache/Passenger and Capistrano
-
-### Server-side
+## Deployment with Apache/Passenger
 
 Perform the following steps on a CentOS or the corresponding ones on a different system:
 
@@ -229,8 +227,39 @@ In order to configure SELinux, do:
 View systemd logs with `journalctl -u "raar-*" -f` and `journalctl -u httpd -f`.
 
 
-### Developer-side
+When everything on the server is ready, the application may finally be deployed. We suggest to deploy with Capistrano, but a manual deployment of pre-packaged builds is also possible.
 
-* Copy `config/deploy/production.example.rb` to `config/deploy/production.rb` and add your server.
+
+### Automatic deploy with Capistrano (from developer machine)
+
+* Copy `config/deploy/production.example.rb` to `config/deploy/production.rb` and add your production server.
 * Add the `raar` user created above as well.
 * Run `cap production deploy` in the raar home folder on your machine.
+
+
+### Manually install pre-packaged builds
+
+To conform with Capistrano deployments, the following steps are required:
+
+* Create a new release folder: ``mkdir /var/www/raar/releases/`date +%Y%m%d%H%M%S` ``
+* `cd /var/www/raar/releases/<created-folder>`
+* Explode the tar package there: `tar xzf /path/to/raar.tar.gz`
+* Link the required shared folders and files:
+
+  ```bash
+  ln -s ../../shared/log .
+  ln -s ../../../shared/tmp/pids tmp/
+  ln -s ../../../shared/tmp/cache tmp/
+  ln -s ../../../shared/tmp/sockets tmp/
+  ln -s ../../../shared/public/system public/
+  ln -s ../../../shared/vendor/bundle vendor/
+  ln -s ../../../shared/config/show_names.yml config/
+  ```
+
+* Install / update the Ruby gems: `source /opt/rh/rh-ruby22/enable && bundle install --deployment --quiet --local`
+* Migrate the database: `source /opt/rh/rh-ruby22/enable && bundle exec rake db:migrate`
+* `cd /var/www/raar`
+* Change the current link to the new release folder: `ln -sf releases/<created-folder> current`
+* Restart Passenger: `touch current/tmp/restart.txt`
+
+When Capistrano is not used at all, the tarball may be directly exploded into `/var/www/raar/current`. The special release folder is not required and all the linking steps may be omitted.
