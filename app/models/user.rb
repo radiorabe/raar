@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
 
   has_secure_token :api_key
 
-  validates :username, presence: true, uniqueness: true
+  validates :username, presence: true, uniqueness: { case_sensitive: false }
 
   scope :list, -> { order(:last_name, :first_name, :username) }
 

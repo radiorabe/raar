@@ -15,7 +15,7 @@ class Profile < ActiveRecord::Base
   has_many :shows, dependent: :restrict_with_error
   has_many :archive_formats, dependent: :destroy
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: { case_sensitive: false }
   validates :default, inclusion: [true, false]
   validate :assert_exactly_one_default_profile_exists
 

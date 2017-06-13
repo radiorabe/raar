@@ -13,7 +13,7 @@ class Show < ActiveRecord::Base
 
   has_many :broadcasts, dependent: :restrict_with_error
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: { case_sensitive: false }
 
   before_validation :set_default_profile_id
 
