@@ -101,9 +101,8 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 * `usermod -a -G raar apache`
 * `chmod g+w /var/www/raar`
 * Add your SSH public key to `/var/www/raar/.ssh/authorized_keys`.
-* `yum install gcc glibc-headers rh-ruby22-ruby-devel httpd mod_xsendfile postgresql-devel libxml2-devel libxslt-devel ffmpeg`
+* `yum install gcc glibc-headers rh-ruby22-ruby-devel rh-ruby22-rubygem-bundler httpd mod_xsendfile postgresql-devel libxml2-devel libxslt-devel ffmpeg`
 * Add `/opt/rh/rh-ruby22/root/usr/local/bin` to PATH in `/opt/rh/rh-ruby22/enable`
-* `gem install bundler --no-ri --no-rdoc`
 * Install Passenger according to these [instructions](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/apache/oss/el7/install_passenger.html).
 * Build Passenger native support: `/usr/bin/scl enable rh-ruby22 "ruby /usr/bin/passenger-config build-native-support"`
 * Create `/var/www/raar/.env` with all environment variables required for configuration.
@@ -161,14 +160,7 @@ Perform the following steps on a CentOS or the corresponding ones on a different
   ```
 
 * Restart Apache: `systemctl restart httpd`.
-* Deploy the application to `/var/www/raar/current` as described below.
-* Copy all files from `config/systemd` to `/etc/systemd/system`.
-* Enable and start Systemd timers for the import and downgrade services:
 
-  ```bash
-  systemctl enable --now raar-import.timer
-  systemctl enable --now raar-downgrade.timer
-  ```
 
 To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication and do:
 
@@ -214,7 +206,12 @@ To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication a
 
 * `setsebool -P allow_httpd_mod_auth_pam 1`.
 * Restart Apache: `systemctl restart httpd`.
-
+* Add empty configuration files for raar:
+  ```bash
+  mkdir -p /var/www/raar/shared/config/initializers
+  touch /var/www/raar/shared/config/show_names.yml
+  touch /var/www/raar/shared/config/initializers/exception_notification.rb
+  ```
 
 In order to configure SELinux, do:
 
@@ -263,3 +260,15 @@ To conform with Capistrano deployments, the following steps are required:
 * Restart Passenger: `touch current/tmp/restart.txt`
 
 When Capistrano is not used at all, the tarball may be directly exploded into `/var/www/raar/current`. The special release folder is not required and all the linking steps may be omitted.
+
+
+### Deploy the systemd timers
+
+* Deploy the application to `/var/www/raar/current` as described above.
+* Copy all files from `/var/www/raar/current/config/systemd` to `/etc/systemd/system/`.
+* Enable and start systemd timers for the import and downgrade services:
+
+  ```bash
+  systemctl enable --now raar-import.timer
+  systemctl enable --now raar-downgrade.timer
+  ```
