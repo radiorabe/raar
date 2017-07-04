@@ -40,9 +40,7 @@ class ArchiveFormatTest < ActiveSupport::TestCase
                                   initial_channels: 2)
     entry.codec = 'flac'
     entry.initial_bitrate = 1
-    entry.save!
-    assert_equal 'mp3', entry.reload.codec
-    assert_equal 1, entry.initial_bitrate
+    assert_not_valid entry, :codec
   end
 
 end

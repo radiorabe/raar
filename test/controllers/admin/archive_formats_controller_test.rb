@@ -63,6 +63,17 @@ module Admin
       assert_equal 224, entry.initial_bitrate
     end
 
+    test 'PATCH update fails for changed codec' do
+      patch :update,
+            params: {
+              id: entry.id,
+              profile_id: profiles(:default).id,
+              data: { attributes: { codec: 'flac', initial_bitrate: 1 } } }
+      assert_response 422
+      assert_match /must not be changed/, response.body
+      assert_equal 'mp3', entry.reload.codec
+    end
+
     test 'PATCH update fails for invalid params' do
       patch :update,
             params: {
