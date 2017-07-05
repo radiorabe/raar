@@ -62,4 +62,30 @@ class DowngradeActionTest < ActiveSupport::TestCase
     assert_not_valid action, :channels
   end
 
+  test 'bitrate and channels must not be zero' do
+    af = archive_formats(:unimportant_mp3)
+    af.downgrade_actions.destroy_all
+    action = af.downgrade_actions.build(months: 24, bitrate: 0, channels: 2)
+    assert_not_valid action, :bitrate
+    action.bitrate = 160 # equal
+    action.channels = 0
+    assert_not_valid action, :channels
+    action.bitrate = nil
+    action.channels = nil
+    assert_valid action
+  end
+
+  test 'delete must be last' do
+    af = archive_formats(:important_mp3)
+    action = af.downgrade_actions.build(months: 6, bitrate: nil, channels: nil) # delete before others
+    assert_not_valid action, :base
+    action.months = 24
+    assert_valid action
+    action.save!
+    action.months = 18
+    assert_valid action
+    action.months = 8
+    assert_not_valid action, :base
+  end
+
 end
