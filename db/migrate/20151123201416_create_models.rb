@@ -37,7 +37,7 @@ class CreateModels < ActiveRecord::Migration[5.0]
     end
 
     create_table :playback_formats do |t|
-      t.string :name, null: false, index: { unique: true }
+      t.string :name, null: false
       t.text :description
       t.string :codec, null: false
       t.integer :bitrate, null: false

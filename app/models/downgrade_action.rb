@@ -64,8 +64,7 @@ class DowngradeAction < ActiveRecord::Base
   def later_actions
     scope = DowngradeAction.where(archive_format_id: archive_format_id)
                            .where('months > ?', months)
-    scope = scope.where('id <> ?', id) if persisted?
-    scope
+    persisted? ? scope.where.not(id: id) : scope
   end
 
 end
