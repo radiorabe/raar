@@ -65,7 +65,6 @@ ActiveRecord::Schema.define(version: 20151123201416) do
     t.integer  "channels",    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["name"], name: "index_playback_formats_on_name", unique: true
   end
 
   create_table "profiles", force: :cascade do |t|

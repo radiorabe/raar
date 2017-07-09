@@ -1,4 +1,4 @@
-class CreateModels < ActiveRecord::Migration
+class CreateModels < ActiveRecord::Migration[5.0]
   def change
     create_table :users do |t|
       t.string :username, null: false, index: { unique: true }
@@ -37,7 +37,7 @@ class CreateModels < ActiveRecord::Migration
     end
 
     create_table :playback_formats do |t|
-      t.string :name, null: false, index: { unique: true }
+      t.string :name, null: false
       t.text :description
       t.string :codec, null: false
       t.integer :bitrate, null: false
