@@ -162,7 +162,7 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 * Restart Apache: `systemctl restart httpd`.
 
 
-To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication and do:
+  To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication and do:
 
 * `yum install mod_auth_gssapi mod_authnz_pam mod_intercept_form_submit sssd-dbus mod_lookup_identity`
 * Create `/etc/pam.d/raar` with the following contents:
@@ -205,6 +205,7 @@ To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication a
   ```
 
 * `setsebool -P allow_httpd_mod_auth_pam 1`.
+* `setsebool -P httpd_mod_auth_pam 1`.
 * Restart Apache: `systemctl restart httpd`.
 * Add empty configuration files for raar:
   ```bash
