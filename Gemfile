@@ -4,14 +4,12 @@ gem 'rails', '5.1.0'
 
 gem 'pg'
 
+gem 'active_model_serializers'
 gem 'exception_notification'
 gem 'jwt'
 gem 'kaminari'
 gem 'rails-i18n'
 gem 'streamio-ffmpeg'
-
-# Use ActiveModelSerializers to serialize JSON responses
-gem 'active_model_serializers'
 
 # document API with swagger
 gem 'swagger-blocks'

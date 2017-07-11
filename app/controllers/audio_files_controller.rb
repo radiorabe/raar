@@ -22,6 +22,7 @@ class AudioFilesController < ListController
 
       security http_token: []
       security api_token: []
+      security access_code: []
     end
   end
 
@@ -95,6 +96,7 @@ class AudioFilesController < ListController
 
       security http_token: []
       security api_token: []
+      security access_code: []
     end
   end
 

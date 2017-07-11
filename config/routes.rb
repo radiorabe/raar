@@ -22,14 +22,16 @@ Rails.application.routes.draw do
 
   get 'login', to: 'login#show'
   post 'login', to: 'login#create'
-  put 'login', to: 'login#update'
+  patch 'login', to: 'login#update'
 
   namespace :admin do
-    resources :users
+    resources :access_codes
 
     resources :audio_encodings, only: :index
 
     resources :broadcasts, only: [:show, :update]
+
+    resources :playback_formats
 
     resources :profiles do
       resources :archive_formats do
@@ -37,11 +39,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :playback_formats
-
     resources :shows do
       post 'merge/:target_id', to: 'shows/merge#create', on: :member
     end
+
+    resources :users
   end
 
 end

@@ -15,7 +15,8 @@ class ApplicationController < ActionController::API
   end
 
   def fetch_current_user
-    Auth::ApiToken.new(request).fetch_user
+    Auth::ApiToken.new(request).fetch_user ||
+      Auth::AccessCode.new(request).fetch_user
   end
 
 end

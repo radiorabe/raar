@@ -4,7 +4,7 @@ class LoginController < ApplicationController
     operation :get do
       key :description,
           'Get the user object of the currently logged in user. ' \
-          'The user may be identified by an API token, a JWT token or over FreeIPA.'
+          'The user may be identified by an API token, an access code, a JWT token or over FreeIPA.'
       key :tags, [:user]
 
       response_entity('User')
@@ -13,6 +13,7 @@ class LoginController < ApplicationController
       end
       security http_token: []
       security api_token: []
+      security access_code: []
       security jwt_token: []
     end
 
@@ -43,7 +44,7 @@ class LoginController < ApplicationController
       end
     end
 
-    operation :put do
+    operation :patch do
       key :description, 'Regenerates the api key of the current FreeIPA user.'
       key :tags, [:user]
 
@@ -99,6 +100,7 @@ class LoginController < ApplicationController
 
   def set_current_user
     @current_user = Auth::ApiToken.new(request).fetch_user ||
+                    Auth::AccessCode.new(request).fetch_user ||
                     Auth::Jwt.new(request).fetch_user ||
                     Auth::RemoteHeader.new(request).fetch_user
   end

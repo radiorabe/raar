@@ -25,6 +25,12 @@
       "in": "query",
       "description": "The API token may be passed as a query parameter in the URL. It may be obtained in the response body from a successfull /login request."
     },
+    "access_code": {
+      "type": "apiKey",
+      "name": "access_code",
+      "in": "query",
+      "description": "An access code may be passed as a query parameter in the URL. This manually obtained code allows a login as a guest user."
+    },
     "jwt_token": {
       "type": "basic",
       "description": "JWT token is passed as HTTP token authentication header: `Authorization: Token token=\"abc\"`. A JWT token is required for the /admin section and may be obtained in the X-Auth-Token Header from a successfull /login request as admin."
@@ -126,6 +132,11 @@
             "api_token": [
 
             ]
+          },
+          {
+            "access_code": [
+
+            ]
           }
         ]
       }
@@ -222,6 +233,11 @@
           },
           {
             "api_token": [
+
+            ]
+          },
+          {
+            "access_code": [
 
             ]
           }
@@ -411,7 +427,7 @@
     },
     "/login": {
       "get": {
-        "description": "Get the user object of the currently logged in user. The user may be identified by an API token, a JWT token or over FreeIPA.",
+        "description": "Get the user object of the currently logged in user. The user may be identified by an API token, an access code, a JWT token or over FreeIPA.",
         "tags": [
           "user"
         ],
@@ -438,6 +454,11 @@
           },
           {
             "api_token": [
+
+            ]
+          },
+          {
+            "access_code": [
 
             ]
           },
@@ -488,7 +509,7 @@
           }
         }
       },
-      "put": {
+      "patch": {
         "description": "Regenerates the api key of the current FreeIPA user.",
         "tags": [
           "user"
@@ -584,6 +605,211 @@
             }
           }
         }
+      }
+    },
+    "/admin/access_codes": {
+      "get": {
+        "description": "Returns a list of access codes.",
+        "tags": [
+          "access_code",
+          "admin"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/page_number"
+          },
+          {
+            "$ref": "#/parameters/page_size"
+          },
+          {
+            "$ref": "#/parameters/sort"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Admin::AccessCode"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
+      },
+      "post": {
+        "description": "Creates a new access code.",
+        "tags": [
+          "access_code",
+          "admin"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Attributes defining the access code to create.",
+            "required": true,
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Admin::AccessCode"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Admin::AccessCode"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/responses/unprocessable_entity"
+          }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
+      }
+    },
+    "/admin/access_codes/{id}": {
+      "get": {
+        "description": "Returns a single access code.",
+        "tags": [
+          "access_code",
+          "admin"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the access code to fetch.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Admin::AccessCode"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "description": "Updates an existing access code.",
+        "tags": [
+          "access_code",
+          "admin"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the access code to update.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Attributes defining the access code to update.",
+            "required": true,
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Admin::AccessCode"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Admin::AccessCode"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/responses/unprocessable_entity"
+          }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "description": "Deletes an existing access code.",
+        "tags": [
+          "access_code",
+          "admin"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the access code to delete.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successfull operation"
+          },
+          "422": {
+            "$ref": "#/responses/unprocessable_entity"
+          }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/profiles/{profile_id}/archive_formats": {
@@ -2269,6 +2495,38 @@
             "admin": {
               "type": "boolean",
               "readOnly": true
+            }
+          }
+        },
+        "links": {
+          "properties": {
+            "self": {
+              "type": "string",
+              "format": "url",
+              "readOnly": true
+            }
+          }
+        }
+      }
+    },
+    "Admin::AccessCode": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "string"
+        },
+        "attributes": {
+          "properties": {
+            "code": {
+              "type": "string",
+              "format": "date",
+              "readOnly": true
+            },
+            "expires_at": {
+              "type": "string",
+              "format": "date"
             }
           }
         },

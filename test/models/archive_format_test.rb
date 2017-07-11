@@ -2,14 +2,18 @@
 #
 # Table name: archive_formats
 #
-#  id                 :integer          not null, primary key
-#  profile_id         :integer          not null
-#  codec              :string           not null
-#  initial_bitrate    :integer          not null
-#  initial_channels   :integer          not null
-#  max_public_bitrate :integer
-#  created_at         :datetime
-#  updated_at         :datetime
+#  id                      :integer          not null, primary key
+#  profile_id              :integer          not null
+#  codec                   :string           not null
+#  initial_bitrate         :integer          not null
+#  initial_channels        :integer          not null
+#  max_public_bitrate      :integer
+#  created_at              :datetime
+#  updated_at              :datetime
+#  download_permission     :integer
+#  max_logged_in_bitrate   :integer
+#  max_priviledged_bitrate :integer
+#  priviledged_groups      :string
 #
 
 require 'test_helper'

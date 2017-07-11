@@ -8,6 +8,7 @@ class ApidocsController < ApplicationController
     BroadcastsController,
     LoginController,
     ShowsController,
+    Admin::AccessCodesController,
     Admin::ArchiveFormatsController,
     Admin::AudioEncodingsController,
     Admin::BroadcastsController,
@@ -23,6 +24,7 @@ class ApidocsController < ApplicationController
     ShowSerializer,
     UnprocessableEntitySerializer,
     UserSerializer,
+    Admin::AccessCodeSerializer,
     Admin::ArchiveFormatSerializer,
     Admin::AudioEncodingSerializer,
     Admin::DowngradeActionSerializer,
@@ -61,6 +63,15 @@ class ApidocsController < ApplicationController
       key :description,
           'The API token may be passed as a query parameter in the URL. ' \
           'It may be obtained in the response body from a successfull /login request.'
+    end
+
+    security_definition :access_code do
+      key :type, :apiKey
+      key :name, :access_code
+      key :in, :query
+      key :description,
+          'An access code may be passed as a query parameter in the URL. ' \
+          'This manually obtained code allows a login as a guest user.'
     end
 
     security_definition :jwt_token do

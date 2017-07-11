@@ -11,7 +11,7 @@ module Auth
     private
 
     def fetch_user_from_api_token(token)
-      return if token.blank?
+      return if token.blank? || !token.include?('$')
 
       id, key = token.split('$')
       key = key.presence || '[blank]'

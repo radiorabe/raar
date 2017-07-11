@@ -15,6 +15,8 @@
 
 class User < ActiveRecord::Base
 
+  attr_accessor :access_code
+
   has_secure_token :api_key
 
   validates :username, presence: true, uniqueness: { case_sensitive: false }
