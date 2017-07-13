@@ -20,16 +20,20 @@ class AudioFileSerializer < ApplicationSerializer
   link(:self) { audio_file_path(AudioPath.new(object).url_params) }
 
   link(:play) do
+    # scope is current_user
     options = AudioPath.new(object).url_params
-    options[:api_token] = scope.api_token if scope && !object.public?
+    options[:api_token] = scope.api_token if scope && scope.api_token
+    options[:access_code] = scope.access_code if scope && scope.access_code
     audio_file_path(options)
   end
 
   link(:download) do
-    if scope
+    # scope is current_user
+    if object.download_permitted?(scope)
       options = AudioPath.new(object).url_params
       options[:download] = true
-      options[:api_token] = scope.api_token
+      options[:api_token] = scope.api_token if scope && scope.api_token
+      options[:access_code] = scope.access_code if scope && scope.access_code
       audio_file_path(options)
     end
   end

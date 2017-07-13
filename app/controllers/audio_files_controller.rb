@@ -84,7 +84,7 @@ class AudioFilesController < ListController
 
       parameter name: :download,
                 in: :query,
-                description: 'Logged-in users may pass this flag to get the file with ' \
+                description: 'Authorized users may pass this flag to get the file with ' \
                              'Content-Disposition attachment.',
                 required: false,
                 type: :boolean
@@ -111,7 +111,9 @@ class AudioFilesController < ListController
   private
 
   def file_playable?
-    entry && ((entry.public? && !params[:download]) || current_user)
+    entry &&
+      entry.access_permitted?(current_user) &&
+      (!params[:download] || entry.download_permitted?(current_user))
   end
 
   def handle_unplayable
@@ -164,13 +166,9 @@ class AudioFilesController < ListController
   end
 
   def fetch_entries
-    entries = super.where(broadcast_id: params[:broadcast_id])
-                   .includes(:playback_format, :broadcast)
-    if current_user
-      entries
-    else
-      entries.only_public
-    end
+    super.where(broadcast_id: params[:broadcast_id])
+         .for_user(current_user)
+         .includes(:playback_format, :broadcast)
   end
 
   def fetch_entry

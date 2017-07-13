@@ -30,9 +30,17 @@ module Admin
                  attributes: {
                    codec: 'flac',
                    initial_bitrate: 1,
-                   initial_channels: 2 } } }
+                   initial_channels: 2,
+                   max_public_bitrate: 0,
+                   max_logged_in_bitrate: 1,
+                   max_priviledged_bitrate: nil,
+                   priviledged_groups: ['staff', 'sendungsmachende '],
+                   download_permission: 'logged_in' } } }
         assert_response 201
       end
+      format = ArchiveFormat.find(json['data']['id'])
+      assert_equal ['staff', 'sendungsmachende'], format.priviledged_group_list
+      assert_equal 'logged_in', format.download_permission
       assert_equal 'flac', json['data']['attributes']['codec']
     end
 
@@ -48,6 +56,8 @@ module Admin
                    initial_channels: 2 } } }
         assert_response 422
       end
+      assert_equal 1, json['errors'].size
+      assert_equal '/data/attributes/codec', json['errors'].first['source']['pointer']
     end
 
     test 'PATCH update updates existing entry' do

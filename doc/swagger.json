@@ -212,7 +212,7 @@
           {
             "name": "download",
             "in": "query",
-            "description": "Logged-in users may pass this flag to get the file with Content-Disposition attachment.",
+            "description": "Authorized users may pass this flag to get the file with Content-Disposition attachment.",
             "required": false,
             "type": "boolean"
           }
@@ -2553,19 +2553,44 @@
           "properties": {
             "codec": {
               "type": "string",
-              "description": "See audio_encodings for possible values. This attribute may only be set on create."
+              "description": "See audio_encodings for possible values. This attribute may only be set on creation."
             },
             "initial_bitrate": {
               "type": "integer",
-              "description": "See audio_encodings of selected codec for possible values."
+              "description": "The bitrate audio files are converted to when they are initially imported into the archive. See audio_encodings of selected codec for possible values."
             },
             "initial_channels": {
               "type": "integer",
-              "description": "See audio_encodings of selected codec for possible values."
+              "description": "The number of channels audio files will have when they are initially imported into the archive. See audio_encodings of selected codec for possible values."
             },
             "max_public_bitrate": {
               "type": "integer",
-              "description": "See audio_encodings of selected codec for possible values."
+              "description": "The maximal bitrate that is available for public, non-logged in users. Use 0 for no access at all, nil for full access. See audio_encodings of selected codec for possible values."
+            },
+            "max_logged_in_bitrate": {
+              "type": "integer",
+              "description": "The maximal bitrate that is available for logged in or guest users. Use 0 for no access at all, nil for full access. See audio_encodings of selected codec for possible values."
+            },
+            "max_priviledged_bitrate": {
+              "type": "integer",
+              "description": "The maximal bitrate that is available for logged-in users in agiven group. Use 0 for no access at all, nil for full access. See audio_encodings of selected codec for possible values."
+            },
+            "priviledged_groups": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "The user group names that have access to the priviledged bitrate."
+            },
+            "download_permission": {
+              "type": "string",
+              "enum": [
+                "public",
+                "logged_in",
+                "priviledged",
+                "admin"
+              ],
+              "description": "Defines which users may download audio files."
             },
             "created_at": {
               "type": "string",

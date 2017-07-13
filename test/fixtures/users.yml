@@ -21,4 +21,9 @@ admin:
 speedee:
   username: speedee
   api_key: <%= SecureRandom.base58(24) %>
-  groups: dermorgen
+  groups: dermorgen, sendungsmachende
+
+member:
+  username: member
+  api_key: <%= SecureRandom.base58(24) %>
+  groups: member

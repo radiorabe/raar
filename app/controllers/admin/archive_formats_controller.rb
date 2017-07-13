@@ -4,7 +4,9 @@ module Admin
     include Admin::Authenticatable
     include Admin::CrudSwag
 
-    self.permitted_attrs = [:codec, :initial_bitrate, :initial_channels, :max_public_bitrate]
+    self.permitted_attrs = [:codec, :initial_bitrate, :initial_channels, :download_permission,
+                            :max_public_bitrate, :max_logged_in_bitrate, :max_priviledged_bitrate,
+                            priviledged_groups: []]
 
     crud_swagger_paths(route_prefix: '/admin/profiles/{profile_id}',
                        data_class: 'Admin::ArchiveFormat',

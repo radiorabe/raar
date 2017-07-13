@@ -47,4 +47,51 @@ class ArchiveFormatTest < ActiveSupport::TestCase
     assert_not_valid entry, :codec
   end
 
+  test 'max_logged_in_bitrate must be nil, greater or equal to max_public_bitrate' do
+    format = archive_formats(:important_mp3)
+    format.max_logged_in_bitrate = 190
+    assert_not_valid format, :max_logged_in_bitrate
+
+    format.max_logged_in_bitrate = 192
+    assert_valid format
+
+    format.max_logged_in_bitrate = 320
+    assert_valid format
+
+    format.max_logged_in_bitrate = nil
+    assert_valid format
+  end
+
+  test 'max_logged_in_bitrate must be nil if max_public_bitrate is nil' do
+    format = archive_formats(:important_mp3)
+    format.max_public_bitrate = nil
+    format.max_logged_in_bitrate = nil
+    assert_valid format
+
+    format.max_logged_in_bitrate = 320
+    assert_not_valid format, :max_logged_in_bitrate
+  end
+
+  test 'download_permitted is true for same or higher role' do
+    format = archive_formats(:important_mp3)
+    format.download_permission = :logged_in
+    assert format.download_permitted?(:logged_in)
+    assert format.download_permitted?(:priviledged)
+    assert format.download_permitted?(:admin)
+    assert !format.download_permitted?(:public)
+  end
+
+  test 'download_permitted without download permission is only true for admin' do
+    format = archive_formats(:unimportant_mp3)
+    assert format.download_permitted?(:admin)
+    assert !format.download_permitted?(:priviledged)
+    assert !format.download_permitted?(:public)
+  end
+
+  test 'priviledged_group_lists returns array' do
+    format = archive_formats(:important_mp3)
+    format.priviledged_groups = 'foo, bar, stör '
+    assert_equal %w(foo bar stör), format.priviledged_group_list
+  end
+
 end

@@ -15,6 +15,7 @@
 class AudioFile < ActiveRecord::Base
 
   include WithAudioFormat
+  include AudioFileUserAccess
 
   belongs_to :broadcast
   belongs_to :playback_format, optional: true
@@ -51,13 +52,6 @@ class AudioFile < ActiveRecord::Base
         .best_at(timestamp, playback_format.codec)
     end
 
-    def only_public
-      joins(broadcast: { show: { profile: :archive_formats } })
-        .where('archive_formats.codec = audio_files.codec')
-        .where('archive_formats.max_public_bitrate IS NULL OR ' \
-               'archive_formats.max_public_bitrate >= audio_files.bitrate')
-    end
-
   end
 
   def absolute_path
@@ -71,16 +65,6 @@ class AudioFile < ActiveRecord::Base
   def with_path
     generate_path
     self
-  end
-
-  def public?
-    ArchiveFormat
-      .joins(profile: { shows: :broadcasts })
-      .where(broadcasts: { id: broadcast_id })
-      .where(archive_formats: { codec: codec })
-      .where('archive_formats.max_public_bitrate IS NULL OR ' \
-             'archive_formats.max_public_bitrate >= ?', bitrate)
-      .exists?
   end
 
   def to_s

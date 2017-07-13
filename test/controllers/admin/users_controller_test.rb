@@ -7,7 +7,7 @@ module Admin
 
     test 'GET index returns list of all users' do
       get :index
-      assert_equal ['admin', 'speedee'], json_attrs(:username)
+      assert_equal ['admin', 'member', 'speedee'], json_attrs(:username)
     end
 
     test 'GET show returns user as admin' do
@@ -35,7 +35,8 @@ module Admin
                  attributes: {
                    username: 'foo',
                    first_name: 'Pit',
-                   last_name: 'Foo' } } }
+                   last_name: 'Foo',
+                   groups: ['staff'] } } }
         assert_response 201
       end
       assert_equal 'foo', json['data']['attributes']['username']
@@ -49,9 +50,12 @@ module Admin
                 attributes: {
                   username: 'speedee',
                   first_name: 'Pit',
-                  last_name: 'Foo' } } }
+                  last_name: 'Foo',
+                  groups: 'staff' } } }
         assert_response 422
       end
+      assert_equal 1, json['errors'].size
+      assert_equal '/data/attributes/username', json['errors'].first['source']['pointer']
     end
 
     test 'PATCH update updates existing user' do

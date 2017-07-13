@@ -22,6 +22,8 @@ class ArchiveFormat < ActiveRecord::Base
 
   attr_readonly :codec
 
+  enum download_permission: [:public, :logged_in, :priviledged, :admin], _prefix: true
+
   belongs_to :profile
 
   has_many :downgrade_actions, dependent: :destroy
@@ -31,15 +33,63 @@ class ArchiveFormat < ActiveRecord::Base
   validates :codec, :initial_bitrate, :initial_channels, presence: true
   validates :codec, uniqueness: { scope: :profile_id }
   validates :max_public_bitrate,
-            numericality: { only_integer: true, greater_or_equal_to: 0, allow_blank: true }
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: 0,  # 0 = no access
+              allow_blank: true             # nil = full access
+            }
+  validates :max_logged_in_bitrate,
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: :max_public_bitrate,
+              if: :max_public_bitrate,
+              allow_blank: true
+            },
+            absence: {
+              unless: :max_public_bitrate
+            }
+  validates :max_priviledged_bitrate,
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: :max_logged_in_bitrate,
+              if: :max_logged_in_bitrate,
+              allow_blank: true
+            },
+            absence: {
+              unless: :max_logged_in_bitrate
+            }
   validate :assert_codec_not_changed, on: :update
 
+  before_save :normalize_priviledged_groups
+
   scope :list, -> { order(:codec) }
+
+  def priviledged_groups=(value)
+    value = value.join(',') if value.is_a?(Array)
+    super(value)
+  end
+
+  def priviledged_group_list
+    priviledged_groups.to_s.split(/[,;]/).collect(&:strip).compact
+  end
+
+  def download_permitted?(role)
+    if download_permission?
+      ArchiveFormat.download_permissions[download_permission] <=
+        ArchiveFormat.download_permissions[role]
+    else
+      role.to_s == 'admin'
+    end
+  end
 
   private
 
   def assert_codec_not_changed
     errors.add(:codec, :must_not_change) if codec_changed?
+  end
+
+  def normalize_priviledged_groups
+    self.priviledged_groups = priviledged_group_list.join(',').presence
   end
 
 end

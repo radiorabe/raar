@@ -4,7 +4,7 @@ module Admin
     include Admin::Authenticatable
     include Admin::CrudSwag
 
-    self.permitted_attrs = [:username, :first_name, :last_name, :groups]
+    self.permitted_attrs = [:username, :first_name, :last_name, groups: []]
 
     self.search_columns = %w[username first_name last_name]
 

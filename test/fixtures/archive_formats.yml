@@ -22,6 +22,7 @@ important_mp3:
   initial_bitrate: 320
   initial_channels: 2
   max_public_bitrate: 192
+  download_permission: logged_in
 
 default_mp3:
   profile: default
@@ -29,10 +30,15 @@ default_mp3:
   initial_bitrate: 256
   initial_channels: 2
   max_public_bitrate: 96
+  max_logged_in_bitrate: 160
+  max_priviledged_bitrate: 320
+  download_permission: priviledged
+  priviledged_groups: "staff,sendungsmachende"
 
 unimportant_mp3:
   profile: unimportant
   codec: mp3
   initial_bitrate: 160
   initial_channels: 2
-  max_public_bitrate: 96
+  max_public_bitrate: 0
+  max_logged_in_bitrate: 96
