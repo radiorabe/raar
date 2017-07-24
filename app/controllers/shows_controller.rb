@@ -44,7 +44,7 @@ class ShowsController < ListController
   end
 
   def index
-    entries = fetch_entries.to_a
+    entries = fetch_entries.load
     render json: entries,
            each_serializer: model_serializer,
            accessible_ids: accessible_entry_ids(entries)

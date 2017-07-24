@@ -110,7 +110,7 @@ class BroadcastsController < ListController
   end
 
   def index
-    entries = fetch_entries.to_a
+    entries = fetch_entries.load
     render json: entries,
            each_serializer: model_serializer,
            include: [:show],
