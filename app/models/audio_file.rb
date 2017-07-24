@@ -15,7 +15,6 @@
 class AudioFile < ActiveRecord::Base
 
   include WithAudioFormat
-  include AudioFileUserAccess
 
   belongs_to :broadcast
   belongs_to :playback_format, optional: true

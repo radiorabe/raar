@@ -48,6 +48,10 @@ class BroadcastsController < ListController
       parameter :sort
 
       response_broadcasts
+
+      security http_token: []
+      security api_token: []
+      security access_code: []
     end
   end
 
@@ -74,6 +78,10 @@ class BroadcastsController < ListController
       parameter :sort
 
       response_broadcasts
+
+      security http_token: []
+      security api_token: []
+      security access_code: []
     end
   end
 
@@ -94,11 +102,19 @@ class BroadcastsController < ListController
       parameter :sort
 
       response_broadcasts
+
+      security http_token: []
+      security api_token: []
+      security access_code: []
     end
   end
 
   def index
-    render json: fetch_entries, each_serializer: model_serializer, include: [:show]
+    entries = fetch_entries.to_a
+    render json: entries,
+           each_serializer: model_serializer,
+           include: [:show],
+           accessible_ids: accessible_entry_ids(entries)
   end
 
   private
@@ -136,6 +152,11 @@ class BroadcastsController < ListController
     if params[:show_id].blank? && params[:year].blank? && params[:q].blank?
       not_found
     end
+  end
+
+  def accessible_entry_ids(entries)
+    scope = Broadcast.where(id: entries.map(&:id))
+    AudioAccess::Broadcasts.new(current_user).filter(scope).pluck(:id)
   end
 
 end

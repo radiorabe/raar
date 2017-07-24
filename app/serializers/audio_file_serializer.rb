@@ -29,7 +29,7 @@ class AudioFileSerializer < ApplicationSerializer
 
   link(:download) do
     # scope is current_user
-    if object.download_permitted?(scope)
+    if AudioAccess::AudioFiles.new(scope).download_permitted?(object)
       options = AudioPath.new(object).url_params
       options[:download] = true
       options[:api_token] = scope.api_token if scope && scope.api_token

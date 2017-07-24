@@ -31,17 +31,6 @@ class User < ActiveRecord::Base
     (listify(groups) & listify(Rails.application.secrets.admin_groups)).present?
   end
 
-  def role
-    if admin?
-      :admin
-    elsif groups?
-      # User is potentially priviledged. If she really is, depends on specifc ArchiveFormat.
-      :priviledged
-    else
-      :logged_in
-    end
-  end
-
   def groups=(value)
     value = value.join(',') if value.is_a?(Array)
     super(value)

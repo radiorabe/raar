@@ -112,8 +112,8 @@ class AudioFilesController < ListController
 
   def file_playable?
     entry &&
-      entry.access_permitted?(current_user) &&
-      (!params[:download] || entry.download_permitted?(current_user))
+      access.access_permitted?(entry) &&
+      (!params[:download] || access.download_permitted?(entry))
   end
 
   def handle_unplayable
@@ -166,9 +166,9 @@ class AudioFilesController < ListController
   end
 
   def fetch_entries
-    super.where(broadcast_id: params[:broadcast_id])
-         .for_user(current_user)
-         .includes(:playback_format, :broadcast)
+    access.filter(super
+                  .where(broadcast_id: params[:broadcast_id])
+                  .includes(:playback_format, :broadcast))
   end
 
   def fetch_entry
@@ -192,6 +192,10 @@ class AudioFilesController < ListController
       Time.zone.local(*params.values_at(:year, :month, :day, :hour, :min, :sec))
   rescue ArgumentError
     not_found
+  end
+
+  def access
+    @access ||= AudioAccess::AudioFiles.new(current_user)
   end
 
 end

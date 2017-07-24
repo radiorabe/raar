@@ -21,6 +21,10 @@ class ShowsController < ListController
                 type: :string
 
       response_entities('Show')
+
+      security http_token: []
+      security api_token: []
+      security access_code: []
     end
   end
 
@@ -32,7 +36,24 @@ class ShowsController < ListController
       parameter_id('show', 'fetch')
 
       response_entity('Show')
+
+      security http_token: []
+      security api_token: []
+      security access_code: []
     end
+  end
+
+  def index
+    entries = fetch_entries.to_a
+    render json: entries,
+           each_serializer: model_serializer,
+           accessible_ids: accessible_entry_ids(entries)
+  end
+
+  def show
+    render json: entry,
+           serializer: model_serializer,
+           accessible_ids: accessible_entry_ids([entry])
   end
 
   private
@@ -49,6 +70,11 @@ class ShowsController < ListController
     scope = scope.left_joins(:broadcasts).group('shows.id')
     scope = scope.having('MAX(broadcasts.started_at) > ?', params[:since]) if params[:since]
     scope
+  end
+
+  def accessible_entry_ids(entries)
+    scope = Show.where(id: entries.map(&:id))
+    AudioAccess::Shows.new(current_user).filter(scope).pluck(:id)
   end
 
 end

@@ -73,15 +73,6 @@ class ArchiveFormat < ActiveRecord::Base
     priviledged_groups.to_s.split(/[,;]/).collect(&:strip).compact
   end
 
-  def download_permitted?(role)
-    if download_permission?
-      ArchiveFormat.download_permissions[download_permission] <=
-        ArchiveFormat.download_permissions[role]
-    else
-      role.to_s == 'admin'
-    end
-  end
-
   private
 
   def assert_codec_not_changed

@@ -5,6 +5,7 @@ class ShowsControllerTest < ActionController::TestCase
   test 'GET index returns list of all shows' do
     get :index
     assert_equal ['Geschäch9schlimmers', 'Info', 'Klangbecken'], json_attrs(:name)
+    assert_equal [true, true, false], json_attrs(:audio_access)
   end
 
   test 'GET index with query params returns list of matching shows' do
@@ -35,7 +36,14 @@ class ShowsControllerTest < ActionController::TestCase
   test 'GET show returns no profile' do
     get :show, params: { id: shows(:info).id }
     assert_equal 'Info', json['data']['attributes']['name']
+    assert_equal true, json['data']['attributes']['audio_access']
     assert_nil json['data']['relationships']
+  end
+
+  test 'GET show returns no audio access' do
+    get :show, params: { id: shows(:klangbecken).id }
+    assert_equal 'Klangbecken', json['data']['attributes']['name']
+    assert_equal false, json['data']['attributes']['audio_access']
   end
 
 end

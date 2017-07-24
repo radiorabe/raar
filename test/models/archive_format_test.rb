@@ -72,22 +72,6 @@ class ArchiveFormatTest < ActiveSupport::TestCase
     assert_not_valid format, :max_logged_in_bitrate
   end
 
-  test 'download_permitted is true for same or higher role' do
-    format = archive_formats(:important_mp3)
-    format.download_permission = :logged_in
-    assert format.download_permitted?(:logged_in)
-    assert format.download_permitted?(:priviledged)
-    assert format.download_permitted?(:admin)
-    assert !format.download_permitted?(:public)
-  end
-
-  test 'download_permitted without download permission is only true for admin' do
-    format = archive_formats(:unimportant_mp3)
-    assert format.download_permitted?(:admin)
-    assert !format.download_permitted?(:priviledged)
-    assert !format.download_permitted?(:public)
-  end
-
   test 'priviledged_group_lists returns array' do
     format = archive_formats(:important_mp3)
     format.priviledged_groups = 'foo, bar, stör '

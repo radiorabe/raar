@@ -5,6 +5,7 @@ class BroadcastsControllerTest < ActionController::TestCase
   test 'GET index returns list of all broadcasts of the given show' do
     get :index, params: { show_id: shows(:info).id }
     assert_equal ['Info April', 'Info Mai'], json_attrs(:label)
+    assert_equal [true, true], json_attrs(:audio_access)
   end
 
   test 'GET index returns list of all broadcasts of the given show, respecting descending sort order' do
@@ -43,6 +44,7 @@ class BroadcastsControllerTest < ActionController::TestCase
     get :index, params: { year: 2013, month: 5, day: 20 }
     assert_equal ['Info Mai', 'Klangbecken', 'G9S Shizzle Edition', 'Klangbecken'],
                  json_attrs(:label)
+    assert_equal [true, false, true, false], json_attrs(:audio_access)
   end
 
   test 'GET index with hour time range returns filtered list' do

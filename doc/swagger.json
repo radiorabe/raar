@@ -285,7 +285,24 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_token": [
+
+            ]
+          },
+          {
+            "access_code": [
+
+            ]
+          }
+        ]
       }
     },
     "/broadcasts/{year}/{month}/{day}/{hour}{minute}{second}": {
@@ -371,7 +388,24 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_token": [
+
+            ]
+          },
+          {
+            "access_code": [
+
+            ]
+          }
+        ]
       }
     },
     "/shows/{show_id}/broadcasts": {
@@ -422,7 +456,24 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_token": [
+
+            ]
+          },
+          {
+            "access_code": [
+
+            ]
+          }
+        ]
       }
     },
     "/login": {
@@ -574,7 +625,24 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_token": [
+
+            ]
+          },
+          {
+            "access_code": [
+
+            ]
+          }
+        ]
       }
     },
     "/shows/{id}": {
@@ -604,7 +672,24 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_token": [
+
+            ]
+          },
+          {
+            "access_code": [
+
+            ]
+          }
+        ]
       }
     },
     "/admin/access_codes": {
@@ -2392,6 +2477,9 @@
             },
             "details": {
               "type": "string"
+            },
+            "audio_access": {
+              "type": "boolean"
             }
           }
         },
@@ -2430,6 +2518,9 @@
             },
             "details": {
               "type": "string"
+            },
+            "audio_access": {
+              "type": "boolean"
             }
           }
         },
