@@ -37,6 +37,8 @@ It is also possible to run an import with custom classes given by environment va
     IMPORT_DIRECTORIES=/path/to/import \
     DAYS_TO_FINISH_IMPORT='' \
     DAYS_TO_KEEP_IMPORTED='' \
+    IMPORT_DEFAULT_SHOW_ID='' \
+    RAILS_LOG=/path/to/logfile \
     bin/import
 
 The show names from the file names may be mapped to real show names in `config/show_names.yml`.

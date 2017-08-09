@@ -172,6 +172,18 @@ Perform the following steps on a CentOS or the corresponding ones on a different
   account  required  pam_sss.so
   ```
 
+* Add the following additional lines to `/etc/sssd/sssd.conf`:
+  ```bash
+  ldap_user_extra_attrs = mail, givenname, sn
+
+  [sssd]
+  services = nss, pam, ssh, ifp
+
+  [ifp]
+  allowed_uids = apache, root
+  user_attributes = +mail, +givenname, +sn
+  ```
+
 * Add the following to `/etc/httpd/conf.d/raar.conf`:
 
   ```xml
@@ -206,6 +218,7 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 
 * `setsebool -P allow_httpd_mod_auth_pam 1`.
 * `setsebool -P httpd_mod_auth_pam 1`.
+* `setsebool -P httpd_dbus_sssd on`
 * Restart Apache: `systemctl restart httpd`.
 * Add empty configuration files for raar:
   ```bash
