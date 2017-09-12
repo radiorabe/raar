@@ -75,9 +75,10 @@ module Import
     end
 
     def fetch_show(attrs = {})
-      Show.where(name: attrs.fetch(:name)).first_or_create.tap do |show|
-        show.details = attrs[:details] if attrs[:details].present?
-      end
+      show = Show.where('LOWER(name) = ?', attrs.fetch(:name).downcase).first ||
+             Show.create(name: attrs.fetch(:name))
+      show.details = attrs[:details] if attrs[:details].present?
+      show
     end
 
     def fetch_broadcast(attrs = {})
