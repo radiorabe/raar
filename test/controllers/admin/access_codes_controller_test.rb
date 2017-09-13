@@ -12,6 +12,18 @@ module Admin
       assert_equal expires.reverse.map { |d| d.strftime('%Y-%m-%d') }, json_attrs(:expires_at)
     end
 
+    test 'GET index destroys expired entries' do
+      today = Time.zone.today
+      c1 = AccessCode.create!(expires_at: today)
+      c2 = AccessCode.create!(expires_at: today + 1.day)
+      c3 = AccessCode.create!(expires_at: today - 1.day)
+      c4 = AccessCode.create!(expires_at: today - 1.year)
+      assert_difference('AccessCode.count', -2) do
+        get :index
+      end
+      assert_equal [c2, c1].map { |d| d.expires_at.strftime('%Y-%m-%d') }, json_attrs(:expires_at)
+    end
+
     test 'GET index returns unauthorized if not logged in' do
       logout
       get :index

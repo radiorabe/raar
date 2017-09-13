@@ -10,5 +10,11 @@ module Admin
                        data_class: 'Admin::AccessCode',
                        tags: [:admin])
 
+    def index
+      # In lack of a better place, automatically destroy expired codes in this action.
+      AccessCode.expired.destroy_all
+      super
+    end
+
   end
 end
