@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   post 'login', to: 'login#create'
   patch 'login', to: 'login#update'
 
+  get 'status', to: 'status#show'
+
   namespace :admin do
     resources :access_codes
 

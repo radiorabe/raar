@@ -692,6 +692,37 @@
         ]
       }
     },
+    "/status": {
+      "get": {
+        "description": "Get the application status",
+        "tags": [
+          "status",
+          "public"
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Status"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "(some) services unavailable",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Status"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/access_codes": {
       "get": {
         "description": "Returns a list of access codes.",
@@ -2530,6 +2561,29 @@
               "type": "string",
               "format": "url",
               "readOnly": true
+            }
+          }
+        }
+      }
+    },
+    "Status": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "attributes": {
+          "properties": {
+            "api": {
+              "type": "boolean"
+            },
+            "database": {
+              "type": "boolean"
+            },
+            "file_system": {
+              "type": "boolean"
             }
           }
         }
