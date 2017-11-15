@@ -92,7 +92,7 @@ class LoginController < ApplicationController
   def set_current_user_from_remote_header
     @current_user =
       if Rails.env.development?
-        User.find_by!(username: params[:username])
+        User.find_by(username: params[:username])
       else
         Auth::RemoteHeader.new(request).fetch_user
       end
