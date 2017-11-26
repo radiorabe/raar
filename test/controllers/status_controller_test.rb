@@ -2,6 +2,11 @@ require 'test_helper'
 
 class StatusControllerTest < ActionController::TestCase
 
+  setup do
+    FileUtils.mkdir_p(Rails.application.secrets.archive_home)
+    FileUtils.touch(File.join(Rails.application.secrets.archive_home, 'dummy_content.data'))
+  end
+
   test 'GET show returns json' do
     get :show
 

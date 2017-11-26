@@ -25,6 +25,8 @@ class StatusTest < ActiveSupport::TestCase
   end
 
   test 'file_system is true if directory has content' do
+    FileUtils.mkdir_p(Rails.application.secrets.archive_home)
+    FileUtils.touch(File.join(Rails.application.secrets.archive_home, 'dummy_content.data'))
     assert_equal true, Status.new.file_system
   end
 
