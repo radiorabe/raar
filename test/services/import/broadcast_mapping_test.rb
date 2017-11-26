@@ -23,12 +23,12 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
   end
 
   test '#assign_show_attrs uses an existing show case insensitive' do
-    mapping.assign_show(name: 'iNFO', details: 'Rabe Info')
+    mapping.assign_show(name: 'GSCHÄCH9SCHLIMMERS', details: 'G9S')
 
-    assert_equal 'Info', show.name
-    assert_equal 'Rabe Info', show.details
-    assert_equal profiles(:important), show.profile
-    assert_equal shows(:info), show
+    assert_equal 'Gschäch9schlimmers', show.name
+    assert_equal 'G9S', show.details
+    assert_equal profiles(:default), show.profile
+    assert_equal shows(:g9s), show
   end
 
   test '#assign_show_attrs uses an existing show and updates details' do

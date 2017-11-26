@@ -75,7 +75,7 @@ module Import
     end
 
     def fetch_show(attrs = {})
-      show = Show.where('LOWER(name) = ?', attrs.fetch(:name).downcase).first ||
+      show = Show.where('LOWER(name) = ?', attrs.fetch(:name).mb_chars.downcase).first ||
              Show.create(name: attrs.fetch(:name))
       show.details = attrs[:details] if attrs[:details].present?
       show

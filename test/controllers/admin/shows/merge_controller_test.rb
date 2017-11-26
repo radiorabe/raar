@@ -11,7 +11,7 @@ module Admin
           post :create, params: { id: shows(:klangbecken).id, target_id: shows(:g9s).id }
         end
         assert_equal 4, shows(:g9s).broadcasts.count
-        assert_equal 'Geschäch9schlimmers', json['data']['attributes']['name']
+        assert_equal 'Gschäch9schlimmers', json['data']['attributes']['name']
       end
 
       test 'POST create leaves everything in place if target equals id' do

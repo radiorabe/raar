@@ -7,12 +7,12 @@ module Admin
 
     test 'GET index returns list of all shows' do
       get :index
-      assert_equal ['Geschäch9schlimmers', 'Info', 'Klangbecken'], json_attrs(:name)
+      assert_equal ['Gschäch9schlimmers', 'Info', 'Klangbecken'], json_attrs(:name)
     end
 
     test 'GET index with query params returns list of matching shows' do
       get :index, params: { q: 'e' }
-      assert_equal ['Geschäch9schlimmers', 'Klangbecken'], json_attrs(:name)
+      assert_equal ['Gschäch9schlimmers', 'Klangbecken'], json_attrs(:name)
     end
 
     test 'GET show returns with profile' do
