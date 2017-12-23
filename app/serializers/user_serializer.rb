@@ -10,9 +10,6 @@ class UserSerializer < ApplicationSerializer
       property :api_key_expires_at, type: :string, format: 'date-time', readOnly: true
       property :admin, type: :boolean, readOnly: true
     end
-    property :links do
-      property :self, type: :string, format: 'url', readOnly: true
-    end
   end
 
   attributes :id, :username, :first_name, :last_name, :groups,
