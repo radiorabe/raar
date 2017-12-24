@@ -13,7 +13,14 @@ AllCops:
 
 Rails:
   Enabled: true
-  
+
+# namespace modules do not require empty lines, mixins do.
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+
 Lint/AmbiguousBlockAssociation:
   Enabled: false
 
@@ -34,13 +41,6 @@ Style/ClassVars:
   Enabled: false
 
 Style/Documentation:
-  Enabled: false
-
-# namespace modules do not require empty lines, mixins do.
-Style/EmptyLinesAroundClassBody:
-  Enabled: false
-
-Style/EmptyLinesAroundModuleBody:
   Enabled: false
 
 Style/EmptyMethod:

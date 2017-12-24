@@ -7,7 +7,6 @@ class Parallelizer
     @thread_count = default_thread_count
   end
 
-  # rubocop:disable Lint/AssignmentInCondition
   def run(&block)
     workers = (0..thread_count).map do
       Thread.new do
@@ -27,7 +26,7 @@ class Parallelizer
 
   def process_payloads
     ActiveRecord::Base.connection_pool.with_connection do
-      while payload = next_payload
+      while payload = next_payload # rubocop:disable Lint/AssignmentInCondition
         yield payload
       end
     end

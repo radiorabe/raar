@@ -13,7 +13,7 @@
 #  updated_at         :datetime
 #
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
 
   attr_accessor :access_code
 

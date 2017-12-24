@@ -12,7 +12,7 @@
 #  updated_at  :datetime
 #
 
-class PlaybackFormat < ActiveRecord::Base
+class PlaybackFormat < ApplicationRecord
 
   include WithAudioFormat
 

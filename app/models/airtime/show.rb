@@ -43,7 +43,7 @@ module Airtime
 
     self.table_name = 'cc_show'
 
-    has_many :show_instances
+    has_many :show_instances, dependent: :destroy
 
   end
 end

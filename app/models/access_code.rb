@@ -7,7 +7,7 @@
 #  expires_at :date
 #
 
-class AccessCode < ActiveRecord::Base
+class AccessCode < ApplicationRecord
 
   CODE_LENGTH = 6
 

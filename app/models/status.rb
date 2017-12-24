@@ -9,7 +9,7 @@ class Status < ActiveModelSerializers::Model
     @database =
       begin
         Show.count > 0
-      rescue
+      rescue StandardError
         false
       end
   end
@@ -19,7 +19,7 @@ class Status < ActiveModelSerializers::Model
     @file_system =
       begin
         Dir.glob(File.join(FileStore::Structure.home, '*')).present?
-      rescue
+      rescue StandardError
         false
       end
   end

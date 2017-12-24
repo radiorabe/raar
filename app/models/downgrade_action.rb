@@ -8,12 +8,12 @@
 #  bitrate           :integer
 #  channels          :integer
 #
-class DowngradeAction < ActiveRecord::Base
+class DowngradeAction < ApplicationRecord
 
   include WithAudioFormat
 
   belongs_to :archive_format
-  has_one :profile, through: :archive_format
+  has_one :profile, through: :archive_format, inverse_of: false
 
   composed_of_audio_format
 

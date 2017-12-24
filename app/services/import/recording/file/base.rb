@@ -27,7 +27,8 @@ module Import
           started_at + duration.seconds
         end
 
-        def audio_duration # in seconds
+        # in seconds
+        def audio_duration
           @audio_duration ||= AudioProcessor.new(path).duration
         end
 

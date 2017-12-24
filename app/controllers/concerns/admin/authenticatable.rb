@@ -11,9 +11,7 @@ module Admin
 
     def require_admin
       if current_user
-        unless current_user.admin?
-          render json: { errors: 'Forbidden' }, status: :forbidden
-        end
+        render json: { errors: 'Forbidden' }, status: :forbidden unless current_user.admin?
       else
         headers['WWW-Authenticate'] = 'Token realm="Application"'
         render json: { errors: 'Not authenticated' }, status: :unauthorized

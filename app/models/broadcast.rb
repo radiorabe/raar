@@ -10,7 +10,7 @@
 #  people      :string
 #  details     :text
 #
-class Broadcast < ActiveRecord::Base
+class Broadcast < ApplicationRecord
 
   belongs_to :show
 

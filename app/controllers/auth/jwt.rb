@@ -17,7 +17,7 @@ module Auth
 
       def decode(token)
         HashWithIndifferentAccess.new(JWT.decode(token, secret)[0])
-      rescue
+      rescue StandardError
         nil
       end
 

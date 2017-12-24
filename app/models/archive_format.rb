@@ -16,7 +16,7 @@
 #  priviledged_groups      :string
 #
 
-class ArchiveFormat < ActiveRecord::Base
+class ArchiveFormat < ApplicationRecord
 
   include WithAudioFormat
 

@@ -10,7 +10,7 @@ class BroadcastsController < CrudController
   self.permitted_attrs = [:label, :details, :people]
 
   before_action :assert_params_given, only: :index
-  before_action :require_user, only: :update
+  before_action :require_user, only: :update # rubocop:disable Rails/LexicallyScopedActionFilter
 
   # Convenience module to extract common swagger documentation in this controller.
   module SwaggerOperationMethods
@@ -185,9 +185,7 @@ class BroadcastsController < CrudController
   end
 
   def assert_params_given
-    if params[:show_id].blank? && params[:year].blank? && params[:q].blank?
-      not_found
-    end
+    not_found if params[:show_id].blank? && params[:year].blank? && params[:q].blank?
   end
 
   def accessible_entry_ids(entries)

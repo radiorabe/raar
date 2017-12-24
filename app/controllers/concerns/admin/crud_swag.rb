@@ -104,6 +104,7 @@ module Admin
           end
         end
       end
+      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
     end
 

@@ -12,7 +12,7 @@
 #  created_at         :datetime         not null
 #
 
-class AudioFile < ActiveRecord::Base
+class AudioFile < ApplicationRecord
 
   include WithAudioFormat
 

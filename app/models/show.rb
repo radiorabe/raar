@@ -7,7 +7,7 @@
 #  details    :text
 #  profile_id :integer          not null
 #
-class Show < ActiveRecord::Base
+class Show < ApplicationRecord
 
   belongs_to :profile
 

@@ -10,7 +10,7 @@
 #  updated_at  :datetime
 #
 
-class Profile < ActiveRecord::Base
+class Profile < ApplicationRecord
 
   has_many :shows, dependent: :restrict_with_error
   has_many :archive_formats, dependent: :destroy
