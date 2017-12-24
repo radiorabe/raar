@@ -41,7 +41,7 @@ group :development do
 end
 
 group :test do
-  gem 'coveralls'
+  gem 'coveralls', '>= 0.8.21'
   gem 'mocha'
   gem 'simplecov'
 end
