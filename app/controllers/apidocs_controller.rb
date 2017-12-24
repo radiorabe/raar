@@ -12,7 +12,6 @@ class ApidocsController < ApplicationController
     Admin::AccessCodesController,
     Admin::ArchiveFormatsController,
     Admin::AudioEncodingsController,
-    Admin::BroadcastsController,
     Admin::DowngradeActionsController,
     Admin::PlaybackFormatsController,
     Admin::ProfilesController,

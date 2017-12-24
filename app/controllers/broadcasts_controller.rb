@@ -1,10 +1,16 @@
-class BroadcastsController < ListController
+# Provides functionality to list broadcasts and update their meta data.
+# Different from the other Admin controllers as the user must not be an
+# administrator to perform updates, but simply authenticated as an exisiting
+# user (not by access code).
+class BroadcastsController < CrudController
 
   TIME_PARTS = [:year, :month, :day, :hour, :min, :sec].freeze
 
-  self.search_columns = %w[label people details shows.name shows.details]
+  self.search_columns = %w[label people details shows.name]
+  self.permitted_attrs = [:label, :details, :people]
 
   before_action :assert_params_given, only: :index
+  before_action :require_user, only: :update
 
   # Convenience module to extract common swagger documentation in this controller.
   module SwaggerOperationMethods
@@ -109,6 +115,36 @@ class BroadcastsController < ListController
     end
   end
 
+  swagger_path('broadcasts/{id}') do
+    operation :get do
+      key :description, 'Returns a single broadcast.'
+      key :tags, [:broadcast]
+
+      parameter_id('broadcast', 'fetch')
+
+      response_entity('Broadcast')
+
+      security http_token: []
+      security api_token: []
+      security access_code: []
+    end
+
+    operation :patch do
+      key :description, 'Updates the description of an an existing broadcast.'
+      key :tags, [:broadcast]
+
+      parameter_id('broadcast', 'update')
+      parameter_attrs('broadcast', 'update', 'Broadcast')
+
+      response_entity('Broadcast')
+      response_unprocessable
+
+      security api_token: []
+      security http_token: []
+      security jwt_token: []
+    end
+  end
+
   def index
     entries = fetch_entries.load
     render json: entries,
@@ -157,6 +193,22 @@ class BroadcastsController < ListController
   def accessible_entry_ids(entries)
     scope = Broadcast.where(id: entries.map(&:id))
     AudioAccess::Broadcasts.new(current_user).filter(scope).pluck(:id)
+  end
+
+  def require_user
+    unless current_user
+      headers['WWW-Authenticate'] = 'Token realm="Application"'
+      render json: { errors: 'Not authenticated' }, status: :unauthorized
+    end
+  end
+
+  def fetch_current_user
+    if action_name == 'update'
+      Auth::Jwt.new(request).fetch_user ||
+        Auth::ApiToken.new(request).fetch_user
+    else
+      super
+    end
   end
 
 end

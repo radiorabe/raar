@@ -70,10 +70,10 @@ class BroadcastsControllerTest < ActionController::TestCase
                    { controller: 'broadcasts', action: 'index', show_id: '42' })
   end
 
-  test 'GET index with only year resolves params correctly' do
-    assert_routing({ path: 'broadcasts/2013', method: :get },
+  test 'GET index with show_id and year resolves params correctly' do
+    assert_routing({ path: 'shows/42/broadcasts/2013', method: :get },
                    { controller: 'broadcasts', action: 'index',
-                     year: '2013' })
+                     show_id: '42', year: '2013' })
   end
 
   test 'GET index with time parts up to month resolves params correctly' do
@@ -104,6 +104,83 @@ class BroadcastsControllerTest < ActionController::TestCase
     assert_routing({ path: 'broadcasts/2013/05/20/201534', method: :get },
                    { controller: 'broadcasts', action: 'index',
                      year: '2013', month: '05', day: '20', hour: '20', min: '15', sec: '34' })
+  end
+
+  test 'GET show returns entry' do
+    get :show, params: { id: entry.id }
+    assert_equal 'Info April', json['data']['attributes']['label']
+    assert_equal "/broadcasts/#{entry.id}", json['data']['links']['self']
+    assert json['data']['links']['update'].blank?
+  end
+
+  test 'GET show as user returns entry with update link' do
+    login(:speedee)
+    get :show, params: { id: entry.id }
+    assert_equal 'Info April', json['data']['attributes']['label']
+    assert_equal "/broadcasts/#{entry.id}", json['data']['links']['self']
+    assert_equal "/broadcasts/#{entry.id}", json['data']['links']['update']
+  end
+
+  test 'POST create is not possible' do
+    login(:speedee)
+    assert_raise(ActionController::UrlGenerationError) do
+      post :create,
+           params: {
+             data: { attributes: { label: 'Live' } }
+           }
+    end
+  end
+
+  test 'PATCH update as admin updates existing entry' do
+    login_as_admin
+    patch :update,
+          params: {
+            id: entry.id,
+            data: { attributes: { details: 'Very important shows', started_at: '17:00' } } }
+    assert_response 200
+    assert_equal 'Very important shows', json['data']['attributes']['details']
+    assert_equal '2013-04-10T11:00:00.000+02:00', json['data']['attributes']['started_at']
+    assert_equal 'Very important shows', entry.reload.details
+  end
+
+  test 'PATCH as regular user with api_token is possible' do
+    patch :update,
+          params: {
+            id: entry.id,
+            api_token: users(:speedee).api_token,
+            data: { attributes: {
+              label: 'Info April 1',
+              details: 'Very important shows',
+              started_at: '17:00'
+            } } }
+    assert_response 200
+    assert_equal 'Info April 1', json['data']['attributes']['label']
+    assert_equal 'Very important shows', json['data']['attributes']['details']
+    assert_equal '2013-04-10T11:00:00.000+02:00', json['data']['attributes']['started_at']
+    assert_equal 'Very important shows', entry.reload.details
+  end
+
+  test 'PATCH with access code fails' do
+    code = AccessCode.create!(expires_at: 1.month.from_now).code
+    patch :update,
+          params: {
+            access_code: code,
+            id: entry.id,
+            data: { attributes: { details: 'Very important shows', started_at: '17:00' } } }
+    assert_response 401
+  end
+
+  test 'DELETE destroy is not possible' do
+    login_as_admin
+    assert_raise(ActionController::UrlGenerationError) do
+      delete :destroy, params: { id: entry.id }
+    end
+  end
+
+  private
+
+  def entry
+    broadcasts(:info_april)
   end
 
 end

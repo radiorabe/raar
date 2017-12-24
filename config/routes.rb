@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :shows, only: [:index, :show]
 
-  resources :broadcasts, only: [] do
+  resources :broadcasts, only: [:show, :update] do
     resources :audio_files, only: :index
   end
 
@@ -30,8 +30,6 @@ Rails.application.routes.draw do
     resources :access_codes
 
     resources :audio_encodings, only: :index
-
-    resources :broadcasts, only: [:show, :update]
 
     resources :playback_formats
 

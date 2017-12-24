@@ -18,9 +18,13 @@ If you are working on the code, always assure that it corresponds to the officia
 
     $ rubocop
 
-To update the generated ERD or swagger.json in `doc/`, the following Rake tasks are here to help:
+Whenever you add, remove or change controller actions or their parameters, document the changes in the respective swagger blocks and re-generate `doc/swagger.json`:
 
-    $ rails erd swagger:json
+    $ rails swagger:json
+
+After every migration, do not forget to re-generate the ERD. So the documentation stays up to date, too:
+
+    $ rails erd
 
 
 ## Source Structure
