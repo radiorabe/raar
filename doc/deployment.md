@@ -218,7 +218,7 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 
 * `setsebool -P allow_httpd_mod_auth_pam 1`.
 * `setsebool -P httpd_mod_auth_pam 1`.
-* `setsebool -P httpd_dbus_sssd on`
+* `setsebool -P httpd_dbus_sssd 1`
 * Restart Apache: `systemctl restart httpd`.
 * Add empty configuration files for raar:
   ```bash
@@ -286,3 +286,58 @@ When Capistrano is not used at all, the tarball may be directly exploded into `/
   systemctl enable --now raar-import.timer
   systemctl enable --now raar-downgrade.timer
   ```
+
+## Zabbix
+
+If you have an own Zabbix Server set up, you may add triggers for error messages showing up in the logs.
+
+### Prepare server
+
+In order for the zabbix agent to be able to read the log files, only the following steps are necessary:
+
+* Add zabbix user to adm group: `usermod -a -G adm zabbix`
+* Add the following lines to `/etc/rsyslog.conf`:
+
+  ```bash
+  # All new files belong to group adm.
+  $FileGroup adm
+  $FileCreateMode 0640
+  $Umask 0022
+  ```
+* Restart Rsyslog: `systemctl restart rsyslog`.
+* Change group for existing file: `chgrp adm /var/log/messages` and `chmod g+r /var/log/messages`.
+* Create a file `zabbix_read_logs.pe` with the following content:
+
+      module zabbix_read_logs 1.0;
+
+      require {
+        type var_log_t;
+        type zabbix_agent_t;
+        class file { open read };
+      }
+
+      #============= zabbix_agent_t ==============
+      allow zabbix_agent_t var_log_t:file open;
+      allow zabbix_agent_t var_log_t:file read;
+
+* Compile and load this SELinux module with the following commands
+
+  ```bash
+  checkmodule -M -m -o zabbix_read_logs.mod zabbix_read_logs.pe
+  semodule_package -o zabbix_read_logs.pp -m zabbix_read_logs.mod
+  semodule -i zabbix_read_logs.pp
+  ```
+
+
+### Configure Zabbix
+
+Add an item to monitor log events:
+
+* Type = Zabbix Agent (active)
+* Key = log[/var/log/messages,"raar.import.+ERROR"]
+* Type of Information = Log
+* Update Interval = 60
+
+Add a trigger that resets itself after 15 minutes if no new messages occur:
+
+* Expression = {archiv.rabe.ch:log[/var/log/messages,"raar.import.+ERROR"].nodata(900)}=0
