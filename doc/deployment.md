@@ -333,11 +333,12 @@ In order for the zabbix agent to be able to read the log files, only the followi
 
 Add an item to monitor log events:
 
+* Name = Exception in Raar
 * Type = Zabbix Agent (active)
-* Key = log[/var/log/messages,"raar.import.+ERROR"]
+* Key = log[/var/log/messages,"raar.+ERROR"]
 * Type of Information = Log
-* Update Interval = 60
+* Update Interval = 300
 
-Add a trigger that resets itself after 15 minutes if no new messages occur:
+Add a trigger that resets itself after one hour if no new messages occur:
 
-* Expression = {archiv.rabe.ch:log[/var/log/messages,"raar.import.+ERROR"].nodata(900)}=0
+* Expression = {archiv.rabe.ch:log[/var/log/messages,"raar.+ERROR"].nodata(3600)}=0
