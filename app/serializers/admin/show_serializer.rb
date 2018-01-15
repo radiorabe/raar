@@ -5,6 +5,10 @@ module Admin
       property :attributes do
         property :name, type: :string
         property :details, type: :string
+        property :created_at, type: :string, format: 'date-time', readOnly: true
+        property :updated_at, type: :string, format: 'date-time', readOnly: true
+        property :creator_id, type: :integer, readOnly: true
+        property :updater_id, type: :integer, readOnly: true
       end
       property :relationships do
         property :profile do
@@ -19,7 +23,8 @@ module Admin
       end
     end
 
-    attributes :id, :name, :details
+    attributes :id, :name, :details,
+               :created_at, :updated_at, :creator_id, :updater_id
 
     belongs_to :profile, serializer: ProfileSerializer
 

@@ -10,11 +10,14 @@
 #  channels    :integer          not null
 #  created_at  :datetime
 #  updated_at  :datetime
+#  creator_id  :integer
+#  updater_id  :integer
 #
 
 class PlaybackFormat < ApplicationRecord
 
   include WithAudioFormat
+  include UserStampable
 
   has_many :audio_files, dependent: :nullify
 

@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                 :integer          not null, primary key
+#  username           :string           not null
+#  first_name         :string
+#  last_name          :string
+#  groups             :string
+#  api_key            :string           not null
+#  api_key_expires_at :datetime
+#  created_at         :datetime
+#  updated_at         :datetime
+#  creator_id         :integer
+#  updater_id         :integer
+#
+
 class UserSerializer < ApplicationSerializer
 
   json_api_swagger_schema do

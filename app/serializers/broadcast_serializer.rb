@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: broadcasts
+#
+#  id          :integer          not null, primary key
+#  show_id     :integer          not null
+#  label       :string           not null
+#  started_at  :datetime         not null
+#  finished_at :datetime         not null
+#  people      :string
+#  details     :text
+#  created_at  :datetime
+#  updated_at  :datetime
+#  updater_id  :integer
+#
+
 class BroadcastSerializer < ApplicationSerializer
 
   json_api_swagger_schema do

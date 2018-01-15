@@ -10,6 +10,8 @@
 #  channels    :integer          not null
 #  created_at  :datetime
 #  updated_at  :datetime
+#  creator_id  :integer
+#  updater_id  :integer
 #
 
 low:

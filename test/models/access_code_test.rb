@@ -5,6 +5,8 @@
 #  id         :integer          not null, primary key
 #  code       :string           not null
 #  expires_at :date
+#  created_at :datetime
+#  creator_id :integer
 #
 
 require 'test_helper'

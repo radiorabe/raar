@@ -8,9 +8,13 @@
 #  default     :boolean          default(FALSE), not null
 #  created_at  :datetime
 #  updated_at  :datetime
+#  creator_id  :integer
+#  updater_id  :integer
 #
 
 class Profile < ApplicationRecord
+
+  include UserStampable
 
   has_many :shows, dependent: :restrict_with_error
   has_many :archive_formats, dependent: :destroy

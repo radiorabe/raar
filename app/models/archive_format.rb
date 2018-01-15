@@ -14,11 +14,14 @@
 #  max_logged_in_bitrate   :integer
 #  max_priviledged_bitrate :integer
 #  priviledged_groups      :string
+#  creator_id              :integer
+#  updater_id              :integer
 #
 
 class ArchiveFormat < ApplicationRecord
 
   include WithAudioFormat
+  include UserStampable
 
   attr_readonly :codec
 

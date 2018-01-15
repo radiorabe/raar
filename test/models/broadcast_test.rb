@@ -9,6 +9,9 @@
 #  finished_at :datetime         not null
 #  people      :string
 #  details     :text
+#  created_at  :datetime
+#  updated_at  :datetime
+#  updater_id  :integer
 #
 
 require 'test_helper'

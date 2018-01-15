@@ -8,6 +8,8 @@
 #  default     :boolean          default(FALSE), not null
 #  created_at  :datetime
 #  updated_at  :datetime
+#  creator_id  :integer
+#  updater_id  :integer
 #
 
 require 'test_helper'

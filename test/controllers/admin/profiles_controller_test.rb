@@ -33,6 +33,8 @@ module Admin
         assert_response 201
       end
       assert_equal 'Live', json['data']['attributes']['name']
+      assert_equal users(:admin).id, json['data']['attributes']['creator_id']
+      assert_equal users(:admin).id, json['data']['attributes']['updater_id']
     end
 
     test 'POST create fails for invalid params' do
@@ -53,6 +55,10 @@ module Admin
               data: { attributes: { description: 'Very important shows' } } }
       assert_response 200
       assert_equal 'Very important shows', json['data']['attributes']['description']
+      assert_nil json['data']['attributes']['creator_id']
+      assert_equal users(:admin).id, json['data']['attributes']['updater_id']
+      assert_nil json['data']['attributes']['creator_id']
+      assert_equal users(:admin).id, json['data']['attributes']['updater_id']
       assert_equal 'Very important shows', entry.reload.description
     end
 

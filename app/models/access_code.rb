@@ -5,11 +5,15 @@
 #  id         :integer          not null, primary key
 #  code       :string           not null
 #  expires_at :date
+#  created_at :datetime
+#  creator_id :integer
 #
 
 class AccessCode < ApplicationRecord
 
   CODE_LENGTH = 6
+
+  include UserStampable
 
   attr_readonly :code
 

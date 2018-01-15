@@ -7,6 +7,10 @@
 #  months            :integer          not null
 #  bitrate           :integer
 #  channels          :integer
+#  created_at        :datetime
+#  updated_at        :datetime
+#  creator_id        :integer
+#  updater_id        :integer
 #
 
 important_mp3_1:

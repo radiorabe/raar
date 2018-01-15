@@ -7,10 +7,16 @@
 #  months            :integer          not null
 #  bitrate           :integer
 #  channels          :integer
+#  created_at        :datetime
+#  updated_at        :datetime
+#  creator_id        :integer
+#  updater_id        :integer
 #
+
 class DowngradeAction < ApplicationRecord
 
   include WithAudioFormat
+  include UserStampable
 
   belongs_to :archive_format
   has_one :profile, through: :archive_format, inverse_of: false

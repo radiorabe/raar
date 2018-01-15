@@ -194,10 +194,7 @@ class BroadcastsController < CrudController
   end
 
   def require_user
-    unless current_user
-      headers['WWW-Authenticate'] = 'Token realm="Application"'
-      render json: { errors: 'Not authenticated' }, status: :unauthorized
-    end
+    render_unauthorized unless current_user
   end
 
   def fetch_current_user

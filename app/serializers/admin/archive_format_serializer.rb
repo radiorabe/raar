@@ -42,6 +42,8 @@ module Admin
                  description: 'Defines which users may download audio files.'
         property :created_at, type: :string, format: 'date-time', readOnly: true
         property :updated_at, type: :string, format: 'date-time', readOnly: true
+        property :creator_id, type: :integer, readOnly: true
+        property :updater_id, type: :integer, readOnly: true
       end
       property :links do
         property :self, type: :string, format: 'url', readOnly: true
@@ -50,7 +52,7 @@ module Admin
 
     attributes :id, :codec, :initial_bitrate, :initial_channels, :download_permission,
                :max_public_bitrate, :max_logged_in_bitrate, :max_priviledged_bitrate,
-               :priviledged_groups, :created_at, :updated_at
+               :priviledged_groups, :created_at, :updated_at, :creator_id, :updater_id
 
     link(:self) { admin_profile_archive_format_path(object.profile_id, object) }
 

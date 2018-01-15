@@ -6,8 +6,15 @@
 #  name       :string           not null
 #  details    :text
 #  profile_id :integer          not null
+#  created_at :datetime
+#  updated_at :datetime
+#  creator_id :integer
+#  updater_id :integer
 #
+
 class Show < ApplicationRecord
+
+  include UserStampable
 
   belongs_to :profile
 

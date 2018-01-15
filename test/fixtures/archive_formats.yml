@@ -14,6 +14,8 @@
 #  max_logged_in_bitrate   :integer
 #  max_priviledged_bitrate :integer
 #  priviledged_groups      :string
+#  creator_id              :integer
+#  updater_id              :integer
 #
 
 important_mp3:

@@ -141,6 +141,7 @@ class BroadcastsControllerTest < ActionController::TestCase
     assert_equal 'Very important shows', json['data']['attributes']['details']
     assert_equal '2013-04-10T11:00:00.000+02:00', json['data']['attributes']['started_at']
     assert_equal 'Very important shows', entry.reload.details
+    assert_equal users(:admin), entry.updater
   end
 
   test 'PATCH as regular user with api_token is possible' do
@@ -158,6 +159,7 @@ class BroadcastsControllerTest < ActionController::TestCase
     assert_equal 'Very important shows', json['data']['attributes']['details']
     assert_equal '2013-04-10T11:00:00.000+02:00', json['data']['attributes']['started_at']
     assert_equal 'Very important shows', entry.reload.details
+    assert_equal users(:speedee), entry.updater
   end
 
   test 'PATCH with access code fails' do

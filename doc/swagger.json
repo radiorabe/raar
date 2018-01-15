@@ -2706,6 +2706,15 @@
               "readOnly": true
             }
           }
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "creator_id": {
+          "type": "integer",
+          "readOnly": true
         }
       }
     },
@@ -2768,6 +2777,14 @@
             "updated_at": {
               "type": "string",
               "format": "date-time",
+              "readOnly": true
+            },
+            "creator_id": {
+              "type": "integer",
+              "readOnly": true
+            },
+            "updater_id": {
+              "type": "integer",
               "readOnly": true
             }
           }
@@ -2840,6 +2857,24 @@
             "channels": {
               "type": "integer",
               "description": "See audio_encodings for archive_format.codec for possible values.Set to null to entirely delete the files after this many months."
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true
+            },
+            "updated_at": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true
+            },
+            "creator_id": {
+              "type": "integer",
+              "readOnly": true
+            },
+            "updater_id": {
+              "type": "integer",
+              "readOnly": true
             }
           }
         },
@@ -2892,6 +2927,14 @@
               "type": "string",
               "format": "date-time",
               "readOnly": true
+            },
+            "creator_id": {
+              "type": "integer",
+              "readOnly": true
+            },
+            "updater_id": {
+              "type": "integer",
+              "readOnly": true
             }
           }
         },
@@ -2934,6 +2977,14 @@
               "type": "string",
               "format": "date-time",
               "readOnly": true
+            },
+            "creator_id": {
+              "type": "integer",
+              "readOnly": true
+            },
+            "updater_id": {
+              "type": "integer",
+              "readOnly": true
             }
           }
         },
@@ -2963,6 +3014,24 @@
             },
             "details": {
               "type": "string"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true
+            },
+            "updated_at": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true
+            },
+            "creator_id": {
+              "type": "integer",
+              "readOnly": true
+            },
+            "updater_id": {
+              "type": "integer",
+              "readOnly": true
             }
           }
         },
@@ -3032,6 +3101,14 @@
             "updated_at": {
               "type": "string",
               "format": "date-time",
+              "readOnly": true
+            },
+            "creator_id": {
+              "type": "integer",
+              "readOnly": true
+            },
+            "updater_id": {
+              "type": "integer",
               "readOnly": true
             }
           }

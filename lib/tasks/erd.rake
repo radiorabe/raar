@@ -9,6 +9,6 @@ namespace :erd do
     ENV['filename']    ||= 'doc/models'
     ENV['filetype']    ||= 'png'
     ENV['exclude']     ||= 'ActiveRecord::InternalMetadata,ActiveRecord::SchemaMigration,' \
-                           'Airtime::Show,Airtime::ShowInstance'
+                           'Airtime::Show,Airtime::ShowInstance,User'
   end
 end

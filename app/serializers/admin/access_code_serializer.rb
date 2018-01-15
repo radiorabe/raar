@@ -9,9 +9,11 @@ module Admin
       property :links do
         property :self, type: :string, format: 'url', readOnly: true
       end
+      property :created_at, type: :string, format: 'date-time', readOnly: true
+      property :creator_id, type: :integer, readOnly: true
     end
 
-    attributes :id, :code, :expires_at
+    attributes :id, :code, :expires_at, :created_at, :creator_id
 
     link(:self) { admin_access_code_path(object) }
 

@@ -11,15 +11,18 @@ module Admin
 
     def require_admin
       if current_user
-        render json: { errors: 'Forbidden' }, status: :forbidden unless current_user.admin?
+        render_forbidden unless current_user.admin?
       else
-        headers['WWW-Authenticate'] = 'Token realm="Application"'
-        render json: { errors: 'Not authenticated' }, status: :unauthorized
+        render_unauthorized
       end
     end
 
     def fetch_current_user
       Auth::Jwt.new(request).fetch_user
+    end
+
+    def render_forbidden
+      render json: { errors: 'Forbidden' }, status: :forbidden
     end
 
   end
