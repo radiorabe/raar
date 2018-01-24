@@ -39,12 +39,12 @@ module Downgrade
                                 path: 'dummy_highest',
                                 codec: 'mp3',
                                 bitrate: 320,
-                                channels: 2)
+                                channels: 1)
       file2 = AudioFile.create!(broadcast: b1,
                                 path: 'dummy_higher1',
                                 codec: 'mp3',
                                 bitrate: 256,
-                                channels: 1)
+                                channels: 2)
       file3 = AudioFile.create!(broadcast: b1,
                                 path: 'dummy_higher2',
                                 codec: 'mp3',
@@ -53,7 +53,9 @@ module Downgrade
       home = FileStore::Structure.home
       path = File.join('2012', '12', '12', '2012-12-12T200000+0100_120_gschach9schlimmers.192k_2.mp3')
 
-      AudioProcessor::Ffmpeg.any_instance.
+      proc = AudioProcessor::Ffmpeg.new('foo')
+      AudioProcessor.expects(:new).with(file2.absolute_path).returns(proc)
+      proc.
         expects(:transcode).
         with(File.join(home, path), AudioFormat.new('mp3', 192, 2))
 
@@ -144,6 +146,11 @@ module Downgrade
                                  codec: 'mp3',
                                  bitrate: 224,
                                  channels: 2)
+      higher_less_channels = AudioFile.create!(broadcast: b1,
+                                path: 'dummy_higher_less',
+                                codec: 'mp3',
+                                bitrate: 256,
+                                channels: 1)
       start = Time.zone.now - action.months.months + 1.day
       b2 = Broadcast.create!(show: shows(:g9s),
                              started_at: start,
@@ -161,7 +168,114 @@ module Downgrade
                                      codec: 'mp3',
                                      bitrate: 224,
                                      channels: 2)
-      assert_equal [higher], downgrader.pending_files
+      assert_equal [higher, higher_less_channels].to_set, downgrader.pending_files.to_set
+    end
+
+    test 'finds files with higher bitrate with lower channel action' do
+      b1 = Broadcast.create!(show: shows(:g9s),
+                             started_at: Time.zone.local(2012, 12, 12, 20),
+                             finished_at: Time.zone.local(2012, 12, 12, 22))
+      lower  = AudioFile.create!(broadcast: b1,
+                                 path: 'dummy_lower',
+                                 codec: 'mp3',
+                                 bitrate: 128,
+                                 channels: 2)
+      same   = AudioFile.create!(broadcast: b1,
+                                 path: 'dummy_same',
+                                 codec: 'mp3',
+                                 bitrate: 192,
+                                 channels: 2)
+      higher = AudioFile.create!(broadcast: b1,
+                                 path: 'dummy_higher',
+                                 codec: 'mp3',
+                                 bitrate: 224,
+                                 channels: 2)
+
+      downgrade_actions(:default_mp3_2).destroy!
+      action.update!(channels: 1)
+      assert_equal [higher, same, audio_files(:g9s_mai_high)].to_set, downgrader.pending_files.to_set
+    end
+
+    test 'highest is true if other has higher bitrate but less channels' do
+      file = create_audio(bitrate: 224, channels: 2)
+      other = create_audio(bitrate: 320, channels: 1)
+      assert downgrader.highest?(file)
+      assert !downgrader.highest?(other)
+    end
+
+    test 'highest is false if other has higher bitrate and same channels' do
+      file = create_audio(bitrate: 224, channels: 2)
+      other = create_audio(bitrate: 320, channels: 2)
+      assert !downgrader.highest?(file)
+      assert downgrader.highest?(other)
+    end
+
+    test 'highest is false if other has same bitrate and more channels' do
+      file = create_audio(bitrate: 224, channels: 1)
+      other = create_audio(bitrate: 224, channels: 2)
+      assert !downgrader.highest?(file)
+      assert downgrader.highest?(other)
+    end
+
+    test 'highest is true if other has bitrate below action but more channels' do
+      file = create_audio(bitrate: 320, channels: 1)
+      other = create_audio(bitrate: 128, channels: 2)
+      assert downgrader.highest?(file)
+      # no assert for other because it would not be in pending_files
+    end
+
+    test 'highest is true if other has lower bitrate and both have less channels than action' do
+      file = create_audio(bitrate: 320, channels: 1)
+      other = create_audio(bitrate: 224, channels: 1)
+      assert downgrader.highest?(file)
+      assert !downgrader.highest?(other)
+    end
+
+    test 'highest is true if other has lower bitrate or less channels' do
+      file = create_audio(bitrate: 256, channels: 2)
+      other1 = create_audio(bitrate: 320, channels: 1)
+      other2 = create_audio(bitrate: 224, channels: 2)
+      assert downgrader.highest?(file)
+      assert !downgrader.highest?(other1)
+      assert !downgrader.highest?(other2)
+    end
+
+    test 'highest is true if other has lower bitrate and more channels than action' do
+      downgrade_actions(:default_mp3_2).destroy!
+      action.update!(channels: 1)
+      file = create_audio(bitrate: 320, channels: 1)
+      other = create_audio(bitrate: 224, channels: 2)
+      assert downgrader.highest?(file)
+      assert !downgrader.highest?(other)
+    end
+
+    test 'highest is true if other has lower bitrate and both have more channels than action' do
+      downgrade_actions(:default_mp3_2).destroy!
+      action.update!(channels: 1)
+      file = create_audio(bitrate: 320, channels: 2)
+      other = create_audio(bitrate: 224, channels: 2)
+      assert downgrader.highest?(file)
+      assert !downgrader.highest?(other)
+    end
+
+    test 'highest is true if other has lower bitrate and both have same channels as action' do
+      downgrade_actions(:default_mp3_2).destroy!
+      action.update!(channels: 1)
+      file = create_audio(bitrate: 320, channels: 1)
+      other = create_audio(bitrate: 224, channels: 1)
+      assert downgrader.highest?(file)
+      assert !downgrader.highest?(other)
+    end
+
+    test 'highest is true if other has lower bitrate' do
+      downgrade_actions(:default_mp3_2).destroy!
+      action.update!(channels: 1)
+      file = create_audio(bitrate: 320, channels: 1)
+      other1 = create_audio(bitrate: 256, channels: 2)
+      other2 = create_audio(bitrate: 224, channels: 1)
+      assert downgrader.highest?(file)
+      assert !downgrader.highest?(other1)
+      assert !downgrader.highest?(other2)
     end
 
     def downgrader
@@ -170,6 +284,16 @@ module Downgrade
 
     def action
       downgrade_actions(:default_mp3_1)
+    end
+
+    def create_audio(attrs)
+      AudioFile.create!(attrs.reverse_merge(
+        broadcast: broadcasts(:g9s_juni),
+        path: "dummy-#{rand(9999999999)}",
+        codec: 'mp3',
+        bitrate: 320,
+        channels: 2
+      ))
     end
 
   end

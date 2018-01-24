@@ -9,8 +9,6 @@ module Downgrade
 
     end
 
-    delegate :bitrate, :channels, to: :action
-
     def process_files
       pending_files.find_in_batches(batch_size: 20) do |list|
         Parallelizer.new(list).run do |file|
@@ -20,7 +18,7 @@ module Downgrade
     end
 
     def pending_files
-      super.where('audio_files.bitrate > ? OR audio_files.channels > ?', bitrate, channels)
+      super.merge(higher_quality_files)
     end
 
     def handle(file)
@@ -28,17 +26,15 @@ module Downgrade
       remove(file)
     end
 
-    private
-
     def highest?(file)
       !AudioFile
         .where(broadcast_id: file.broadcast_id, codec: file.codec)
-        .where('bitrate > ? OR (bitrate = ? AND channels > ?)',
-               file.bitrate,
-               file.bitrate,
-               file.channels)
+        .merge(higher_quality_files)
+        .where(highest_quality_condition(file))
         .exists?
     end
+
+    private
 
     def create_downgraded(source)
       target = target_audio_file(source)
@@ -53,8 +49,8 @@ module Downgrade
     def target_attributes(file)
       { broadcast_id: file.broadcast_id,
         codec: file.codec,
-        bitrate: bitrate,
-        channels: channels }
+        bitrate: action.bitrate,
+        channels: action.channels }
     end
 
     # Create a downgraded version of the audio file on the file system if it does not exist yet.
@@ -68,6 +64,28 @@ module Downgrade
 
     def create_database_entry(target)
       target.save! if target.changed?
+    end
+
+    def higher_quality_files
+      AudioFile.where('audio_files.bitrate > ? OR ' \
+                      '(audio_files.bitrate = ? AND audio_files.channels > ?)',
+                      action.bitrate, action.bitrate, action.channels)
+    end
+
+    def highest_quality_condition(file)
+      conditions = base_highest_quality_conditions(file)
+      if file.channels < action.channels
+        conditions.first << ' OR channels > ?'
+        conditions << file.channels
+      end
+      conditions
+    end
+
+    def base_highest_quality_conditions(file)
+      ['(bitrate > ? AND channels >= ?) OR ' \
+       '(bitrate = ? AND channels > ?)',
+       file.bitrate, [action.channels, file.channels].min,
+       file.bitrate, file.channels]
     end
 
   end
