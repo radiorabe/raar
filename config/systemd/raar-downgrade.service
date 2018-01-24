@@ -6,6 +6,7 @@ Description=Raar audio archive downgrade
 [Service]
 Type=simple
 User=raar
+Nice=10
 Environment="RAAR_LOG=stdout"
 EnvironmentFile=/var/www/raar/.env
 ExecStart=/usr/bin/scl enable rh-ruby22 -- /var/www/raar/current/bin/downgrade
