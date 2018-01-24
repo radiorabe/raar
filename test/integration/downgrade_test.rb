@@ -9,12 +9,18 @@ class DowngradeTest < ActiveSupport::TestCase
 
     test 'downgrades and ereases all pending files' do
       FileUtils.rm_rf(FileStore::Structure.home)
+      # additional audio that will be used for downgrading
+      AudioFile.create!(broadcast: broadcasts(:g9s_mai),
+                        codec: 'mp3',
+                        bitrate: 320,
+                        channels: 2,
+                        path: '2013/05/20/2013-05-20T200000+0200_180_g9s_shizzle_edition.320k_2.mp3')
       AudioGenerator.new.silent_files_for_audio_files
 
       assert_equal 3, file_count('2013', '04', '10')
-      assert_equal 4, file_count('2013', '05', '20')
+      assert_equal 5, file_count('2013', '05', '20')
 
-      assert_difference('AudioFile.count', -3) do
+      assert_difference('AudioFile.count', -4) do
         require 'downgrade' # load main module file
         Downgrade.run
       end
@@ -32,6 +38,7 @@ class DowngradeTest < ActiveSupport::TestCase
 
       g9s = broadcasts(:g9s_mai)
       assert !g9s.audio_files.where(bitrate: 192).exists?
+      assert !g9s.audio_files.where(bitrate: 320).exists?
       assert_equal 1, g9s.audio_files.where(bitrate: 128).count
 
       klangbecken = broadcasts(:klangbecken_mai1)

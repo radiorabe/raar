@@ -6,7 +6,7 @@ module Downgrade
     class << self
 
       def run
-        actions.find_each do |action|
+        actions.find_each(batch_size: 5) do |action|
           new(action).process_files
         end
       end

@@ -12,7 +12,7 @@ module Downgrade
     delegate :bitrate, :channels, to: :action
 
     def process_files
-      pending_files.find_in_batches(batch_size: 100) do |list|
+      pending_files.find_in_batches(batch_size: 20) do |list|
         Parallelizer.new(list).run do |file|
           safe_handle(file)
         end
@@ -24,11 +24,21 @@ module Downgrade
     end
 
     def handle(file)
-      create_downgraded(file)
+      create_downgraded(file) if highest?(file)
       remove(file)
     end
 
     private
+
+    def highest?(file)
+      !AudioFile
+        .where(broadcast_id: file.broadcast_id, codec: file.codec)
+        .where('bitrate > ? OR (bitrate = ? AND channels > ?)',
+               file.bitrate,
+               file.bitrate,
+               file.channels)
+        .exists?
+    end
 
     def create_downgraded(source)
       target = target_audio_file(source)
@@ -42,7 +52,7 @@ module Downgrade
 
     def target_attributes(file)
       { broadcast_id: file.broadcast_id,
-        audio_format: file.audio_format,
+        codec: file.codec,
         bitrate: bitrate,
         channels: channels }
     end
