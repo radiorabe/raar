@@ -21,7 +21,8 @@ module Downgrade
 
       AudioProcessor::Ffmpeg.any_instance.
         expects(:transcode).
-        with(File.join(home, path), AudioFormat.new('mp3', 192, 2))
+        with(is_a(String), AudioFormat.new('mp3', 192, 2))
+      FileUtils.expects(:mv).with(is_a(String), File.join(home, path))
 
       assert_no_difference('AudioFile.count') do
         downgrader.handle(file)
@@ -57,7 +58,8 @@ module Downgrade
       AudioProcessor.expects(:new).with(file2.absolute_path).returns(proc)
       proc.
         expects(:transcode).
-        with(File.join(home, path), AudioFormat.new('mp3', 192, 2))
+        with(is_a(String), AudioFormat.new('mp3', 192, 2))
+      FileUtils.expects(:mv).with(is_a(String), File.join(home, path))
 
       File.expects(:exist?).with(File.join(home, path)).at_least(1).returns(false, true, true)
       [file1, file2, file3].each do |file|
@@ -99,7 +101,8 @@ module Downgrade
       File.expects(:exist?).with(higher.absolute_path).returns(false)
       AudioProcessor::Ffmpeg.any_instance
         .expects(:transcode)
-        .with(File.join(home, lower.path), AudioFormat.new('mp3', 192, 2))
+        .with(is_a(String), AudioFormat.new('mp3', 192, 2))
+      FileUtils.expects(:mv).with(is_a(String), File.join(home, lower.path))
 
       assert_difference('AudioFile.count', -1) do
         downgrader.handle(higher)

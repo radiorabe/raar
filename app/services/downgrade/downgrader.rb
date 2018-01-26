@@ -38,7 +38,7 @@ module Downgrade
 
     def create_downgraded(source)
       target = target_audio_file(source)
-      downgrade_audio(source, target)
+      downgrade_audio(source, target) unless File.exist?(target.absolute_path)
       create_database_entry(target)
     end
 
@@ -53,13 +53,20 @@ module Downgrade
         channels: action.channels }
     end
 
-    # Create a downgraded version of the audio file on the file system if it does not exist yet.
     def downgrade_audio(source, target)
-      return if File.exist?(target.absolute_path)
-
-      processor = AudioProcessor.new(source.absolute_path)
-      processor.transcode(target.absolute_path, target.audio_format)
+      write_via_tempfile(target.absolute_path) do |temp|
+        processor = AudioProcessor.new(source.absolute_path)
+        processor.transcode(temp.path, target.audio_format)
+      end
       inform(target, "Downgraded #{target.codec} to #{target.bitrate}/#{target.channels}")
+    end
+
+    def write_via_tempfile(path)
+      temp = Tempfile.new(['downgraded', File.extname(path)])
+      yield temp
+      FileUtils.mv(temp.path, path)
+    ensure
+      temp.close! if temp
     end
 
     def create_database_entry(target)
