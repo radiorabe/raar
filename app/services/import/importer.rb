@@ -30,6 +30,7 @@ module Import
     def ready_for_import?
       recordings? &&
         !mapping_imported? &&
+        confirmation_obtained? &&
         mapping_complete? &&
         broadcast_valid?
     end
@@ -45,13 +46,15 @@ module Import
     end
 
     def mapping_complete?
-      mapping.complete?.tap do |complete|
-        unless complete
-          inform("Broadcast #{mapping} is not imported, " \
-                 "as the following recordings do not cover the entire duration:\n" +
-                 mapping.recordings.collect(&:path).join("\n"))
+      complete = mapping.complete?
+      unless complete
+        if Rails.configuration.x.interactive
+          complete = ask_for_incomplete_broadcast
+        else
+          inform_incomplete_broadcast
         end
       end
+      complete
     end
 
     def broadcast_valid?
@@ -95,6 +98,30 @@ module Import
         ExceptionNotifier.notify_exception(exception, data: { mapping: mapping })
       end
     end
+
+    def confirmation_obtained?
+      if Rails.configuration.x.interactive
+        print "Do you want to import broadcast #{mapping}? (Y/n) " # rubocop:disable Rails/Output
+        gets.strip.casecmp('y')
+      else
+        true
+      end
+    end
+
+    def inform_incomplete_broadcast
+      inform("Broadcast #{mapping} is not imported, " \
+             "as the following recordings do not cover the entire duration:\n" +
+             mapping.recordings.collect(&:path).join("\n"))
+    end
+
+    # rubocop:disable Rails/Output
+    def ask_for_incomplete_broadcast
+      puts "The recordings for #{mapping} do not cover the entire broadcast duration:"
+      puts mapping.recordings.collect(&:path).join("\n")
+      print 'Do you want to import an incomplete broadcast? (y/N) '
+      gets.strip.casecmp('y')
+    end
+    # rubocop:enable Rails/Output
 
   end
 end

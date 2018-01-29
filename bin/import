@@ -1,8 +1,19 @@
 #!/usr/bin/env ruby
 
 # Imports all pending recordings that form a complete broadcast.
+# Run with -i [recordings] to import given recordings interactively.
 # See doc/deployment.md for how to schedule this command with cron.
 
 require File.expand_path('../../config/environment', __FILE__)
 
-Import.run
+interactive, *files = ARGV
+if interactive == '-i'
+  Rails.configuration.x.interactive = true
+  Import.run(files)
+elsif ARGV.blank?
+  Import.run
+else
+  puts 'Usage:'
+  puts '$ bin/import'
+  puts '$ bin/import -i {recordings}'
+end

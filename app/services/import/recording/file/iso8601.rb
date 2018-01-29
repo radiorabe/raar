@@ -2,7 +2,7 @@ module Import
   module Recording
     module File
 
-      # Iso 8601 recordings must have the format yyyy-mm-ddTHHMM+ZZZZ_ddd.ext, where ZZZZ
+      # Iso 8601 recordings must have the format yyyy-mm-ddTHHMMSS+ZZZZ_ddd.ext, where ZZZZ
       # stands for the time zone offset, ddd for the duration in minutes and ext
       # for the file extension.
       class Iso8601 < Base
@@ -19,6 +19,8 @@ module Import
 
         def started_at
           @started_at ||= Time.strptime(filename_parts[1], DATE_TIME_FORMAT).in_time_zone
+        rescue StandardError
+          raise_invalid_filename
         end
 
         # in seconds
@@ -38,6 +40,10 @@ module Import
         def filename_parts
           name = basename('.*')
           name.match(/^(.+)_(\d{3})(#{IMPORTED_SUFFIX})?$/)
+        end
+
+        def raise_invalid_filename
+          raise ArgumentError, 'Filename must be in the format yyyy-mm-ddTHHMMSS+ZZZZ_ddd.ext'
         end
 
       end

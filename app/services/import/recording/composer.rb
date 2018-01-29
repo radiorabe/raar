@@ -31,7 +31,9 @@ module Import
       private
 
       def check_arguments
-        raise(ArgumentError, 'broadcast mapping must be complete') unless mapping.complete?
+        if !mapping.complete? && !Rails.configuration.x.interactive
+          raise(ArgumentError, 'broadcast mapping must be complete')
+        end
         if (recordings - mapping.recordings).present?
           raise(ArgumentError, 'recordings must be part of the broadcast mapping')
         end

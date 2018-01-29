@@ -33,6 +33,9 @@ module Raar
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 
+    # Flag to use in import binary for interactive runs.
+    config.x.interactive = false
+
     routes.default_url_options = {
       protocol: Rails.application.secrets.ssl ? 'https' : 'http',
       host: Rails.application.secrets.host_name,
