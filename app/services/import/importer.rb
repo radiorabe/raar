@@ -75,7 +75,7 @@ module Import
     def compose_master(recordings)
       warn_for_too_short_recordings(recordings)
       inform("Composing master file for broadcast #{mapping} out of the following recordings:\n" +
-            recordings.collect(&:path).join("\n"))
+             recordings.collect(&:path).join("\n"))
       Recording::Composer.new(mapping, recordings).compose
     end
 
