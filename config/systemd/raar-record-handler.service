@@ -1,0 +1,18 @@
+[Unit]
+Description=RAAR Recording Handler
+Documentation=https://github.com/radiorabe/raar
+After=remote-fs.target
+
+[Service]
+User=rotter
+Group=rotter
+
+Environment="RAAR_RECORD_HANDLER_WATCH_DIR=/var/lib/rotter/raar"
+Environment="RAAR_RECORD_HANDLER_DEST_DIR=/var/tmp/raar/import"
+
+ExecStart=/usr/local/bin/raar-record-handler.sh \
+              ${RAAR_RECORD_HANDLER_WATCH_DIR} \
+              ${RAAR_RECORD_HANDLER_DEST_DIR}
+
+[Install]
+WantedBy=multi-user.target
