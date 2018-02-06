@@ -20,6 +20,7 @@ It consists of three main parts:
 * [API](doc/api.md)
 * [Import](doc/import.md)
 * [Downgrade](doc/downgrade.md)
+* [Recording](doc/recording.md)
 
 ## License
 
