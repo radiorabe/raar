@@ -6,7 +6,7 @@ See [Architecture](architecture.md) for details on the import settings.
 
 ## Recordings
 
-The import processes audio files from a external sources, aka recordings. The way these files are created is not part of RAAR. The following pre-conditions must hold:
+The import processes audio files from a external sources, aka recordings. The way these files are created is not part of RAAR. Refer to [Recording](recording.md) in case you don't already have a recording solution. The following pre-conditions must hold:
 
 * The audio files are put in the directories defined by `IMPORT_DIRECTORIES`.
 * Multiple directories may contain different recordings for the same times (for failover purposes), but with the same duration.
