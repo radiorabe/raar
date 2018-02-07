@@ -1,7 +1,7 @@
 [Unit]
 Description=RAAR Recording Handler
 Documentation=https://github.com/radiorabe/raar
-After=remote-fs.target
+After=remote-fs.target rotter@raar.service
 
 [Service]
 User=rotter
