@@ -5,10 +5,10 @@ assumes that recordings are placed within directories defined by
 `IMPORT_DIRECTORIES` waiting for the [RAAR Importer](import.md) to pick them
 up.
 
-But don't panic :-) we've got you covered in case you haven't your own
+But don't panic :-) we've got you covered in case you don't have your own
 recording solution already in place.
 
-The following sections describe a recording solution based on
+The following sections describes a recording solution based on
 [JACK](http://www.jackaudio.org/), [Rotter](https://www.aelius.com/njh/rotter/)
 and some systemd service units, which plays nicely together with RAAR.
 
