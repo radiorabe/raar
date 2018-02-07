@@ -326,7 +326,7 @@ Jackd:
 
 * Systemd journal of `jackd@raar.service`
 
-   ```
+   ```bash
    journalctl -u jackd@raar.service
    journalctl -u jackd@raar.service -f
    ```
@@ -338,7 +338,7 @@ Rotter:
 
 * Systemd journal of `rotter@raar.service`
 
-   ```
+   ```bash
    journalctl -u rotter@raar.service
    journalctl -u rotter@raar.service -f
    ```
@@ -351,7 +351,7 @@ RAAR Record Handler:
 
 * Systemd journal of `raar-record-handler.service`
 
-   ```
+   ```bash
    journalctl -u raar-record-handler.service
    journalctl -u raar-record-handler.service -f
    ```
