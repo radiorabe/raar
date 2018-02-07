@@ -279,7 +279,7 @@ Environment="RAAR_RECORD_HANDLER_DEST_DIR="/path/to/my/raar-import/dir"
 Make sure the `rotter` user has read/write access to the destination directory:
 ```bash
 # Adapt to your import directory
-chown rotter:rooter /var/tmp/raar/import
+chown rotter:rotter /var/tmp/raar/import
 ```
 
 Enable and start the `raar-record-handler.service`: 
