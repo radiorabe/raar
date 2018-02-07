@@ -257,13 +257,13 @@ Install the [RAAR Record Handler](bin/raar-record-handler.sh) and its
 corresponding systemd service unit
 ([raar-record-handler.service](config/systemd/raar-record-handler.service)):
 ```bash
-wget -O /usr/local/bin/raar-record-handler.sh
+wget -O /usr/local/bin/raar-record-handler.sh \
      https://raw.githubusercontent.com/radiorabe/raar/master/bin/raar-record-handler.sh
 
 chmod 755 /usr/local/bin/raar-record-handler.sh
 
 
-wget -O /etc/systemd/system \
+wget -O /etc/systemd/system/raar-record-handler.service \
      https://raw.githubusercontent.com/paraenggu/raar/feature/recording/config/systemd/raar-record-handler.service
 ```
 
