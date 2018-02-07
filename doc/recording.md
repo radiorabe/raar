@@ -34,15 +34,15 @@ modifications).
 
 ## Deployment
 ### Deployment on CentOS 7 systems
-There are pre-built binary packages for CentOS 7 available from
-[EPEL](https://fedoraproject.org/wiki/EPEL) (jack) and [RaBe APEL package
-repository](https://build.opensuse.org/project/show/home:radiorabe:audio)
-(rotter), which can be installed as follows:
+There are pre-built binary packages for CentOS 7 available from [Fedora
+EPEL](https://fedoraproject.org/wiki/EPEL) (jack) and [RaBe
+APEL](https://build.opensuse.org/project/show/home:radiorabe:audio) (rotter),
+which can be installed as follows:
 ```bash
-# Add EPEL repository
+# Add Fedora EPEL repository
 yum install epel-release
 
-# Install jackd and helper tools (from EPEL)
+# Install jackd and helper tools (from Fedora EPEL)
 yum install -y jack-audio-connection-kit \
                jack-audio-connection-kit-example-clients
 
