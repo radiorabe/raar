@@ -42,10 +42,6 @@ which can be installed as follows:
 # Add Fedora EPEL repository
 yum install epel-release
 
-# Install jackd and helper tools (from Fedora EPEL)
-yum install -y jack-audio-connection-kit \
-               jack-audio-connection-kit-example-clients
-
 # Add RaBe APEL repository
 curl -o /etc/yum.repos.d/home:radiorabe:audio.repo \
      http://download.opensuse.org/repositories/home:/radiorabe:/audio/CentOS_7/home:radiorabe:audio.repo
