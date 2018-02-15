@@ -5,10 +5,10 @@ assumes that recordings are placed within directories defined by
 `IMPORT_DIRECTORIES` waiting for the [RAAR Importer](import.md) to pick them
 up.
 
-But don't panic :-) we've got you covered in case you haven't your own
+But don't panic :-) we've got you covered in case you don't have your own
 recording solution already in place.
 
-The following sections describe a recording solution based on
+The following sections describes a recording solution based on
 [JACK](http://www.jackaudio.org/), [Rotter](https://www.aelius.com/njh/rotter/)
 and some systemd service units, which plays nicely together with RAAR.
 
@@ -34,17 +34,13 @@ modifications).
 
 ## Deployment
 ### Deployment on CentOS 7 systems
-There are pre-built binary packages for CentOS 7 available from
-[EPEL](https://fedoraproject.org/wiki/EPEL) (jack) and [RaBe APEL package
-repository](https://build.opensuse.org/project/show/home:radiorabe:audio)
-(rotter), which can be installed as follows:
+There are pre-built binary packages for CentOS 7 available from [Fedora
+EPEL](https://fedoraproject.org/wiki/EPEL) (jack) and [RaBe
+APEL](https://build.opensuse.org/project/show/home:radiorabe:audio) (rotter),
+which can be installed as follows:
 ```bash
-# Add EPEL repository
+# Add Fedora EPEL repository
 yum install epel-release
-
-# Install jackd and helper tools (from EPEL)
-yum install -y jack-audio-connection-kit \
-               jack-audio-connection-kit-example-clients
 
 # Add RaBe APEL repository
 curl -o /etc/yum.repos.d/home:radiorabe:audio.repo \
@@ -257,13 +253,13 @@ Install the [RAAR Record Handler](bin/raar-record-handler.sh) and its
 corresponding systemd service unit
 ([raar-record-handler.service](config/systemd/raar-record-handler.service)):
 ```bash
-wget -O /usr/local/bin/raar-record-handler.sh
+wget -O /usr/local/bin/raar-record-handler.sh \
      https://raw.githubusercontent.com/radiorabe/raar/master/bin/raar-record-handler.sh
 
 chmod 755 /usr/local/bin/raar-record-handler.sh
 
 
-wget -O /etc/systemd/system \
+wget -O /etc/systemd/system/raar-record-handler.service \
      https://raw.githubusercontent.com/paraenggu/raar/feature/recording/config/systemd/raar-record-handler.service
 ```
 
@@ -283,7 +279,7 @@ Environment="RAAR_RECORD_HANDLER_DEST_DIR="/path/to/my/raar-import/dir"
 Make sure the `rotter` user has read/write access to the destination directory:
 ```bash
 # Adapt to your import directory
-chown rotter:rooter /var/tmp/raar/import
+chown rotter:rotter /var/tmp/raar/import
 ```
 
 Enable and start the `raar-record-handler.service`: 
@@ -330,7 +326,7 @@ Jackd:
 
 * Systemd journal of `jackd@raar.service`
 
-   ```
+   ```bash
    journalctl -u jackd@raar.service
    journalctl -u jackd@raar.service -f
    ```
@@ -342,7 +338,7 @@ Rotter:
 
 * Systemd journal of `rotter@raar.service`
 
-   ```
+   ```bash
    journalctl -u rotter@raar.service
    journalctl -u rotter@raar.service -f
    ```
@@ -355,7 +351,7 @@ RAAR Record Handler:
 
 * Systemd journal of `raar-record-handler.service`
 
-   ```
+   ```bash
    journalctl -u raar-record-handler.service
    journalctl -u raar-record-handler.service -f
    ```
