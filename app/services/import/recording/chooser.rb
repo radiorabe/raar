@@ -10,12 +10,15 @@ module Import
       end
 
       def best
-        by_audio_length.last
+        by_audio_length.first
       end
 
       def by_audio_length
-        variants.sort_by do |v|
-          v.audio_duration > v.duration ? v.duration : v.audio_duration
+        # using with_index and a sort_by array results in a stable sort,
+        # i.e. positions remain the same if the duration is equal.
+        variants.sort_by.with_index do |v, i|
+          duration = v.audio_duration > v.duration ? v.duration : v.audio_duration
+          [-duration, i]
         end
       end
 
