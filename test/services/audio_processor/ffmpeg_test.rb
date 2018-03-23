@@ -105,6 +105,38 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       end
     end
 
+    test 'concats flac files' do
+      file = Tempfile.new(['merge', '.flac'])
+      begin
+        format = AudioFormat.new('flac', nil, 2)
+        flac1 = AudioGenerator.new.silent_source_file(format)
+        flac2 = AudioGenerator.new.silent_source_file(format)
+        flac3 = AudioGenerator.new.silent_source_file(format)
+        AudioProcessor::Ffmpeg.new(flac1).concat(file.path, [flac2, flac3])
+
+        merge = FFMPEG::Movie.new(file.path)
+        assert_equal 9, merge.duration.round
+        assert_equal 'flac', merge.audio_codec
+      ensure
+        file.close!
+      end
+    end
+
+    test 'fails to concat different files files' do
+      file = Tempfile.new(['merge', '.flac'])
+      begin
+        format = AudioFormat.new('flac', nil, 2)
+        flac1 = AudioGenerator.new.silent_source_file(format)
+        mp31 = audio_files(:g9s_mai_high).absolute_path
+        flac3 = AudioGenerator.new.silent_source_file(format)
+        assert_raises(ArgumentError) do
+          AudioProcessor::Ffmpeg.new(flac1).concat(file.path, [mp31, flac3])
+        end
+      ensure
+        file.close!
+      end
+    end
+
     test 'converts flac to mp3' do
       mp3 = Tempfile.new(['output', '.mp3'])
 

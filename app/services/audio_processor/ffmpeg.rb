@@ -30,6 +30,7 @@ module AudioProcessor
 
     def concat(new_path, other_paths)
       assert_directory(new_path)
+      assert_same_codecs(other_paths)
       list_file = Tempfile.new('list')
       begin
         create_list_file(list_file, [audio.path, *other_paths])
@@ -66,6 +67,14 @@ module AudioProcessor
       @duration ||= accurate_duration
     end
 
+    def audio_format
+      AudioFormat.new(codec, bitrate || 1, channels)
+    end
+
+    def file_extension
+      ::File.extname(audio.path)[1..-1]
+    end
+
     private
 
     def audio
@@ -86,8 +95,10 @@ module AudioProcessor
     end
 
     def concat_audio(new_path, list_file)
+      # flacs are not concated correctly when using copy codec
+      concat_codec = codec == 'flac' ? 'flac' : 'copy'
       run_command(FFMPEG.ffmpeg_binary, '-y', '-f', 'concat', '-safe', '0', '-i',
-                  list_file.path, '-c', 'copy', new_path)
+                  list_file.path, '-c', concat_codec, new_path)
     end
 
     def accurate_duration
@@ -129,11 +140,20 @@ module AudioProcessor
     def same_format?(audio_format)
       audio_format.codec == codec &&
         audio_format.channels == channels &&
-        (audio_format.encoding.lossless? || audio_format.bitrate == bitrate)
+        (audio_format.encoding.lossless? || audio_format.bitrate == bitrate) &&
+        audio_format.file_extension == file_extension
     end
 
     def assert_directory(file)
       FileUtils.mkdir_p(File.dirname(file))
+    end
+
+    def assert_same_codecs(files)
+      extensions = ([audio.path] + files).map { |f| ::File.extname(f) }.uniq
+      if extensions.size > 1
+        raise ArgumentError,
+              "Cannot concat files with different extensions (#{extensions.join(', ')})"
+      end
     end
 
   end

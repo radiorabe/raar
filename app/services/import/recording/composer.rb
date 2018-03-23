@@ -118,7 +118,7 @@ module Import
       end
 
       def trim(file, start, duration)
-        new_tempfile.tap do |target_file|
+        new_tempfile(file).tap do |target_file|
           proc = AudioProcessor.new(file)
           proc.trim(target_file.path, start, duration)
         end
@@ -127,14 +127,41 @@ module Import
       def concat(list)
         return list.first if list.size <= 1
 
-        new_tempfile.tap do |target_file|
-          proc = AudioProcessor.new(list[0].path)
-          proc.concat(target_file.path, list[1..-1].collect(&:path))
+        with_same_format(list) do |unified|
+          new_tempfile(unified[0]).tap do |target_file|
+            proc = AudioProcessor.new(unified[0])
+            proc.concat(target_file.path, unified[1..-1])
+          end
         end
       end
 
-      def new_tempfile
-        Tempfile.new(['master', ::File.extname(first.path)])
+      def with_same_format(list)
+        unified = convert_all_to_same_format(list)
+        yield unified.collect(&:path)
+      ensure
+        unified && unified.each { |file| file.close! if file.respond_to?(:close!) }
+      end
+
+      def convert_all_to_same_format(list)
+        format = AudioProcessor.new(list.first.path).audio_format
+        list.map do |file|
+          if ::File.extname(file.path) == ".#{format.file_extension}"
+            file
+          else
+            convert_to_format(file, format)
+          end
+        end
+      end
+
+      def convert_to_format(file, format)
+        Tempfile.new(['master', ".#{format.file_extension}"]).tap do |target_file|
+          proc = AudioProcessor.new(file.path)
+          proc.transcode(target_file.path, format)
+        end
+      end
+
+      def new_tempfile(template = first.path)
+        Tempfile.new(['master', ::File.extname(template)])
       end
 
     end

@@ -3,6 +3,10 @@ module Import
     # Compares an array of audio files and returns the best one.
     class Chooser
 
+      # Deal with inaccurate duration measurements by reducing
+      # the duration value granularity.
+      DURATION_TOLERANCE = 5.seconds
+
       attr_reader :variants
 
       def initialize(variants)
@@ -18,7 +22,7 @@ module Import
         # i.e. positions remain the same if the duration is equal.
         variants.sort_by.with_index do |v, i|
           duration = v.audio_duration > v.duration ? v.duration : v.audio_duration
-          [-duration, i]
+          [-(duration / DURATION_TOLERANCE.to_f).round, i]
         end
       end
 

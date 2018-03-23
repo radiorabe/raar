@@ -90,6 +90,21 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
                               '2013-06-12T210000+0200_060.mp3')
 
     expect_concat(2)
+    expect_audio_format('mp3', 320)
+    expect_duration(mapping.recordings.first.path, 30)
+    expect_duration(mapping.recordings.second.path, 30)
+    expect_duration(mapping.recordings.last.path, 60)
+    composer.compose
+  end
+
+  test 'returns merged recording with unified format' do
+    composer = build_composer('2013-06-12T200000+0200_030.flac',
+                              '2013-06-12T203000+0200_030.ogg',
+                              '2013-06-12T210000+0200_060.flac')
+
+    expect_concat(2)
+    expect_transcode
+    expect_audio_format('flac', 1)
     expect_duration(mapping.recordings.first.path, 30)
     expect_duration(mapping.recordings.second.path, 30)
     expect_duration(mapping.recordings.last.path, 60)
@@ -102,6 +117,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
                               '2013-06-12T210000+0200_060.mp3')
 
     expect_concat(2)
+    expect_audio_format('mp3', 320)
     expect_duration(mapping.recordings.first.path, 20)
     expect_duration(mapping.recordings.second.path, 20)
     expect_duration(mapping.recordings.last.path, 20)
@@ -114,6 +130,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
                               '2013-06-12T210000+0200_060.mp3')
 
     expect_concat(2)
+    expect_audio_format('mp3', 320)
     expect_trim(:first, 0, 30)
     expect_trim(:last, 00, 60)
     expect_duration(mapping.recordings.first.path, 40)
@@ -127,6 +144,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
                               '2013-06-12T210000+0200_060.mp3')
 
     expect_concat(1)
+    expect_audio_format('mp3', 320)
     expect_duration(mapping.recordings.last.path, 60)
     expect_trim(:first, 10, 60)
     expect_duration(mapping.recordings.first.path, 70)
@@ -138,6 +156,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
                               '2013-06-12T210000+0200_060.mp3')
 
     expect_concat(1)
+    expect_audio_format('mp3', 320)
     expect_duration(mapping.recordings.last.path, 60)
     expect_trim(:first, 10, 40)
     expect_duration(mapping.recordings.first.path, 50)
@@ -158,6 +177,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
                               '2013-06-12T210000+0200_065.mp3')
 
     expect_concat(1)
+    expect_audio_format('mp3', 320)
     expect_duration(mapping.recordings.first.path, 60)
     expect_trim(:last, 0, 60)
     expect_duration(mapping.recordings.last.path, 65)
@@ -170,6 +190,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
                               '2013-06-12T213000+0200_060.mp3')
 
     expect_concat(2)
+    expect_audio_format('mp3', 320)
     expect_duration(mapping.recordings.second.path, 60)
     expect_trim(:first, 30, 30)
     expect_trim(:last, 0, 30)
@@ -184,6 +205,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
                               '2013-06-12T213000+0200_060.mp3')
 
     expect_concat(2)
+    expect_audio_format('mp3', 320)
     expect_duration(mapping.recordings.second.path, 40)
     expect_trim(:first, 30, 20)
     expect_trim(:last, 0, 20)
@@ -218,6 +240,18 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
   def expect_concat(file_count)
     proc = mock('processor')
     proc.expects(:concat).with(instance_of(String), responds_with(:size, file_count))
+    AudioProcessor.expects(:new).with(instance_of(String)).returns(proc)
+  end
+
+  def expect_audio_format(codec, bitrate = 1)
+    proc = mock('processor')
+    proc.expects(:audio_format).returns(AudioFormat.new(codec, bitrate, 2))
+    AudioProcessor.expects(:new).with(instance_of(String)).returns(proc)
+  end
+
+  def expect_transcode
+    proc = mock('processor')
+    proc.expects(:transcode).with(instance_of(String), instance_of(AudioFormat))
     AudioProcessor.expects(:new).with(instance_of(String)).returns(proc)
   end
 
