@@ -11,12 +11,17 @@ module AudioProcessor
                       album: :album,
                       year: :date }.freeze
 
+    COMMON_FLAC_FRAME_SIZE = 1152
+
     def transcode(new_path, audio_format, tags = {})
       assert_directory(new_path)
-      if same_format?(audio_format)
+      # always transcode flacs to assert a common frame size
+      if same_format?(audio_format) && audio_format.codec != 'flac'
         preserving_transcode(new_path, custom: metadata_args(tags))
       else
-        options = codec_options(audio_format).merge(validate: true, custom: metadata_args(tags))
+        options = codec_options(audio_format).merge(validate: true)
+        options[:custom] ||= []
+        options[:custom].push(*metadata_args(tags))
         audio.transcode(new_path, options)
       end
     end
@@ -122,9 +127,9 @@ module AudioProcessor
     end
 
     def metadata_args(tags)
-      tags.slice(*METADATA_TAGS.keys).collect do |tag, value|
+      tags.slice(*METADATA_TAGS.keys).flat_map do |tag, value|
         %W[-metadata #{METADATA_TAGS[tag]}=#{value}]
-      end.flatten
+      end
     end
 
     def codec_options(audio_format)
@@ -134,14 +139,14 @@ module AudioProcessor
         audio_channels: audio_format.channels
       }
       options.delete(:audio_bitrate) if audio_format.encoding.lossless?
+      options[:custom] = %W[-frame_size #{COMMON_FLAC_FRAME_SIZE}] if audio_format.codec == 'flac'
       options
     end
 
     def same_format?(audio_format)
       audio_format.codec == codec &&
         audio_format.channels == channels &&
-        (audio_format.encoding.lossless? || audio_format.bitrate == bitrate) &&
-        audio_format.file_extension == file_extension
+        (audio_format.encoding.lossless? || audio_format.bitrate == bitrate)
     end
 
     def assert_directory(file)

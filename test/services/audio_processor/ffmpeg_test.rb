@@ -78,6 +78,47 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       end
     end
 
+    test 'transcodes same format flac file to common frame size' do
+      file = Tempfile.new(['same', '.flac'])
+      begin
+        format = AudioFormat.new('flac', nil, 2)
+        flac = AudioGenerator.new.silent_source_file(format)
+        same = AudioProcessor::Ffmpeg.new(flac)
+                 .transcode(file.path, AudioFormat.new('flac', nil, 2))
+        assert_equal 'flac', same.audio_codec
+        assert_equal 2, same.audio_channels
+      ensure
+        file.close!
+      end
+    end
+
+    test 'converts flac to mp3' do
+      mp3 = Tempfile.new(['output', '.mp3'])
+
+      begin
+        flac = AudioGenerator.new.silent_source_file(AudioFormat.new('flac', nil, 2))
+        output = AudioProcessor::Ffmpeg.new(flac).transcode(mp3.path, AudioFormat.new('mp3', 56, 2))
+        assert_equal 56000, output.audio_bitrate
+        assert_equal 2, output.audio_channels
+        assert_equal 'mp3', output.audio_codec
+      ensure
+        mp3.close!
+      end
+    end
+
+    test 'converts mp3 to flac' do
+      flac = Tempfile.new(['output', '.flac'])
+
+      begin
+        mp3 = AudioGenerator.new.silent_source_file(AudioFormat.new('mp3', 320, 2))
+        output = AudioProcessor::Ffmpeg.new(mp3).transcode(flac.path, AudioFormat.new('flac', 1, 2))
+        assert_equal 2, output.audio_channels
+        assert_equal 'flac', output.audio_codec
+      ensure
+        flac.close!
+      end
+    end
+
     test 'trims mp3 file' do
       file = Tempfile.new(['part', '.mp3'])
       begin
@@ -134,20 +175,6 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
         end
       ensure
         file.close!
-      end
-    end
-
-    test 'converts flac to mp3' do
-      mp3 = Tempfile.new(['output', '.mp3'])
-
-      begin
-        flac = AudioGenerator.new.silent_source_file(AudioFormat.new('flac', nil, 2))
-        output = AudioProcessor::Ffmpeg.new(flac).transcode(mp3.path, AudioFormat.new('mp3', 56, 2))
-        assert_equal 56000, output.audio_bitrate
-        assert_equal 2, output.audio_channels
-        assert_equal 'mp3', output.audio_codec
-      ensure
-        mp3.close!
       end
     end
 

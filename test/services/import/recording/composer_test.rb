@@ -104,6 +104,8 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
     expect_concat(2)
     expect_transcode
+    expect_transcode
+    expect_transcode
     expect_audio_format('flac', 1)
     expect_duration(mapping.recordings.first.path, 30)
     expect_duration(mapping.recordings.second.path, 30)

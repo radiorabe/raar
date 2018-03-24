@@ -145,10 +145,11 @@ module Import
       def convert_all_to_same_format(list)
         format = AudioProcessor.new(list.first.path).audio_format
         list.map do |file|
-          if ::File.extname(file.path) == ".#{format.file_extension}"
-            file
-          else
+          # always convert flacs to assert a common frame size
+          if ::File.extname(file.path) != ".#{format.file_extension}" || format.codec == 'flac'
             convert_to_format(file, format)
+          else
+            file
           end
         end
       end
