@@ -27,6 +27,9 @@ class ImportTest < ActiveSupport::TestCase
       ExceptionNotifier
         .expects(:notify_exception)
         .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f5)), instance_of(Hash))
+      ExceptionNotifier
+        .expects(:notify_exception)
+        .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f7)), instance_of(Hash))
 
       assert_difference('Show.count', 2) do
         assert_difference('Broadcast.count', 2) do
@@ -39,7 +42,7 @@ class ImportTest < ActiveSupport::TestCase
       archive_mp3s = File.join(FileStore::Structure.home, '2013', '06', '19', '*.mp3')
       assert_equal 6, Dir.glob(archive_mp3s).size
       audio = Show.find_by_name('Mittag').broadcasts.last.audio_files.first
-      assert_in_delta 170, AudioProcessor.new(audio.absolute_path).duration, 0.1
+      assert_in_delta 290, AudioProcessor.new(audio.absolute_path).duration, 0.1
       audio = Show.find_by_name('Info').broadcasts.last.audio_files.first
       assert_in_delta 60, AudioProcessor.new(audio.absolute_path).duration, 0.1
     end
@@ -56,11 +59,15 @@ class ImportTest < ActiveSupport::TestCase
     @f3 = file('2013-06-19T100600+0200_002.mp3')
     @f4 = file('2013-06-19T100800+0200_002.mp3')
     @f5 = file('2013-06-19T101000+0200_002.mp3')
+    @f6 = file('2013-06-19T101100+0200_002.mp3')
+    @f7 = file('2013-06-19T101200+0200_002.mp3')
     AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f1, 120)
     AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f2, 120)
     AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f3, 120)
     AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f4, 130)
-    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f5, 110)
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f5, 60)
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f6, 120)
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f7, 110)
   end
 
   def build_airtime_entries
@@ -80,7 +87,7 @@ class ImportTest < ActiveSupport::TestCase
                                 created: Time.zone.now)
     mittag = Airtime::Show.create!(name: 'Mittag')
     mittag.show_instances.create!(starts: Time.local(2013, 6, 19, 10, 9),
-                                  ends: Time.local(2013, 6, 19, 10, 12),
+                                  ends: Time.local(2013, 6, 19, 10, 14),
                                   created: Time.zone.now)
   end
 

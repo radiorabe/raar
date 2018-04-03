@@ -7,6 +7,8 @@ module Import
     # If the audio duration of the given recordings is longer than declared, the files are trimmed
     # at the end. If the audio duration is shorter, the recordings are used from the declared
     # start position as long as available.
+    #
+    # In the case that recordings overlap each other, they are trimmed to build an adjacent stream.
     class Composer
 
       attr_reader :mapping, :recordings
@@ -59,8 +61,8 @@ module Import
         first.started_at < mapping.started_at
       end
 
-      def last_longer?
-        last.finished_at > mapping.finished_at
+      def last_longer?(current)
+        current == last && current.finished_at > mapping.finished_at
       end
 
       def trim_start_and_end
@@ -71,35 +73,55 @@ module Import
 
       def concat_list
         list = []
-        list << first_file_in_list
-        recordings[1..-2].each do |r|
-          list << file_with_maximum_duration(r)
+        @previous_finished_at = mapping.started_at
+        recordings.each_with_index do |r, i|
+          list << trim_list_recording(r, i)
         end
-        list << last_file_in_list
 
         concat(list.compact)
       ensure
         list.each { |file| file.close! if file.respond_to?(:close!) }
       end
 
-      def first_file_in_list
-        first_earlier? ? trim_start : file_with_maximum_duration(first)
+      def trim_list_recording(current, i)
+        if previous_overlapping_current?(current)
+          trim_overlapped(current) if previous_not_overlapping_next?(current, i)
+        elsif last_longer?(current)
+          trim_end
+        else
+          trim_to_maximum_duration(current)
+        end
       end
 
-      def last_file_in_list
-        last_longer? ? trim_end : file_with_maximum_duration(last)
+      def previous_overlapping_current?(current)
+        @previous_finished_at > current.started_at + DURATION_TOLERANCE
       end
 
-      def trim_start
-        start = mapping.started_at - first.started_at
-        duration = first.duration - start
-        trim_available(first, start, duration)
+      def previous_not_overlapping_next?(current, i)
+        @next_started_at = next_started_at(current, i)
+        @previous_finished_at < @next_started_at - DURATION_TOLERANCE
+      end
+
+      def next_started_at(current, i)
+        current == last ? mapping.finished_at : recordings[i + 1].started_at
+      end
+
+      def trim_overlapped(current)
+        start = @previous_finished_at - current.started_at
+        duration = @next_started_at - @previous_finished_at
+        @previous_finished_at += [duration, current.audio_duration - start].min.seconds
+        trim_available(current, start, duration)
+      end
+
+      def trim_to_maximum_duration(current)
+        @previous_finished_at = current.started_at +
+                                [current.duration, current.audio_duration].min.seconds
+        file_with_maximum_duration(current)
       end
 
       def trim_end
-        start = 0
         duration = mapping.finished_at - last.started_at
-        trim_available(last, start, duration)
+        trim_available(last, 0, duration)
       end
 
       def file_with_maximum_duration(recording)

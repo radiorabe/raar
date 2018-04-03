@@ -208,11 +208,46 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
     expect_concat(2)
     expect_audio_format('mp3', 320)
-    expect_duration(mapping.recordings.second.path, 40)
     expect_trim(:first, 30, 20)
     expect_trim(:last, 0, 20)
     expect_duration(mapping.recordings.first.path, 50)
+    expect_duration(mapping.recordings.second.path, 40)
     expect_duration(mapping.recordings.last.path, 20)
+    composer.compose
+  end
+
+  test 'returns merged recording if overlappings exist' do
+    composer = build_composer('2013-06-12T193000+0200_060.mp3',
+                              '2013-06-12T201500+0200_030.mp3',
+                              '2013-06-12T203000+0200_060.mp3',
+                              '2013-06-12T211500+0200_060.mp3')
+
+    expect_concat(3)
+    expect_audio_format('mp3', 320)
+    expect_trim(:first, 30, 15)
+    expect_trim('2013-06-12T203000+0200_060.mp3', 15, 30)
+    expect_trim(:last, 0, 45)
+    expect_duration(mapping.recordings.first.path, 50)
+    expect_duration(mapping.recordings.second.path, 30)
+    expect_duration(mapping.recordings.third.path, 60)
+    expect_duration(mapping.recordings.fourth.path, 50)
+    composer.compose
+  end
+
+  test 'returns merged recording if complete overlappings exist' do
+    composer = build_composer('2013-06-12T200000+0200_060.mp3',
+                              '2013-06-12T205000+0200_030.mp3',
+                              '2013-06-12T210000+0200_060.mp3',
+                              '2013-06-12T213000+0200_060.mp3')
+
+    expect_concat(2)
+    expect_audio_format('mp3', 320)
+    expect_trim(:last, 20, 10)
+    expect_duration(mapping.recordings.first.path, 59.95)
+    # not called actually
+    # expect_duration(mapping.recordings.second.path, 30)
+    expect_duration(mapping.recordings.third.path, 50)
+    expect_duration(mapping.recordings.fourth.path, 50)
     composer.compose
   end
 
