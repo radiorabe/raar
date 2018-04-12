@@ -69,7 +69,7 @@ echo "Watching for new records in ${watchDir}"
 echo "Recordings will be moved to ${destDir}"
 
 # The minimum size a recording must have to trigger an archival
-minFileSize="1048576" # 1 MiB
+minFileSize="$(( 20 * 1048576 ))" # 20 MiB
 
 inotifywait --monitor --event close_write "${watchDir}" | while read \
     watchedFileName eventNames eventFileName
