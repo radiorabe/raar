@@ -40,7 +40,13 @@ module Import
 
     def mapping_imported?
       mapping.imported?.tap do |imported|
-        inform("Broadcast #{mapping} is already imported.") if imported
+        if imported
+          inform("Broadcast #{mapping} is already imported.")
+          # If unimported recordings exist, mark them as imported. Such recordings may appear
+          # if a recorder is not ready at the time of the import and provides the recorded
+          # file only later on. Too bad, then just ignore this file now.
+          mark_recordings_as_imported
+        end
       end
     end
 

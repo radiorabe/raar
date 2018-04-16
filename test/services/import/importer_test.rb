@@ -17,12 +17,15 @@ class Import::ImporterTest < ActiveSupport::TestCase
     importer.run
   end
 
-  test 'it does nothing if broadcast is already imported' do
-    mapping.add_recording_if_overlapping(Import::Recording::File.new(file('2013-06-19T200000+0200_120.mp3')))
+  test 'it marks recordings as imported and aborts if broadcast is already imported' do
+    f = touch('2013-06-19T200000+0200_120.mp3')
+    mapping.add_recording_if_overlapping(Import::Recording::File.new(f))
     mapping.broadcast.save!
     Import::Archiver.expects(:new).never
     ExceptionNotifier.expects(:notify_exception).never
     importer.run
+    assert !File.exists?(f)
+    assert File.exists?(file('2013-06-19T200000+0200_120_imported.mp3'))
   end
 
   test 'creates database entries' do
