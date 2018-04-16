@@ -11,6 +11,8 @@ module Import
     # In the case that recordings overlap each other, they are trimmed to build an adjacent stream.
     class Composer
 
+      include Loggable
+
       attr_reader :mapping, :recordings
 
       def initialize(mapping, recordings)
@@ -140,6 +142,7 @@ module Import
       end
 
       def trim(file, start, duration)
+        inform("Trimming #{file} from #{start.round}s to #{(start + duration).round}s")
         new_tempfile(file).tap do |target_file|
           proc = AudioProcessor.new(file)
           proc.trim(target_file.path, start, duration)
