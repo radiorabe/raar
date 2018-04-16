@@ -8,15 +8,21 @@ class Parallelizer
   end
 
   def run(&block)
-    workers = (0..thread_count).map do
-      Thread.new do
-        process_payloads(&block)
-      end
+    if thread_count <= 1
+      process_payloads(&block)
+    else
+      run_parallel(&block)
     end
-    workers.each(&:join)
   end
 
   private
+
+  def run_parallel(&block)
+    workers = Array.new(thread_count) do
+      Thread.new { process_payloads(&block) }
+    end
+    workers.each(&:join)
+  end
 
   def init_queue(payloads)
     Queue.new.tap do |q|
@@ -39,7 +45,7 @@ class Parallelizer
   end
 
   def default_thread_count
-    Rails.application.secrets.parallel_transcodings.to_i || 1
+    Rails.application.secrets.parallel_transcodings.to_i
   end
 
 end
