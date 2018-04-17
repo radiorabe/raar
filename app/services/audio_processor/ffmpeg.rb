@@ -76,10 +76,6 @@ module AudioProcessor
       AudioFormat.new(codec, bitrate || 1, channels)
     end
 
-    def file_extension
-      ::File.extname(audio.path)[1..-1]
-    end
-
     private
 
     def audio

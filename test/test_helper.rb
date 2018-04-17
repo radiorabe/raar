@@ -1,9 +1,21 @@
 require 'simplecov'
-SimpleCov.start 'rails' do
-  coverage_dir 'test/coverage'
-end
 require 'coveralls'
-Coveralls.wear!
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+])
+SimpleCov.start  do
+  coverage_dir 'test/coverage'
+
+  add_filter '/test/'
+  add_filter '/config/'
+  add_filter '/lib/'
+
+  add_group 'Controllers', 'app/controllers'
+  add_group 'Models', 'app/models'
+  add_group 'Services', 'app/services'
+  add_group 'Serializers', 'app/serializers'
+end
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
@@ -49,7 +61,7 @@ class ActionController::TestCase < ActiveSupport::TestCase
   def set_auth_token(token)
     request.env['HTTP_AUTHORIZATION'] = encode_token(token)
   end
-  
+
 end
 
 class ActionDispatch::IntegrationTest < ActiveSupport::TestCase
