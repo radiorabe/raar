@@ -23,7 +23,7 @@ require 'capistrano/bundler'
 require 'capistrano/rails/migrations'
 require 'capistrano/passenger'
 
-$LOAD_PATH.push File.expand_path('../lib', __FILE__)
+$LOAD_PATH.push File.expand_path('lib', __dir__)
 
 require_relative 'lib/capistrano/artifact_plugin.rb'
 install_plugin Capistrano::ArtifactPlugin

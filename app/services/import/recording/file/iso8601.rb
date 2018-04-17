@@ -7,7 +7,7 @@ module Import
       # for the file extension.
       class Iso8601 < Base
 
-        DATE_TIME_FORMAT = '%Y-%m-%dT%H%M%S%z'.freeze # rubocop:disable Style/FormatStringToken
+        DATE_TIME_FORMAT = '%Y-%m-%dT%H%M%S%z'.freeze
         IMPORTED_SUFFIX = '_imported'.freeze
         DATE_GLOB = '[12][019][0-9][0-9]-[0-1][0-9]-[0-3][0-9]'.freeze # yyyy-mm-dd
         TIME_GLOB = '[0-2][0-9][0-5][0-9][0-5][0-9]{+,-}[0-2][0-9][0-5]0'.freeze # HHMMSS+ZZZZ

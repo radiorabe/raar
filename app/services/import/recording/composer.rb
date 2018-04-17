@@ -85,9 +85,9 @@ module Import
         list.each { |file| file.close! if file.respond_to?(:close!) }
       end
 
-      def trim_list_recording(current, i)
+      def trim_list_recording(current, index)
         if previous_overlapping_current?(current)
-          trim_overlapped(current) if previous_not_overlapping_next?(current, i)
+          trim_overlapped(current) if previous_not_overlapping_next?(current, index)
         elsif last_longer?(current)
           trim_end
         else
@@ -99,13 +99,13 @@ module Import
         @previous_finished_at > current.started_at + DURATION_TOLERANCE
       end
 
-      def previous_not_overlapping_next?(current, i)
-        @next_started_at = next_started_at(current, i)
+      def previous_not_overlapping_next?(current, index)
+        @next_started_at = next_started_at(current, index)
         @previous_finished_at < @next_started_at - DURATION_TOLERANCE
       end
 
-      def next_started_at(current, i)
-        current == last ? mapping.finished_at : recordings[i + 1].started_at
+      def next_started_at(current, index)
+        current == last ? mapping.finished_at : recordings[index + 1].started_at
       end
 
       def trim_overlapped(current)
