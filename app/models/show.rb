@@ -24,7 +24,7 @@ class Show < ApplicationRecord
 
   before_validation :set_default_profile_id
 
-  scope :list, -> { order('LOWER(shows.name)') }
+  scope :list, -> { order(Arel.sql('LOWER(shows.name)')) }
 
   def to_s
     name

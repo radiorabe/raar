@@ -33,6 +33,8 @@ module Raar
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 
+    config.active_record.sqlite3.represent_boolean_as_integer = true
+
     routes.default_url_options = {
       protocol: Rails.application.secrets.ssl ? 'https' : 'http',
       host: Rails.application.secrets.host_name,

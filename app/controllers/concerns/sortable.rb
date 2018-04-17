@@ -22,7 +22,7 @@ module Sortable
     sortable = sortable?
     if sortable || default_sort
       clause = [sortable ? sort_expression : nil, default_sort]
-      super.reorder(clause.compact.join(', '))
+      super.reorder(Arel.sql(clause.compact.join(', ')))
     else
       super
     end

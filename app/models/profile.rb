@@ -27,7 +27,7 @@ class Profile < ApplicationRecord
   after_save :clear_defaults, if: :default
   before_destroy :protect_default
 
-  scope :list, -> { order('LOWER(name)') }
+  scope :list, -> { order(Arel.sql('LOWER(name)')) }
 
   class << self
 
