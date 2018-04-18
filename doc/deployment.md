@@ -252,6 +252,8 @@ When everything on the server is ready, the application may finally be deployed.
 
 To conform with Capistrano deployments, the following steps are required:
 
+* Get the latest release tarball (`raar.tar.gz`) at https://github.com/radiorabe/raar/releases/latest or create one yourself with `rails package`.
+* Copy `raar.tar.gz` to your server.
 * Create a new release folder: ``mkdir /var/www/raar/releases/`date +%Y%m%d%H%M%S` ``
 * `cd /var/www/raar/releases/<created-folder>`
 * Explode the tar package there: `tar xzf /path/to/raar.tar.gz`
