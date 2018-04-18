@@ -27,6 +27,9 @@ script:
   - bundle exec rails test
   - bundle exec rubocop
 
+before_deploy:
+  - bundle exec rails package
+
 deploy:
   provider: releases
   api_key:
@@ -36,5 +39,4 @@ deploy:
   on:
     tags: true
     repo: radiorabe/raar
-  before_deploy:
-    - bundle exec rails package
+
