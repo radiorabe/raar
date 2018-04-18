@@ -64,35 +64,8 @@ An easy way to manage these values is to create a `~/.env` file with several `VA
 | BROADCAST_MAPPING_BUILDER | Name of the broadcast mapping builder class to use. | AirtimeDb |
 | RECORDING_FILE | Name of the recording file class to use. | Iso8601 |
 
-## Cron Jobs
 
-The import and downgrade executables live in `bin/import` and `bin/downgrade`, respectively. The may be run by two separate cron jobs, houry and daily based on your average broadcast duration.
-
-```bash
-bash -l -c 'flock -xn tmp/pids/import.lock -c bin/import >> /dev/null 2>&1'
-
-bash -l -c 'flock -xn tmp/pids/downgrade.lock -c bin/downgrade >> /dev/null 2>&1'
-```
-
-The cron jobs should run as the application user in its home directory (`$RAAR_HOME`). It is essential that the environment variables defined above are available to the processes.
-
-## Systemd Timers
-
-As an alternative to cron jobs, the import and downgrade executables may also be run as Systemd timers. Copy the files from `config/systemd/*` to `/etc/systemd/system/`, make adjustments matching your deployment environment and run the following commands as root to start the timers:
-
-```bash
-systemctl enable --now raar-import.timer
-systemctl enable --now raar-downgrade.timer
-```
-
-## Free IPA
-
-In order for the authentication to work with username and password, Free IPA may be configured to capture `POST` requests to `/login`. The form parameters `username` and `password` are provided. The application expects `REMOTE_USER`, `REMOTE_USER_GROUPS`, `REMOTE_USER_FIRST_NAME`, `REMOTE_USER_LAST_NAME` or `EXTERNAL_AUTH_ERROR` headers to be set. If the `REMOTE_USER` is set, a user object with the generated API token is returned.
-
-If no Free IPA is configured, authentication is still possible by API token. The users must be created and the tokens must be distributed manually in this case.
-
-
-## Deployment with Apache/Passenger
+## Setup for Apache/Passenger
 
 Perform the following steps on a CentOS or the corresponding ones on a different system:
 
@@ -162,7 +135,28 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 * Restart Apache: `systemctl restart httpd`.
 
 
-  To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication and do:
+### SELinux
+
+In order to configure SELinux, do:
+
+* `semanage fcontext -a -t httpd_sys_rw_content_t /var/www/raar/shared/log/`
+* `semanage fcontext -a -t httpd_sys_script_exec_t "/var/www/raar/shared/bundle/ruby/extensions/x86_64-linux(/.*)?"`
+* `restorecon -Rv /var/www/raar/shared/log`
+* `restorecon -Rv /var/www/raar/shared/bundle/ruby/extensions/x86_64-linux`
+
+
+### Logs
+
+View systemd logs with `journalctl -u "raar-*" -f` and `journalctl -u httpd -f`.
+
+
+### Free IPA
+
+In order for the authentication to work with username and password, Free IPA may be configured to capture `POST` requests to `/login`. The form parameters `username` and `password` are provided. The application expects `REMOTE_USER`, `REMOTE_USER_GROUPS`, `REMOTE_USER_FIRST_NAME`, `REMOTE_USER_LAST_NAME` or `EXTERNAL_AUTH_ERROR` headers to be set. If the `REMOTE_USER` is set, a user object with the generated API token is returned.
+
+If no Free IPA is configured, authentication is still possible by API token. The users must be created and the tokens must be distributed manually in this case.
+
+To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication and do:
 
 * `yum install mod_auth_gssapi mod_authnz_pam mod_intercept_form_submit sssd-dbus mod_lookup_identity`
 * Create `/etc/pam.d/raar` with the following contents:
@@ -220,26 +214,19 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 * `setsebool -P httpd_mod_auth_pam 1`.
 * `setsebool -P httpd_dbus_sssd 1`
 * Restart Apache: `systemctl restart httpd`.
-* Add empty configuration files for raar:
-  ```bash
-  mkdir -p /var/www/raar/shared/config/initializers
-  touch /var/www/raar/shared/config/show_names.yml
-  touch /var/www/raar/shared/config/initializers/exception_notification.rb
-  ```
-
-In order to configure SELinux, do:
-
-* `semanage fcontext -a -t httpd_sys_rw_content_t /var/www/raar/shared/log/`
-* `semanage fcontext -a -t httpd_sys_script_exec_t "/var/www/raar/shared/bundle/ruby/extensions/x86_64-linux(/.*)?"`
-* `restorecon -Rv /var/www/raar/shared/log`
-* `restorecon -Rv /var/www/raar/shared/bundle/ruby/extensions/x86_64-linux`
 
 
-View systemd logs with `journalctl -u "raar-*" -f` and `journalctl -u httpd -f`.
-
+## Application Deployment
 
 When everything on the server is ready, the application may finally be deployed. We suggest to deploy with Capistrano, but a manual deployment of pre-packaged builds is also possible.
 
+As an initial step (after all of the above has been done), add empty configuration files for raar:
+
+```bash
+mkdir -p /var/www/raar/shared/config/initializers
+touch /var/www/raar/shared/config/show_names.yml
+touch /var/www/raar/shared/config/initializers/exception_notification.rb
+```
 
 ### Automatic deploy with Capistrano (from developer machine)
 
@@ -288,6 +275,20 @@ When Capistrano is not used at all, the tarball may be directly exploded into `/
   systemctl enable --now raar-import.timer
   systemctl enable --now raar-downgrade.timer
   ```
+
+
+## Cron Jobs
+
+As an alternative to Systemd timers, the import and downgrade executables may also be run as cron jobs. The import and downgrade executables live in `bin/import` and `bin/downgrade`, respectively. The may be run by two separate cron jobs, houry and daily based on your average broadcast duration.
+
+```bash
+bash -l -c 'flock -xn tmp/pids/import.lock -c bin/import >> /dev/null 2>&1'
+
+bash -l -c 'flock -xn tmp/pids/downgrade.lock -c bin/downgrade >> /dev/null 2>&1'
+```
+
+The cron jobs should run as the application user in its home directory (`$RAAR_HOME`). It is essential that the environment variables defined above are available to the processes.
+
 
 ## Zabbix
 
