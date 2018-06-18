@@ -3,7 +3,9 @@ Rails.application.routes.draw do
 
   root to: 'apidocs#index'
 
-  resources :shows, only: [:index, :show]
+  resources :shows, only: [:index, :show] do
+    get 'podcasts/:playback_format.:format', to: 'podcasts#show'
+  end
 
   resources :broadcasts, only: [:show, :update] do
     resources :audio_files, only: :index

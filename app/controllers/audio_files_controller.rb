@@ -182,9 +182,7 @@ class AudioFilesController < ListController
   end
 
   def detect_codec
-    encoding = AudioEncoding.for_extension(params[:format])
-    raise ActionController::UnknownFormat unless encoding
-    encoding.codec
+    AudioEncoding.for_extension!(params[:format]).codec
   end
 
   def timestamp

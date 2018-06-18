@@ -13,6 +13,12 @@ module AudioEncoding
     list.detect { |e| e.file_extension == file_extension.to_s.strip }
   end
 
+  def self.for_extension!(file_extension)
+    for_extension(file_extension).tap do |encoding|
+      raise ActionController::UnknownFormat unless encoding
+    end
+  end
+
   def self.list
     AudioEncoding::Base.subclasses
   end

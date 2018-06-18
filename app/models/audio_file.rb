@@ -41,14 +41,18 @@ class AudioFile < ApplicationRecord
     # Get file for the given playback_format. If it does not exist,
     # return the next lower quality file with the same codec.
     def playback_format_at(timestamp, playback_format)
-      entry = at(timestamp).find_by(playback_format_id: playback_format.id)
-      return entry if entry
+      at(timestamp).with_playback_format(playback_format).first
+    end
 
-      where('(bitrate = ? AND channels <= ?) OR bitrate < ?',
+    def with_playback_format(playback_format)
+      where('playback_format_id = ? OR (bitrate = ? AND channels <= ?) OR bitrate < ?',
+            playback_format.id,
             playback_format.bitrate,
             playback_format.channels,
             playback_format.bitrate)
-        .best_at(timestamp, playback_format.codec)
+        .where(codec: playback_format.codec)
+        .group(:broadcast_id)
+        .having('bitrate + channels = MAX(bitrate + channels)')
     end
 
   end
