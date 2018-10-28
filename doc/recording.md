@@ -260,7 +260,7 @@ chmod 755 /usr/local/bin/raar-record-handler.sh
 
 
 wget -O /etc/systemd/system/raar-record-handler.service \
-     https://raw.githubusercontent.com/paraenggu/raar/feature/recording/config/systemd/raar-record-handler.service
+     https://raw.githubusercontent.com/radiorabe/raar/master/config/systemd/raar-record-handler.service
 ```
 
 You might want to adapt the destination directory, which defaults to
