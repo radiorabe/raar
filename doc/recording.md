@@ -261,6 +261,10 @@ chmod 755 /usr/local/bin/raar-record-handler.sh
 
 wget -O /etc/systemd/system/raar-record-handler.service \
      https://raw.githubusercontent.com/radiorabe/raar/master/config/systemd/raar-record-handler.service
+
+
+wget -O /etc/tmpfiles.d/rotter-raar.conf \
+     https://raw.githubusercontent.com/radiorabe/raar/master/config/systemd/tmpfiles.d/rotter-raar.conf
 ```
 
 You might want to adapt the destination directory, which defaults to
