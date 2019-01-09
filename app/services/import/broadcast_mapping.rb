@@ -24,6 +24,7 @@ module Import
     # This method may only be called after a show is set.
     def assign_broadcast(attrs = {})
       raise(KeyError, 'show attrs must be set beforehand') unless @show
+
       @broadcast = fetch_broadcast(attrs)
     end
 

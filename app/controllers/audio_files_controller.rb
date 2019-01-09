@@ -184,6 +184,7 @@ class AudioFilesController < ListController
   def detect_codec
     encoding = AudioEncoding.for_extension(params[:format])
     raise ActionController::UnknownFormat unless encoding
+
     encoding.codec
   end
 

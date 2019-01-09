@@ -1,4 +1,3 @@
-
 namespace :scl_ruby do
   desc 'Prints the Ruby version on the target host'
   task :check do

@@ -53,6 +53,7 @@ module Sortable
   # Returns true if the passed attribute is sortable.
   def sortable?
     return false if params[:sort].blank?
+
     attr = sort_with_order.first
     attr.present? && (
     model_class.column_names.include?(attr.to_s) ||

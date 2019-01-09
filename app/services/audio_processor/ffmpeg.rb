@@ -106,6 +106,7 @@ module AudioProcessor
       out = run_command(FFMPEG.ffmpeg_binary, '-i', file, '-acodec', 'copy', '-f', 'null', '-')
       segments = out.scan(/\btime=(\d+)\:(\d\d)\:(\d\d(\.\d+)?)\b/)
       raise("Could not determine duration for #{file}: #{out}") if segments.blank?
+
       number_of_seconds(segments.last)
     end
 
@@ -119,6 +120,7 @@ module AudioProcessor
       FFMPEG.logger.info("Running command...\n#{command.join(' ')}\n")
       out, status = Open3.capture2e(*command)
       raise("#{command} failed with status #{status}:\n#{out}") unless status.success?
+
       out
     end
 

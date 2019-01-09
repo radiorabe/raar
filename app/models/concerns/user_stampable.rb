@@ -13,6 +13,7 @@ module UserStampable
 
   def set_user_stamps
     return unless User.current
+
     self.creator = User.current if new_record? && respond_to?(:creator=)
     self.updater = User.current if respond_to?(:updater=)
   end

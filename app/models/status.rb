@@ -6,6 +6,7 @@ class Status < ActiveModelSerializers::Model
 
   def database
     return @database if defined?(@database)
+
     @database =
       begin
         Show.count > 0
@@ -16,6 +17,7 @@ class Status < ActiveModelSerializers::Model
 
   def file_system
     return @file_system if defined?(@file_system)
+
     @file_system =
       begin
         Dir.glob(File.join(FileStore::Structure.home, '*')).present?

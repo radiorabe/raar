@@ -1,0 +1,26 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "fd92abd624a5387c0a2b505cacac5764123ff9cfe646a3987085e1f4d0b7e7f6",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/downgrade_action.rb",
+      "line": 59,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "DowngradeAction.where(:archive_format_id => archive_format_id).where(\"(months > ? AND #{attr} > ?) OR (months < ? AND (#{attr} < ? OR #{attr} IS NULL))\", months, send(attr), months, send(attr))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DowngradeAction",
+        "method": "non_decreasing_actions"
+      },
+      "user_input": "attr",
+      "confidence": "Medium",
+      "note": "attr is hardcoded as bitrate or channels"
+    }
+  ],
+  "updated": "2019-01-09 22:09:51 +0100",
+  "brakeman_version": "4.2.1"
+}
