@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0",
+    "version": "1.1",
     "title": "RAAR Radio Archive API",
     "description": "RAAR Radio Archive API. A public part allows querying shows, broadcasts and audio files. In the admin section, the archiving configuration may be managed.",
     "license": {
@@ -476,7 +476,7 @@
         ]
       }
     },
-    "broadcasts/{id}": {
+    "/broadcasts/{id}": {
       "get": {
         "description": "Returns a single broadcast.",
         "tags": [
@@ -774,6 +774,423 @@
               "properties": {
                 "data": {
                   "$ref": "#/definitions/Show"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_token": [
+
+            ]
+          },
+          {
+            "access_code": [
+
+            ]
+          }
+        ]
+      }
+    },
+    "/tracks": {
+      "get": {
+        "description": "Returns a list of tracks.",
+        "tags": [
+          "track",
+          "public"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/q"
+          },
+          {
+            "$ref": "#/parameters/page_number"
+          },
+          {
+            "$ref": "#/parameters/page_size"
+          },
+          {
+            "$ref": "#/parameters/sort"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Track"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
+      },
+      "post": {
+        "description": "Creates a new track.",
+        "tags": [
+          "track"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Attributes defining the track to create.",
+            "required": true,
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Track"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Track"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/responses/unprocessable_entity"
+          }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
+      }
+    },
+    "/tracks/{id}": {
+      "get": {
+        "description": "Returns a single track.",
+        "tags": [
+          "track",
+          "public"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the track to fetch.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Track"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "description": "Updates an existing track.",
+        "tags": [
+          "track"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the track to update.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Attributes defining the track to update.",
+            "required": true,
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Track"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Track"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/responses/unprocessable_entity"
+          }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "description": "Deletes an existing track.",
+        "tags": [
+          "track"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the track to delete.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successfull operation"
+          },
+          "422": {
+            "$ref": "#/responses/unprocessable_entity"
+          }
+        },
+        "security": [
+          {
+            "jwt_token": [
+
+            ]
+          }
+        ]
+      }
+    },
+    "/tracks/{year}/{month}/{day}/{hour}{minute}{second}": {
+      "get": {
+        "description": "Returns a list of tracks at the given date/time span.",
+        "tags": [
+          "track",
+          "public"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "description": "The four-digit year to get the tracks for.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "month",
+            "in": "path",
+            "description": "Optional two-digit month to get the tracks for. Requires all preceeding parameters.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "day",
+            "in": "path",
+            "description": "Optional two-digit day to get the tracks for. Requires all preceeding parameters.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "hour",
+            "in": "path",
+            "description": "Optional two-digit hour to get the tracks for. Requires all preceeding parameters.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "minute",
+            "in": "path",
+            "description": "Optional two-digit minute to get the tracks for. Requires all preceeding parameters.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "second",
+            "in": "path",
+            "description": "Optional two-digit second to get the tracks for. Requires all preceeding parameters.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "$ref": "#/parameters/q"
+          },
+          {
+            "$ref": "#/parameters/page_number"
+          },
+          {
+            "$ref": "#/parameters/page_size"
+          },
+          {
+            "$ref": "#/parameters/sort"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Track"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_token": [
+
+            ]
+          },
+          {
+            "access_code": [
+
+            ]
+          }
+        ]
+      }
+    },
+    "/shows/{show_id}/tracks": {
+      "get": {
+        "description": "Returns a list of tracks of the given show.",
+        "tags": [
+          "track",
+          "public"
+        ],
+        "parameters": [
+          {
+            "name": "show_id",
+            "in": "path",
+            "description": "ID of the show to list the tracks for",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "$ref": "#/parameters/q"
+          },
+          {
+            "$ref": "#/parameters/page_number"
+          },
+          {
+            "$ref": "#/parameters/page_size"
+          },
+          {
+            "$ref": "#/parameters/sort"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Track"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "api_token": [
+
+            ]
+          },
+          {
+            "access_code": [
+
+            ]
+          }
+        ]
+      }
+    },
+    "/broadcasts/{broadcast_id}/tracks": {
+      "get": {
+        "description": "Returns a list of tracks of the given broadcast.",
+        "tags": [
+          "track",
+          "public"
+        ],
+        "parameters": [
+          {
+            "name": "broadcast_id",
+            "in": "path",
+            "description": "ID of the broadcast to list the tracks for",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "$ref": "#/parameters/q"
+          },
+          {
+            "$ref": "#/parameters/page_number"
+          },
+          {
+            "$ref": "#/parameters/page_size"
+          },
+          {
+            "$ref": "#/parameters/sort"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Track"
                 }
               }
             }
@@ -2616,6 +3033,43 @@
             },
             "file_system": {
               "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "Track": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "string"
+        },
+        "attributes": {
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "artist": {
+              "type": "string"
+            },
+            "started_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "finished_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "links": {
+          "properties": {
+            "self": {
+              "type": "string",
+              "format": "url",
+              "readOnly": true
             }
           }
         }

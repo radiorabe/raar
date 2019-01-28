@@ -48,6 +48,10 @@ class Broadcast < ApplicationRecord
     finished_at - started_at
   end
 
+  def tracks
+    Track.within(started_at, finished_at)
+  end
+
   private
 
   def set_show_label_if_empty

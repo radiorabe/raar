@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180115193331) do
+ActiveRecord::Schema.define(version: 2019_01_27_185449) do
 
   create_table "access_codes", force: :cascade do |t|
     t.string "code", null: false
@@ -110,6 +110,15 @@ ActiveRecord::Schema.define(version: 20180115193331) do
     t.integer "updater_id"
     t.index ["name"], name: "index_shows_on_name", unique: true
     t.index ["profile_id"], name: "index_shows_on_profile_id"
+  end
+
+  create_table "tracks", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "artist"
+    t.datetime "started_at", null: false
+    t.datetime "finished_at", null: false
+    t.index ["finished_at"], name: "index_tracks_on_finished_at", unique: true
+    t.index ["started_at"], name: "index_tracks_on_started_at", unique: true
   end
 
   create_table "users", force: :cascade do |t|

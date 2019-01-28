@@ -8,6 +8,7 @@ class ApidocsController < ApplicationController
     BroadcastsController,
     LoginController,
     ShowsController,
+    TracksController,
     StatusController,
     Admin::AccessCodesController,
     Admin::ArchiveFormatsController,
@@ -23,6 +24,7 @@ class ApidocsController < ApplicationController
     BroadcastSerializer,
     ShowSerializer,
     StatusSerializer,
+    TrackSerializer,
     UnprocessableEntitySerializer,
     UserSerializer,
     Admin::AccessCodeSerializer,
@@ -38,7 +40,7 @@ class ApidocsController < ApplicationController
   swagger_root do
     key :swagger, '2.0'
     info do
-      key :version, '1.0'
+      key :version, '1.1'
       key :title, 'RAAR Radio Archive API'
       key :description,
           'RAAR Radio Archive API. ' \

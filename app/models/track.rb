@@ -1,0 +1,41 @@
+# == Schema Information
+#
+# Table name: tracks
+#
+#  id          :integer          not null, primary key
+#  title       :string           not null
+#  artist      :string
+#  started_at  :datetime         not null
+#  finished_at :datetime         not null
+#
+
+class Track < ApplicationRecord
+
+  validates :title, :started_at, :finished_at, presence: true
+  validates :started_at, :finished_at, uniqueness: true
+
+  scope :list, -> { order('tracks.started_at') }
+
+  class << self
+    def within(start, finish)
+      where('tracks.finished_at > ? AND tracks.started_at < ?', start, finish)
+    end
+
+    def for_show(show_id)
+      joins('INNER JOIN broadcasts ' \
+            'ON tracks.started_at >= broadcasts.started_at ' \
+            'AND tracks.started_at < broadcasts.finished_at')
+        .where(broadcasts: { show_id: show_id })
+    end
+  end
+
+  def to_s
+    "#{I18n.l(started_at)}: #{[artist, title].compact.join(' - ')}"
+  end
+
+  # duration in seconds
+  def duration
+    finished_at - started_at
+  end
+
+end

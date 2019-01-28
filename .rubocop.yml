@@ -55,6 +55,10 @@ Style/SymbolArray:
 Rails/Delegate:
   Enabled: false
 
+# with dry_crud, this is a pattern
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+
 # we should know about update_all constraints.
 Rails/SkipsModelValidations:
   Enabled: false

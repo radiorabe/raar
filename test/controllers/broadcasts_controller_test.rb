@@ -54,7 +54,7 @@ class BroadcastsControllerTest < ActionController::TestCase
   end
 
   test 'GET index with minute time range returns filtered list' do
-    get :index, params: { year: 2013, month: 5, day: 20, hour: 21, minute: 0 }
+    get :index, params: { year: 2013, month: 5, day: 20, hour: 21, min: 0 }
     assert_equal ['G9S Shizzle Edition'],
                  json_attrs(:label)
   end

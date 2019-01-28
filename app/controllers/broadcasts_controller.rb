@@ -4,13 +4,11 @@
 # user (not by access code).
 class BroadcastsController < CrudController
 
-  TIME_PARTS = [:year, :month, :day, :hour, :min, :sec].freeze
+  include TimeFilterable
+  include WriteAuthenticatable
 
   self.search_columns = %w[label people details shows.name]
   self.permitted_attrs = [:label, :details, :people]
-
-  before_action :assert_params_given, only: :index
-  before_action :require_user, only: :update # rubocop:disable Rails/LexicallyScopedActionFilter
 
   # Convenience module to extract common swagger documentation in this controller.
   module SwaggerOperationMethods
@@ -115,7 +113,7 @@ class BroadcastsController < CrudController
     end
   end
 
-  swagger_path('broadcasts/{id}') do
+  swagger_path('/broadcasts/{id}') do
     operation :get do
       key :description, 'Returns a single broadcast.'
       key :tags, [:broadcast]
@@ -162,48 +160,9 @@ class BroadcastsController < CrudController
     scope
   end
 
-  def start_finish
-    parts = params.values_at(*TIME_PARTS).compact
-    start = get_timestamp(parts)
-    finish = start + range(parts)
-    [start, finish]
-  end
-
-  def range(parts)
-    range = TIME_PARTS[parts.size - 1]
-    case range
-    when :min then 1.minute
-    when :sec then 1.second
-    else 1.send(range)
-    end
-  end
-
-  def get_timestamp(parts)
-    Time.zone.local(*parts)
-  rescue ArgumentError
-    not_found
-  end
-
-  def assert_params_given
-    not_found if params[:show_id].blank? && params[:year].blank? && params[:q].blank?
-  end
-
   def accessible_entry_ids(entries)
     scope = Broadcast.where(id: entries.map(&:id))
     AudioAccess::Broadcasts.new(current_user).filter(scope).pluck(:id)
-  end
-
-  def require_user
-    render_unauthorized unless current_user
-  end
-
-  def fetch_current_user
-    if action_name == 'update'
-      Auth::Jwt.new(request).fetch_user ||
-        Auth::ApiToken.new(request).fetch_user
-    else
-      super
-    end
   end
 
 end

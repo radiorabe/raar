@@ -1,0 +1,34 @@
+# == Schema Information
+#
+# Table name: tracks
+#
+#  id          :integer          not null, primary key
+#  title       :string           not null
+#  artist      :string
+#  started_at  :datetime         not null
+#  finished_at :datetime         not null
+#
+
+jayz:
+  title: "99 problems"
+  artist: "Jay-Z"
+  started_at: <%= Time.zone.local(2013, 5, 20, 20, 01, 13).to_s(:db) %>
+  finished_at: <%= Time.zone.local(2013, 5, 20, 20, 04, 51).to_s(:db) %>
+
+choco:
+  title: Schwenger
+  artist: Chocolococolo
+  started_at: <%= Time.zone.local(2013, 5, 20, 20, 10, 44).to_s(:db) %>
+  finished_at: <%= Time.zone.local(2013, 5, 20, 20, 13, 5).to_s(:db) %>
+
+goeldin:
+  title: Liebi i Zyte vom kommende Ufstand
+  artist: "Göldin & Bit-Tuner"
+  started_at: <%= Time.zone.local(2013, 6, 12, 20, 36, 21).to_s(:db) %>
+  finished_at: <%= Time.zone.local(2013, 6, 12, 20, 39, 9).to_s(:db) %>
+
+shakira:
+  title: Loco
+  artist: Shakira
+  started_at: <%= Time.zone.local(2013, 5, 20, 11, 45, 13).to_s(:db) %>
+  finished_at: <%= Time.zone.local(2013, 5, 20, 11, 48).to_s(:db) %>
