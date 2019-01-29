@@ -2,14 +2,21 @@
 #
 # Table name: tracks
 #
-#  id          :integer          not null, primary key
-#  title       :string           not null
-#  artist      :string
-#  started_at  :datetime         not null
-#  finished_at :datetime         not null
+#  id           :integer          not null, primary key
+#  title        :string           not null
+#  artist       :string
+#  started_at   :datetime         not null
+#  finished_at  :datetime         not null
+#  broadcast_id :integer
 #
 
 class Track < ApplicationRecord
+
+  include NonOverlappable
+
+  belongs_to :broadcast, optional: true
+
+  before_save :assign_broadcast, if: :started_at_changed?
 
   validates :title, :started_at, :finished_at, presence: true
   validates :started_at, :finished_at, uniqueness: true
@@ -22,10 +29,7 @@ class Track < ApplicationRecord
     end
 
     def for_show(show_id)
-      joins('INNER JOIN broadcasts ' \
-            'ON tracks.started_at >= broadcasts.started_at ' \
-            'AND tracks.started_at < broadcasts.finished_at')
-        .where(broadcasts: { show_id: show_id })
+      joins(:broadcast).where(broadcasts: { show_id: show_id })
     end
   end
 
@@ -36,6 +40,12 @@ class Track < ApplicationRecord
   # duration in seconds
   def duration
     finished_at - started_at
+  end
+
+  private
+
+  def assign_broadcast
+    self.broadcast = Broadcast.at(started_at).first
   end
 
 end

@@ -106,15 +106,8 @@ class TracksController < CrudController
     scope = super
     scope = scope.within(*start_finish) if params[:year]
     scope = scope.for_show(params[:show_id]) if params[:show_id]
+    scope = scope.where(broadcast_id: params[:broadcast_id]) if params[:broadcast_id]
     scope
-  end
-
-  def model_scope
-    if params[:broadcast_id]
-      Broadcast.find(params[:broadcast_id]).tracks
-    else
-      super
-    end
   end
 
   def index_params?

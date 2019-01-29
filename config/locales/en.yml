@@ -26,6 +26,7 @@ en:
         identifier_format: may only contain a-z, 0-9 and '_'
         must_decrease: must decrease over time
         must_not_change: must not be changed
+        must_not_overlap: must not overlap with other entries
       models:
         profile:
           attributes:

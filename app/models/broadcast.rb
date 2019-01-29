@@ -17,13 +17,17 @@
 class Broadcast < ApplicationRecord
 
   include UserStampable
+  include NonOverlappable
 
   belongs_to :show
 
   has_many :audio_files, dependent: :restrict_with_error
+  has_many :tracks, dependent: :nullify
 
   validates :label, :started_at, :finished_at, presence: true
   validates :started_at, :finished_at, uniqueness: true
+
+  after_create :assign_tracks
 
   before_validation :set_show_label_if_empty
 
@@ -48,14 +52,14 @@ class Broadcast < ApplicationRecord
     finished_at - started_at
   end
 
-  def tracks
-    Track.within(started_at, finished_at)
-  end
-
   private
 
   def set_show_label_if_empty
     self.label ||= show.name if show
+  end
+
+  def assign_tracks
+    Track.within(started_at, finished_at).update_all(broadcast_id: id)
   end
 
 end

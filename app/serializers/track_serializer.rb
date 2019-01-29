@@ -2,11 +2,12 @@
 #
 # Table name: tracks
 #
-#  id          :integer          not null, primary key
-#  title       :string           not null
-#  artist      :string
-#  started_at  :datetime         not null
-#  finished_at :datetime         not null
+#  id           :integer          not null, primary key
+#  title        :string           not null
+#  artist       :string
+#  started_at   :datetime         not null
+#  finished_at  :datetime         not null
+#  broadcast_id :integer
 #
 
 class TrackSerializer < ApplicationSerializer

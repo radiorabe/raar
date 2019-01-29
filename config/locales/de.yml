@@ -95,16 +95,17 @@ de:
 
     errors:
       messages:
-        identifier_format: darf nur die Zeichen a-z, 0-9 und '_' enthalten.
-        must_decrease: muss mit der Zeit kleiner werden.
-        must_not_change: darf nicht verändert werden.
+        identifier_format: darf nur die Zeichen a-z, 0-9 und '_' enthalten
+        must_decrease: muss mit der Zeit kleiner werden
+        must_not_change: darf nicht verändert werden
+        must_not_overlap: darf sich nicht mit anderen Einträgen überschneiden
       models:
         profile:
           attributes:
             default:
-              must_exist: muss definiert sein.
+              must_exist: muss definiert sein
         downgrade_action:
-          delete_must_be_last: Löschen darf erst am Ende aller Aktionen geschehen.
+          delete_must_be_last: Löschen darf erst am Ende aller Aktionen geschehen
 
   time:
     formats:

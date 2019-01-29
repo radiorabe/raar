@@ -2,13 +2,13 @@
 #
 # Table name: tracks
 #
-#  id          :integer          not null, primary key
-#  title       :string           not null
-#  artist      :string
-#  started_at  :datetime         not null
-#  finished_at :datetime         not null
+#  id           :integer          not null, primary key
+#  title        :string           not null
+#  artist       :string
+#  started_at   :datetime         not null
+#  finished_at  :datetime         not null
+#  broadcast_id :integer
 #
-
 
 require 'test_helper'
 
@@ -48,6 +48,11 @@ class TrackTest < ActiveSupport::TestCase
   test '.for_show contains is empty if no tracks' do
     assert_equal [],
                  Track.for_show(shows(:info).id).list
+  end
+
+  test 'changing started_at updates broadcast' do
+    tracks(:jayz).update!(started_at: Time.zone.local(2013, 5, 20, 19, 58, 13))
+    assert_equal broadcasts(:klangbecken_mai1), tracks(:jayz).broadcast
   end
 
 end
