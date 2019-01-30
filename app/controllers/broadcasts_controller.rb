@@ -7,7 +7,7 @@ class BroadcastsController < CrudController
   include TimeFilterable
   include WriteAuthenticatable
 
-  self.search_columns = %w[label people details shows.name]
+  self.search_columns = %w[label people details shows.name tracks.title tracks.artist]
   self.permitted_attrs = [:label, :details, :people]
 
   # Convenience module to extract common swagger documentation in this controller.
@@ -153,8 +153,9 @@ class BroadcastsController < CrudController
 
   private
 
-  def fetch_entries
+  def fetch_entries # rubocop:disable Metrics/AbcSize
     scope = super.joins(:show).includes(:show)
+    scope = scope.left_joins(:tracks).distinct if params[:q]
     scope = scope.within(*start_finish) if params[:year]
     scope = scope.where(show_id: params[:show_id]) if params[:show_id]
     scope
