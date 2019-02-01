@@ -19,7 +19,7 @@ class Track < ApplicationRecord
   before_save :assign_broadcast, if: :started_at_changed?
 
   validates :title, :started_at, :finished_at, presence: true
-  validates :started_at, :finished_at, uniqueness: true
+  validates :started_at, uniqueness: true
 
   scope :list, -> { order('tracks.started_at') }
 

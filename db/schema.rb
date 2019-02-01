@@ -119,7 +119,6 @@ ActiveRecord::Schema.define(version: 2019_01_27_185449) do
     t.datetime "finished_at", null: false
     t.integer "broadcast_id"
     t.index ["broadcast_id"], name: "index_tracks_on_broadcast_id"
-    t.index ["finished_at"], name: "index_tracks_on_finished_at", unique: true
     t.index ["started_at"], name: "index_tracks_on_started_at", unique: true
   end
 

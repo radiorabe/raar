@@ -110,10 +110,6 @@ class TracksController < CrudController
     scope
   end
 
-  def index_params?
-    super || params[:broadcast_id].present?
-  end
-
   def entry_url
     track_path(entry)
   end

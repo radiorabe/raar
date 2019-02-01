@@ -1,12 +1,6 @@
 module TimeFilterable
 
-  extend ActiveSupport::Concern
-
   TIME_PARTS = [:year, :month, :day, :hour, :min, :sec].freeze
-
-  included do
-    before_action :assert_params_given, only: :index
-  end
 
   private
 
@@ -30,14 +24,6 @@ module TimeFilterable
     Time.zone.local(*parts)
   rescue ArgumentError
     not_found
-  end
-
-  def assert_params_given
-    not_found unless index_params?
-  end
-
-  def index_params?
-    params[:show_id].present? || params[:year].present? || params[:q].present?
   end
 
 end

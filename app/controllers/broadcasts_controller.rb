@@ -10,6 +10,8 @@ class BroadcastsController < CrudController
   self.search_columns = %w[label people details shows.name tracks.title tracks.artist]
   self.permitted_attrs = [:label, :details, :people]
 
+  before_action :assert_params_given, only: :index
+
   # Convenience module to extract common swagger documentation in this controller.
   module SwaggerOperationMethods
 
@@ -164,6 +166,14 @@ class BroadcastsController < CrudController
   def accessible_entry_ids(entries)
     scope = Broadcast.where(id: entries.map(&:id))
     AudioAccess::Broadcasts.new(current_user).filter(scope).pluck(:id)
+  end
+
+  def assert_params_given
+    not_found unless index_params?
+  end
+
+  def index_params?
+    params[:show_id].present? || params[:year].present? || params[:q].present?
   end
 
 end
