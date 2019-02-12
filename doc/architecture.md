@@ -29,6 +29,8 @@ RAAR distinguishes two key words: `Shows` and `Broadcasts`. In the naming of RAA
 
 A broadcast may have multiple `Audio Files` with different formats/bitrates. Each audio file contains the entire broadcast (the duration of the audio file equals the duration of the broadcast).
 
+Played `Tracks` may be archived additionally, independent of `Broadcasts` but associated to them for convenience. Currently, they are not imported from Airtime, but may be managed with the API.
+
 ### Archive Configuration
 
 The archive configuration mostly defines various audio formats to create when importing a broadcast and when they are downgraded. An audio format is defined with three values:
