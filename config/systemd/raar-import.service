@@ -9,4 +9,4 @@ User=raar
 Nice=10
 Environment="RAAR_LOG=stdout"
 EnvironmentFile=/var/www/raar/.env
-ExecStart=/usr/bin/scl enable rh-ruby22 -- /var/www/raar/current/bin/import
+ExecStart=/usr/bin/scl enable rh-ruby25 -- /var/www/raar/current/bin/import
