@@ -47,7 +47,7 @@ Three models contain the actual configuration: `ArchiveFormat` with `DowngradeAc
 
 Defines which audio formats should be created when importing a broadcast assigned to a given profile. Only one archive format may be defined per codec and profile.
 
-Additionally, a maximum public bitrate may be defined. If set, this value restricts API access to audio files of the given codec with a higher bitrate to users with a login.
+Additionally, a maximum public bitrate may be defined. If set, this value restricts API access to audio files of the given codec with a higher bitrate to users with a login or access code.
 
 #### Downgrade Actions
 
