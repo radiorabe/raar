@@ -59,7 +59,9 @@ class Broadcast < ApplicationRecord
   end
 
   def assign_tracks
-    Track.within(started_at, finished_at).update_all(broadcast_id: id)
+    Track
+      .where(tracks: { started_at: started_at..finished_at })
+      .update_all(broadcast_id: id)
   end
 
 end

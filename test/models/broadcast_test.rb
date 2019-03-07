@@ -65,6 +65,11 @@ class BroadcastTest < ActiveSupport::TestCase
   end
 
   test 'creating broadcasts sets relation in tracks' do
+    t0 = Track.create!(
+      title: 'foo',
+      started_at: Time.zone.local(2016, 8, 20, 7, 59, 59),
+      finished_at: Time.zone.local(2016, 8, 20, 8, 01, 10)
+    )
     t1 = Track.create!(
       title: 'foo',
       started_at: Time.zone.local(2016, 8, 20, 9, 18, 13),
@@ -87,6 +92,7 @@ class BroadcastTest < ActiveSupport::TestCase
       finished_at: Time.zone.local(2016, 8, 20, 10)
     )
 
+    assert_nil t0.reload.broadcast
     assert_equal b, t1.reload.broadcast
     assert_equal b, t2.reload.broadcast
     assert_nil t3.reload.broadcast
