@@ -4,8 +4,8 @@
 
 The following software must be installed on your system:
 
-* Ruby >= 2.2.0
-* PostgreSQL >= 8.0
+* Ruby >= 2.5.0
+* PostgreSQL >= 9.0
 * Ffmpeg >= 2.7.0
 * Apache HTTPD
 * mod_xsendfile

@@ -1,6 +1,6 @@
 # Development
 
-RAAR is a Ruby application, so you need [Ruby 2.2](https://www.ruby-lang.org/) and [Bundler](http://bundler.io) installed on your system to work on it. For development purposes, a simple [Sqlite](https://www.sqlite.org) database is used by default. You may change the database by setting the respective environment variables described in the [Deployment](deployment.md) documentation. There you'll also find a list of all the other third party libraries required.
+RAAR is a Ruby application, so you need [Ruby 2.5](https://www.ruby-lang.org/) and [Bundler](http://bundler.io) installed on your system to work on it. For development purposes, a simple [Sqlite](https://www.sqlite.org) database is used by default. You may change the database by setting the respective environment variables described in the [Deployment](deployment.md) documentation. There you'll also find a list of all the other third party libraries required.
 
 Once everything is set up and you cloned the Git repository, install all required Gems and prepare the Sqlite3 database with:
 
