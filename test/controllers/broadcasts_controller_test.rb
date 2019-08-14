@@ -43,7 +43,7 @@ class BroadcastsControllerTest < ActionController::TestCase
   test 'GET index with search param finds tracks' do
     broadcasts(:klangbecken_mai1).update(label: 'Klangbecken Mai')
     get :index, params: { q: 'loco' }
-    assert_equal ['Klangbecken Mai', 'G9S Shizzle Edition'], json_attrs(:label)
+    assert_equal ['Klangbecken Mai', 'G9S Shizzle Edition', "G9S Shizzle Edition II"], json_attrs(:label)
   end
 
   test 'GET index with day time range returns filtered list' do

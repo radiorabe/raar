@@ -9,17 +9,20 @@ class TracksControllerTest < ActionController::TestCase
 
   test 'GET index returns list of all tracks of the given show' do
     get :index, params: { show_id: shows(:g9s).id }
-    assert_equal ['Jay-Z', 'Chocolococolo', 'Göldin & Bit-Tuner'], json_attrs(:artist)
+    assert_equal ['Jay-Z', 'Chocolococolo', 'Göldin, Bit-Tuner', 'Bit-Tuner', 'Chocolococolo'],
+                 json_attrs(:artist)
   end
 
   test 'GET index returns list of all tracks of the given show, respecting descending sort order' do
     get :index, params: { show_id: shows(:g9s).id, sort: '-started_at' }
-    assert_equal ['Göldin & Bit-Tuner', 'Chocolococolo', 'Jay-Z'], json_attrs(:artist)
+    assert_equal ['Chocolococolo', 'Bit-Tuner', 'Göldin, Bit-Tuner', 'Chocolococolo', 'Jay-Z'],
+                 json_attrs(:artist)
   end
 
   test 'GET index returns list of all tracks of the given show, respecting ascending sort order' do
     get :index, params: { show_id: shows(:g9s).id, sort: 'artist' }
-    assert_equal ['Chocolococolo', 'Göldin & Bit-Tuner', 'Jay-Z'], json_attrs(:artist)
+    assert_equal ['Bit-Tuner', 'Chocolococolo', 'Chocolococolo', 'Göldin, Bit-Tuner', 'Jay-Z'],
+                 json_attrs(:artist)
   end
 
   test 'GET index returns bad request if sort is invalid' do
@@ -34,17 +37,17 @@ class TracksControllerTest < ActionController::TestCase
 
   test 'GET index with search param returns filtered list' do
     get :index, params: { show_id: shows(:g9s).id, q: 'loco' }
-    assert_equal ['Chocolococolo'], json_attrs(:artist)
+    assert_equal ['Chocolococolo', 'Chocolococolo'], json_attrs(:artist)
   end
 
   test 'GET index without show with search param returns filtered list' do
     get :index, params: { q: 'loco' }
-    assert_equal ['Shakira', 'Chocolococolo'], json_attrs(:artist)
+    assert_equal ['Shakira', 'Chocolococolo', 'Chocolococolo'], json_attrs(:artist)
   end
 
   test 'GET index with day time range returns filtered list' do
     get :index, params: { year: 2013, month: 5, day: 20 }
-    assert_equal ['Shakira', 'Jay-Z', 'Chocolococolo'], json_attrs(:artist)
+    assert_equal ['Shakira', 'Jay-Z', 'Jay-Z', 'Chocolococolo'], json_attrs(:artist)
   end
 
   test 'GET index with hour time range returns filtered list' do
@@ -174,7 +177,7 @@ class TracksControllerTest < ActionController::TestCase
   private
 
   def entry
-    tracks(:choco)
+    tracks(:choco1)
   end
 
 end

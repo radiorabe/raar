@@ -21,27 +21,27 @@ class TrackTest < ActiveSupport::TestCase
   end
 
   test 'duration is in seconds' do
-    assert_equal 141, tracks(:choco).duration
+    assert_equal 141, tracks(:choco1).duration
   end
 
   test '.within contains started at and finished_at' do
-    t = tracks(:choco)
+    t = tracks(:choco1)
     assert_equal [t], Track.within(t.started_at, t.finished_at)
   end
 
   test '.within contains the broadcast around the duration' do
-    t = tracks(:choco)
+    t = tracks(:choco1)
     assert_equal [t], Track.within(t.started_at + 1.minute, t.finished_at - 1.minute)
   end
 
   test '.within contains all broadcasts around the duration' do
-    t = tracks(:choco)
-    assert_equal tracks(:jayz, :choco),
+    t = tracks(:choco1)
+    assert_equal tracks(:jayz, :choco1),
                  Track.within(t.started_at - 10.minute, t.finished_at + 10.minute).list
   end
 
   test '.for_show contains all tracks for show' do
-    assert_equal tracks(:jayz, :choco, :goeldin),
+    assert_equal tracks(:jayz, :choco1, :goeldin, :bit, :choco2),
                  Track.for_show(shows(:g9s).id).list
   end
 
