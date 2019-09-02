@@ -19,6 +19,7 @@ class ApidocsController < ApplicationController
     Admin::PlaybackFormatsController,
     Admin::ProfilesController,
     Admin::ShowsController,
+    Admin::StatsController,
     Admin::UsersController,
     Admin::Shows::MergeController,
     # entities

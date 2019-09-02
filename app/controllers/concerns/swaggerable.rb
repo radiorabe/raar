@@ -41,7 +41,7 @@ module Swaggerable
                 required: true do
         schema do
           property :data do
-            key '$ref', data_class
+            key '$ref', URI.encode_www_form_component(data_class)
           end
         end
       end
@@ -52,7 +52,7 @@ module Swaggerable
         key :description, 'successfull operation'
         schema do
           property :data do
-            key '$ref', data_class
+            key '$ref', URI.encode_www_form_component(data_class)
           end
         end
       end
@@ -63,7 +63,7 @@ module Swaggerable
         key :description, 'successfull operation'
         schema do
           property :data, type: :array do
-            items '$ref' => data_class
+            items '$ref' => URI.encode_www_form_component(data_class)
           end
         end
       end

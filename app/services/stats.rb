@@ -4,7 +4,7 @@ class Stats
 
   class << self
     def for(year, month = nil)
-      new(Date.new(year, month || 1, 1)..Date.new(year, month || 12, -1))
+      new(Date.new(year.to_i, (month || 1).to_i, 1)..Date.new(year.to_i, (month || 12).to_i, -1))
     end
   end
 
@@ -12,42 +12,48 @@ class Stats
     @date_range = date_range
   end
 
-  def tracks
-    Track.within(date_range.first, date_range.last).joins(:broadcast)
-  end
-
-  def broadcasts
-    Broadcast.within(date_range.first, date_range.last)
-  end
-
-  def track_durations
-    @track_durations ||=
-      sort_counts(tracks.group(:show_id).sum(duration_in_seconds('tracks')))
-  end
-
-  def broadcast_durations
-    @broadcast_durations ||=
-      sort_counts(broadcasts.group(:show_id).sum(duration_in_seconds('broadcasts')))
+  def shows
+    Show.where(id: broadcast_durations.keys)
   end
 
   def broadcast_counts
-    sort_counts(broadcasts.group(:show_id).count)
+    @broadcast_counts ||= sort_counts(broadcasts.group(:show_id).count)
+  end
+
+  def overall_broadcast_count
+    broadcast_counts.values.sum
+  end
+
+  def broadcast_durations
+    @broadcast_durations ||= sum_hours_by_show(broadcasts, 'broadcasts')
   end
 
   def overall_broadcast_duration
-    broadcast_durations.values.sum
+    @overall_broadcast_duration ||= broadcast_durations.values.sum
   end
 
-  def track_ratios
+  def broadcasts?
+    overall_broadcast_duration > 0
+  end
+
+  def tracks_durations
+    @tracks_durations ||= sum_hours_by_show(tracks, 'tracks')
+  end
+
+  def overall_tracks_duration
+    tracks_durations.values.sum
+  end
+
+  def tracks_ratios
     sort_counts(
-      track_durations.each_with_object({}) do |(show_id, value), hash|
+      tracks_durations.each_with_object({}) do |(show_id, value), hash|
         hash[show_id] = value / broadcast_durations[show_id].to_f
       end
     )
   end
 
-  def overall_track_ratio
-    track_durations.values.sum / overall_broadcast_duration.to_f
+  def overall_tracks_ratio
+    broadcasts? ? (overall_tracks_duration / overall_broadcast_duration.to_f) : nil
   end
 
   def track_counts
@@ -117,12 +123,26 @@ class Stats
   def per_hour(show_counts)
     sort_counts(
       show_counts.each_with_object({}) do |(show_id, count), hash|
-        hash[show_id] = count / (broadcast_durations[show_id] / 1.hour.to_f)
+        hash[show_id] = count / broadcast_durations[show_id]
       end
     )
   end
 
   private
+
+  def tracks
+    Track.within(date_range.first, date_range.last).joins(:broadcast)
+  end
+
+  def broadcasts
+    Broadcast.within(date_range.first, date_range.last)
+  end
+
+  def sum_hours_by_show(scope, table)
+    seconds = scope.group(:show_id).sum(duration_in_seconds(table))
+    hours = seconds.transform_values { |v| v / 1.hour.to_f }
+    sort_counts(hours)
+  end
 
   def track_property_counts(scope)
     hash = Hash.new { |h, k| h[k] = {} }
@@ -158,6 +178,80 @@ class Stats
 
   def db_adapter
     Track.connection.adapter_name.downcase
+  end
+
+  class Csv
+
+    delegate_missing_to :@stats
+
+    def initialize(stats)
+      @stats = stats
+    end
+
+    def generate
+      require 'csv'
+      CSV.generate do |csv|
+        csv << csv_headers
+        csv << overall_columns
+        shows.includes(:profile).list.each do |show|
+          csv << show_columns(show)
+        end
+      end
+    end
+
+    private
+
+    def csv_headers # rubocop:disable Metrics/MethodLength
+      [
+        'Show',
+        'Profile',
+        'Broadcast Count',
+        'Broadcast Duration',
+        'Tracks Duration',
+        'Tracks Ratio',
+        'Uniq Tracks Count',
+        'Unique Artist Combo Count',
+        'Unique Single Artist Count',
+        'Unique Tracks per hour',
+        'Unique Artist Combos per hour',
+        'Unique Single Artists per hour'
+      ]
+    end
+
+    def overall_columns # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      [
+        'Overall',
+        nil,
+        overall_broadcast_count,
+        overall_broadcast_duration,
+        overall_tracks_duration,
+        overall_tracks_ratio,
+        overall_uniq_tracks,
+        overall_uniq_artist_combos,
+        overall_uniq_single_artists,
+        broadcasts? ? overall_uniq_tracks / overall_broadcast_duration : nil,
+        broadcasts? ? overall_uniq_artist_combos / overall_broadcast_duration : nil,
+        broadcasts? ? overall_uniq_single_artists / overall_broadcast_duration : nil
+      ]
+    end
+
+    def show_columns(show) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      [
+        show.name,
+        show.profile.name,
+        broadcast_counts[show.id],
+        broadcast_durations[show.id],
+        tracks_durations[show.id],
+        tracks_ratios[show.id],
+        uniq_tracks[show.id],
+        uniq_artist_combos[show.id],
+        uniq_single_artists[show.id],
+        per_hour(uniq_tracks)[show.id],
+        per_hour(uniq_artist_combos)[show.id],
+        per_hour(uniq_single_artists)[show.id]
+      ]
+    end
+
   end
 
 end

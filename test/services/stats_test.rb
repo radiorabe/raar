@@ -2,19 +2,19 @@ require 'test_helper'
 
 class StatsTest < ActiveSupport::TestCase
 
-  test '#track_durations' do
+  test '#tracks_durations' do
     assert_equal(
-      { shows(:g9s).id => 1606,
-        shows(:klangbecken).id => 616 },
-      stats.track_durations
+      { shows(:g9s).id => 0.4461111111111111,
+        shows(:klangbecken).id => 0.1711111111111111 },
+      stats.tracks_durations
     )
   end
 
   test '#broadcast_durations' do
     assert_equal(
-      { shows(:klangbecken).id => 63000,
-        shows(:g9s).id => 18000,
-        shows(:info).id => 1800 },
+      { shows(:klangbecken).id => 17.5,
+        shows(:g9s).id => 5.0,
+        shows(:info).id => 0.5 },
       stats.broadcast_durations
     )
   end
@@ -29,19 +29,19 @@ class StatsTest < ActiveSupport::TestCase
   end
 
   test '#overall_broadcast_duration' do
-    assert_equal(82800, stats.overall_broadcast_duration)
+    assert_equal(23.0, stats.overall_broadcast_duration)
   end
 
-  test '#track_ratios' do
+  test '#tracks_ratios' do
     assert_equal(
-      { shows(:g9s).id => 0.08922222222222222,
+      { shows(:g9s).id => 0.08922222222222223,
         shows(:klangbecken).id => 0.009777777777777778 },
-      stats.track_ratios
+      stats.tracks_ratios
     )
   end
 
-  test '#overall_track_ratio' do
-    assert_in_delta(0.026836, stats.overall_track_ratio, 0.00001)
+  test '#overall_tracks_ratio' do
+    assert_in_delta(0.026836, stats.overall_tracks_ratio, 0.00001)
   end
 
   test '#track_counts' do
@@ -160,6 +160,16 @@ class StatsTest < ActiveSupport::TestCase
         shows(:klangbecken).id => 0.11428571428571428 },
       stats.per_hour(stats.uniq_single_artists)
     )
+  end
+
+  test '#to_csv contains overall and show data' do
+    lines = Stats::Csv.new(stats).generate.split("\n")
+    assert_equal(5, lines.size)
+    assert_equal('Show,Profile,Broadcast Count,Broadcast Duration,Tracks Duration,Tracks Ratio,Uniq Tracks Count,Unique Artist Combo Count,Unique Single Artist Count,Unique Tracks per hour,Unique Artist Combos per hour,Unique Single Artists per hour', lines.first)
+    assert_equal('Overall,,5,23.0,0.6172222222222222,0.02683574879227053,6,5,5,0.2608695652173913,0.21739130434782608,0.21739130434782608', lines.second)
+    assert_equal('Gschäch9schlimmers,Default,2,5.0,0.4461111111111111,0.08922222222222223,4,4,4,0.8,0.8,0.8', lines.third)
+    assert_equal('Info,Important,1,0.5,,,,,,,,', lines.fourth)
+    assert_equal('Klangbecken,Unimportant,2,17.5,0.1711111111111111,0.009777777777777778,3,2,2,0.17142857142857143,0.11428571428571428,0.11428571428571428', lines.fifth)
   end
 
   def stats

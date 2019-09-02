@@ -49,6 +49,8 @@ Rails.application.routes.draw do
       post 'merge/:target_id', to: 'shows/merge#create', on: :member
     end
 
+    get 'stats/:year(/:month)', to: 'stats#index'
+
     resources :users
   end
 
