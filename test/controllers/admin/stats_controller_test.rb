@@ -16,7 +16,7 @@ module Admin
     test 'GET index returns empty csv for period without shows' do
       get :index, params: { year: 1980 }
       assert_equal 2, csv.size
-      assert_equal 'Overall,,0,0,0,,0,0,0,,,', csv.last
+      assert_equal 'Overall,,0,0,0,,0,0', csv.last
     end
 
     test 'GET index returns unauthorized if not logged in' do

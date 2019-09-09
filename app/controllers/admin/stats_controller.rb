@@ -34,7 +34,7 @@ module Admin
     end
 
     def index
-      send_data Stats::Csv.new(stats).generate, filename: filename
+      send_data stats.to_csv, filename: filename
     end
 
     private
@@ -48,7 +48,7 @@ module Admin
     end
 
     def stats
-      @stats ||= Stats.for(params[:year], params[:month])
+      @stats ||= Stats::Shows.for(params[:year], params[:month])
     end
 
   end
