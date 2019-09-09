@@ -8,7 +8,8 @@ module Admin
     test 'GET index returns csv of all broadcasted shows in given period' do
       get :index, params: { year: 2013, month: 5 }
       assert_equal 'text/csv', response.header['Content-Type']
-      assert_equal 'attachment; filename="stats_2013_05.csv"', response.header['Content-Disposition']
+      assert_equal 'attachment; filename="stats_2013_05.csv"; filename*=UTF-8\'\'stats_2013_05.csv',
+                   response.header['Content-Disposition']
       assert_equal 5, csv.size
       assert_equal 'Klangbecken', csv.last.split(',').first
     end

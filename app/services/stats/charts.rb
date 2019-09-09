@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Stats
   class Charts < Base
 
@@ -31,6 +33,15 @@ module Stats
             end
           end
         )
+    end
+
+    def to_csv(hash)
+      require 'csv'
+      CSV.generate do |csv|
+        hash.each do |values|
+          csv << values.flatten
+        end
+      end
     end
 
     private

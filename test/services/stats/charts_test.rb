@@ -33,6 +33,20 @@ class Stats::ChartsTest < ActiveSupport::TestCase
     )
   end
 
+  test '#to_csv(track_counts)' do
+    assert_equal(
+      [
+        'Chocolococolo,Schwenger,2',
+        'Jay-Z,99 problems,2',
+        'Bit-Tuner,Sacre du printemps,1',
+        '"Göldin, Bit-Tuner",Liebi i Zyte vom kommende Ufstand,1',
+        'Jay-Z,101 problems,1',
+        'Shakira,Loco,1'
+      ],
+      charts.to_csv(charts.track_counts).split("\n")
+    )
+  end
+
   test '#artist_combo_counts klangbecken' do
     assert_equal(
       { "Jay-Z" => 2, "Shakira" => 1 },
@@ -54,6 +68,19 @@ class Stats::ChartsTest < ActiveSupport::TestCase
     )
   end
 
+  test '#to_csv(artist_combo_counts)' do
+    assert_equal(
+      [
+        'Jay-Z,3',
+        'Chocolococolo,2',
+        'Bit-Tuner,1',
+        '"Göldin, Bit-Tuner",1',
+        'Shakira,1'
+      ],
+      charts.to_csv(charts.artist_combo_counts).split("\n")
+    )
+  end
+
   test '#single_artist_counts klangbecken' do
     assert_equal(
       { "Jay-Z" => 2, "Shakira" => 1 },
@@ -72,6 +99,19 @@ class Stats::ChartsTest < ActiveSupport::TestCase
     assert_equal(
       {"Jay-Z" => 3, "Bit-Tuner" => 2, "Chocolococolo" => 2, "Göldin" => 1, "Shakira" => 1},
       charts.single_artist_counts
+    )
+  end
+
+  test '#to_csv(single_artist_counts)' do
+    assert_equal(
+      [
+        'Jay-Z,3',
+        'Bit-Tuner,2',
+        'Chocolococolo,2',
+        'Göldin,1',
+        'Shakira,1'
+      ],
+      charts.to_csv(charts.single_artist_counts).split("\n")
     )
   end
 

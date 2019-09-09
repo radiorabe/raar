@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Stats
   class Shows < Base
 
@@ -22,7 +24,7 @@ module Stats
     end
 
     def broadcasts?
-      overall_broadcast_duration > 0
+      overall_broadcast_duration.positive?
     end
 
     def tracks_durations
