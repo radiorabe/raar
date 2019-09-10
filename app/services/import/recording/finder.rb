@@ -13,8 +13,11 @@ module Import
       end
 
       def import_directories
-        Rails.application.secrets.import_directories ||
-          raise('IMPORT_DIRECTORIES not set!')
+        if Rails.env.test? && $TEST_WORKER # rubocop:disable Style/GlobalVars
+          parallelized_import_directories
+        else
+          config_import_directories
+        end
       end
 
       private
@@ -25,6 +28,17 @@ module Import
             Import::Recording::File.new(f)
           end
         end.flatten
+      end
+
+      def config_import_directories
+        Rails.application.secrets.import_directories ||
+          raise('IMPORT_DIRECTORIES not set!')
+      end
+
+      def parallelized_import_directories
+        config_import_directories.map do |dir|
+          ::File.join(dir, $TEST_WORKER.to_s) # rubocop:disable Style/GlobalVars
+        end
       end
 
     end

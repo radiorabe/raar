@@ -11,6 +11,7 @@ env:
     - AIRTIME_DB_ADAPTER=postgresql
     - AIRTIME_DB_NAME=airtime_test
     - AIRTIME_DB_USERNAME=postgres
+    - PARALLEL_WORKERS=1
 
 sudo: false
 

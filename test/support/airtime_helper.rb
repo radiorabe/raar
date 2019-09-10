@@ -3,6 +3,16 @@ module AirtimeHelper
 
   included do
     setup :setup_airtime
+    parallelize_setup { |worker| create_airtime_db(worker) }
+  end
+
+  module ClassMethods
+    def create_airtime_db(worker)
+      Airtime::Base.establish_connection(
+        adapter: :sqlite3,
+        database: "db/airtime_test_#{worker}.sqlite3"
+      )
+    end
   end
 
   private
