@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Auth
   # A simple authentication based on the api_key stored in the database.
   # As this key is stored in clear text, this method should only be used

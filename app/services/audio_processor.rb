@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Interface for audio processors.
 module AudioProcessor
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ShowsController < ListController
 
   self.search_columns = %w[name details]

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AudioEncoding
   class Mp3 < Base
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Import
   # Imports a given broadcast mapping by creating a master audio file from the
   # corresponding recordings. This master may then be archived by the Archiver.

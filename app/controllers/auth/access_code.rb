@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Auth
   # A preview-kind authentication based on the access_codes stored in the database.
   # An unpersisted User instance is returned.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Import
   # Imports a master recording into the archive.
   # The argument master may be nil. In this case, no audio files are created.
@@ -96,13 +98,13 @@ module Import
     end
 
     def formats_covered_by_archive_formats
-      [''].tap do |condition|
-        archive_audio_formats.each do |f|
-          condition.first << ' OR ' if condition.first.present?
-          condition.first << '(codec = ? AND ((bitrate = ? AND channels <= ?) OR bitrate <= ?))'
-          condition.push(f.codec, f.bitrate, f.channels, f.bitrate)
-        end
+      condition = [+'']
+      archive_audio_formats.each do |f|
+        condition.first << ' OR ' if condition.first.present?
+        condition.first << '(codec = ? AND ((bitrate = ? AND channels <= ?) OR bitrate <= ?))'
+        condition.push(f.codec, f.bitrate, f.channels, f.bitrate)
       end
+      condition
     end
 
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Provides functionality to list broadcasts and update their meta data.
 # Different from the other Admin controllers as the user must not be an
 # administrator to perform updates, but simply authenticated as an exisiting

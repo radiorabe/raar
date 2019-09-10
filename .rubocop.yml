@@ -1,3 +1,7 @@
+require:
+  - rubocop-rails
+  - rubocop-performance
+
 AllCops:
   DisplayCopNames: true
   Exclude:
@@ -10,9 +14,6 @@ AllCops:
     - test/**/*
     - tmp/**/*
     - vendor/**/*
-
-Rails:
-  Enabled: true
 
 # namespace modules do not require empty lines, mixins do.
 Layout/EmptyLinesAroundClassBody:

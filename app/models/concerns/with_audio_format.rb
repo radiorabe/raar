@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Common methods for models containing audio format information such as bitrate and channel.
 module WithAudioFormat
   extend ActiveSupport::Concern

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Base module for the available audio formats, such as MP3, Ogg or Flac.
 module AudioEncoding
 

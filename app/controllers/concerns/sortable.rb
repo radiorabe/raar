@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Sort functionality for the index table.
 # Define a default sort expression that is always appended to the
 # current sort params with the class attribute +default_sort+.

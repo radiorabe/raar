@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Auth
   # Fetches the user from the REMOTE_USER header set by the FreeIPA module of
   # the web server.
@@ -27,7 +29,7 @@ module Auth
        h['REMOTE_USER_GROUPS'],
        h['REMOTE_USER_FIRST_NAME'],
        h['REMOTE_USER_LAST_NAME']]
-        .map { |str| str && str.force_encoding('UTF-8') }
+        .map { |str| str&.force_encoding('UTF-8') }
     end
 
   end

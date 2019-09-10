@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Parallelizer
 
   attr_accessor :thread_count

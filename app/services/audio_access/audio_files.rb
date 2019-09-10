@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AudioAccess
   class AudioFiles < Base
 
@@ -6,7 +8,7 @@ module AudioAccess
     end
 
     def download_permitted?(audio_file)
-      if user && user.admin?
+      if user&.admin?
         true
       else
         archive_format = fetch_archive_format(audio_file)

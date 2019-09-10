@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Import
   module Recording
     module File
@@ -7,7 +9,7 @@ module Import
       # time and duration).
       class Base
 
-        DIGIT_GLOB = '[0-9]'.freeze
+        DIGIT_GLOB = '[0-9]'
 
         include Loggable
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 gem 'rails', '6.0.0'
@@ -17,6 +19,9 @@ gem 'swagger-blocks'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors', require: 'rack/cors'
 
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', require: false
+
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
@@ -32,7 +37,8 @@ group :development do
   gem 'puma'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'rails-erd'
-  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
   gem 'spring'
 
   # Loading the listen gem enables an evented file system monitor. Check

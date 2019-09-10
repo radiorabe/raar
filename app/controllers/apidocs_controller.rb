@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApidocsController < ApplicationController
 
   # A list of all classes that have swagger_* declarations.

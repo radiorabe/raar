@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LoginController < ApplicationController
 
   swagger_path('/login') do

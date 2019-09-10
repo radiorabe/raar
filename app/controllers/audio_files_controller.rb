@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AudioFilesController < ListController
 
   NOT_FOUND_PATH = Rails.root.join('public', 'system', 'not_found.mp3')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: archive_formats
@@ -25,7 +27,8 @@ class ArchiveFormat < ApplicationRecord
 
   attr_readonly :codec
 
-  enum download_permission: [:public, :logged_in, :priviledged, :admin], _prefix: true
+  enum download_permission: { public: 0, logged_in: 1, priviledged: 2, admin: 3 },
+       _prefix: true
 
   belongs_to :profile
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Downgrade
   class Downgrader < ActionHandler
 
@@ -66,7 +68,7 @@ module Downgrade
       yield temp
       FileUtils.mv(temp.path, path)
     ensure
-      temp.close! if temp
+      temp&.close!
     end
 
     def create_database_entry(target)
@@ -82,7 +84,7 @@ module Downgrade
     def highest_quality_condition(file)
       conditions = base_highest_quality_conditions(file)
       if file.channels < action.channels
-        conditions.first << ' OR channels > ?'
+        conditions[0] += ' OR channels > ?'
         conditions << file.channels
       end
       conditions

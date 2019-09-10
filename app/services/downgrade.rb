@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Downgrade
 
   def self.run

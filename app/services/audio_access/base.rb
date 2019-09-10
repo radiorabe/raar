@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AudioAccess
   class Base
 
@@ -8,7 +10,7 @@ module AudioAccess
     end
 
     def filter(scope)
-      if user && user.admin?
+      if user&.admin?
         scope
       elsif user
         scope.merge(for_logged_in)

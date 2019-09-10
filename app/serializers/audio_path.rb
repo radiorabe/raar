@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class AudioPath
 
-  BEST_FORMAT = 'best'.freeze
+  BEST_FORMAT = 'best'
 
   attr_reader :audio_file
 

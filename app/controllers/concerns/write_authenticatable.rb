@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Requires that all write actions of an including controller are
 # performed by a logged in user (and not only a guest with an access code).
 module WriteAuthenticatable

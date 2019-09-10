@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FileStore
   # Defines the directory/file structure of the file system store.
   class Structure

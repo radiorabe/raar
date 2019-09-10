@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Import
   module Recording
     # Compares an array of audio files and returns the best one.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A value object representing an audio format, consisting of codec, bitrate and channels.
 class AudioFormat
 

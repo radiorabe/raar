@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Import
   module Recording
 
@@ -164,7 +166,7 @@ module Import
         unified = convert_all_to_same_format(list)
         yield unified.collect(&:path)
       ensure
-        unified && unified.each { |file| file.close! if file.respond_to?(:close!) }
+        unified&.each { |file| file.close! if file.respond_to?(:close!) }
       end
 
       def convert_all_to_same_format(list)

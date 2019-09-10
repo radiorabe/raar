@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Import
   module Recording
     module File
@@ -7,12 +9,12 @@ module Import
       # for the file extension.
       class Iso8601 < Base
 
-        DATE_TIME_FORMAT = '%Y-%m-%dT%H%M%S%z'.freeze
-        IMPORTED_SUFFIX = '_imported'.freeze
-        DATE_GLOB = '[12][019][0-9][0-9]-[0-1][0-9]-[0-3][0-9]'.freeze # yyyy-mm-dd
-        TIME_GLOB = '[0-2][0-9][0-5][0-9][0-5][0-9]{+,-}[0-2][0-9][0-5]0'.freeze # HHMMSS+ZZZZ
+        DATE_TIME_FORMAT = '%Y-%m-%dT%H%M%S%z'
+        IMPORTED_SUFFIX = '_imported'
+        DATE_GLOB = '[12][019][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' # yyyy-mm-dd
+        TIME_GLOB = '[0-2][0-9][0-5][0-9][0-5][0-9]{+,-}[0-2][0-9][0-5]0' # HHMMSS+ZZZZ
         DURATION_GLOB = DIGIT_GLOB * 3 # ddd, minutes
-        FILENAME_GLOB = "#{DATE_GLOB}T#{TIME_GLOB}_#{DURATION_GLOB}".freeze
+        FILENAME_GLOB = "#{DATE_GLOB}T#{TIME_GLOB}_#{DURATION_GLOB}"
 
         self.pending_glob = FILENAME_GLOB + '.*'
         self.imported_glob = FILENAME_GLOB + IMPORTED_SUFFIX + '.*'

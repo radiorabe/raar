@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Airtime
 
   # https://github.com/sourcefabric/airtime/blob/2.5.x/airtime_mvc/build/schema.xml

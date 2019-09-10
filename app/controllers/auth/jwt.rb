@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Auth
   # Fetches the user based on the id stored in a short-lived JWT token.
   # This method is used for the more critical actions in the admin section.

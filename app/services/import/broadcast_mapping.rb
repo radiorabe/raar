@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Import
   # A simple data holder for a single broadcast.
   class BroadcastMapping

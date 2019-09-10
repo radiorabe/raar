@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TimeFilterable
 
   TIME_PARTS = [:year, :month, :day, :hour, :min, :sec].freeze

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Status < ActiveModelSerializers::Model
 
   def api
@@ -9,7 +11,7 @@ class Status < ActiveModelSerializers::Model
 
     @database =
       begin
-        Show.count > 0
+        Show.count.positive?
       rescue StandardError
         false
       end

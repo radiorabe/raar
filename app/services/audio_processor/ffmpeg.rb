@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AudioProcessor
 
   FFMPEG.logger = Rails.env.development? ? Rails.logger : Logger.new('/dev/null')

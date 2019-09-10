@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: audio_files
@@ -36,8 +38,8 @@ class AudioFileSerializer < ApplicationSerializer
   link(:play) do
     # scope is current_user
     options = AudioPath.new(object).url_params
-    options[:api_token] = scope.api_token if scope && scope.api_token
-    options[:access_code] = scope.access_code if scope && scope.access_code
+    options[:api_token] = scope.api_token if scope&.api_token
+    options[:access_code] = scope.access_code if scope&.access_code
     audio_file_path(options)
   end
 
@@ -46,8 +48,8 @@ class AudioFileSerializer < ApplicationSerializer
     if AudioAccess::AudioFiles.new(scope).download_permitted?(object)
       options = AudioPath.new(object).url_params
       options[:download] = true
-      options[:api_token] = scope.api_token if scope && scope.api_token
-      options[:access_code] = scope.access_code if scope && scope.access_code
+      options[:api_token] = scope.api_token if scope&.api_token
+      options[:access_code] = scope.access_code if scope&.access_code
       audio_file_path(options)
     end
   end

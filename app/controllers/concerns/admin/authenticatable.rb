@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   # Requires that all actions of an including controller are performed
   # by an user with admin flag set to true.

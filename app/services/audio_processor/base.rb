@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AudioProcessor
   # Base class for processing audio files.
   class Base

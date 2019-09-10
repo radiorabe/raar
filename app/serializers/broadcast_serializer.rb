@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: broadcasts
@@ -47,7 +49,7 @@ class BroadcastSerializer < ApplicationSerializer
 
   link(:update) do
     # scope is current_user
-    broadcast_path(object) if scope && scope.persisted?
+    broadcast_path(object) if scope&.persisted?
   end
 
   def audio_access

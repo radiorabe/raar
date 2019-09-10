@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'capistrano/scm/plugin'
 
 # http://capistranorb.com/documentation/advanced-features/custom-scm

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Import
   module Recording
     module File
