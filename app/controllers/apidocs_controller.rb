@@ -43,7 +43,7 @@ class ApidocsController < ApplicationController
   swagger_root do
     key :swagger, '2.0'
     info do
-      key :version, '1.1'
+      key :version, '1.2'
       key :title, 'RAAR Radio Archive API'
       key :description,
           'RAAR Radio Archive API. ' \
