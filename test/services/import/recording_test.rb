@@ -18,12 +18,27 @@ class Import::RecordingTest < ActiveSupport::TestCase
 
   test '#duration returns seconds from filename' do
     recording = Import::Recording::File.new(file('2016-01-01T235959+0200_120.mp3'))
-    assert_equal 120 * 60, recording.duration
+    assert_equal 120.minutes.to_i, recording.duration
+  end
+
+  test '#duration returns seconds from filename period in minutes' do
+    recording = Import::Recording::File.new(file('2016-01-01T235959+0200_PT120M.mp3'))
+    assert_equal 120.minutes.to_i, recording.duration
+  end
+
+  test '#duration returns seconds from filename period in hours' do
+    recording = Import::Recording::File.new(file('2016-01-01T235959+0200_PT2.5H.mp3'))
+    assert_equal 2.5.hours.to_i, recording.duration
+  end
+
+  test '#duration returns seconds from filename mixed period' do
+    recording = Import::Recording::File.new(file('2016-01-01T235959+0200_PT1H30M20S.mp3'))
+    assert_equal 1.hour.to_i + 30.minutes.to_i + 20.seconds.to_i, recording.duration
   end
 
   test '#duration returns seconds from filename for imported files' do
     recording = Import::Recording::File.new(file('2015-12-31T000000-1200_030_imported.mp3'))
-    assert_equal 30 * 60, recording.duration
+    assert_equal 30.minutes.to_i, recording.duration
   end
 
   test '#finished_at returns correct time' do

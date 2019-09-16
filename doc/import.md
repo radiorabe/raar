@@ -11,7 +11,7 @@ The import processes audio files from a external sources, aka recordings. The wa
 * The audio files are put in the directories defined by `IMPORT_DIRECTORIES`.
 * Multiple directories may contain different recordings for the same times (for failover purposes), but with the same duration.
 * Recording durations do not have to correspond to broadcast durations.
-* The recording file names must be in the format `yyyy-mm-ddTHHMMSS±ZZZZ_ddd.*` (year '-' month '-' day 'T' hour minute second '+/-' time zone offset '_' duration '.' extension, e.g. '2015-02-12T120000+0200_060.mp3').
+* The recording file names must be in the format `yyyy-mm-ddTHHMMSS±ZZZZ_{ddd,PTaaHbbMccS}.*` (year '-' month '-' day 'T' hour minute second '+/-' time zone offset '_' { duration in minutes OR 'PT' hours 'H' minutes 'M' seconds 'S' (= ISO 8061 time period) } '.' extension, e.g. '2015-02-12T120000+0200_090.mp3' OR '2015-02-12T120000+0200_PT1H30M.mp3').
 
 ## Procedure
 
