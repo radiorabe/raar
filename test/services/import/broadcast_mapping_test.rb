@@ -43,15 +43,15 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
 
   test '#assign_broadcast_attrs creates a new broadcast' do
     mapping.assign_show(name: 'Info')
-    mapping.assign_broadcast(started_at: Time.local(2016, 1, 1, 11),
-                             finished_at: Time.local(2016, 1, 1, 11, 30),
+    mapping.assign_broadcast(started_at: Time.zone.local(2016, 1, 1, 11),
+                             finished_at: Time.zone.local(2016, 1, 1, 11, 30),
                              label: 'Rabe Info',
                              details: 'Politik und Aareabflussgeschwindigkeit')
 
     assert_equal 'Rabe Info', broadcast.label
     assert_equal 'Politik und Aareabflussgeschwindigkeit', broadcast.details
-    assert_equal Time.local(2016, 1, 1, 11), broadcast.started_at
-    assert_equal Time.local(2016, 1, 1, 11, 30), broadcast.finished_at
+    assert_equal Time.zone.local(2016, 1, 1, 11), broadcast.started_at
+    assert_equal Time.zone.local(2016, 1, 1, 11, 30), broadcast.finished_at
     assert broadcast.new_record?
     assert !mapping.imported?
   end

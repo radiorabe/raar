@@ -20,12 +20,16 @@ cache: bundler
 services:
   - postgresql
 
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y ffmpeg
+
 before_script:
   - psql -c 'create database raar_test;' -U postgres
   - psql -c 'create database airtime_test;' -U postgres
 
 script:
-  - bundle exec rails test
+  - bundle exec rails test || cat log/test.log
   - bundle exec rubocop
 
 before_deploy:

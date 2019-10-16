@@ -11,41 +11,38 @@ class ImportTest < ActiveSupport::TestCase
     Rails.application.secrets.import_default_show_id = nil
   end
 
-  # Travis has ffmpeg 0.8.17, which reports "Unknown input format: 'lavfi'"
-  unless ENV['TRAVIS']
-    test 'imports recordings as broadcasts' do
-      Rails.application.secrets.import_default_show_id = shows(:klangbecken).id
-      Time.zone.stubs(today: Time.local(2013, 6, 19),
-                      now: Time.local(2013, 6, 19, 11))
-      # build dummy recordings and broadcasts with a duration of two minutes
-      build_recording_files
-      build_airtime_entries
+  test 'imports recordings as broadcasts' do
+    Rails.application.secrets.import_default_show_id = shows(:klangbecken).id
+    Time.zone.stubs(today: Time.zone.local(2013, 6, 19),
+                    now: Time.zone.local(2013, 6, 19, 11))
+    # build dummy recordings and broadcasts with a duration of two minutes
+    build_recording_files
+    build_airtime_entries
 
-      ExceptionNotifier
-        .expects(:notify_exception)
-        .with(Import::Recording::UnimportedWarning.new(Import::Recording::File.new(@f1)))
-      ExceptionNotifier
-        .expects(:notify_exception)
-        .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f5)), instance_of(Hash))
-      ExceptionNotifier
-        .expects(:notify_exception)
-        .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f7)), instance_of(Hash))
+    ExceptionNotifier
+      .expects(:notify_exception)
+      .with(Import::Recording::UnimportedWarning.new(Import::Recording::File.new(@f1)))
+    ExceptionNotifier
+      .expects(:notify_exception)
+      .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f5)), instance_of(Hash))
+    ExceptionNotifier
+      .expects(:notify_exception)
+      .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f7)), instance_of(Hash))
 
-      assert_difference('Show.count', 2) do
-        assert_difference('Broadcast.count', 2) do
-          assert_difference('AudioFile.count', 6) do
-            Import.run
-          end
+    assert_difference('Show.count', 2) do
+      assert_difference('Broadcast.count', 2) do
+        assert_difference('AudioFile.count', 6) do
+          Import.run
         end
       end
-
-      archive_mp3s = File.join(FileStore::Structure.home, '2013', '06', '19', '*.mp3')
-      assert_equal 6, Dir.glob(archive_mp3s).size
-      audio = Show.find_by_name('Mittag').broadcasts.last.audio_files.first
-      assert_in_delta 290, AudioProcessor.new(audio.absolute_path).duration, 0.1
-      audio = Show.find_by_name('Info').broadcasts.last.audio_files.first
-      assert_in_delta 60, AudioProcessor.new(audio.absolute_path).duration, 0.1
     end
+
+    archive_mp3s = File.join(FileStore::Structure.home, '2013', '06', '19', '*.mp3')
+    assert_equal 6, Dir.glob(archive_mp3s).size
+    audio = Show.find_by_name('Mittag').broadcasts.last.audio_files.first
+    assert_in_delta 290, AudioProcessor.new(audio.absolute_path).duration, 0.1
+    audio = Show.find_by_name('Info').broadcasts.last.audio_files.first
+    assert_in_delta 60, AudioProcessor.new(audio.absolute_path).duration, 0.1
   end
 
   private
@@ -72,22 +69,22 @@ class ImportTest < ActiveSupport::TestCase
 
   def build_airtime_entries
     morgen = Airtime::Show.create!(name: 'Morgen')
-    morgen.show_instances.create!(starts: Time.local(2013, 6, 18, 8),
-                                  ends: Time.local(2013, 6, 18, 11),
+    morgen.show_instances.create!(starts: Time.zone.local(2013, 6, 18, 8),
+                                  ends: Time.zone.local(2013, 6, 18, 11),
                                   created: Time.zone.now)
-    morgen.show_instances.create!(starts: Time.local(2013, 6, 19, 10),
-                                  ends: Time.local(2013, 6, 19, 10, 8),
+    morgen.show_instances.create!(starts: Time.zone.local(2013, 6, 19, 10),
+                                  ends: Time.zone.local(2013, 6, 19, 10, 8),
                                   created: Time.zone.now)
     info = Airtime::Show.create!(name: 'Info')
-    info.show_instances.create!(starts: Time.local(2013, 6, 19, 10, 8),
-                                ends: Time.local(2013, 6, 19, 10, 9),
+    info.show_instances.create!(starts: Time.zone.local(2013, 6, 19, 10, 8),
+                                ends: Time.zone.local(2013, 6, 19, 10, 9),
                                 created: Time.zone.now)
-    info.show_instances.create!(starts: Time.local(2013, 6, 20, 11),
-                                ends: Time.local(2013, 6, 20, 11, 30),
+    info.show_instances.create!(starts: Time.zone.local(2013, 6, 20, 11),
+                                ends: Time.zone.local(2013, 6, 20, 11, 30),
                                 created: Time.zone.now)
     mittag = Airtime::Show.create!(name: 'Mittag')
-    mittag.show_instances.create!(starts: Time.local(2013, 6, 19, 10, 9),
-                                  ends: Time.local(2013, 6, 19, 10, 14),
+    mittag.show_instances.create!(starts: Time.zone.local(2013, 6, 19, 10, 9),
+                                  ends: Time.zone.local(2013, 6, 19, 10, 14),
                                   created: Time.zone.now)
   end
 

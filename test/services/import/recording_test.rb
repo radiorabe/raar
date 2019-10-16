@@ -68,30 +68,25 @@ class Import::RecordingTest < ActiveSupport::TestCase
     assert !File.exist?(f)
   end
 
-  # Travis has ffmpeg 0.8.17, which reports "Unknown input format: 'lavfi'"
-  unless ENV['TRAVIS']
+  test '#audio_duration returns actual duration' do
+    f = file('2016-01-01T235959+0200_120.mp3')
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 96, 1), f)
+    recording = Import::Recording::File.new(f)
+    assert_in_delta 3, recording.audio_duration, 0.1
+  end
 
-    test '#audio_duration returns actual duration' do
-      f = file('2016-01-01T235959+0200_120.mp3')
-      AudioGenerator.new.silent_file(AudioFormat.new('mp3', 96, 1), f)
-      recording = Import::Recording::File.new(f)
-      assert_in_delta 3, recording.audio_duration, 0.1
-    end
+  test '#audio_duration_too_short? returns true' do
+    f = file('2016-01-01T235959+0200_120.mp3')
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 96, 1), f)
+    recording = Import::Recording::File.new(f)
+    assert recording.audio_duration_too_short?
+  end
 
-    test '#audio_duration_too_short? returns true' do
-      f = file('2016-01-01T235959+0200_120.mp3')
-      AudioGenerator.new.silent_file(AudioFormat.new('mp3', 96, 1), f)
-      recording = Import::Recording::File.new(f)
-      assert recording.audio_duration_too_short?
-    end
-
-    test '#audio_duration_too_long? returns false' do
-      f = file('2016-01-01T235959+0200_120.mp3')
-      AudioGenerator.new.silent_file(AudioFormat.new('mp3', 96, 1), f)
-      recording = Import::Recording::File.new(f)
-      assert !recording.audio_duration_too_long?
-    end
-
+  test '#audio_duration_too_long? returns false' do
+    f = file('2016-01-01T235959+0200_120.mp3')
+    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 96, 1), f)
+    recording = Import::Recording::File.new(f)
+    assert !recording.audio_duration_too_long?
   end
 
 end
