@@ -13,7 +13,7 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
     assert show.persisted?
   end
 
-  test '#assign_show_attrs uses an existing show' do
+  test '#assign_show_attrs uses an existing show and sets details if blank' do
     mapping.assign_show(name: 'Info', details: 'Rabe Info')
 
     assert_equal 'Info', show.name
@@ -31,12 +31,12 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
     assert_equal shows(:g9s), show
   end
 
-  test '#assign_show_attrs uses an existing show and updates details' do
+  test '#assign_show_attrs uses an existing show and keeps details if present' do
     shows(:info).update!(details: 'RaBe Info')
     mapping.assign_show(name: 'Info', details: 'Info')
 
     assert_equal 'Info', show.name
-    assert_equal 'Info', show.details
+    assert_equal 'RaBe Info', show.details
     assert_equal profiles(:important), show.profile
     assert_equal shows(:info), show
   end
@@ -56,7 +56,8 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
     assert !mapping.imported?
   end
 
-  test '#assign_broadcast_attrs uses an existing broadcast' do
+  test '#assign_broadcast_attrs uses an existing broadcast and keeps details if present' do
+    broadcasts(:info_mai).update!(details: 'Bla bla')
     mapping.assign_show(name: 'Info')
     mapping.assign_broadcast(started_at: Time.zone.local(2013, 5, 20, 11),
                              finished_at: Time.zone.local(2013, 5, 20, 11, 30),
@@ -64,12 +65,12 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
                              details: 'Politik und Aareabflussgeschwindigkeit')
 
 
-    assert_equal 'Rabe Info', broadcast.label
-    assert_equal 'Politik und Aareabflussgeschwindigkeit', broadcast.details
+    assert_equal 'Info Mai', broadcast.label
+    assert_equal 'Bla bla', broadcast.details
     assert_equal Time.zone.local(2013, 5, 20, 11), broadcast.started_at
     assert_equal Time.zone.local(2013, 5, 20, 11, 30), broadcast.finished_at
     assert_equal broadcasts(:info_mai), broadcast
-    assert mapping.imported?
+    assert !mapping.imported?
   end
 
   test '#complete? is true if recording is equal to broadcast' do

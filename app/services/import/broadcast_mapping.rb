@@ -19,6 +19,7 @@ module Import
     # Assigns a show based on the given attrs. A :name key must be included.
     def assign_show(attrs = {})
       @show = fetch_show(attrs)
+      @show.details ||= attrs[:details].presence
     end
 
     # Assigns a broadcast based on the given attrs.
@@ -28,6 +29,7 @@ module Import
       raise(KeyError, 'show attrs must be set beforehand') unless @show
 
       @broadcast = fetch_broadcast(attrs)
+      assign_broadcast_attrs(attrs)
     end
 
     def to_s
@@ -35,7 +37,7 @@ module Import
     end
 
     def imported?
-      broadcast.persisted?
+      broadcast.audio_files.exists?
     end
 
     def persist!
@@ -51,12 +53,11 @@ module Import
     end
 
     def add_recording_if_overlapping(recording)
-      if overlaps?(recording)
-        @recordings << recording
-        recording.broadcasts_mappings << self
-        true
-      else
-        false
+      overlaps?(recording).tap do |overlapping|
+        if overlapping
+          @recordings << recording
+          recording.broadcasts_mappings << self
+        end
       end
     end
 
@@ -78,17 +79,20 @@ module Import
     end
 
     def fetch_show(attrs = {})
-      show = Show.where('LOWER(name) = ?', attrs.fetch(:name).mb_chars.downcase).first ||
-             Show.create(name: attrs.fetch(:name))
-      show.details = attrs[:details] if attrs[:details].present?
-      show
+      Show.where('LOWER(name) = ?', attrs.fetch(:name).mb_chars.downcase).first ||
+        Show.create!(name: attrs.fetch(:name))
     end
 
     def fetch_broadcast(attrs = {})
       show.broadcasts
           .where(started_at: attrs.fetch(:started_at), finished_at: attrs.fetch(:finished_at))
           .first_or_initialize
-          .tap { |bc| bc.attributes = attrs }
+    end
+
+    def assign_broadcast_attrs(attrs)
+      broadcast.label ||= attrs[:label].presence
+      broadcast.details ||= attrs[:details].presence
+      broadcast.people ||= attrs[:people].presence
     end
 
   end

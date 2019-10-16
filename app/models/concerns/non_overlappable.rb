@@ -11,7 +11,7 @@ module NonOverlappable
   private
 
   def assert_not_overlapping
-    scope = overlapping_scope
+    scope = self.class.within(started_at, finished_at)
     scope = scope.where.not(id: id) if persisted?
     if scope.exists?
       errors.add(:started_at, :must_not_overlap)
@@ -19,8 +19,10 @@ module NonOverlappable
     end
   end
 
-  def overlapping_scope
-    self.class.where('started_at < ? AND finished_at > ?', finished_at, started_at)
+  module ClassMethods
+    def within(start, finish)
+      where("#{table_name}.finished_at > ? AND #{table_name}.started_at < ?", start, finish)
+    end
   end
 
 end

@@ -2,8 +2,6 @@ require 'open3'
 
 class AudioGenerator
 
-  TEMP_DIR = Rails.root.join('tmp', 'test', 'audio')
-
   def silent_files_for_audio_files
     AudioFile.find_each do |f|
       unless File.exists?(f.absolute_path)
@@ -20,11 +18,11 @@ class AudioGenerator
   end
 
   def silent_source_file(audio_format, duration = 3)
-    file = File.join(TEMP_DIR,
+    file = File.join(temp_dir,
                      "silence_#{duration}s_#{audio_format.bitrate}k." \
                      "#{audio_format.file_extension}")
     unless File.exists?(file)
-      FileUtils.mkdir_p(TEMP_DIR)
+      FileUtils.mkdir_p(temp_dir)
       create_silent_file(audio_format, file, duration)
     end
     file
@@ -49,6 +47,8 @@ class AudioGenerator
     end
   end
 
-
+  def temp_dir
+    @temp_dir ||= Rails.root.join('tmp', 'test', 'audio', $TEST_WORKER.to_s)
+  end
 
 end

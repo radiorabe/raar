@@ -428,7 +428,7 @@ class AudioFilesControllerTest < ActionController::TestCase
   end
 
   def path
-    @path ||= file.absolute_path
+    @path ||= original_path
   end
 
   def touch_path
@@ -438,6 +438,11 @@ class AudioFilesControllerTest < ActionController::TestCase
 
   def remove_path
     FileUtils.rm(path)
+    FileUtils.rm(original_path) unless path == original_path
+  end
+
+  def original_path
+    file.absolute_path
   end
 
 end

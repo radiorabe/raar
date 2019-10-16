@@ -163,7 +163,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       end
     end
 
-    test 'fails to concat different files files' do
+    test 'fails to concat different codec files' do
       file = Tempfile.new(['merge', '.flac'])
       begin
         format = AudioFormat.new('flac', nil, 2)

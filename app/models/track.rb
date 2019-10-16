@@ -26,10 +26,6 @@ class Track < ApplicationRecord
   scope :list, -> { order('tracks.started_at') }
 
   class << self
-    def within(start, finish)
-      where('tracks.finished_at > ? AND tracks.started_at < ?', start, finish)
-    end
-
     def for_show(show_id)
       joins(:broadcast).where(broadcasts: { show_id: show_id })
     end

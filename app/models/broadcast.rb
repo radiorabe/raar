@@ -39,10 +39,6 @@ class Broadcast < ApplicationRecord
     def at(timestamp)
       where('broadcasts.started_at <= ? AND broadcasts.finished_at > ?', timestamp, timestamp)
     end
-
-    def within(start, finish)
-      where('broadcasts.finished_at > ? AND broadcasts.started_at < ?', start, finish)
-    end
   end
 
   def to_s

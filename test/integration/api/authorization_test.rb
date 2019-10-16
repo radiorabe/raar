@@ -2,7 +2,8 @@ require 'test_helper'
 
 class AuthorizationTest < ActionDispatch::IntegrationTest
 
-  setup { touch_audio_file }
+  setup :touch_audio_file
+  teardown :remove_audio_file
 
   test 'GET show audio file with HTTP token is allowed' do
     assert_no_difference('User.count') do
@@ -54,6 +55,10 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
     path = audio_file.absolute_path
     FileUtils.mkdir_p(File.dirname(path))
     FileUtils.touch(path)
+  end
+
+  def remove_audio_file
+    FileUtils.rm(audio_file.absolute_path)
   end
 
   def audio_path

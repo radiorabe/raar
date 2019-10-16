@@ -21,6 +21,7 @@ class Import::ImporterTest < ActiveSupport::TestCase
     f = touch('2013-06-19T200000+0200_120.mp3')
     mapping.add_recording_if_overlapping(Import::Recording::File.new(f))
     mapping.broadcast.save!
+    mapping.broadcast.audio_files.new(codec: :mp3, bitrate: 320, channels: 2).with_path.save!
     Import::Archiver.expects(:new).never
     ExceptionNotifier.expects(:notify_exception).never
     importer.run
