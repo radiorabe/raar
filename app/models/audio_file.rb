@@ -16,6 +16,8 @@
 
 class AudioFile < ApplicationRecord
 
+  BEST_FORMAT_NAME = 'best'
+
   include WithAudioFormat
 
   belongs_to :broadcast
@@ -70,6 +72,26 @@ class AudioFile < ApplicationRecord
 
   def to_s
     path
+  end
+
+  def url_params
+    @url_params ||= timestamp_params.merge(
+      playback_format: playback_format_name,
+      format: audio_format.file_extension
+    )
+  end
+
+  def playback_format_name
+    playback_format.try(:name) || BEST_FORMAT_NAME
+  end
+
+  private
+
+  def timestamp_params
+    timestamp = broadcast.started_at
+    %i[year month day hour min sec].each_with_object({}) do |key, hash|
+      hash[key] = format('%02d', timestamp.send(key))
+    end
   end
 
 end

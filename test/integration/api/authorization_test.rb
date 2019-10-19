@@ -62,7 +62,7 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
   end
 
   def audio_path
-    audio_file_path(AudioPath.new(audio_file).url_params)
+    audio_file_path(audio_file.url_params)
   end
 
   def audio_file

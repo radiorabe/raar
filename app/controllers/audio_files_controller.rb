@@ -74,7 +74,8 @@ class AudioFilesController < ListController
       parameter name: :playback_format,
                 in: :path,
                 description: 'Name of the playback format to get the audio file for. ' \
-                             "Use '#{AudioPath::BEST_FORMAT}' to get the best available quality.",
+                             "Use '#{AudioFile::BEST_FORMAT_NAME}' to get the best available " \
+                             'quality.',
                 required: true,
                 type: :string
 
@@ -174,7 +175,7 @@ class AudioFilesController < ListController
   end
 
   def fetch_entry
-    if params[:playback_format] == AudioPath::BEST_FORMAT
+    if params[:playback_format] == AudioFile::BEST_FORMAT_NAME
       AudioFile.best_at(timestamp, detect_codec)
     else
       playback_format = PlaybackFormat.find_by!(name: params[:playback_format],

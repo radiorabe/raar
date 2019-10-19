@@ -4,7 +4,7 @@
 module AudioEncoding
 
   def self.[](codec)
-    list.detect { |c| c.codec == codec.to_s.strip }
+    registry[codec]
   end
 
   def self.fetch(codec)
@@ -16,7 +16,11 @@ module AudioEncoding
   end
 
   def self.list
-    AudioEncoding::Base.subclasses
+    registry.values
+  end
+
+  def self.registry
+    @@registry ||= AudioEncoding::Base.subclasses.index_by(&:codec)
   end
 
 end
