@@ -9,8 +9,11 @@ class BroadcastsController < CrudController
   include TimeFilterable
   include WriteAuthenticatable
 
-  self.search_columns = %w[label people details shows.name tracks.title tracks.artist]
   self.permitted_attrs = [:label, :details, :people]
+
+  # Not used because of optimized search query for Postgresql trigram indizes.
+  # See below for more details.
+  # self.search_columns = %w[label people details shows.name tracks.artist tracks.title]
 
   before_action :assert_params_given, only: :index
 
@@ -157,9 +160,8 @@ class BroadcastsController < CrudController
 
   private
 
-  def fetch_entries # rubocop:disable Metrics/AbcSize
+  def fetch_entries
     scope = super.joins(:show).includes(:show)
-    scope = scope.left_joins(:tracks).distinct if params[:q]
     scope = scope.within(*start_finish) if params[:year]
     scope = scope.where(show_id: params[:show_id]) if params[:show_id]
     scope
@@ -176,6 +178,48 @@ class BroadcastsController < CrudController
 
   def index_params?
     params[:show_id].present? || params[:year].present? || params[:q].present?
+  end
+
+  # To fully use the Postgresql trigram GIST indizes of the different tables,
+  # split the search in one subquery per table and word.
+  # This performs over 30 times faster than concatenated ILIKE conditions
+  # on joined tables without indizes.
+  def search_word_condition(word)
+    search_word_in_tables_conditions(word)
+      .reduce { |query, cond| query.or(cond) }
+  end
+
+  def search_word_in_tables_conditions(word)
+    [
+      search_broadcasts_condition(word),
+      search_tracks_condition(word)
+    ].tap do |conditions|
+      # no need to search shows if only broadcasts of one show are requested
+      conditions << search_shows_condition(word) unless params[:show_id]
+    end
+  end
+
+  def search_broadcasts_condition(word)
+    search_other_table_condition(word, :id, 'broadcasts', :id, :label, :details, :people)
+  end
+
+  def search_tracks_condition(word)
+    search_other_table_condition(word, :id, 'tracks', :broadcast_id, :artist, :title)
+  end
+
+  def search_shows_condition(word)
+    search_other_table_condition(word, :show_id, 'shows', :id, :name)
+  end
+
+  def search_other_table_condition(word, broadcast_field, table_name, select_field, *fields)
+    table = Arel::Table.new(table_name)
+    condition = search_table_columns_condition(word, table, *fields)
+    subquery = table.project(table[select_field]).where(condition)
+    Broadcast.arel_table[broadcast_field].in(subquery)
+  end
+
+  def search_support?
+    true
   end
 
 end
