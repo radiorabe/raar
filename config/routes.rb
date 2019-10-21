@@ -3,55 +3,59 @@ Rails.application.routes.draw do
 
   root to: 'apidocs#index'
 
-  resources :shows, only: [:index, :show]
+  defaults format: :json do
 
-  resources :broadcasts, only: [:show, :update] do
-    resources :audio_files, only: :index
-    resources :tracks, only: :index
-  end
+    resources :shows, only: [:index, :show]
 
-  resources :tracks, except: :index
+    resources :broadcasts, only: [:show, :update] do
+      resources :audio_files, only: :index
+      resources :tracks, only: :index
+    end
 
-  constraints(year: /\d{4}/, month: /\d{2}/, day: /\d{2}/,
-              hour: /\d{2}/, min: /\d{2}/, sec: /\d{2}/) do
-    get '(/shows/:show_id)/broadcasts(/:year(/:month(/:day(/:hour(:min(:sec))))))',
-        to: 'broadcasts#index',
-        as: :broadcasts
+    resources :tracks, except: :index
 
-    get 'audio_files/:year/:month/:day/:hour:min(:sec)_:playback_format.:format',
-        to: 'audio_files#show',
-        as: :audio_file
+    constraints(year: /\d{4}/, month: /\d{2}/, day: /\d{2}/,
+                hour: /\d{2}/, min: /\d{2}/, sec: /\d{2}/) do
+      get '(/shows/:show_id)/broadcasts(/:year(/:month(/:day(/:hour(:min(:sec))))))',
+          to: 'broadcasts#index',
+          as: :broadcasts
 
-    get '(/shows/:show_id)/tracks(/:year(/:month(/:day(/:hour(:min(:sec))))))',
-        to: 'tracks#index'
-  end
+      get 'audio_files/:year/:month/:day/:hour:min(:sec)_:playback_format.:format',
+          to: 'audio_files#show',
+          as: :audio_file
 
-  get 'login', to: 'login#show'
-  post 'login', to: 'login#create'
-  patch 'login', to: 'login#update'
+      get '(/shows/:show_id)/tracks(/:year(/:month(/:day(/:hour(:min(:sec))))))',
+          to: 'tracks#index'
+    end
 
-  get 'status', to: 'status#show'
+    get 'login', to: 'login#show'
+    post 'login', to: 'login#create'
+    patch 'login', to: 'login#update'
 
-  namespace :admin do
-    resources :access_codes
+    get 'status', to: 'status#show'
 
-    resources :audio_encodings, only: :index
+    namespace :admin do
+      resources :access_codes
 
-    resources :playback_formats
+      resources :audio_encodings, only: :index
 
-    resources :profiles do
-      resources :archive_formats do
-        resources :downgrade_actions
+      resources :playback_formats
+
+      resources :profiles do
+        resources :archive_formats do
+          resources :downgrade_actions
+        end
       end
+
+      resources :shows do
+        post 'merge/:target_id', to: 'shows/merge#create', on: :member
+      end
+
+      get 'stats/:year(/:month)', to: 'stats#index'
+
+      resources :users
     end
 
-    resources :shows do
-      post 'merge/:target_id', to: 'shows/merge#create', on: :member
-    end
-
-    get 'stats/:year(/:month)', to: 'stats#index'
-
-    resources :users
   end
 
 end
