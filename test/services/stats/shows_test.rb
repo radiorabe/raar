@@ -79,7 +79,7 @@ class Stats::ShowsTest < ActiveSupport::TestCase
   end
 
   def stats
-    @stats ||= Stats::Shows.new(Date.new(2013,5,16)..Date.new(2013,6,15))
+    @stats ||= Stats::Shows.new(Date.new(2013,5,16)..Date.new(2013,6,12))
   end
 
 end

@@ -24,7 +24,9 @@ module Stats
     private
 
     def tracks
-      Track.within(date_range.first, date_range.last).joins(:broadcast)
+      Track
+        .within(date_range.first.at_beginning_of_day, date_range.last.at_end_of_day)
+        .joins(:broadcast)
     end
 
     def sort_counts(counts)

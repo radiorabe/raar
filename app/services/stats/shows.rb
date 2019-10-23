@@ -73,7 +73,7 @@ module Stats
     private
 
     def broadcasts
-      Broadcast.within(date_range.first, date_range.last)
+      Broadcast.within(date_range.first.at_beginning_of_day, date_range.last.at_end_of_day)
     end
 
     def sum_hours_by_show(scope, table)
