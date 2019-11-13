@@ -18,6 +18,10 @@ task :package do
   # create artifact
   sh 'cd dist && ' \
      'tar -cvzf raar.tar.gz ' \
-     '--exclude tmp --exclude test --exclude .travis.yml --exclude .rubocop.yml ' \
+     '--exclude tmp ' \
+     '--exclude test ' \
+     '--exclude .travis.yml ' \
+     '--exclude .rubocop.yml ' \
+     '--exclude raar.tar.gz ' \
      '.'
 end
