@@ -3,9 +3,9 @@
 # raar-record-handler.sh - Moves new recordings to the raar import directory
 ################################################################################
 #
-# Copyright (C) 2018 Radio Bern RaBe
-#                    Switzerland
-#                    http://www.rabe.ch
+# Copyright (C) 2018 - 2019 Radio Bern RaBe
+#                           Switzerland
+#                           https://rabe.ch
 #
 # This program is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public 
