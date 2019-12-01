@@ -88,8 +88,43 @@ do
 
     echo "Archiving ${eventFileName}"
 
-    tmpPath="${destDir}/.${eventFileName}.tmp"
-    destPath="${destDir}/${eventFileName}"
+    # Get the duration of the recording in seconds, with microsecond accuracy
+    # such as "3599.998979"
+    ffprobeOutput="$( LC_ALL=C ffprobe -i "${sourcePath}" \
+                                       -show_entries format="duration" \
+                                       -print_format csv="print_section=0" \
+                                       -v quiet )"
+
+    if [ $? -eq 0 ] && [[ "${ffprobeOutput}" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+        # Round to integer value in seconds
+        # 3599.998979 => 3600
+        duration=$( LC_ALL=C printf '%.0f' "$ffprobeOutput" )
+
+        echo "Duration of recording is ${duration} seconds (${ffprobeOutput})"
+    else
+        echo "Unable to determine duration of recording" >&2
+
+        # Skip this recording file
+        continue
+    fi
+
+
+    # Get the file name without the extension, such as "2019-11-30T170000+0100"
+    fileName="${eventFileName%.*}"
+
+    # Get the file extension, such as flac, opus or mp3
+    fileExtension="${eventFileName##*.}"
+
+    # Add the duration to the original file name in the ISO 8601 duration
+    # format.
+    # For example, the file name "2019-11-30T170000+0100.flac" will be renamed
+    # to "2019-11-30T170000+0100_PT3600S.flac"
+    finalFileName="${fileName}_PT${duration}S.${fileExtension}"
+
+    echo "Setting final recording file name to: ${finalFileName}"
+
+    tmpPath="${destDir}/.${finalFileName}.tmp"
+    destPath="${destDir}/${finalFileName}"
 
     # Move the file to a temporary location in a first step. This prevents the
     # archive from importing an unfinished file, in case the source and
@@ -107,7 +142,7 @@ do
         continue
     fi
 
-    echo "${eventFileName} successfully archived"
+    echo "${eventFileName} successfully archived to ${destPath}"
 
     # Inform the monitoring system about the last successful recording
     zabbix_sender --config /etc/zabbix/zabbix_agentd.conf \
