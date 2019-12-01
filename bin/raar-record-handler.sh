@@ -44,6 +44,20 @@
 # raar-record-handler.sh <WATCH-DIRECTORY> <DESTINATION-DIRECTORY>
 #
 
+# Check if all required external commands are available
+for cmd in ffprobe \
+           inotifywait \
+           mv \
+           printf \
+           zabbix_sender
+do
+    command -v "${cmd}" >/dev/null 2>&1 || {
+        echo >&2 "Missing command '${cmd}'"
+        exit 1
+    }
+
+done
+
 watchDir="$1"
 destDir="$2"
 
