@@ -16,16 +16,24 @@ and some systemd service units, which plays nicely together with RAAR.
 [Rotter](https://www.aelius.com/njh/rotter/) is a Recording of Transmission /
 Audio Logger for [JACK](http://www.jackaudio.org/). It captures audio from
 `jackd`, encodes it in a specified format and creates a new recording file
-every hour by default. This makes it ideal to use together with RAAR.
+every hour by default. This makes it ideal for using it together with RAAR.
 
 In the following deployment walk-through `rotter` will be configured to capture
 the audio from the first two JACK input ports found, while storing the
 recordings into the `/var/lib/rotter/raar` directory in the lossless
-[FLAC](https://xiph.org/flac/) format. A separate recording-handler will move
-the finished recordings from the `/var/lib/rotter/raar` directory to a final
-RAAR import directory. Of course, the JACK configuration, audio codec and
-directory locations can be customized to meet the requirements of your
-environment.
+[FLAC](https://xiph.org/flac/) format.
+
+A separate recording-handler will move the finished recordings from the
+`/var/lib/rotter/raar` directory to a final RAAR import directory. It also
+determines the recording duration with the help of
+[`ffprobe`](http://www.ffmpeg.org/ffprobe.html) and adds it to the recording
+file name in the [ISO 8601 duration
+format](https://en.wikipedia.org/wiki/ISO_8601#Durations) in seconds.
+
+A final recording file will be named according to `YYYY-MM-DDThhmmss±hhmm_PTsS.flac` (such as `2019-11-30T170000+0100_PT3600S.flac`).
+
+Of course, the JACK configuration, audio codec and directory locations can be
+customized to meet the requirements of your environment.
 
 Also note, that the deployment was tested on [CentOS
 7](#deployment-on-centos-7-systems), but should work on [other
@@ -36,8 +44,9 @@ modifications).
 ### Deployment on CentOS 7 systems
 There are pre-built binary packages for CentOS 7 available from [Fedora
 EPEL](https://fedoraproject.org/wiki/EPEL) (jack) and [RaBe
-APEL](https://build.opensuse.org/project/show/home:radiorabe:audio) (rotter),
-which can be installed as follows:
+APEL](https://build.opensuse.org/project/show/home:radiorabe:audio) (rotter)
+and [Nux Dextop](http://li.nux.ro/repos.html) (ffprobe from ffmpeg), which can
+be installed as follows:
 ```bash
 # Add Fedora EPEL repository
 yum install epel-release
@@ -45,10 +54,14 @@ yum install epel-release
 # Add RaBe APEL repository
 curl -o /etc/yum.repos.d/home:radiorabe:audio.repo \
      http://download.opensuse.org/repositories/home:/radiorabe:/audio/CentOS_7/home:radiorabe:audio.repo
+
+# Add Nux Dextop repository
+rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
  
 # Install rotter (which will also install "jack-audio-connection-kit" and
-# "jack-audio-connection-kit-example-clients")
-yum install rotter
+# "jack-audio-connection-kit-example-clients") as well as the ffprobe command
+# from the ffmpeg package.
+yum install rotter ffmpeg
 ```
 
 Install the [raar jackd systemd service instance
@@ -236,18 +249,33 @@ ls -la /var/lib/rotter/raar
 total 717844
 drwxr-xr-x. 2 rotter rotter      4096 Feb  6 16:59 .
 drwxr-xr-x. 3 rotter rotter        17 Feb  6 15:45 ..
--rw-r--r--. 1 rotter rotter 120309610 Feb  6 16:00 2018-02-06T154512+0100_60.flac
--rw-r--r--. 1 rotter rotter 230000737 Feb  6 16:28 2018-02-06T160000+0100_60.flac
--rw-r--r--. 1 rotter rotter 250600686 Feb  6 16:59 2018-02-06T162851+0100_60.flac
--rw-r--r--. 1 rotter rotter 127717296 Feb  6 17:16 2018-02-06T170000+0100_60.flac
+-rw-r--r--. 1 rotter rotter 120309610 Feb  6 16:00 2018-02-06T154512+0100.flac
+-rw-r--r--. 1 rotter rotter 230000737 Feb  6 16:28 2018-02-06T160000+0100.flac
+-rw-r--r--. 1 rotter rotter 250600686 Feb  6 16:59 2018-02-06T162851+0100.flac
+-rw-r--r--. 1 rotter rotter 127717296 Feb  6 17:16 2018-02-06T170000+0100.flac
 
 ```
 
 #### RAAR Record Handler
 The [RAAR Record Handler](bin/raar-record-handler.sh) will move the finished
 recordings from the `/var/lib/rotter/raar` directory to a final RAAR import
-directory (`IMPORT_DIRECTORIES`) for the [RAAR Importer](import.md) to pick
-them up.
+directory (`IMPORT_DIRECTORIES`) waiting for the [RAAR Importer](import.md) to
+pick them up.
+
+The record handler also determines the recording duration with the help of
+[`ffprobe`](http://www.ffmpeg.org/ffprobe.html) and adds it to the recording
+file name in the [ISO 8601 duration
+format](https://en.wikipedia.org/wiki/ISO_8601#Durations) in seconds.
+
+For example, a one hour (3600 seconds) rotter recording file
+`/var/lib/rotter/raar/2019-11-30T170000+0100.flac` will be renamed and moved to
+`/var/tmp/raar/import/2019-11-30T170000+0100_PT3600S.flac`
+
+##### RAAR Record Handler installation
+Install `ffmpeg` (required for
+[`ffprobe`](https://www.ffmpeg.org/ffprobe.html)) from the packages provided by
+your distribution or [compile it from
+source](https://www.ffmpeg.org/download.html).
 
 Install the [RAAR Record Handler](bin/raar-record-handler.sh) and its
 corresponding systemd service unit
@@ -360,6 +388,14 @@ RAAR Record Handler:
    journalctl -u raar-record-handler.service -f
    ```
 
+* Duration of recording file in seconds
+  ```bash
+  ffprobe -i RECORDING-FILENAME \
+          -show_entries format="duration" \
+          -print_format csv="print_section=0" \
+          -v quiet 
+  ```
+
 ## Links
 * [Jack Audio Connection Kit](http://www.jackaudio.org/)
 * [Rotter](https://www.aelius.com/njh/rotter/)
@@ -367,3 +403,4 @@ RAAR Record Handler:
   Rotter](https://github.com/radiorabe/centos-rpm-rotter)
 * [Jack and Rotter Systemd service unit templates
   explained](https://github.com/radiorabe/centos-rpm-rotter#systemd-service-unit-templates-explained)
+* [ffprobe](https://www.ffmpeg.org/ffprobe.html)
