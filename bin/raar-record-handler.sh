@@ -74,7 +74,7 @@ minFileSize="$(( 20 * 1048576 ))" # 20 MiB
 inotifywait --monitor --event close_write "${watchDir}" | while read \
     watchedFileName eventNames eventFileName
 do
-    echo "${eventNames} occoured on ${eventFileName}"
+    echo "${eventNames} occurred on ${eventFileName}"
 
     sourcePath="${watchDir}/${eventFileName}"
 
@@ -107,7 +107,7 @@ do
 
     echo "${eventFileName} successfully archived"
 
-    # Inform the monitoring system about the last successfull recording
+    # Inform the monitoring system about the last successful recording
     zabbix_sender --config /etc/zabbix/zabbix_agentd.conf \
                   --key 'rabe.raar.recording.success[]' \
                   --value "$(date +%s)" > /dev/null
