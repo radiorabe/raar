@@ -32,6 +32,8 @@
 # watch directory, containing recording files. The script assumes, that a
 # recording has finished on such an event and moves the file to the given
 # destination directory.
+# Before moving the recording file to its final location, the script determines
+# the duration of the recording and adds it to the final file name.
 # If the archival was successful, the script sends the last successful
 # recording timestamp to a Zabbix monitoring system with the help of the
 # zabbix_sender tool.
