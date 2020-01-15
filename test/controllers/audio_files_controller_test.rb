@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class AudioFilesControllerTest < ActionController::TestCase
@@ -10,7 +12,7 @@ class AudioFilesControllerTest < ActionController::TestCase
     get :index, params: { broadcast_id: broadcasts(:info_april).id, access_code: code }
 
     assert_equal [320, 192, 96], json_attrs(:bitrate)
-    assert_equal %w(best high low), json_attrs('playback_format')
+    assert_equal %w[best high low], json_attrs('playback_format')
     json_links = json['data'].map { |s| s['links'] }
     assert_equal ['/audio_files/2013/04/10/110000_best.mp3',
                   '/audio_files/2013/04/10/110000_high.mp3',
@@ -30,7 +32,7 @@ class AudioFilesControllerTest < ActionController::TestCase
     get :index, params: { broadcast_id: broadcasts(:info_april).id }
 
     assert_equal [192, 96], json_attrs(:bitrate)
-    assert_equal %w(high low), json_attrs('playback_format')
+    assert_equal %w[high low], json_attrs('playback_format')
     json_links = json['data'].map { |s| s['links'] }
     assert_equal ['/audio_files/2013/04/10/110000_high.mp3',
                   '/audio_files/2013/04/10/110000_low.mp3'],
@@ -48,7 +50,7 @@ class AudioFilesControllerTest < ActionController::TestCase
     get :index, params: { broadcast_id: broadcasts(:info_april).id }
 
     assert_equal [320, 192, 96], json_attrs(:bitrate)
-    assert_equal %w(best high low), json_attrs('playback_format')
+    assert_equal %w[best high low], json_attrs('playback_format')
     json_links = json['data'].map { |s| s['links'] }
     assert_equal ['/audio_files/2013/04/10/110000_best.mp3',
                   '/audio_files/2013/04/10/110000_high.mp3',
@@ -72,7 +74,7 @@ class AudioFilesControllerTest < ActionController::TestCase
     get :index, params: { broadcast_id: broadcasts(:g9s_mai).id, access_code: code }
 
     assert_equal [128], json_attrs(:bitrate)
-    assert_equal %w(low), json_attrs('playback_format')
+    assert_equal %w[low], json_attrs('playback_format')
     json_links = json['data'].map { |s| s['links'] }
     assert_equal ['/audio_files/2013/05/20/200000_low.mp3'],
                  json_links.map { |l| l['self'] }
@@ -86,7 +88,7 @@ class AudioFilesControllerTest < ActionController::TestCase
     get :index, params: { broadcast_id: broadcasts(:g9s_mai).id, api_token: users(:member).api_token }
 
     assert_equal [128], json_attrs(:bitrate)
-    assert_equal %w(low), json_attrs('playback_format')
+    assert_equal %w[low], json_attrs('playback_format')
     json_links = json['data'].map { |s| s['links'] }
     assert_equal ['/audio_files/2013/05/20/200000_low.mp3'],
                  json_links.map { |l| l['self'] }
@@ -101,7 +103,7 @@ class AudioFilesControllerTest < ActionController::TestCase
     get :index, params: { broadcast_id: broadcasts(:g9s_mai).id }
 
     assert_equal [192, 128], json_attrs(:bitrate)
-    assert_equal %w(high low), json_attrs('playback_format')
+    assert_equal %w[high low], json_attrs('playback_format')
     json_links = json['data'].map { |s| s['links'] }
     token = CGI.escape(users(:speedee).api_token)
     assert_equal ['/audio_files/2013/05/20/200000_high.mp3',
@@ -123,10 +125,14 @@ class AudioFilesControllerTest < ActionController::TestCase
   end
 
   test 'GET index without download permission returns correct list for logged in user' do
-    get :index, params: { broadcast_id: broadcasts(:klangbecken_mai1).id, api_token: users(:member).api_token }
+    get :index,
+        params: {
+          broadcast_id: broadcasts(:klangbecken_mai1).id,
+          api_token: users(:member).api_token
+        }
 
     assert_equal [96], json_attrs(:bitrate)
-    assert_equal %w(low), json_attrs('playback_format')
+    assert_equal %w[low], json_attrs('playback_format')
     json_links = json['data'].map { |s| s['links'] }
     assert_equal ['/audio_files/2013/05/20/113000_low.mp3'],
                  json_links.map { |l| l['self'] }
@@ -141,7 +147,7 @@ class AudioFilesControllerTest < ActionController::TestCase
     get :index, params: { broadcast_id: broadcasts(:klangbecken_mai1).id }
 
     assert_equal [192, 96], json_attrs(:bitrate)
-    assert_equal %w(high low), json_attrs('playback_format')
+    assert_equal %w[high low], json_attrs('playback_format')
     json_links = json['data'].map { |s| s['links'] }
     token = CGI.escape(users(:admin).api_token)
     assert_equal ['/audio_files/2013/05/20/113000_high.mp3',
@@ -172,7 +178,7 @@ class AudioFilesControllerTest < ActionController::TestCase
     get :index, params: { broadcast_id: broadcasts(:klangbecken_mai1).id }
 
     assert_equal [192, 96], json_attrs(:bitrate)
-    assert_equal %w(high low), json_attrs('playback_format')
+    assert_equal %w[high low], json_attrs('playback_format')
     json_links = json['data'].map { |s| s['links'] }
     token = CGI.escape(users(:admin).api_token)
     assert_equal ['/audio_files/2013/05/20/113000_high.mp3',
@@ -196,7 +202,8 @@ class AudioFilesControllerTest < ActionController::TestCase
           min: '00',
           sec: '00',
           playback_format: 'best',
-          format: 'mp3' }
+          format: 'mp3'
+        }
 
     assert_response 401
   end
@@ -213,7 +220,8 @@ class AudioFilesControllerTest < ActionController::TestCase
           min: '00',
           sec: '00',
           playback_format: 'high',
-          format: 'mp3' }
+          format: 'mp3'
+        }
 
     assert_response 200
     assert_equal AudioEncoding::Mp3.mime_type, response.headers['Content-Type']
@@ -233,7 +241,8 @@ class AudioFilesControllerTest < ActionController::TestCase
           sec: '00',
           playback_format: 'high',
           format: 'mp3',
-          download: 'true' }
+          download: 'true'
+        }
 
     assert_response 401
   end
@@ -251,7 +260,8 @@ class AudioFilesControllerTest < ActionController::TestCase
           min: '00',
           sec: '00',
           playback_format: 'high',
-          format: 'mp3' }
+          format: 'mp3'
+        }
 
     assert_response 200
     assert_equal AudioEncoding::Mp3.mime_type, response.headers['Content-Type']
@@ -268,7 +278,8 @@ class AudioFilesControllerTest < ActionController::TestCase
           min: '00',
           sec: '00',
           playback_format: 'high',
-          format: 'mp3' }
+          format: 'mp3'
+        }
 
     assert_response 200
     assert_equal AudioEncoding::Mp3.mime_type, response.headers['Content-Type']
@@ -284,7 +295,8 @@ class AudioFilesControllerTest < ActionController::TestCase
           hour: '20',
           min: '43',
           playback_format: 'high',
-          format: 'mp3' }
+          format: 'mp3'
+        }
 
     assert_response 200
   end
@@ -299,7 +311,8 @@ class AudioFilesControllerTest < ActionController::TestCase
           hour: '20',
           min: '43',
           playback_format: 'best',
-          format: 'mp3' }
+          format: 'mp3'
+        }
 
     assert_response 200
     assert_match 'inline', response.headers['Content-Disposition']
@@ -316,7 +329,8 @@ class AudioFilesControllerTest < ActionController::TestCase
           min: '43',
           playback_format: 'best',
           format: 'mp3',
-          download: true }
+          download: true
+        }
 
     assert_response 200
     assert_match 'attachment', response.headers['Content-Disposition']
@@ -334,7 +348,8 @@ class AudioFilesControllerTest < ActionController::TestCase
           playback_format: 'best',
           format: 'mp3',
           download: true,
-          api_token: users(:member).api_token }
+          api_token: users(:member).api_token
+        }
 
     assert_response 401
   end
@@ -353,7 +368,8 @@ class AudioFilesControllerTest < ActionController::TestCase
           playback_format: 'high',
           format: 'mp3',
           download: true,
-          access_code: code }
+          access_code: code
+        }
 
     assert_response 200
     assert_match 'attachment', response.headers['Content-Disposition']
@@ -369,7 +385,8 @@ class AudioFilesControllerTest < ActionController::TestCase
             hour: '20',
             min: '43',
             playback_format: 'high',
-            format: 'wav' }
+            format: 'wav'
+          }
     end
   end
 
@@ -383,7 +400,8 @@ class AudioFilesControllerTest < ActionController::TestCase
             hour: '20',
             min: '43',
             playback_format: 'another',
-            format: 'mp3' }
+            format: 'mp3'
+          }
     end
   end
 
@@ -399,7 +417,8 @@ class AudioFilesControllerTest < ActionController::TestCase
           min: '00',
           sec: '00',
           playback_format: 'high',
-          format: 'mp3' }
+          format: 'mp3'
+        }
 
     assert_response 404
   end
@@ -416,7 +435,8 @@ class AudioFilesControllerTest < ActionController::TestCase
           min: '00',
           sec: '00',
           playback_format: 'high',
-          format: 'mp3' }
+          format: 'mp3'
+        }
 
     assert_response 404
   end

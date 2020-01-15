@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Downgrade
@@ -14,21 +16,21 @@ module Downgrade
       b1 = Broadcast.create!(show: shows(:klangbecken),
                              started_at: Time.zone.local(2012, 12, 12, 20),
                              finished_at: Time.zone.local(2012, 12, 12, 22))
-      file  = AudioFile.create!(broadcast: b1,
-                                path: 'dummy_lower',
-                                codec: 'mp3',
-                                bitrate: 128,
-                                channels: 1)
+      file = AudioFile.create!(broadcast: b1,
+                               path: 'dummy_lower',
+                               codec: 'mp3',
+                               bitrate: 128,
+                               channels: 1)
 
       start = Time.zone.now - action.months.months + 1.day
       b2 = Broadcast.create!(show: shows(:klangbecken),
                              started_at: start,
                              finished_at: start + 2.hours)
-      newer  = AudioFile.create!(broadcast: b2,
-                                 path: 'dummy_newer',
-                                 codec: 'mp3',
-                                 bitrate: 224,
-                                 channels: 2)
+      newer = AudioFile.create!(broadcast: b2,
+                                path: 'dummy_newer',
+                                codec: 'mp3',
+                                bitrate: 224,
+                                channels: 2)
 
       assert_equal [file], ereaser.pending_files
     end

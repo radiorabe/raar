@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Import::Recording::ComposerTest < ActiveSupport::TestCase
@@ -134,7 +136,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
     expect_concat(2)
     mock_audio_format('mp3', 320)
     expect_trim(:first, 0, 30)
-    expect_trim(:last, 00, 60)
+    expect_trim(:last, 0o0, 60)
     mock_duration(mapping.recordings.first.path, 40)
     mock_duration(mapping.recordings.second.path, 30)
     mock_duration(mapping.recordings.last.path, 80)

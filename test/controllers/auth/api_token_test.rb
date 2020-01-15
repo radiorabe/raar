@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Auth
@@ -11,7 +13,7 @@ module Auth
       user = users(:speedee)
       request = stub('request')
       request.expects(authorization: nil)
-      request.expects(params: { api_token: user.api_token  })
+      request.expects(params: { api_token: user.api_token })
       assert_equal user, Auth::ApiToken.new(request).fetch_user
     end
 
@@ -48,7 +50,7 @@ module Auth
       request.expects(
         authorization: ActionController::HttpAuthentication::Token.encode_credentials(token)
       )
-      request.stubs(params: { api_token: token  })
+      request.stubs(params: { api_token: token })
       Auth::ApiToken.new(request).fetch_user
     end
 

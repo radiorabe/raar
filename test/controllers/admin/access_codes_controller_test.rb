@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Admin
@@ -6,7 +8,7 @@ module Admin
     setup :login_as_admin
 
     test 'GET index returns list of all entries' do
-      expires = 3.times.map { |i| i.months.from_now }
+      expires = Array.new(3) { |i| i.months.from_now }
       expires.each { |date| AccessCode.create!(expires_at: date) }
       get :index
       assert_equal expires.reverse.map { |d| d.strftime('%Y-%m-%d') }, json_attrs(:expires_at)
@@ -42,7 +44,10 @@ module Admin
              params: {
                data: {
                  attributes: {
-                   expires_at: '2100-02-01' } } }
+                   expires_at: '2100-02-01'
+                 }
+               }
+             }
         assert_response 201
       end
       assert_equal '2100-02-01', json['data']['attributes']['expires_at']
@@ -52,10 +57,13 @@ module Admin
     test 'POST create fails for invalid params' do
       assert_no_difference('AccessCode.count') do
         post :create,
-            params: {
-              data: {
-                attributes: {
-                  expires_at: nil } } }
+             params: {
+               data: {
+                 attributes: {
+                   expires_at: nil
+                 }
+               }
+             }
         assert_response 422
       end
     end
@@ -64,7 +72,8 @@ module Admin
       patch :update,
             params: {
               id: entry.id,
-              data: { attributes: { expires_at: '2100-02-01' } } }
+              data: { attributes: { expires_at: '2100-02-01' } }
+            }
       assert_response 200
       assert_equal '2100-02-01', json['data']['attributes']['expires_at']
     end
@@ -73,7 +82,8 @@ module Admin
       patch :update,
             params: {
               id: entry.id,
-              data: { attributes: { expires_at: nil } } }
+              data: { attributes: { expires_at: nil } }
+            }
       assert_response 422
     end
 

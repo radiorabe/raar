@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: broadcasts
@@ -18,7 +20,7 @@ require 'test_helper'
 
 class BroadcastTest < ActiveSupport::TestCase
 
-  test "all fixtures valid" do
+  test 'all fixtures valid' do
     Broadcast.all.each do |e|
       assert_valid e
     end
@@ -68,7 +70,7 @@ class BroadcastTest < ActiveSupport::TestCase
     t0 = Track.create!(
       title: 'foo',
       started_at: Time.zone.local(2016, 8, 20, 7, 59, 59),
-      finished_at: Time.zone.local(2016, 8, 20, 8, 01, 10)
+      finished_at: Time.zone.local(2016, 8, 20, 8, 0o1, 10)
     )
     t1 = Track.create!(
       title: 'foo',
@@ -101,14 +103,14 @@ class BroadcastTest < ActiveSupport::TestCase
   test 'broadcasts lapping to next is invalid' do
     broadcast = broadcasts(:klangbecken_mai1)
     broadcast.finished_at += 1.minute
-    assert !broadcast.valid?
+    assert_not broadcast.valid?
     assert_equal ['must not overlap with other entries'], broadcast.errors['started_at']
   end
 
   test 'broadcasts lapping to previous is invalid' do
     broadcast = broadcasts(:klangbecken_mai1)
     broadcast.started_at -= 1.minute
-    assert !broadcast.valid?
+    assert_not broadcast.valid?
     assert_equal ['must not overlap with other entries'], broadcast.errors['started_at']
   end
 
@@ -116,7 +118,7 @@ class BroadcastTest < ActiveSupport::TestCase
     broadcast = broadcasts(:klangbecken_mai1)
     broadcast.started_at = broadcasts(:g9s_mai).started_at + 5.minutes
     broadcast.finished_at = broadcasts(:g9s_mai).finished_at - 5.minutes
-    assert !broadcast.valid?
+    assert_not broadcast.valid?
     assert_equal ['must not overlap with other entries'], broadcast.errors['started_at']
   end
 
@@ -124,7 +126,7 @@ class BroadcastTest < ActiveSupport::TestCase
     broadcast = broadcasts(:klangbecken_mai1)
     broadcast.started_at = broadcasts(:g9s_mai).started_at
     broadcast.finished_at = broadcasts(:g9s_mai).finished_at
-    assert !broadcast.valid?
+    assert_not broadcast.valid?
     assert_equal ['must not overlap with other entries'], broadcast.errors['started_at']
   end
 

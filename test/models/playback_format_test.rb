@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: playback_formats
@@ -18,7 +20,7 @@ require 'test_helper'
 
 class PlaybackFormatTest < ActiveSupport::TestCase
 
-  test "all fixtures valid" do
+  test 'all fixtures valid' do
     PlaybackFormat.all.each do |e|
       assert_valid e
     end

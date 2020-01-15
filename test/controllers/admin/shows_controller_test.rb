@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Admin
@@ -7,12 +9,12 @@ module Admin
 
     test 'GET index returns list of all shows' do
       get :index
-      assert_equal ['Gschäch9schlimmers', 'Info', 'Klangbecken'], json_attrs(:name)
+      assert_equal %w[Gschäch9schlimmers Info Klangbecken], json_attrs(:name)
     end
 
     test 'GET index with query params returns list of matching shows' do
       get :index, params: { q: 'e' }
-      assert_equal ['Gschäch9schlimmers', 'Klangbecken'], json_attrs(:name)
+      assert_equal %w[Gschäch9schlimmers Klangbecken], json_attrs(:name)
     end
 
     test 'GET show returns with profile' do
@@ -34,7 +36,10 @@ module Admin
                data: {
                  attributes: {
                    name: 'foo',
-                   details: 'bla bla' } } }
+                   details: 'bla bla'
+                 }
+               }
+             }
         assert_response 201
       end
       assert_equal 'foo', json['data']['attributes']['name']
@@ -44,10 +49,13 @@ module Admin
     test 'POST create fails for invalid params' do
       assert_no_difference('Show.count') do
         post :create,
-            params: {
-              data: {
-                attributes: {
-                  name: 'Info' } } }
+             params: {
+               data: {
+                 attributes: {
+                   name: 'Info'
+                 }
+               }
+             }
         assert_response 422
       end
     end
@@ -55,15 +63,21 @@ module Admin
     test 'POST create assigns profile' do
       assert_difference('Show.count', 1) do
         post :create,
-            params: {
-              data: {
-                attributes: {
-                  name: 'foo' },
-                relationships: {
-                  profile: {
-                    data: {
-                      type: 'profiles',
-                      id: profiles(:unimportant).id } } } } }
+             params: {
+               data: {
+                 attributes: {
+                   name: 'foo'
+                 },
+                 relationships: {
+                   profile: {
+                     data: {
+                       type: 'profiles',
+                       id: profiles(:unimportant).id
+                     }
+                   }
+                 }
+               }
+             }
         assert_response 201
       end
 
@@ -75,7 +89,8 @@ module Admin
       patch :update,
             params: {
               id: shows(:info).id,
-              data: { attributes: { details: 'yabadabadoo' } } }
+              data: { attributes: { details: 'yabadabadoo' } }
+            }
       assert_response 200
       assert_equal 'yabadabadoo', json['data']['attributes']['details']
       assert_equal 'yabadabadoo', shows(:info).reload.details
@@ -91,7 +106,12 @@ module Admin
                   profile: {
                     data: {
                       type: 'profiles',
-                      id: profiles(:unimportant).id } } } } }
+                      id: profiles(:unimportant).id
+                    }
+                  }
+                }
+              }
+            }
       assert_response 200
       assert_equal profiles(:unimportant).id, shows(:info).reload.profile_id
     end
@@ -100,7 +120,8 @@ module Admin
       patch :update,
             params: {
               id: shows(:info).id,
-              data: { attributes: { name: 'Klangbecken' } } }
+              data: { attributes: { name: 'Klangbecken' } }
+            }
       assert_response 422
       assert_match /taken/, response.body
       assert_equal 'Info', shows(:info).reload.name

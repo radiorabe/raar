@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Import::ArchiverTest < ActiveSupport::TestCase
@@ -118,14 +120,14 @@ class Import::ArchiverTest < ActiveSupport::TestCase
 
   def expect_transcode(bitrate, channels)
     expect_new_audio_processor
-    audio_processor.
-      expects(:transcode).
-      with(format_file(bitrate, channels),
-           AudioFormat.new('mp3', bitrate, channels),
-           title: 'G9S is just a test @ Mittwoch, 19. Juni 2013, 20:00 Uhr',
-           album: 'Gschäch9schlimmers',
-           artist: nil,
-           year: 2013)
+    audio_processor
+      .expects(:transcode)
+      .with(format_file(bitrate, channels),
+            AudioFormat.new('mp3', bitrate, channels),
+            title: 'G9S is just a test @ Mittwoch, 19. Juni 2013, 20:00 Uhr',
+            album: 'Gschäch9schlimmers',
+            artist: nil,
+            year: 2013)
   end
 
   def format_file(bitrate, channels)

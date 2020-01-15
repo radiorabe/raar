@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Import::Recording::CleanerTest < ActiveSupport::TestCase
@@ -10,9 +12,9 @@ class Import::Recording::CleanerTest < ActiveSupport::TestCase
     unimported = touch("#{2.days.ago.to_s(:iso8601).tr(':', '')}_020.mp3")
 
     cleaner.clear_old_imported
-    assert File.exists?(newer)
-    assert !File.exists?(older)
-    assert File.exists?(unimported)
+    assert File.exist?(newer)
+    assert_not File.exist?(older)
+    assert File.exist?(unimported)
   end
 
   test '#warn_for_old_unimported issues warning' do

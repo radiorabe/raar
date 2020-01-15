@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Admin
@@ -9,7 +11,8 @@ module Admin
       get :index,
           params: {
             profile_id: profiles(:default).id,
-            archive_format_id: archive_formats(:default_mp3).id }
+            archive_format_id: archive_formats(:default_mp3).id
+          }
       assert_equal [4, 24], json_attrs(:months)
     end
 
@@ -18,7 +21,8 @@ module Admin
       get :index,
           params: {
             profile_id: profiles(:default).id,
-            archive_format_id: archive_formats(:default_mp3).id }
+            archive_format_id: archive_formats(:default_mp3).id
+          }
       assert_response 401
     end
 
@@ -27,7 +31,8 @@ module Admin
           params: {
             id: entry.id,
             profile_id: profiles(:default).id,
-            archive_format_id: archive_formats(:default_mp3).id }
+            archive_format_id: archive_formats(:default_mp3).id
+          }
       assert_equal 4, json['data']['attributes']['months']
     end
 
@@ -41,7 +46,10 @@ module Admin
                  attributes: {
                    months: '12',
                    bitrate: 160,
-                   channels: 2 } } }
+                   channels: 2
+                 }
+               }
+             }
         assert_response 201
       end
       assert_equal 12, json['data']['attributes']['months']
@@ -57,7 +65,10 @@ module Admin
                  attributes: {
                    months: '4',
                    bitrate: 164,
-                   channels: 2 } } }
+                   channels: 2
+                 }
+               }
+             }
         assert_response 422
       end
     end
@@ -68,7 +79,8 @@ module Admin
               id: entry.id,
               profile_id: profiles(:default).id,
               archive_format_id: archive_formats(:default_mp3).id,
-              data: { attributes: { months: 6, bitrate: 224 } } }
+              data: { attributes: { months: 6, bitrate: 224 } }
+            }
       assert_response 200, response.body
       assert_equal 6, json['data']['attributes']['months']
       assert_equal 224, json['data']['attributes']['bitrate']
@@ -82,7 +94,8 @@ module Admin
               id: entry.id,
               profile_id: profiles(:default).id,
               archive_format_id: archive_formats(:default_mp3).id,
-              data: { attributes: { bitrate: 123 } } }
+              data: { attributes: { bitrate: 123 } }
+            }
       assert_response 422
       assert_match /not included/, response.body
       assert_equal 192, entry.reload.bitrate
@@ -94,7 +107,8 @@ module Admin
                params: {
                  id: entry.id,
                  profile_id: profiles(:default).id,
-                 archive_format_id: archive_formats(:default_mp3).id }
+                 archive_format_id: archive_formats(:default_mp3).id
+               }
       end
       assert_response 204
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: profiles
@@ -16,7 +18,7 @@ require 'test_helper'
 
 class ProfileTest < ActiveSupport::TestCase
 
-  test "all fixtures valid" do
+  test 'all fixtures valid' do
     Profile.all.each do |e|
       assert_valid e
     end
@@ -49,7 +51,7 @@ class ProfileTest < ActiveSupport::TestCase
 
   test 'default profile may not be destroyed' do
     p = Profile.create!(name: 'foo', default: true)
-    assert !p.destroy
+    assert_not p.destroy
     assert p.errors[:default].present?
   end
 
@@ -57,5 +59,5 @@ class ProfileTest < ActiveSupport::TestCase
     p = Profile.create!(name: 'foo', default: false)
     assert p.destroy
   end
-  
+
 end

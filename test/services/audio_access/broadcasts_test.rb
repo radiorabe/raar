@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class AudioAccess::BroadcastsTest < ActiveSupport::TestCase
@@ -12,7 +14,12 @@ class AudioAccess::BroadcastsTest < ActiveSupport::TestCase
   end
 
   test '#filter for user member contains only accessible broadcastss' do
-    archive_formats(:unimportant_mp3).update!(max_public_bitrate: 0, max_logged_in_bitrate: 0, max_priviledged_bitrate: 192, priviledged_groups: 'staff')
+    archive_formats(:unimportant_mp3).update!(
+      max_public_bitrate: 0,
+      max_logged_in_bitrate: 0,
+      max_priviledged_bitrate: 192,
+      priviledged_groups: 'staff'
+    )
     assert_equal broadcasts(:info_april, :info_mai, :g9s_mai, :g9s_juni), accessibles(users(:member))
   end
 
@@ -22,7 +29,8 @@ class AudioAccess::BroadcastsTest < ActiveSupport::TestCase
 
   test '#filter for user member contains no broadcasts without archive format' do
     archive_formats(:default_mp3).destroy!
-    assert_equal broadcasts(:info_april, :info_mai, :klangbecken_mai1, :klangbecken_mai2), accessibles(users(:member))
+    assert_equal broadcasts(:info_april, :info_mai, :klangbecken_mai1, :klangbecken_mai2),
+                 accessibles(users(:member))
   end
 
   test '#filter for user admin contains all broadcasts without archive format' do

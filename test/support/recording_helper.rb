@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module RecordingHelper
+
   extend ActiveSupport::Concern
 
   included do

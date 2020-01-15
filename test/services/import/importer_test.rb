@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Import::ImporterTest < ActiveSupport::TestCase
@@ -25,8 +27,8 @@ class Import::ImporterTest < ActiveSupport::TestCase
     Import::Archiver.expects(:new).never
     ExceptionNotifier.expects(:notify_exception).never
     importer.run
-    assert !File.exists?(f)
-    assert File.exists?(file('2013-06-19T200000+0200_120_imported.mp3'))
+    assert_not File.exist?(f)
+    assert File.exist?(file('2013-06-19T200000+0200_120_imported.mp3'))
   end
 
   test 'creates database entries' do
@@ -49,8 +51,8 @@ class Import::ImporterTest < ActiveSupport::TestCase
     AudioProcessor::Ffmpeg.any_instance.expects(:transcode).times(3)
     ExceptionNotifier.expects(:notify_exception).never
     importer.run
-    assert !File.exists?(f)
-    assert File.exists?(file('2013-06-19T200000+0200_120_imported.mp3'))
+    assert_not File.exist?(f)
+    assert File.exist?(file('2013-06-19T200000+0200_120_imported.mp3'))
   end
 
   test 'it notifies if recording is too short but still does import' do
@@ -61,10 +63,11 @@ class Import::ImporterTest < ActiveSupport::TestCase
     AudioProcessor::Ffmpeg.any_instance.expects(:transcode).times(3)
     ExceptionNotifier.expects(:notify_exception).with(
       instance_of(Import::Recording::TooShortError),
-      instance_of(Hash))
+      instance_of(Hash)
+    )
     importer.run
-    assert !File.exists?(f)
-    assert File.exists?(file('2013-06-19T200000+0200_120_imported.mp3'))
+    assert_not File.exist?(f)
+    assert File.exist?(file('2013-06-19T200000+0200_120_imported.mp3'))
   end
 
   test 'it notifies if broadcast is invalid' do
@@ -75,7 +78,8 @@ class Import::ImporterTest < ActiveSupport::TestCase
     Import::Archiver.expects(:new).never
     ExceptionNotifier.expects(:notify_exception).with(
       instance_of(ActiveRecord::RecordInvalid),
-      instance_of(Hash))
+      instance_of(Hash)
+    )
     importer.run
   end
 

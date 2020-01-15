@@ -1,0 +1,41 @@
+inherit_from:
+  - ../.rubocop.yml
+
+Layout/LineLength:
+  Max: 110
+
+# Offense count: 26
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - 'controllers/audio_files_controller_test.rb'
+
+# Offense count: 13
+# happens often with assert_match
+Lint/AmbiguousRegexpLiteral:
+  Enabled: false
+
+# Offense count: 17
+Lint/UselessAssignment:
+  Exclude:
+    - 'controllers/admin/access_codes_controller_test.rb'
+    - 'models/access_code_test.rb'
+    - 'services/audio_processor/ffmpeg_test.rb'
+    - 'services/downgrade/downgrader_test.rb'
+    - 'services/downgrade/ereaser_test.rb'
+    - 'services/import/recording/cleaner_test.rb'
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  ExcludedMethods:
+    - test
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false

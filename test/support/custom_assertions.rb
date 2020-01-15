@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A handful of convenient assertions. The aim of custom assertions is to
 # provide more specific error messages and to perform complex checks.
 #
@@ -16,7 +18,7 @@ module CustomAssertions
     msg = message(msg) do
       "Expected #{mu_pp(record)} to be valid, " \
       "but has the following errors:\n" +
-      mu_pp(record.errors.full_messages.join("\n"))
+        mu_pp(record.errors.full_messages.join("\n"))
     end
     assert record.valid?, msg
   end
@@ -29,7 +31,7 @@ module CustomAssertions
     msg = message do
       "Expected #{mu_pp(record)} to be invalid, but is valid."
     end
-    assert !record.valid?, msg
+    assert_not record.valid?, msg
 
     if invalid_attrs.present?
       assert_invalid_attrs_have_errors(record, *invalid_attrs)

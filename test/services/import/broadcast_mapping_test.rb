@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Import::BroadcastMappingTest < ActiveSupport::TestCase
@@ -53,7 +55,7 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
     assert_equal Time.zone.local(2016, 1, 1, 11), broadcast.started_at
     assert_equal Time.zone.local(2016, 1, 1, 11, 30), broadcast.finished_at
     assert broadcast.new_record?
-    assert !mapping.imported?
+    assert_not mapping.imported?
   end
 
   test '#assign_broadcast_attrs uses an existing broadcast and keeps details if present' do
@@ -64,13 +66,12 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
                              label: 'Rabe Info',
                              details: 'Politik und Aareabflussgeschwindigkeit')
 
-
     assert_equal 'Info Mai', broadcast.label
     assert_equal 'Bla bla', broadcast.details
     assert_equal Time.zone.local(2013, 5, 20, 11), broadcast.started_at
     assert_equal Time.zone.local(2013, 5, 20, 11, 30), broadcast.finished_at
     assert_equal broadcasts(:info_mai), broadcast
-    assert !mapping.imported?
+    assert_not mapping.imported?
   end
 
   test '#complete? is true if recording is equal to broadcast' do
@@ -100,19 +101,19 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
   test '#complete? is false if recording is only on beginning of broadcast' do
     assign_broadcast
     mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T20000+0200_060.mp3'))
-    assert !mapping.complete?
+    assert_not mapping.complete?
   end
 
   test '#complete? is false if recording is only on end of broadcast' do
     assign_broadcast
     mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T21000+0200_060.mp3'))
-    assert !mapping.complete?
+    assert_not mapping.complete?
   end
 
   test '#complete? is false if recording is inside broadcast' do
     assign_broadcast
     mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T203000+0200_060.mp3'))
-    assert !mapping.complete?
+    assert_not mapping.complete?
   end
 
   test '#complete? is true if recordings are overlapping broadcast' do
@@ -161,28 +162,28 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
     assign_broadcast
     mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T203000+0200_060.mp3'))
     mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T213000+0200_060.mp3'))
-    assert !mapping.complete?
+    assert_not mapping.complete?
   end
 
   test '#complete? is false if recordings are before broadcast finished' do
     assign_broadcast
     mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T200000+0200_060.mp3'))
     mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T210000+0200_030.mp3'))
-    assert !mapping.complete?
+    assert_not mapping.complete?
   end
 
   test '#complete? is false if recordings are inside broadcast' do
     assign_broadcast
     mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T203000+0200_030.mp3'))
     mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T210000+0200_030.mp3'))
-    assert !mapping.complete?
+    assert_not mapping.complete?
   end
 
   test '#complete? is false if recordings have gap' do
     assign_broadcast
     mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T200000+0200_030.mp3'))
     mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T210000+0200_060.mp3'))
-    assert !mapping.complete?
+    assert_not mapping.complete?
   end
 
   test '#complete? is true if recordings have minimal gap' do

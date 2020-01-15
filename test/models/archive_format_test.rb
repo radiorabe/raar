@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: archive_formats
@@ -23,9 +25,9 @@ require 'test_helper'
 class ArchiveFormatTest < ActiveSupport::TestCase
 
   test 'all fixtures valid' do
-     ArchiveFormat.all.each do |e|
-       assert_valid e
-     end
+    ArchiveFormat.all.each do |e|
+      assert_valid e
+    end
   end
 
   test 'validates available bitrates' do
@@ -77,7 +79,7 @@ class ArchiveFormatTest < ActiveSupport::TestCase
   test 'priviledged_group_lists returns array' do
     format = archive_formats(:important_mp3)
     format.priviledged_groups = 'foo, bar, stör '
-    assert_equal %w(foo bar stör), format.priviledged_group_list
+    assert_equal %w[foo bar stör], format.priviledged_group_list
   end
 
 end

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class LoginControllerTest < ActionController::TestCase
 
   test 'GET show with REMOTE_USER returns user object' do
-    request.env['REMOTE_USER'] = 'speedee'
+    request.env['REMOTE_USER'] = +'speedee'
     get :show
     assert_response 200
     assert_equal 'speedee', json['data']['attributes']['username']
@@ -13,7 +15,7 @@ class LoginControllerTest < ActionController::TestCase
 
   test 'GET show with api_token returns user object' do
     get :show,
-         params: { api_token: users(:speedee).api_token }
+        params: { api_token: users(:speedee).api_token }
     assert_response 200
     assert_equal 'speedee', json['data']['attributes']['username']
   end
@@ -21,7 +23,7 @@ class LoginControllerTest < ActionController::TestCase
   test 'GET show with access_code returns empty user object' do
     code = AccessCode.create!(expires_at: 1.month.from_now).code
     get :show,
-         params: { access_code: code }
+        params: { access_code: code }
     assert_response 200
     assert_nil json['data']['attributes']['username']
   end
@@ -32,7 +34,7 @@ class LoginControllerTest < ActionController::TestCase
   end
 
   test 'POST login with REMOTE_USER returns user object' do
-    request.env['REMOTE_USER'] = 'speedee'
+    request.env['REMOTE_USER'] = +'speedee'
     post :create,
          params: { username: 'speedee', password: 'foo' }
     assert_response 200
@@ -64,7 +66,7 @@ class LoginControllerTest < ActionController::TestCase
   end
 
   test 'PATCH update regenerates api key with REMOTE_USER' do
-    request.env['REMOTE_USER'] = 'speedee'
+    request.env['REMOTE_USER'] = +'speedee'
     user = users(:speedee)
     key = user.api_key
     patch :update

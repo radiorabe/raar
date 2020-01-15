@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: shows
@@ -15,9 +17,11 @@
 require 'test_helper'
 
 class ShowTest < ActiveSupport::TestCase
-  test "all fixtures valid" do
+
+  test 'all fixtures valid' do
     Show.all.each do |e|
       assert_valid e
     end
   end
+
 end

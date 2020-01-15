@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module AirtimeHelper
+
   extend ActiveSupport::Concern
 
   included do
@@ -7,12 +10,14 @@ module AirtimeHelper
   end
 
   module ClassMethods
+
     def create_airtime_db(worker)
       Airtime::Base.establish_connection(
         adapter: :sqlite3,
         database: "db/airtime_test_#{worker}.sqlite3"
       )
     end
+
   end
 
   private

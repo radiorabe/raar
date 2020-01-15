@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class BroadcastsControllerTest < ActionController::TestCase
@@ -43,7 +45,7 @@ class BroadcastsControllerTest < ActionController::TestCase
   test 'GET index with search param finds tracks' do
     broadcasts(:klangbecken_mai1).update(label: 'Klangbecken Mai')
     get :index, params: { q: 'loco' }
-    assert_equal ['Klangbecken Mai', 'G9S Shizzle Edition', "G9S Shizzle Edition II"], json_attrs(:label)
+    assert_equal ['Klangbecken Mai', 'G9S Shizzle Edition', 'G9S Shizzle Edition II'], json_attrs(:label)
   end
 
   test 'GET index with day time range returns filtered list' do
@@ -67,49 +69,49 @@ class BroadcastsControllerTest < ActionController::TestCase
 
   test 'GET index with show_id and time parts resolves params correctly' do
     assert_routing({ path: 'shows/42/broadcasts/2013/05/20', method: :get },
-                   { controller: 'broadcasts', action: 'index', show_id: '42',
-                     year: '2013', month: '05', day: '20', format: :json })
+                   controller: 'broadcasts', action: 'index', show_id: '42',
+                   year: '2013', month: '05', day: '20', format: :json)
   end
 
   test 'GET index only with show_id resolves params correctly' do
     assert_routing({ path: 'shows/42/broadcasts', method: :get },
-                   { controller: 'broadcasts', action: 'index', show_id: '42', format: :json })
+                   controller: 'broadcasts', action: 'index', show_id: '42', format: :json)
   end
 
   test 'GET index with show_id and year resolves params correctly' do
     assert_routing({ path: 'shows/42/broadcasts/2013', method: :get },
-                   { controller: 'broadcasts', action: 'index', format: :json,
-                     show_id: '42', year: '2013' })
+                   controller: 'broadcasts', action: 'index', format: :json,
+                   show_id: '42', year: '2013')
   end
 
   test 'GET index with time parts up to month resolves params correctly' do
     assert_routing({ path: 'broadcasts/2013/05', method: :get },
-                   { controller: 'broadcasts', action: 'index', format: :json,
-                     year: '2013', month: '05' })
+                   controller: 'broadcasts', action: 'index', format: :json,
+                   year: '2013', month: '05')
   end
 
   test 'GET index with time parts up to day resolves params correctly' do
     assert_routing({ path: 'broadcasts/2013/05/20', method: :get },
-                   { controller: 'broadcasts', action: 'index', format: :json,
-                     year: '2013', month: '05', day: '20' })
+                   controller: 'broadcasts', action: 'index', format: :json,
+                   year: '2013', month: '05', day: '20')
   end
 
   test 'GET index with time parts up to hour resolves params correctly' do
     assert_routing({ path: 'broadcasts/2013/05/20/20', method: :get },
-                   { controller: 'broadcasts', action: 'index', format: :json,
-                     year: '2013', month: '05', day: '20', hour: '20' })
+                   controller: 'broadcasts', action: 'index', format: :json,
+                   year: '2013', month: '05', day: '20', hour: '20')
   end
 
   test 'GET index with time parts up to minute resolves params correctly' do
     assert_routing({ path: 'broadcasts/2013/05/20/2015', method: :get },
-                   { controller: 'broadcasts', action: 'index', format: :json,
-                    year: '2013', month: '05', day: '20', hour: '20', min: '15' })
+                   controller: 'broadcasts', action: 'index', format: :json,
+                   year: '2013', month: '05', day: '20', hour: '20', min: '15')
   end
 
   test 'GET index with time parts up to seconds resolves params correctly' do
     assert_routing({ path: 'broadcasts/2013/05/20/201534', method: :get },
-                   { controller: 'broadcasts', action: 'index', format: :json,
-                     year: '2013', month: '05', day: '20', hour: '20', min: '15', sec: '34' })
+                   controller: 'broadcasts', action: 'index', format: :json,
+                   year: '2013', month: '05', day: '20', hour: '20', min: '15', sec: '34')
   end
 
   test 'GET show returns entry' do
@@ -142,7 +144,8 @@ class BroadcastsControllerTest < ActionController::TestCase
     patch :update,
           params: {
             id: entry.id,
-            data: { attributes: { details: 'Very important shows', started_at: '17:00' } } }
+            data: { attributes: { details: 'Very important shows', started_at: '17:00' } }
+          }
     assert_response 200
     assert_equal 'Very important shows', json['data']['attributes']['details']
     assert_equal '2013-04-10T11:00:00.000+02:00', json['data']['attributes']['started_at']
@@ -159,7 +162,8 @@ class BroadcastsControllerTest < ActionController::TestCase
               label: 'Info April 1',
               details: 'Very important shows',
               started_at: '17:00'
-            } } }
+            } }
+          }
     assert_response 200
     assert_equal 'Info April 1', json['data']['attributes']['label']
     assert_equal 'Very important shows', json['data']['attributes']['details']
@@ -174,7 +178,8 @@ class BroadcastsControllerTest < ActionController::TestCase
           params: {
             access_code: code,
             id: entry.id,
-            data: { attributes: { details: 'Very important shows', started_at: '17:00' } } }
+            data: { attributes: { details: 'Very important shows', started_at: '17:00' } }
+          }
     assert_response 401
   end
 

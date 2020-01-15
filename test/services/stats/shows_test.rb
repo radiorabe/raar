@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Stats::ShowsTest < ActiveSupport::TestCase
@@ -71,7 +73,8 @@ class Stats::ShowsTest < ActiveSupport::TestCase
   test '#to_csv contains overall and show data' do
     lines = stats.to_csv.split("\n")
     assert_equal(5, lines.size)
-    assert_equal('Show,Profile,Broadcast Count,Broadcast Duration,Tracks Duration,Tracks Ratio,Uniq Tracks Count,Unique Artist Combo Count', lines.first)
+    assert_equal('Show,Profile,Broadcast Count,Broadcast Duration,Tracks Duration,' \
+                 'Tracks Ratio,Uniq Tracks Count,Unique Artist Combo Count', lines.first)
     assert_equal('Overall,,5,23.0,0.6172222222222222,0.02683574879227053,6,5', lines.second)
     assert_equal('Gschäch9schlimmers,Default,2,5.0,0.4461111111111111,0.08922222222222223,4,4', lines.third)
     assert_equal('Info,Important,1,0.5,,,,', lines.fourth)
@@ -79,7 +82,7 @@ class Stats::ShowsTest < ActiveSupport::TestCase
   end
 
   def stats
-    @stats ||= Stats::Shows.new(Date.new(2013,5,16)..Date.new(2013,6,12))
+    @stats ||= Stats::Shows.new(Date.new(2013, 5, 16)..Date.new(2013, 6, 12))
   end
 
 end

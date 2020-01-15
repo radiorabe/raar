@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: tracks
@@ -14,7 +16,7 @@ require 'test_helper'
 
 class TrackTest < ActiveSupport::TestCase
 
-  test "all fixtures valid" do
+  test 'all fixtures valid' do
     Track.all.each do |e|
       assert_valid e
     end
@@ -37,7 +39,7 @@ class TrackTest < ActiveSupport::TestCase
   test '.within contains all broadcasts around the duration' do
     t = tracks(:choco1)
     assert_equal tracks(:jayz, :choco1),
-                 Track.within(t.started_at - 10.minute, t.finished_at + 10.minute).list
+                 Track.within(t.started_at - 10.minutes, t.finished_at + 10.minutes).list
   end
 
   test '.for_show contains all tracks for show' do

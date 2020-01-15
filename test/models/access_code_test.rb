@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: access_codes
@@ -14,7 +16,7 @@ require 'test_helper'
 class AccessCodeTest < ActiveSupport::TestCase
 
   test 'generates code on creation' do
-    code = AccessCode.new(expires_at: 1.months.from_now)
+    code = AccessCode.new(expires_at: 1.month.from_now)
     assert code.save
     assert_equal AccessCode::CODE_LENGTH, code.code.size
   end

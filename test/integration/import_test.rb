@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ImportTest < ActiveSupport::TestCase
@@ -39,9 +41,9 @@ class ImportTest < ActiveSupport::TestCase
 
     archive_mp3s = File.join(FileStore::Structure.home, '2013', '06', '19', '*.mp3')
     assert_equal 6, Dir.glob(archive_mp3s).size
-    audio = Show.find_by_name('Mittag').broadcasts.last.audio_files.first
+    audio = Show.find_by(name: 'Mittag').broadcasts.last.audio_files.first
     assert_in_delta 290, AudioProcessor.new(audio.absolute_path).duration, 0.1
-    audio = Show.find_by_name('Info').broadcasts.last.audio_files.first
+    audio = Show.find_by(name: 'Info').broadcasts.last.audio_files.first
     assert_in_delta 60, AudioProcessor.new(audio.absolute_path).duration, 0.1
   end
 

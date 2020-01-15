@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
@@ -24,14 +26,14 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     file = Tempfile.new(['low', '.mp3'])
     begin
       low = processor(:klangbecken_mai1_best).transcode(file.path, AudioFormat.new('mp3', 56, 1))
-      assert_equal 56000, low.audio_bitrate
+      assert_equal 56_000, low.audio_bitrate
       assert_equal 1, low.audio_channels
 
       tags = read_tags(file.path)
       assert_equal "Title 'yeah'!", tags[:title]
-      assert_equal "Ärtist Ünknöwn", tags[:artist]
-      assert_equal "Albüm", tags[:album]
-      assert_equal "2016", tags[:date]
+      assert_equal 'Ärtist Ünknöwn', tags[:artist]
+      assert_equal 'Albüm', tags[:album]
+      assert_equal '2016', tags[:date]
     ensure
       file.close!
     end
@@ -41,17 +43,17 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     file = Tempfile.new(['low', '.mp3'])
     begin
       low = processor(:klangbecken_mai1_best)
-              .transcode(file.path,
-                          AudioFormat.new('mp3', 56, 1),
-                          { title: 'Hölidüli', year: '2010', album: nil })
-      assert_equal 56000, low.audio_bitrate
+            .transcode(file.path,
+                       AudioFormat.new('mp3', 56, 1),
+                       title: 'Hölidüli', year: '2010', album: nil)
+      assert_equal 56_000, low.audio_bitrate
       assert_equal 1, low.audio_channels
 
       tags = read_tags(file.path)
-      assert_equal "Hölidüli", tags[:title]
-      assert_equal "Ärtist Ünknöwn", tags[:artist]
+      assert_equal 'Hölidüli', tags[:title]
+      assert_equal 'Ärtist Ünknöwn', tags[:artist]
       assert_nil tags[:album]
-      assert_equal "2010", tags[:date]
+      assert_equal '2010', tags[:date]
     ensure
       file.close!
     end
@@ -61,15 +63,15 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     file = Tempfile.new(['same', '.mp3'])
     begin
       same = processor(:klangbecken_mai1_best)
-                .transcode(file.path, AudioFormat.new('mp3', 192, 2))
-      assert_equal 192000, same.audio_bitrate
+             .transcode(file.path, AudioFormat.new('mp3', 192, 2))
+      assert_equal 192_000, same.audio_bitrate
       assert_equal 2, same.audio_channels
 
       tags = read_tags(file.path)
       assert_equal "Title 'yeah'!", tags[:title]
-      assert_equal "Ärtist Ünknöwn", tags[:artist]
-      assert_equal "Albüm", tags[:album]
-      assert_equal "2016", tags[:date]
+      assert_equal 'Ärtist Ünknöwn', tags[:artist]
+      assert_equal 'Albüm', tags[:album]
+      assert_equal '2016', tags[:date]
     ensure
       file.close!
     end
@@ -81,7 +83,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       format = AudioFormat.new('flac', nil, 2)
       flac = AudioGenerator.new.silent_source_file(format)
       same = AudioProcessor::Ffmpeg.new(flac)
-                .transcode(file.path, AudioFormat.new('flac', nil, 2))
+                                   .transcode(file.path, AudioFormat.new('flac', nil, 2))
       assert_equal 'flac', same.audio_codec
       assert_equal 2, same.audio_channels
     ensure
@@ -95,7 +97,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     begin
       flac = AudioGenerator.new.silent_source_file(AudioFormat.new('flac', nil, 2))
       output = AudioProcessor::Ffmpeg.new(flac).transcode(mp3.path, AudioFormat.new('mp3', 56, 2))
-      assert_equal 56000, output.audio_bitrate
+      assert_equal 56_000, output.audio_bitrate
       assert_equal 2, output.audio_channels
       assert_equal 'mp3', output.audio_codec
     ensure
@@ -121,7 +123,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     begin
       part = processor(:klangbecken_mai1_best).trim(file.path, 1, 1)
       assert_equal 1, part.duration.round
-      assert_equal 192000, part.audio_bitrate
+      assert_equal 192_000, part.audio_bitrate
     ensure
       file.close!
     end
@@ -130,14 +132,14 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
   test 'concats mp3 files' do
     file = Tempfile.new(['merge', '.mp3'])
     begin
-      processor(:klangbecken_mai1_best).
-        concat(file.path,
+      processor(:klangbecken_mai1_best)
+        .concat(file.path,
                 [audio_files(:g9s_mai_high).absolute_path,
-                audio_files(:info_april_high).absolute_path])
+                 audio_files(:info_april_high).absolute_path])
 
       merge = FFMPEG::Movie.new(file.path)
       assert_equal 9, merge.duration.round
-      assert_equal 192000, merge.audio_bitrate
+      assert_equal 192_000, merge.audio_bitrate
     ensure
       file.close!
     end
@@ -177,13 +179,13 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
 
   test 'tags mp3 file without changing other stuff' do
     mp3 = Tempfile.new(['source', '.mp3'])
-    File.delete(mp3.path) if File.exists?(mp3.path)
+    File.delete(mp3.path) if File.exist?(mp3.path)
     begin
       AudioGenerator.new.silent_file(AudioFormat.new('mp3', 192, 2), mp3.path)
       p = AudioProcessor::Ffmpeg.new(mp3.path)
-      p.tag(title: "title \"yeah!\"", artist: 'artist', album: 'Albüm', year: '2016')
+      p.tag(title: 'title "yeah!"', artist: 'artist', album: 'Albüm', year: '2016')
       tags = read_tags(mp3.path)
-      assert_equal "title \"yeah!\"", tags[:title]
+      assert_equal 'title "yeah!"', tags[:title]
       assert_equal 'artist', tags[:artist]
       assert_equal 'Albüm', tags[:album]
       assert_equal '2016', tags[:date]

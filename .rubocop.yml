@@ -5,9 +5,9 @@ require:
 AllCops:
   DisplayCopNames: true
   Exclude:
+    # only generated files
     - db/schema.rb
     - dist/**/*
-    - test/**/*
     - tmp/**/*
     - vendor/**/*
 

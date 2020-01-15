@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -19,7 +21,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
 
-  test "all fixtures valid" do
+  test 'all fixtures valid' do
     User.all.each do |e|
       assert_valid e
     end
@@ -40,23 +42,23 @@ class UserTest < ActiveSupport::TestCase
   test '#admin? is false if no groups are present' do
     user = users(:admin)
     user.groups = 'chief'
-    assert !user.admin?
+    assert_not user.admin?
   end
 
   test '#admin? is false if groups is empty' do
     user = users(:admin)
     user.groups = ''
-    assert !user.admin?
+    assert_not user.admin?
   end
 
   test '#group_list returns array' do
     user = users(:admin)
-    assert_equal %w(admins grooveexpress), user.group_list
+    assert_equal %w[admins grooveexpress], user.group_list
   end
 
   test '#groups= serializes arrays' do
     user = users(:admin)
-    user.groups = %w(root admin)
+    user.groups = %w[root admin]
     assert_equal 'root,admin', user.groups
   end
 

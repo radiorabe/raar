@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Admin
@@ -7,7 +9,7 @@ module Admin
 
     test 'GET index returns list of all entries' do
       get :index
-      assert_equal ['Default', 'Important', 'Unimportant'], json_attrs(:name)
+      assert_equal %w[Default Important Unimportant], json_attrs(:name)
     end
 
     test 'GET index returns unauthorized if not logged in' do
@@ -29,7 +31,10 @@ module Admin
                  attributes: {
                    name: 'Live',
                    description: 'Live Shows from various locations',
-                   default: false } } }
+                   default: false
+                 }
+               }
+             }
         assert_response 201
       end
       assert_equal 'Live', json['data']['attributes']['name']
@@ -40,10 +45,13 @@ module Admin
     test 'POST create fails for invalid params' do
       assert_no_difference('Profile.count') do
         post :create,
-            params: {
-              data: {
-                attributes: {
-                  name: entry.name } } }
+             params: {
+               data: {
+                 attributes: {
+                   name: entry.name
+                 }
+               }
+             }
         assert_response 422
       end
     end
@@ -52,7 +60,8 @@ module Admin
       patch :update,
             params: {
               id: entry.id,
-              data: { attributes: { description: 'Very important shows' } } }
+              data: { attributes: { description: 'Very important shows' } }
+            }
       assert_response 200
       assert_equal 'Very important shows', json['data']['attributes']['description']
       assert_nil json['data']['attributes']['creator_id']
@@ -66,7 +75,8 @@ module Admin
       patch :update,
             params: {
               id: entry.id,
-              data: { attributes: { name: 'Unimportant' } } }
+              data: { attributes: { name: 'Unimportant' } }
+            }
       assert_response 422
       assert_match /taken/, response.body
       assert_equal 'Important', entry.reload.name

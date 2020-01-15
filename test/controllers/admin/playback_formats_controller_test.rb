@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Admin
@@ -7,7 +9,7 @@ module Admin
 
     test 'GET index returns list of all entries' do
       get :index
-      assert_equal ['high', 'low'], json_attrs(:name)
+      assert_equal %w[high low], json_attrs(:name)
     end
 
     test 'GET index returns unauthorized if not logged in' do
@@ -30,7 +32,10 @@ module Admin
                    name: 'mid',
                    codec: 'mp3',
                    channels: '2',
-                   bitrate: '128' } } }
+                   bitrate: '128'
+                 }
+               }
+             }
         assert_response 201
       end
       assert_equal 'mid', json['data']['attributes']['name']
@@ -39,12 +44,15 @@ module Admin
     test 'POST create fails for invalid params' do
       assert_no_difference('PlaybackFormat.count') do
         post :create,
-            params: {
-              data: {
-                attributes: {
-                  name: 'mid',
-                  codec: 'mp4',
-                  bitrate: '123' } } }
+             params: {
+               data: {
+                 attributes: {
+                   name: 'mid',
+                   codec: 'mp4',
+                   bitrate: '123'
+                 }
+               }
+             }
         assert_response 422
       end
       assert_match /can't be blank/, response.body
@@ -54,7 +62,8 @@ module Admin
       patch :update,
             params: {
               id: entry.id,
-              data: { attributes: { channels: 2 } } }
+              data: { attributes: { channels: 2 } }
+            }
       assert_response 200
       assert_equal 2, json['data']['attributes']['channels']
       assert_equal 2, entry.reload.channels
@@ -64,7 +73,8 @@ module Admin
       patch :update,
             params: {
               id: entry.id,
-              data: { attributes: { bitrate: '123' } } }
+              data: { attributes: { bitrate: '123' } }
+            }
       assert_response 422
       assert_match /not included/, response.body
       assert_equal 96, entry.reload.bitrate

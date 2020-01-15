@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
@@ -58,7 +60,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert_equal Time.zone.local(2016, 1, 1, 8), morgen_map.broadcast.started_at
     assert_equal Time.zone.local(2016, 1, 1, 11), morgen_map.broadcast.finished_at
     assert morgen_map.broadcast.new_record?
-    assert !morgen_map.complete?
+    assert_not morgen_map.complete?
     assert_equal [file('2016-01-01T090000+0100_060.mp3'),
                   file('2016-01-01T100000+0100_060.mp3')],
                  morgen_map.recordings.collect(&:path)
@@ -74,7 +76,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert_equal becken.name, becken_map.show.name
     assert_equal Time.zone.local(2016, 1, 1, 11, 30), becken_map.broadcast.started_at
     assert_equal Time.zone.local(2016, 1, 1, 13), becken_map.broadcast.finished_at
-    assert !becken_map.complete?
+    assert_not becken_map.complete?
     assert_equal [file('2016-01-01T110000+0100_060.mp3')],
                  becken_map.recordings.collect(&:path)
   end
@@ -160,10 +162,12 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
                                   ends: Time.zone.local(2016, 1, 1, 10, 30),
                                   created: Time.zone.now)
 
-    Import::BroadcastMapping::Builder::AirtimeDb.any_instance
+    Import::BroadcastMapping::Builder::AirtimeDb
+      .any_instance
       .expects(:warn)
       .with('No broadcast found from Fri, 01 Jan 2016 08:30:00 +0100 to 09:00:00.')
-    Import::BroadcastMapping::Builder::AirtimeDb.any_instance
+    Import::BroadcastMapping::Builder::AirtimeDb
+      .any_instance
       .expects(:warn)
       .with('No broadcast found from Fri, 01 Jan 2016 10:30:00 +0100 to 11:00:00.')
 
@@ -186,10 +190,12 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
                                   ends: Time.zone.local(2016, 1, 1, 9, 30),
                                   created: Time.zone.now)
 
-    Import::BroadcastMapping::Builder::AirtimeDb.any_instance
+    Import::BroadcastMapping::Builder::AirtimeDb
+      .any_instance
       .expects(:warn)
       .with('Creating default broadcast from Fri, 01 Jan 2016 08:30:00 +0100 to 09:00:00.')
-    Import::BroadcastMapping::Builder::AirtimeDb.any_instance
+    Import::BroadcastMapping::Builder::AirtimeDb
+      .any_instance
       .expects(:warn)
       .with('Creating default broadcast from Fri, 01 Jan 2016 09:30:00 +0100 to 11:00:00.')
 
@@ -210,7 +216,8 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     recordings = build_recordings('2016-01-01T080000+0100_060.mp3',
                                   '2016-01-01T090000+0100_060.mp3')
 
-    Import::BroadcastMapping::Builder::AirtimeDb.any_instance
+    Import::BroadcastMapping::Builder::AirtimeDb
+      .any_instance
       .expects(:warn)
       .with('Creating default broadcast from Fri, 01 Jan 2016 08:00:00 +0100 to 10:00:00.')
 

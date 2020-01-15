@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Admin
@@ -7,7 +9,7 @@ module Admin
 
     test 'GET index returns list of all entries for a given archive format' do
       get :index
-      assert_equal ['flac', 'mp3'], json_attrs(:codec)
+      assert_equal %w[flac mp3], json_attrs(:codec)
       assert_equal [[1], AudioEncoding.fetch('mp3').bitrates], json_attrs(:bitrates)
     end
 

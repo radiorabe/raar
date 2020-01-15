@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Downgrade
   class DowngraderTest < ActiveSupport::TestCase
 
     test 'actions contain only those with bitrate' do
-      assert !Downgrade::Downgrader.actions.map(&:bitrate).include?(nil)
+      assert_not Downgrade::Downgrader.actions.map(&:bitrate).include?(nil)
     end
 
     test 'creates lower-bitrate file and deletes higher-bitrate one' do
@@ -19,15 +21,15 @@ module Downgrade
       home = FileStore::Structure.home
       path = File.join('2012', '12', '12', '2012-12-12T200000+0100_120_gschach9schlimmers.192k_2.mp3')
 
-      AudioProcessor::Ffmpeg.any_instance.
-        expects(:transcode).
-        with(is_a(String), AudioFormat.new('mp3', 192, 2))
+      AudioProcessor::Ffmpeg.any_instance
+                            .expects(:transcode)
+                            .with(is_a(String), AudioFormat.new('mp3', 192, 2))
       FileUtils.expects(:mv).with(is_a(String), File.join(home, path))
 
       assert_no_difference('AudioFile.count') do
         downgrader.handle(file)
       end
-      assert !AudioFile.where(id: file.id).exists?
+      assert_not AudioFile.where(id: file.id).exists?
       lower = AudioFile.where(broadcast_id: b1.id, bitrate: 192, channels: 2).first
       assert_equal path, lower.path
     end
@@ -56,9 +58,9 @@ module Downgrade
 
       proc = AudioProcessor::Ffmpeg.new('foo')
       AudioProcessor.expects(:new).with(file2.absolute_path).returns(proc)
-      proc.
-        expects(:transcode).
-        with(is_a(String), AudioFormat.new('mp3', 192, 2))
+      proc
+        .expects(:transcode)
+        .with(is_a(String), AudioFormat.new('mp3', 192, 2))
       FileUtils.expects(:mv).with(is_a(String), File.join(home, path))
 
       File.expects(:exist?).with(File.join(home, path)).at_least(1).returns(false, true, true)
@@ -70,9 +72,9 @@ module Downgrade
       assert_difference('AudioFile.count', -2) do
         [file1, file2, file3].shuffle.each { |file| downgrader.handle(file) }
       end
-      assert !AudioFile.where(id: file1.id).exists?
-      assert !AudioFile.where(id: file2.id).exists?
-      assert !AudioFile.where(id: file3.id).exists?
+      assert_not AudioFile.where(id: file1.id).exists?
+      assert_not AudioFile.where(id: file2.id).exists?
+      assert_not AudioFile.where(id: file3.id).exists?
       lower = AudioFile.where(broadcast_id: b1.id, bitrate: 192, channels: 2).first
       assert_equal path, lower.path
     end
@@ -89,7 +91,7 @@ module Downgrade
       assert_difference('AudioFile.count', -1) do
         downgrader.handle(higher)
       end
-      assert !AudioFile.where(id: higher.id).exists?
+      assert_not AudioFile.where(id: higher.id).exists?
     end
 
     test 're-creates lower-bitrate file even if database entry exists' do
@@ -100,14 +102,14 @@ module Downgrade
       File.expects(:exist?).with(lower.absolute_path).returns(false)
       File.expects(:exist?).with(higher.absolute_path).returns(false)
       AudioProcessor::Ffmpeg.any_instance
-        .expects(:transcode)
-        .with(is_a(String), AudioFormat.new('mp3', 192, 2))
+                            .expects(:transcode)
+                            .with(is_a(String), AudioFormat.new('mp3', 192, 2))
       FileUtils.expects(:mv).with(is_a(String), File.join(home, lower.path))
 
       assert_difference('AudioFile.count', -1) do
         downgrader.handle(higher)
       end
-      assert !AudioFile.where(id: higher.id).exists?
+      assert_not AudioFile.where(id: higher.id).exists?
     end
 
     test 're-creates database entry if lower-bitrate file exists' do
@@ -123,7 +125,7 @@ module Downgrade
       assert_no_difference('AudioFile.count') do
         downgrader.handle(higher)
       end
-      assert !AudioFile.where(id: higher.id).exists?
+      assert_not AudioFile.where(id: higher.id).exists?
       assert AudioFile.where(broadcast_id: lower.broadcast_id,
                              codec: 'mp3',
                              bitrate: 192,
@@ -134,43 +136,43 @@ module Downgrade
       b1 = Broadcast.create!(show: shows(:g9s),
                              started_at: Time.zone.local(2012, 12, 12, 20),
                              finished_at: Time.zone.local(2012, 12, 12, 22))
-      lower  = AudioFile.create!(broadcast: b1,
-                                 path: 'dummy_lower',
-                                 codec: 'mp3',
-                                 bitrate: 128,
-                                 channels: 1)
-      same   = AudioFile.create!(broadcast: b1,
-                                 path: 'dummy_same',
-                                 codec: 'mp3',
-                                 bitrate: 192,
-                                 channels: 2)
+      lower = AudioFile.create!(broadcast: b1,
+                                path: 'dummy_lower',
+                                codec: 'mp3',
+                                bitrate: 128,
+                                channels: 1)
+      same = AudioFile.create!(broadcast: b1,
+                               path: 'dummy_same',
+                               codec: 'mp3',
+                               bitrate: 192,
+                               channels: 2)
       higher = AudioFile.create!(broadcast: b1,
                                  path: 'dummy_higher',
                                  codec: 'mp3',
                                  bitrate: 224,
                                  channels: 2)
       higher_less_channels = AudioFile.create!(broadcast: b1,
-                                path: 'dummy_higher_less',
-                                codec: 'mp3',
-                                bitrate: 256,
-                                channels: 1)
+                                               path: 'dummy_higher_less',
+                                               codec: 'mp3',
+                                               bitrate: 256,
+                                               channels: 1)
       start = Time.zone.now - action.months.months + 1.day
       b2 = Broadcast.create!(show: shows(:g9s),
                              started_at: start,
                              finished_at: start + 2.hours)
-      newer  = AudioFile.create!(broadcast: b2,
-                                 path: 'dummy_newer',
-                                 codec: 'mp3',
-                                 bitrate: 224,
-                                 channels: 2)
+      newer = AudioFile.create!(broadcast: b2,
+                                path: 'dummy_newer',
+                                codec: 'mp3',
+                                bitrate: 224,
+                                channels: 2)
       b3 = Broadcast.create!(show: shows(:klangbecken),
                              started_at: Time.zone.local(2012, 12, 12, 22),
                              finished_at: Time.zone.local(2012, 12, 13, 8))
-      different  = AudioFile.create!(broadcast: b3,
-                                     path: 'dummy_different_profile',
-                                     codec: 'mp3',
-                                     bitrate: 224,
-                                     channels: 2)
+      different = AudioFile.create!(broadcast: b3,
+                                    path: 'dummy_different_profile',
+                                    codec: 'mp3',
+                                    bitrate: 224,
+                                    channels: 2)
       assert_equal [higher, higher_less_channels].to_set, downgrader.pending_files.to_set
     end
 
@@ -178,16 +180,16 @@ module Downgrade
       b1 = Broadcast.create!(show: shows(:g9s),
                              started_at: Time.zone.local(2012, 12, 12, 20),
                              finished_at: Time.zone.local(2012, 12, 12, 22))
-      lower  = AudioFile.create!(broadcast: b1,
-                                 path: 'dummy_lower',
-                                 codec: 'mp3',
-                                 bitrate: 128,
-                                 channels: 2)
-      same   = AudioFile.create!(broadcast: b1,
-                                 path: 'dummy_same',
-                                 codec: 'mp3',
-                                 bitrate: 192,
-                                 channels: 2)
+      lower = AudioFile.create!(broadcast: b1,
+                                path: 'dummy_lower',
+                                codec: 'mp3',
+                                bitrate: 128,
+                                channels: 2)
+      same = AudioFile.create!(broadcast: b1,
+                               path: 'dummy_same',
+                               codec: 'mp3',
+                               bitrate: 192,
+                               channels: 2)
       higher = AudioFile.create!(broadcast: b1,
                                  path: 'dummy_higher',
                                  codec: 'mp3',
@@ -203,20 +205,20 @@ module Downgrade
       file = create_audio(bitrate: 224, channels: 2)
       other = create_audio(bitrate: 320, channels: 1)
       assert downgrader.highest?(file)
-      assert !downgrader.highest?(other)
+      assert_not downgrader.highest?(other)
     end
 
     test 'highest is false if other has higher bitrate and same channels' do
       file = create_audio(bitrate: 224, channels: 2)
       other = create_audio(bitrate: 320, channels: 2)
-      assert !downgrader.highest?(file)
+      assert_not downgrader.highest?(file)
       assert downgrader.highest?(other)
     end
 
     test 'highest is false if other has same bitrate and more channels' do
       file = create_audio(bitrate: 224, channels: 1)
       other = create_audio(bitrate: 224, channels: 2)
-      assert !downgrader.highest?(file)
+      assert_not downgrader.highest?(file)
       assert downgrader.highest?(other)
     end
 
@@ -231,7 +233,7 @@ module Downgrade
       file = create_audio(bitrate: 320, channels: 1)
       other = create_audio(bitrate: 224, channels: 1)
       assert downgrader.highest?(file)
-      assert !downgrader.highest?(other)
+      assert_not downgrader.highest?(other)
     end
 
     test 'highest is true if other has lower bitrate or less channels' do
@@ -239,8 +241,8 @@ module Downgrade
       other1 = create_audio(bitrate: 320, channels: 1)
       other2 = create_audio(bitrate: 224, channels: 2)
       assert downgrader.highest?(file)
-      assert !downgrader.highest?(other1)
-      assert !downgrader.highest?(other2)
+      assert_not downgrader.highest?(other1)
+      assert_not downgrader.highest?(other2)
     end
 
     test 'highest is true if other has lower bitrate and more channels than action' do
@@ -249,7 +251,7 @@ module Downgrade
       file = create_audio(bitrate: 320, channels: 1)
       other = create_audio(bitrate: 224, channels: 2)
       assert downgrader.highest?(file)
-      assert !downgrader.highest?(other)
+      assert_not downgrader.highest?(other)
     end
 
     test 'highest is true if other has lower bitrate and both have more channels than action' do
@@ -258,7 +260,7 @@ module Downgrade
       file = create_audio(bitrate: 320, channels: 2)
       other = create_audio(bitrate: 224, channels: 2)
       assert downgrader.highest?(file)
-      assert !downgrader.highest?(other)
+      assert_not downgrader.highest?(other)
     end
 
     test 'highest is true if other has lower bitrate and both have same channels as action' do
@@ -267,7 +269,7 @@ module Downgrade
       file = create_audio(bitrate: 320, channels: 1)
       other = create_audio(bitrate: 224, channels: 1)
       assert downgrader.highest?(file)
-      assert !downgrader.highest?(other)
+      assert_not downgrader.highest?(other)
     end
 
     test 'highest is true if other has lower bitrate' do
@@ -277,8 +279,8 @@ module Downgrade
       other1 = create_audio(bitrate: 256, channels: 2)
       other2 = create_audio(bitrate: 224, channels: 1)
       assert downgrader.highest?(file)
-      assert !downgrader.highest?(other1)
-      assert !downgrader.highest?(other2)
+      assert_not downgrader.highest?(other1)
+      assert_not downgrader.highest?(other2)
     end
 
     def downgrader
@@ -291,12 +293,12 @@ module Downgrade
 
     def create_audio(attrs)
       AudioFile.create!(attrs.reverse_merge(
-        broadcast: broadcasts(:g9s_juni),
-        path: "dummy-#{rand(9999999999)}",
-        codec: 'mp3',
-        bitrate: 320,
-        channels: 2
-      ))
+                          broadcast: broadcasts(:g9s_juni),
+                          path: "dummy-#{rand(9_999_999_999)}",
+                          codec: 'mp3',
+                          bitrate: 320,
+                          channels: 2
+                        ))
     end
 
   end

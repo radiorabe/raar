@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Import::RecordingTest < ActiveSupport::TestCase
@@ -53,7 +55,7 @@ class Import::RecordingTest < ActiveSupport::TestCase
     FileUtils.touch(f)
     assert File.exist?(f)
     recording.mark_imported
-    assert !File.exist?(file('2016-01-01T235959+0200_120_imported.mp3'))
+    assert_not File.exist?(file('2016-01-01T235959+0200_120_imported.mp3'))
     assert File.exist?(f)
   end
 
@@ -65,7 +67,7 @@ class Import::RecordingTest < ActiveSupport::TestCase
     recording.broadcasts_mappings << mapping
     recording.mark_imported
     assert File.exist?(file('2016-01-01T235959+0200_120_imported.mp3'))
-    assert !File.exist?(f)
+    assert_not File.exist?(f)
   end
 
   test '#audio_duration returns actual duration' do
@@ -86,7 +88,7 @@ class Import::RecordingTest < ActiveSupport::TestCase
     f = file('2016-01-01T235959+0200_120.mp3')
     AudioGenerator.new.silent_file(AudioFormat.new('mp3', 96, 1), f)
     recording = Import::Recording::File.new(f)
-    assert !recording.audio_duration_too_long?
+    assert_not recording.audio_duration_too_long?
   end
 
 end

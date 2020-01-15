@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DowngradeTest < ActiveSupport::TestCase
@@ -26,7 +28,7 @@ class DowngradeTest < ActiveSupport::TestCase
     assert_equal 1, file_count('2013', '05', '20')
 
     info = broadcasts(:info_april)
-    assert !info.audio_files.where(bitrate: 320).exists?
+    assert_not info.audio_files.where(bitrate: 320).exists?
     file = info.audio_files.where(bitrate: 224).first
     assert file
     assert_equal 2, file.channels
@@ -34,8 +36,8 @@ class DowngradeTest < ActiveSupport::TestCase
     assert 224, AudioProcessor.new(file.absolute_path).bitrate
 
     g9s = broadcasts(:g9s_mai)
-    assert !g9s.audio_files.where(bitrate: 192).exists?
-    assert !g9s.audio_files.where(bitrate: 320).exists?
+    assert_not g9s.audio_files.where(bitrate: 192).exists?
+    assert_not g9s.audio_files.where(bitrate: 320).exists?
     assert_equal 1, g9s.audio_files.where(bitrate: 128).count
 
     klangbecken = broadcasts(:klangbecken_mai1)

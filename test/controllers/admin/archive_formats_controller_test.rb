@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Admin
@@ -35,11 +37,14 @@ module Admin
                    max_logged_in_bitrate: 1,
                    max_priviledged_bitrate: nil,
                    priviledged_groups: ['staff', 'sendungsmachende '],
-                   download_permission: 'logged_in' } } }
+                   download_permission: 'logged_in'
+                 }
+               }
+             }
         assert_response 201
       end
       format = ArchiveFormat.find(json['data']['id'])
-      assert_equal ['staff', 'sendungsmachende'], format.priviledged_group_list
+      assert_equal %w[staff sendungsmachende], format.priviledged_group_list
       assert_equal 'logged_in', format.download_permission
       assert_equal 'flac', json['data']['attributes']['codec']
     end
@@ -53,7 +58,10 @@ module Admin
                  attributes: {
                    codec: 'mp3',
                    initial_bitrate: 128,
-                   initial_channels: 2 } } }
+                   initial_channels: 2
+                 }
+               }
+             }
         assert_response 422
       end
       assert_equal 1, json['errors'].size
@@ -65,7 +73,8 @@ module Admin
             params: {
               id: entry.id,
               profile_id: profiles(:default).id,
-              data: { attributes: { codec: 'mp3', initial_bitrate: 224 } } }
+              data: { attributes: { codec: 'mp3', initial_bitrate: 224 } }
+            }
       assert_response 200
       assert_equal 'mp3', json['data']['attributes']['codec']
       assert_equal 224, json['data']['attributes']['initial_bitrate']
@@ -78,7 +87,8 @@ module Admin
             params: {
               id: entry.id,
               profile_id: profiles(:default).id,
-              data: { attributes: { codec: 'flac', initial_bitrate: 1 } } }
+              data: { attributes: { codec: 'flac', initial_bitrate: 1 } }
+            }
       assert_response 422
       assert_match /must not be changed/, response.body
       assert_equal 'mp3', entry.reload.codec
@@ -89,7 +99,8 @@ module Admin
             params: {
               id: entry.id,
               profile_id: profiles(:default).id,
-              data: { attributes: { initial_bitrate: 123 } } }
+              data: { attributes: { initial_bitrate: 123 } }
+            }
       assert_response 422
       assert_match /not included/, response.body
       assert_equal 256, entry.reload.initial_bitrate

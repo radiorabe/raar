@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class AudioAccess::AudioFilesTest < ActiveSupport::TestCase
@@ -64,7 +66,7 @@ class AudioAccess::AudioFilesTest < ActiveSupport::TestCase
   end
 
   test '#access_permitted?(nil) is false if bitrate is higher than max_public_bitrate' do
-    assert !access_permitted?(:info_april_best, nil)
+    assert_not access_permitted?(:info_april_best, nil)
   end
 
   test '#access_permitted?(new) is true if bitrate is smaller than max_logged_in_bitrate' do
@@ -84,7 +86,7 @@ class AudioAccess::AudioFilesTest < ActiveSupport::TestCase
 
   test '#access_permitted?(new) is false if bitrate is higher than max_logged_in_bitrate' do
     archive_formats(:important_mp3).update!(max_public_bitrate: 96, max_logged_in_bitrate: 96)
-    assert !access_permitted?(:info_april_best, User.new)
+    assert_not access_permitted?(:info_april_best, User.new)
   end
 
   test '#access_permitted?(member) is true if bitrate is smaller than max_logged_in_bitrate' do
@@ -102,19 +104,21 @@ class AudioAccess::AudioFilesTest < ActiveSupport::TestCase
     assert access_permitted?(:g9s_mai_high, users(:member))
   end
 
-  test '#access_permitted?(member) is false if bitrate is higher than max_logged_in_bitrate but same as max_priviledged_bitrate' do
+  test '#access_permitted?(member) is false if bitrate is higher than max_logged_in_bitrate' \
+       'but same as max_priviledged_bitrate' do
     archive_formats(:default_mp3).update!(max_logged_in_bitrate: 96, max_priviledged_bitrate: 192)
-    assert !access_permitted?(:g9s_mai_high, users(:member))
+    assert_not access_permitted?(:g9s_mai_high, users(:member))
   end
 
-  test '#access_permitted?(member) is false if bitrate is higher than max_logged_in_bitrate and max_priviledged_bitrate is nil' do
+  test '#access_permitted?(member) is false if bitrate is higher than max_logged_in_bitrate' \
+       'and max_priviledged_bitrate is nil' do
     archive_formats(:default_mp3).update!(max_logged_in_bitrate: 96, max_priviledged_bitrate: nil)
-    assert !access_permitted?(:g9s_mai_high, users(:member))
+    assert_not access_permitted?(:g9s_mai_high, users(:member))
   end
 
   test '#access_permitted?(member) is false if bitrate is higher than max_logged_in_bitrate' do
     archive_formats(:default_mp3).update!(max_public_bitrate: 96, max_logged_in_bitrate: 96)
-    assert !access_permitted?(:g9s_mai_high, users(:member))
+    assert_not access_permitted?(:g9s_mai_high, users(:member))
   end
 
   test '#access_permitted?(speedee) is true if bitrate is smaller than max_priviledged_bitrate' do
@@ -133,12 +137,14 @@ class AudioAccess::AudioFilesTest < ActiveSupport::TestCase
   end
 
   test '#access_permitted?(speedee) is false if bitrate is higher than max_priviledged_bitrate' do
-    archive_formats(:default_mp3).update!(max_public_bitrate: 96, max_logged_in_bitrate: 96, max_priviledged_bitrate: 96)
-    assert !access_permitted?(:g9s_mai_high, users(:speedee))
+    archive_formats(:default_mp3)
+      .update!(max_public_bitrate: 96, max_logged_in_bitrate: 96, max_priviledged_bitrate: 96)
+    assert_not access_permitted?(:g9s_mai_high, users(:speedee))
   end
 
   test '#access_permitted?(admin) is true even if nothing is permitted' do
-    archive_formats(:default_mp3).update!(max_public_bitrate: 0, max_logged_in_bitrate: 0, max_priviledged_bitrate: 0)
+    archive_formats(:default_mp3)
+      .update!(max_public_bitrate: 0, max_logged_in_bitrate: 0, max_priviledged_bitrate: 0)
     assert access_permitted?(:g9s_mai_high, users(:admin))
   end
 
@@ -149,12 +155,12 @@ class AudioAccess::AudioFilesTest < ActiveSupport::TestCase
 
   test '#download_permitted?(nil) is false if permission is logged_in' do
     archive_formats(:default_mp3).update!(download_permission: :logged_in)
-    assert !download_permitted?(:g9s_mai_low, nil)
+    assert_not download_permitted?(:g9s_mai_low, nil)
   end
 
   test '#download_permitted?(nil) is false if permission is nil' do
     archive_formats(:default_mp3).update!(download_permission: nil)
-    assert !download_permitted?(:g9s_mai_low, nil)
+    assert_not download_permitted?(:g9s_mai_low, nil)
   end
 
   test '#download_permitted?(new) is true if permission is public' do
@@ -169,7 +175,7 @@ class AudioAccess::AudioFilesTest < ActiveSupport::TestCase
 
   test '#download_permitted?(new) is false if permission is priviledged' do
     archive_formats(:default_mp3).update!(download_permission: :priviledged)
-    assert !download_permitted?(:g9s_mai_high, User.new)
+    assert_not download_permitted?(:g9s_mai_high, User.new)
   end
 
   test '#download_permitted?(member) is true if permission is logged_in' do
@@ -179,7 +185,7 @@ class AudioAccess::AudioFilesTest < ActiveSupport::TestCase
 
   test '#download_permitted?(member) is false if permission is priviledged' do
     archive_formats(:default_mp3).update!(download_permission: :priviledged)
-    assert !download_permitted?(:g9s_mai_high, users(:member))
+    assert_not download_permitted?(:g9s_mai_high, users(:member))
   end
 
   test '#download_permitted?(speedee) is true if permission is logged_in' do
@@ -194,7 +200,7 @@ class AudioAccess::AudioFilesTest < ActiveSupport::TestCase
 
   test '#download_permitted?(speedee) is false if permission is admin' do
     archive_formats(:default_mp3).update!(download_permission: :admin)
-    assert !download_permitted?(:g9s_mai_high, users(:speedee))
+    assert_not download_permitted?(:g9s_mai_high, users(:speedee))
   end
 
   test '#download_permitted?(admin) is true if permission is admin' do

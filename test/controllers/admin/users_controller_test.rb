@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Admin
@@ -7,7 +9,7 @@ module Admin
 
     test 'GET index returns list of all users' do
       get :index
-      assert_equal ['admin', 'member', 'speedee'], json_attrs(:username)
+      assert_equal %w[admin member speedee], json_attrs(:username)
     end
 
     test 'GET show returns user as admin' do
@@ -36,7 +38,10 @@ module Admin
                    username: 'foo',
                    first_name: 'Pit',
                    last_name: 'Foo',
-                   groups: ['staff'] } } }
+                   groups: ['staff']
+                 }
+               }
+             }
         assert_response 201
       end
       assert_equal 'foo', json['data']['attributes']['username']
@@ -45,13 +50,16 @@ module Admin
     test 'POST create fails for invalid params' do
       assert_no_difference('User.count') do
         post :create,
-            params: {
-              data: {
-                attributes: {
-                  username: 'speedee',
-                  first_name: 'Pit',
-                  last_name: 'Foo',
-                  groups: 'staff' } } }
+             params: {
+               data: {
+                 attributes: {
+                   username: 'speedee',
+                   first_name: 'Pit',
+                   last_name: 'Foo',
+                   groups: 'staff'
+                 }
+               }
+             }
         assert_response 422
       end
       assert_equal 1, json['errors'].size
@@ -62,7 +70,8 @@ module Admin
       patch :update,
             params: {
               id: users(:speedee).id,
-              data: { attributes: { first_name: 'Spee', last_name: 'Dee' } } }
+              data: { attributes: { first_name: 'Spee', last_name: 'Dee' } }
+            }
       assert_response 200
       assert_equal 'Spee', json['data']['attributes']['first_name']
       assert_equal 'Spee', users(:speedee).reload.first_name
@@ -73,7 +82,8 @@ module Admin
       patch :update,
             params: {
               id: users(:speedee).id,
-              data: { attributes: { username: 'admin' } } }
+              data: { attributes: { username: 'admin' } }
+            }
       assert_response 422
       assert_match /taken/, response.body
       assert_equal 'speedee', users(:speedee).reload.username
