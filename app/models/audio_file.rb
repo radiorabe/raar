@@ -16,9 +16,8 @@
 
 class AudioFile < ApplicationRecord
 
-  BEST_FORMAT_NAME = 'best'
-
   include WithAudioFormat
+  BEST_FORMAT_NAME = 'best'
 
   belongs_to :broadcast
   belongs_to :playback_format, optional: true
@@ -89,7 +88,7 @@ class AudioFile < ApplicationRecord
 
   def timestamp_params
     timestamp = broadcast.started_at
-    %i[year month day hour min sec].each_with_object({}) do |key, hash|
+    [:year, :month, :day, :hour, :min, :sec].each_with_object({}) do |key, hash|
       hash[key] = format('%02d', timestamp.send(key))
     end
   end

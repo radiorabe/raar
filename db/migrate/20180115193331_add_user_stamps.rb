@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class AddUserStamps < ActiveRecord::Migration[5.1]
+
   def change
     add_column :shows, :created_at, :datetime
     add_column :shows, :updated_at, :datetime
@@ -22,4 +25,5 @@ class AddUserStamps < ActiveRecord::Migration[5.1]
     add_column :access_codes, :created_at, :datetime
     add_column :access_codes, :creator_id, :integer
   end
+
 end

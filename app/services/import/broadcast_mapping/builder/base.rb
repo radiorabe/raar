@@ -3,15 +3,13 @@
 module Import
   class BroadcastMapping
     module Builder
-
       # Based on a list of recording files, determine the corresponding broadcasts
       # and create a broadcast mapping object for each broadcast, containing the
       # corresponding recordings.
       class Base
 
-        DURATION_TOLERANCE = 5.minutes
-
         include Loggable
+        DURATION_TOLERANCE = 5.minutes
 
         attr_reader :recordings
 
@@ -100,7 +98,6 @@ module Import
         end
 
       end
-
     end
   end
 end

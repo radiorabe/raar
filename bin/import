@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # Imports all pending recordings that form a complete broadcast.
 # See doc/deployment.md for how to schedule this command with cron.
 
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 
 Import.run

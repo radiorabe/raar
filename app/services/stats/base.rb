@@ -6,6 +6,7 @@ module Stats
     attr_reader :date_range
 
     class << self
+
       def for(year, month = nil)
         new(date_range_for(year, month))
       end
@@ -15,6 +16,7 @@ module Stats
       def date_range_for(year, month = nil)
         Date.new(year.to_i, (month || 1).to_i, 1)..Date.new(year.to_i, (month || 12).to_i, -1)
       end
+
     end
 
     def initialize(date_range)

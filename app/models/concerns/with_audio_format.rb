@@ -2,6 +2,7 @@
 
 # Common methods for models containing audio format information such as bitrate and channel.
 module WithAudioFormat
+
   extend ActiveSupport::Concern
 
   def audio_encoding
@@ -41,4 +42,5 @@ module WithAudioFormat
     end
 
   end
+
 end

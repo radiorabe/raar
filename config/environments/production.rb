@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -40,7 +42,7 @@ Rails.application.configure do
 
   # Use a different logger for distributed setups.
   case ENV['RAAR_LOG'].to_s.downcase.strip
-  when'syslog'
+  when 'syslog'
     require 'syslog/logger'
     config.logger =
       case $PROGRAM_NAME
@@ -54,7 +56,7 @@ Rails.application.configure do
     file = ENV['RAAR_LOG'].to_s
     FileUtils.mkdir_p(File.dirname(file))
     config.logger = ActiveSupport::TaggedLogging.new(Logger.new(file))
-    config.logger.formatter = proc do |severity, datetime, progname, msg|
+    config.logger.formatter = proc do |severity, datetime, _progname, msg|
       "#{severity} [#{datetime.strftime('%Y-%m-%d %H:%M:%S.%6N')}]: #{msg}\n"
     end
   end
@@ -85,5 +87,4 @@ Rails.application.configure do
   #     email_prefix: "[PREFIX] ",
   #     sender_address: %{"notifier" <notifier@example.com>},
   #     exception_recipients: %w{exceptions@example.com} }
-
 end

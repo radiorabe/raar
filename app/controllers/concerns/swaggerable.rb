@@ -74,6 +74,7 @@ module Swaggerable
         key '$ref', '#/responses/unprocessable_entity'
       end
     end
+
   end
 
 end

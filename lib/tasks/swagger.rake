@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :swagger do
   desc 'Generates the swagger.json into doc folder.'
   task :json => :environment do

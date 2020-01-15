@@ -3,15 +3,13 @@
 module Import
   module Recording
     module File
-
       # A single recorded audio file. Recordings may come from different
       # recorders/import directories, but must have the same intervals (start
       # time and duration).
       class Base
 
-        DIGIT_GLOB = '[0-9]'
-
         include Loggable
+        DIGIT_GLOB = '[0-9]'
 
         class_attribute :pending_glob, :imported_glob, :lossy
         self.pending_glob = '*.*'

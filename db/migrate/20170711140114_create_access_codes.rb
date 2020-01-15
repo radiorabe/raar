@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class CreateAccessCodes < ActiveRecord::Migration[5.1]
+
   def change
     create_table :access_codes do |t|
       t.string :code, null: false, index: { unique: true }
@@ -10,4 +13,5 @@ class CreateAccessCodes < ActiveRecord::Migration[5.1]
     add_column :archive_formats, :max_priviledged_bitrate, :integer
     add_column :archive_formats, :priviledged_groups, :string
   end
+
 end

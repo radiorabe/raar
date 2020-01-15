@@ -3,7 +3,6 @@
 module Import
   module Recording
     module File
-
       # ISO 8601 recordings must have the format yyyy-mm-ddTHHMM+ZZZZ_{ddd,PTaaHbbMccS}.ext,
       # where ZZZZ stands for the time zone offset, ddd for the duration in minutes or
       # PTaaHbbMccS for an ISO 8601 time period (where segments are optional)

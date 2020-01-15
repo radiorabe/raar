@@ -1,0 +1,9 @@
+inherit_from: ../../.rubocop.yml
+
+# change methods are often quite long
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false

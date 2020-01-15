@@ -19,8 +19,7 @@
 #
 
 module Airtime
-
-  # rubocop:disable Metrics/LineLength
+  # rubocop:disable Layout/LineLength
   # <column name="id" phpName="DbId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
   # <column name="description" phpName="DbDescription" type="VARCHAR" size="512" required="false" defaultValue=""/>
   # <column name="starts" phpName="DbStarts" type="TIMESTAMP" required="true"/>
@@ -47,7 +46,7 @@ module Airtime
   # <foreign-key foreignTable="cc_files" name="cc_recorded_file_fkey" onDelete="CASCADE">
   #     <reference local="file_id" foreign="id"/>
   # </foreign-key>
-  # rubocop:enable Metrics/LineLength
+  # rubocop:enable Layout/LineLength
   class ShowInstance < Base
 
     belongs_to :show

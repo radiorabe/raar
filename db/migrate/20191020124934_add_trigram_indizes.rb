@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class AddTrigramIndizes < ActiveRecord::Migration[5.1]
+
   def change
     enable_extension :pg_trgm
 
@@ -18,4 +21,5 @@ class AddTrigramIndizes < ActiveRecord::Migration[5.1]
                 title: :gin_trgm_ops
               }
   end
+
 end

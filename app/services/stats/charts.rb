@@ -6,9 +6,11 @@ module Stats
     attr_reader :show
 
     class << self
+
       def for(year, month = nil, show = nil)
         new(date_range_for(year, month), show)
       end
+
     end
 
     def initialize(date_range, show = nil)
@@ -55,5 +57,4 @@ module Stats
     end
 
   end
-
 end

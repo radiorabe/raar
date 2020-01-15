@@ -2,7 +2,6 @@
 
 module Import
   module Recording
-
     class Cleaner
 
       include Loggable
@@ -46,6 +45,5 @@ module Import
       end
 
     end
-
   end
 end

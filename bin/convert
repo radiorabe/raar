@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # Converts a directory of audio files into the archive.
 
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 
 Convert.run(ARGV[0])

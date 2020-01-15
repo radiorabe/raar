@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 desc 'Create a deployable artifact of the entire rails application'
 task :package do
   rev_file = 'dist/REVISION'
   revision = `git rev-parse HEAD`
-  next if File.exists?(rev_file) && revision == File.read(rev_file)
+  next if File.exist?(rev_file) && revision == File.read(rev_file)
 
   rm_rf 'dist'
   mkdir 'dist'

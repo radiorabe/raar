@@ -20,8 +20,7 @@
 #
 
 module Airtime
-
-  # rubocop:disable Metrics/LineLength
+  # rubocop:disable Layout/LineLength
   # <column name="id" phpName="DbId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
   # <column name="name" phpName="DbName" type="VARCHAR" size="255" required="true" defaultValue=""/>
   # <column name="url" phpName="DbUrl" type="VARCHAR" size="255" required="false" defaultValue=""/>
@@ -40,7 +39,7 @@ module Airtime
   # <column name="image_path" phpName="DbImagePath" type="VARCHAR" size="255" required="false" defaultValue=""/>
   # <!-- Fully qualified path for the image associated with this show.
   #      Default is /path/to/stor/dir/:ownerId/show-images/:showId/imageName -->
-  # rubocop:enable Metrics/LineLength
+  # rubocop:enable Layout/LineLength
   class Show < Base
 
     self.table_name = 'cc_show'

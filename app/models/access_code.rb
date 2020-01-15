@@ -13,9 +13,8 @@
 
 class AccessCode < ApplicationRecord
 
-  CODE_LENGTH = 6
-
   include UserStampable
+  CODE_LENGTH = 6
 
   attr_readonly :code
 

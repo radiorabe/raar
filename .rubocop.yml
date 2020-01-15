@@ -5,35 +5,40 @@ require:
 AllCops:
   DisplayCopNames: true
   Exclude:
-    - Rakefile
-    - bin/**/*
-    - config/**/*
-    - db/**/*
+    - db/schema.rb
     - dist/**/*
-    - lib/tasks/**/*
     - test/**/*
     - tmp/**/*
     - vendor/**/*
 
+Layout/ClassStructure:
+  Enabled: true
+
 # namespace modules do not require empty lines, mixins do.
 Layout/EmptyLinesAroundClassBody:
-  Enabled: false
+  EnforcedStyle: empty_lines_except_namespace
 
 Layout/EmptyLinesAroundModuleBody:
-  Enabled: false
+  EnforcedStyle: empty_lines_except_namespace
 
-Lint/AmbiguousBlockAssociation:
-  Enabled: false
+Layout/LineLength:
+  Max: 100
 
 # Long Blocks used for swagger documentation, otherwise handled by method length.
 Metrics/BlockLength:
-  Enabled: false
+  ExcludedMethods:
+    - configure
+    - defaults
+    - draw
+    - swagger_path
+    - swagger_root
+    - json_api_swagger_schema
+    - namespace
+    - operation
+    - property
 
 Metrics/ClassLength:
   Max: 200
-
-Metrics/LineLength:
-  Max: 100
 
 Metrics/MethodLength:
   Max: 10
@@ -45,7 +50,7 @@ Style/Documentation:
   Enabled: false
 
 Style/EmptyMethod:
-  Enabled: false
+  EnforcedStyle: expanded
 
 Style/FormatStringToken:
   Enabled: false
@@ -53,7 +58,14 @@ Style/FormatStringToken:
 Style/GuardClause:
   MinBodyLength: 3
 
+Style/HashSyntax:
+  Exclude:
+    - lib/tasks/*.rake
+
 Style/SymbolArray:
+  EnforcedStyle: brackets
+
+Rails/CreateTableWithTimestamps:
   Enabled: false
 
 Rails/Delegate:

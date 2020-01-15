@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :erd do
   task :options => :customize
   task :customize do

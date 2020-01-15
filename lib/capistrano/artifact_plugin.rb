@@ -54,5 +54,6 @@ module Capistrano
       after 'deploy:new_release_path', 'artifact:create_release'
       before 'deploy:set_current_revision', 'artifact:set_current_revision'
     end
+
   end
 end

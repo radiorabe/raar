@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # Runs all pending downgrade actions on the archive.
 # See doc/deployment.md for how to schedule this command with cron.
 
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 
 Downgrade.run

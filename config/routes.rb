@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   root to: 'apidocs#index'
 
   defaults format: :json do
-
     resources :shows, only: [:index, :show]
 
     resources :broadcasts, only: [:show, :update] do
@@ -55,7 +56,5 @@ Rails.application.routes.draw do
 
       resources :users
     end
-
   end
-
 end

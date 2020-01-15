@@ -3,7 +3,6 @@
 module Import
   module Recording
     module File
-
       # These recordings have the following filename structure:
       # mp3rec-05-5-20170203-090000-3600-sec-der_morgen.wav.mp3
       class Mp3Rec < SelfContained

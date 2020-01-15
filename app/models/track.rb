@@ -26,9 +26,11 @@ class Track < ApplicationRecord
   scope :list, -> { order('tracks.started_at') }
 
   class << self
+
     def for_show(show_id)
       joins(:broadcast).where(broadcasts: { show_id: show_id })
     end
+
   end
 
   def to_s

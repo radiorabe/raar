@@ -13,6 +13,7 @@ class TracksController < CrudController
 
   # Convenience module to extract common swagger documentation in this controller.
   module SwaggerOperationMethods
+
     def parameter_date(name)
       parameter name: name,
                 in: :path,
@@ -21,7 +22,9 @@ class TracksController < CrudController
                 required: true, # false, actually. Swagger path params must be required.
                 type: :integer
     end
+
   end
+
   include_missing(Swagger::Blocks::Nodes::OperationNode, SwaggerOperationMethods)
 
   swagger_path '/tracks/{year}/{month}/{day}/{hour}{minute}{second}' do

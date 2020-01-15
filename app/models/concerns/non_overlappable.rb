@@ -20,9 +20,11 @@ module NonOverlappable
   end
 
   module ClassMethods
+
     def within(start, finish)
       where("#{table_name}.finished_at > ? AND #{table_name}.started_at < ?", start, finish)
     end
+
   end
 
 end

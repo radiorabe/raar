@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # config valid only for current version of Capistrano
 lock '3.11.2'
 
@@ -12,7 +14,7 @@ set :deploy_to, '/var/www/raar'
 
 # Default value for :scm is :git
 # set :scm, :git
-#set :scm, :artifact
+# set :scm, :artifact
 
 set :bundle_flags, '--deployment --quiet --local'
 
@@ -21,7 +23,8 @@ set :bundle_flags, '--deployment --quiet --local'
 
 # You can configure the Airbrussh format using :format_options.
 # These are the defaults.
-# set :format_options, command_output: true, log_file: 'log/capistrano.log', color: :auto, truncate: :auto
+# set :format_options, command_output: true, log_file: 'log/capistrano.log', color: :auto,
+#     truncate: :auto
 
 # Default value for :pty is false
 # set :pty, true

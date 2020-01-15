@@ -36,9 +36,11 @@ class Broadcast < ApplicationRecord
   scope :list, -> { order('broadcasts.started_at') }
 
   class << self
+
     def at(timestamp)
       where('broadcasts.started_at <= ? AND broadcasts.finished_at > ?', timestamp, timestamp)
     end
+
   end
 
   def to_s
