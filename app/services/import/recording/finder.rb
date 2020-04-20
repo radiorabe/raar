@@ -23,11 +23,11 @@ module Import
       private
 
       def glob_recordings(pattern)
-        import_directories.collect do |d, _h|
-          Dir.glob(::File.join(d, pattern)).collect do |f|
+        import_directories.flat_map do |d, _h|
+          Dir.glob(::File.join(d, pattern)).map do |f|
             Import::Recording::File.new(f)
           end
-        end.flatten
+        end
       end
 
       def config_import_directories

@@ -8,7 +8,7 @@ module Import
 
       def initialize(recording)
         super("Recording #{recording.path} has an audio duration of " \
-              "#{recording.audio_duration}s, where #{recording.duration}s were expected.")
+              "#{recording.audio_duration}s, where #{recording.specified_duration}s were expected.")
         @recording = recording
       end
 

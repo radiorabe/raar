@@ -15,6 +15,12 @@ module RecordingHelper
     File.join(import_directory, name)
   end
 
+  def file_with_audio(name, duration = 3)
+    file(name).tap do |f|
+      AudioGenerator.new.silent_file(dummy_audio_format, f, duration)
+    end
+  end
+
   def touch(name)
     file(name).tap { |f| FileUtils.touch(f) }
   end
@@ -29,6 +35,10 @@ module RecordingHelper
 
   def clear_import_dir
     FileUtils.rm_rf(import_directory)
+  end
+
+  def dummy_audio_format
+    @dummy_audio_format ||= AudioFormat.new('mp3', 96, 1)
   end
 
 end

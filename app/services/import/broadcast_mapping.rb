@@ -66,7 +66,8 @@ module Import
       finish = started_at + Recording::DURATION_TOLERANCE.seconds
       @recordings.sort_by(&:started_at).all? do |r|
         adjacent = r.started_at <= finish
-        finish = r.finished_at + Recording::DURATION_TOLERANCE.seconds
+        new_finish = r.finished_at + Recording::DURATION_TOLERANCE.seconds
+        finish = new_finish if new_finish > finish
         adjacent
       end && finish >= finished_at
     end

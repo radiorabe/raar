@@ -2,29 +2,37 @@
 
 module Import
   module Recording
-    # Compares an array of audio files and returns the best one.
+    # Compares an array of audio files and returns the best ones.
+    # If a file is entirely contained in another, it is removed.
+    # If two files have the same start and end time, the one appearing
+    # later in the list is removed.
     class Chooser
 
       # Deal with inaccurate duration measurements by reducing
-      # the duration value granularity.
-      DURATION_TOLERANCE = 5.seconds
+      # the duration value granularity just a little.
+      DURATION_TOLERANCE = 1.second
 
-      attr_reader :variants
+      attr_reader :recordings
 
-      def initialize(variants)
-        @variants = variants
+      def initialize(recordings)
+        @recordings = recordings.sort_by(&:started_at)
       end
 
       def best
-        by_audio_length.first
+        recordings.dup.tap do |result|
+          recordings.each do |container|
+            remove_contained_recordings(result, container) if result.include?(container)
+          end
+        end
       end
 
-      def by_audio_length
-        # using with_index and a sort_by array results in a stable sort,
-        # i.e. positions remain the same if the duration is equal.
-        variants.sort_by.with_index do |v, i|
-          duration = v.audio_duration > v.duration ? v.duration : v.audio_duration
-          [-(duration / DURATION_TOLERANCE.to_f).round, i]
+      private
+
+      def remove_contained_recordings(result, container)
+        result.delete_if do |r|
+          container != r &&
+            container.started_at <= r.started_at + DURATION_TOLERANCE &&
+            container.considered_finished_at >= r.considered_finished_at - DURATION_TOLERANCE
         end
       end
 

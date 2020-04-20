@@ -4,7 +4,7 @@ module Import
   module Recording
     module File
       # A single recorded audio file. Recordings may come from different
-      # recorders/import directories, but must have the same intervals (start
+      # recorders/import directories, but should have the same intervals (start
       # time and duration).
       class Base
 
@@ -16,19 +16,11 @@ module Import
         self.imported_glob = '%%%' # try hard to produce no matches
         self.lossy = false
 
-        attr_reader :started_at, :duration, :path, :broadcasts_mappings
+        attr_reader :started_at, :specified_duration, :path, :broadcasts_mappings
 
         def initialize(path)
           @path = path
           @broadcasts_mappings = []
-        end
-
-        def finished_at
-          started_at + duration.seconds
-        end
-
-        def audio_finished_at
-          started_at + audio_duration.seconds
         end
 
         # in seconds
@@ -36,12 +28,28 @@ module Import
           @audio_duration ||= AudioProcessor.new(path).duration
         end
 
+        def considered_duration
+          [specified_duration, audio_duration].min
+        end
+
+        def finished_at
+          started_at + specified_duration.seconds
+        end
+
+        def audio_finished_at
+          started_at + audio_duration.seconds
+        end
+
+        def considered_finished_at
+          started_at + considered_duration.seconds
+        end
+
         def audio_duration_too_short?
-          audio_duration < duration - DURATION_TOLERANCE
+          audio_duration < specified_duration - DURATION_TOLERANCE
         end
 
         def audio_duration_too_long?
-          audio_duration > duration + DURATION_TOLERANCE
+          audio_duration > specified_duration + DURATION_TOLERANCE
         end
 
         def mark_imported

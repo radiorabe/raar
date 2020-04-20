@@ -26,10 +26,10 @@ class ImportTest < ActiveSupport::TestCase
       .with(Import::Recording::UnimportedWarning.new(Import::Recording::File.new(@f1)))
     ExceptionNotifier
       .expects(:notify_exception)
-      .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f5)), instance_of(Hash))
+      .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f6)), instance_of(Hash))
     ExceptionNotifier
       .expects(:notify_exception)
-      .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f7)), instance_of(Hash))
+      .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f8)), instance_of(Hash))
 
     assert_difference('Show.count', 2) do
       assert_difference('Broadcast.count', 2) do
@@ -45,6 +45,12 @@ class ImportTest < ActiveSupport::TestCase
     assert_in_delta 290, AudioProcessor.new(audio.absolute_path).duration, 0.1
     audio = Show.find_by(name: 'Info').broadcasts.last.audio_files.first
     assert_in_delta 60, AudioProcessor.new(audio.absolute_path).duration, 0.1
+
+    [@f1, @f2, @f3].each { |f| assert File.exist?(f) }
+    [@f4, @f5, @f6, @f7, @f8, @f9].each do |f|
+      assert_not File.exist?(f)
+      assert File.exist?("#{f[0..-5]}_imported.mp3")
+    end
   end
 
   private
@@ -57,18 +63,28 @@ class ImportTest < ActiveSupport::TestCase
     @f2 = file('2013-06-19T095800+0200_002.mp3')
     @f3 = file('2013-06-19T100600+0200_002.mp3')
     @f4 = file('2013-06-19T100800+0200_002.mp3')
-    @f5 = file('2013-06-19T101000+0200_002.mp3')
-    @f6 = file('2013-06-19T101100+0200_002.mp3')
-    @f7 = file('2013-06-19T101200+0200_002.mp3')
-    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f1, 120)
-    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f2, 120)
-    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f3, 120)
-    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f4, 130)
-    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f5, 60)
-    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f6, 120)
-    AudioGenerator.new.silent_file(AudioFormat.new('mp3', 320, 2), @f7, 110)
+    @f5 = file('2013-06-19T100830+0200_001.mp3') # contained, dropped
+    @f6 = file('2013-06-19T101000+0200_002.mp3')
+    @f7 = file('2013-06-19T101100+0200_002.mp3')
+    @f8 = file('2013-06-19T101200+0200_002.mp3')
+    @f9 = file('2013-06-19T101200+0200_003.mp3') # contained, dropped
+    generator = AudioGenerator.new
+    audio_format = AudioFormat.new('mp3', 320, 2)
+    generator.silent_file(audio_format, @f1, 120)
+    generator.silent_file(audio_format, @f2, 120)
+    generator.silent_file(audio_format, @f3, 120)
+    generator.silent_file(audio_format, @f4, 130)
+    generator.silent_file(audio_format, @f5, 70)
+    generator.silent_file(audio_format, @f6, 60)
+    generator.silent_file(audio_format, @f7, 120)
+    generator.silent_file(audio_format, @f8, 110)
+    generator.silent_file(audio_format, @f9, 60)
   end
 
+  # 2013-06-19:
+  #  * morgen: 10:00 - 10:08
+  #  * info:   10:08 - 10:09
+  #  * mittag: 10:09 - 10:14
   def build_airtime_entries
     morgen = Airtime::Show.create!(name: 'Morgen')
     morgen.show_instances.create!(starts: Time.zone.local(2013, 6, 18, 8),

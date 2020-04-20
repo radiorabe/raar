@@ -14,8 +14,8 @@ module Import
           @started_at ||= Time.zone.parse(filename_parts[1].tr('-', ' '))
         end
 
-        def duration
-          @duration ||= filename_parts[2].to_i.seconds
+        def specified_duration
+          @specified_duration ||= filename_parts[2].to_i.seconds
         end
 
         def show_name

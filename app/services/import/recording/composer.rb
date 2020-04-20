@@ -25,7 +25,7 @@ module Import
       # Compose the recordings and return the resulting file.
       def compose
         if first_equal?
-          file_with_maximum_duration(first)
+          file_with_considered_duration(first)
         elsif first_earlier_and_longer?
           trim_start_and_end
         else
@@ -52,12 +52,12 @@ module Import
 
       def first_equal?
         first.started_at == mapping.started_at &&
-          first.finished_at == mapping.finished_at
+          first.audio_finished_at == mapping.finished_at
       end
 
       def first_earlier_and_longer?
         first.started_at <= mapping.started_at &&
-          first.finished_at >= mapping.finished_at
+          first.audio_finished_at >= mapping.finished_at
       end
 
       def first_earlier?
@@ -65,7 +65,7 @@ module Import
       end
 
       def last_longer?(current)
-        current == last && current.finished_at > mapping.finished_at
+        current == last && current.audio_finished_at > mapping.finished_at
       end
 
       def trim_start_and_end
@@ -92,7 +92,7 @@ module Import
         elsif last_longer?(current)
           trim_end
         else
-          trim_to_maximum_duration(current)
+          trim_to_considered_duration(current)
         end
       end
 
@@ -101,8 +101,7 @@ module Import
       end
 
       def previous_not_overlapping_next?(current, index)
-        @next_started_at = next_started_at(current, index)
-        @previous_finished_at < @next_started_at - DURATION_TOLERANCE
+        @previous_finished_at < next_started_at(current, index) - DURATION_TOLERANCE
       end
 
       def next_started_at(current, index)
@@ -111,15 +110,14 @@ module Import
 
       def trim_overlapped(current)
         start = @previous_finished_at - current.started_at
-        duration = @next_started_at - @previous_finished_at
-        @previous_finished_at += [duration, current.audio_duration - start].min.seconds
+        duration = [current.considered_finished_at, mapping.finished_at].min - @previous_finished_at
+        @previous_finished_at += duration.seconds
         trim_available(current, start, duration)
       end
 
-      def trim_to_maximum_duration(current)
-        @previous_finished_at = current.started_at +
-                                [current.duration, current.audio_duration].min.seconds
-        file_with_maximum_duration(current)
+      def trim_to_considered_duration(current)
+        @previous_finished_at = current.considered_finished_at
+        file_with_considered_duration(current)
       end
 
       def trim_end
@@ -127,9 +125,9 @@ module Import
         trim_available(last, 0, duration)
       end
 
-      def file_with_maximum_duration(recording)
+      def file_with_considered_duration(recording)
         if recording.audio_duration_too_long?
-          trim_available(recording, 0, recording.duration)
+          trim_available(recording, 0, recording.specified_duration)
         else
           recording
         end

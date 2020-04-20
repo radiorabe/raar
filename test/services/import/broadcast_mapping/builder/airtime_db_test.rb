@@ -16,13 +16,6 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert_equal [], builder.run
   end
 
-  test 'recordings are checked for equal intervals' do
-    recordings = build_recordings('2016-01-01T235959+0100_120.mp3',
-                                  '2016-01-01T235959+0100_110.mp3',
-                                  '2016-01-02T000000+0100_119.mp3')
-    assert_raise(ArgumentError) { new_builder(recordings) }
-  end
-
   test 'recordings are mapped to overlapping broadcasts' do
     recordings = build_recordings('2016-01-01T100000+0100_060.mp3',
                                   '2016-01-01T110000+0100_060.mp3',
@@ -78,6 +71,67 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert_equal Time.zone.local(2016, 1, 1, 13), becken_map.broadcast.finished_at
     assert_not becken_map.complete?
     assert_equal [file('2016-01-01T110000+0100_060.mp3')],
+                 becken_map.recordings.collect(&:path)
+  end
+
+  test 'multiple recordings are mapped to overlapping broadcasts' do
+    recordings = build_recordings('2016-01-01T090000+0100_060.mp3',
+                                  '2016-01-01T090000+0100_030.mp3',
+                                  '2016-01-01T093000+0100_060.mp3',
+                                  '2016-01-01T100000+0100_060.mp3',
+                                  '2016-01-01T103000+0100_030.mp3',
+                                  '2016-01-01T110000+0100_060.mp3',
+                                  '2016-01-01T110000+0100_090.mp3')
+    morgen = Airtime::Show.create!(name: 'Morgen', description: 'La mañana')
+    info = Airtime::Show.create!(name: 'Info', description: 'Rabe Info')
+    becken = Airtime::Show.create!(name: 'Klangbecken', description: 'Only Hits')
+    morgen.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 8),
+                                  ends: Time.zone.local(2016, 1, 1, 11),
+                                  created: Time.zone.now)
+    info.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 11),
+                                ends: Time.zone.local(2016, 1, 1, 11, 30),
+                                created: Time.zone.now)
+    becken.show_instances.create!(starts: Time.zone.local(2016, 1, 1, 11, 30),
+                                  ends: Time.zone.local(2016, 1, 1, 13),
+                                  created: Time.zone.now)
+
+    builder = new_builder(recordings)
+    mappings = builder.run
+
+    assert_equal 3, mappings.size
+
+    morgen_map = mappings.first
+    assert_equal morgen.name, morgen_map.show.name
+    assert_equal morgen.description, morgen_map.show.details
+    assert morgen_map.show.persisted?
+    assert_equal morgen.name, morgen_map.broadcast.label
+    assert_equal morgen.description, morgen_map.broadcast.details
+    assert_equal Time.zone.local(2016, 1, 1, 8), morgen_map.broadcast.started_at
+    assert_equal Time.zone.local(2016, 1, 1, 11), morgen_map.broadcast.finished_at
+    assert morgen_map.broadcast.new_record?
+    assert_not morgen_map.complete?
+    assert_equal [file('2016-01-01T090000+0100_060.mp3'),
+                  file('2016-01-01T090000+0100_030.mp3'),
+                  file('2016-01-01T093000+0100_060.mp3'),
+                  file('2016-01-01T100000+0100_060.mp3'),
+                  file('2016-01-01T103000+0100_030.mp3')],
+                 morgen_map.recordings.collect(&:path)
+
+    info_map = mappings.second
+    assert_equal info.name, info_map.show.name
+    assert_equal Time.zone.local(2016, 1, 1, 11), info_map.broadcast.started_at
+    assert info_map.complete?
+    assert_equal [file('2016-01-01T110000+0100_090.mp3'),
+                  file('2016-01-01T110000+0100_060.mp3')],
+                 info_map.recordings.collect(&:path)
+
+    becken_map = mappings.third
+    assert_equal becken.name, becken_map.show.name
+    assert_equal Time.zone.local(2016, 1, 1, 11, 30), becken_map.broadcast.started_at
+    assert_equal Time.zone.local(2016, 1, 1, 13), becken_map.broadcast.finished_at
+    assert_not becken_map.complete?
+    assert_equal [file('2016-01-01T110000+0100_090.mp3'),
+                  file('2016-01-01T110000+0100_060.mp3')],
                  becken_map.recordings.collect(&:path)
   end
 

@@ -75,9 +75,7 @@ module Import
     end
 
     def determine_best_recordings
-      mapping.recordings.group_by(&:started_at).collect do |_start, variants|
-        Recording::Chooser.new(variants).best
-      end
+      Recording::Chooser.new(mapping.recordings).best
     end
 
     def compose_master(recordings)

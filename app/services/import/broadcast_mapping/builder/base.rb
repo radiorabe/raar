@@ -14,8 +14,7 @@ module Import
         attr_reader :recordings
 
         def initialize(recordings)
-          check_intervals(recordings)
-          @recordings = recordings.sort_by(&:started_at)
+          @recordings = recordings.sort_by { |r| [r.started_at, -r.specified_duration] }
         end
 
         def run
@@ -37,16 +36,6 @@ module Import
 
         def build_mappings
           raise(NotImplementedError)
-        end
-
-        def check_intervals(recordings)
-          recordings.group_by(&:started_at).each do |time, variants|
-            durations = variants.collect(&:duration).uniq
-            unless durations.size == 1
-              raise(ArgumentError,
-                    "Recordings at #{time} must all have the same durations: #{durations.inspect}.")
-            end
-          end
         end
 
         def add_corresponding_recordings(mapping)

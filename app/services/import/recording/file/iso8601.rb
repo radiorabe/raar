@@ -25,8 +25,8 @@ module Import
         end
 
         # in seconds
-        def duration
-          @duration ||= parse_duration(filename_parts[2])
+        def specified_duration
+          @specified_duration ||= parse_duration(filename_parts[2])
         end
 
         def mark_imported
