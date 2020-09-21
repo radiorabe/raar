@@ -10,7 +10,7 @@ module Import
         private
 
         def build_mappings
-          show_instances.collect do |instance|
+          show_instances.map do |instance|
             build_broadcast_mapping(instance)
           end
         end

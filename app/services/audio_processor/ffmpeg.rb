@@ -93,7 +93,7 @@ module AudioProcessor
     end
 
     def create_list_file(file, paths)
-      entries = paths.collect { |p| "file '#{p}'" }
+      entries = paths.map { |p| "file '#{p}'" }
       File.write(file, entries.join("\n"))
     end
 

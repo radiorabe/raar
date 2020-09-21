@@ -161,7 +161,7 @@ module Import
 
       def with_same_format(list)
         unified = convert_all_to_same_format(list)
-        yield unified.collect(&:path)
+        yield unified.map(&:path)
       ensure
         unified&.each { |file| file.close! if file.respond_to?(:close!) }
       end

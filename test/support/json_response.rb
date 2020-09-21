@@ -7,7 +7,7 @@ module JsonResponse
   end
 
   def json_attrs(attr)
-    json['data'].collect { |s| s['attributes'][attr.to_s] }
+    json['data'].map { |s| s['attributes'][attr.to_s] }
   end
 
 end

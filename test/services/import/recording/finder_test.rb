@@ -13,13 +13,13 @@ class Import::Recording::FinderTest < ActiveSupport::TestCase
                   file('2016-01-02T000000-1200_PT1H.flac'),
                   file('2016-01-04T000000-1200_PT45M2.33S.flac'),
                   file('2015-12-31T000000-1200_030.flac')].sort,
-                 finder.pending.collect(&:path).sort
+                 finder.pending.map(&:path).sort
   end
 
   test '#imported includes only imported files' do
     assert_equal [file('2016-01-03T000000-1200_PT120M_imported.flac'),
                   file('2015-12-31T000000-1200_030_imported.mp3')].sort,
-                 finder.imported.collect(&:path).sort
+                 finder.imported.map(&:path).sort
   end
 
   private

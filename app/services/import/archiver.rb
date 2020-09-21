@@ -28,7 +28,7 @@ module Import
     end
 
     def build_audio_files
-      audio_formats.collect do |audio_format|
+      audio_formats.map do |audio_format|
         build_audio_file(audio_format).tap do |file|
           link_to_playback_format(file)
         end
@@ -36,7 +36,7 @@ module Import
     end
 
     def audio_formats
-      (archive_audio_formats + playback_formats.collect(&:audio_format)).uniq
+      (archive_audio_formats + playback_formats.map(&:audio_format)).uniq
     end
 
     def build_audio_file(format)
@@ -77,14 +77,14 @@ module Import
     end
 
     def actual_archive_audio_formats
-      mapping.profile.archive_formats.collect(&:audio_format)
+      mapping.profile.archive_formats.map(&:audio_format)
     end
 
     def limited_archive_audio_formats
       processor = AudioProcessor.new(master)
       actual_archive_audio_formats
         .reject { |f| f.encoding.lossless? }
-        .collect { |f| limited_audio_format(f, processor.bitrate, processor.channels) }
+        .map { |f| limited_audio_format(f, processor.bitrate, processor.channels) }
     end
 
     def limited_audio_format(source, bitrate, channels)

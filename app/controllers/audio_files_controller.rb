@@ -32,7 +32,7 @@ class AudioFilesController < ListController
                '{playback_format}.{format}' do
     operation :get do
       key :description, 'Returns an audio file in the requested format.'
-      key :produces, AudioEncoding.list.collect(&:mime_type).sort
+      key :produces, AudioEncoding.list.map(&:mime_type).sort
       key :tags, [:audio_file, :public]
 
       parameter name: :year,

@@ -57,7 +57,7 @@ module Import
         unless complete
           inform("Broadcast #{mapping} is not imported, " \
                  "as the following recordings do not cover the entire duration:\n" +
-                 mapping.recordings.collect(&:path).join("\n"))
+                 mapping.recordings.map(&:path).join("\n"))
         end
       end
     end
@@ -66,7 +66,7 @@ module Import
       broadcast = mapping.broadcast
       broadcast.valid?.tap do |valid|
         unless valid
-          error("Broadcast of #{broadcast.show} @ #{I18n.l(broadcast.started_at)} is invalid: " \
+          error("Broadcast #{mapping} is invalid: " \
                 "#{broadcast.errors.full_messages.join(', ')}")
           ExceptionNotifier.notify_exception(ActiveRecord::RecordInvalid.new(broadcast),
                                              data: { mapping: mapping })
@@ -81,7 +81,7 @@ module Import
     def compose_master(recordings)
       warn_for_too_short_recordings(recordings)
       inform("Composing master file for broadcast #{mapping} out of the following recordings:\n" +
-             recordings.collect(&:path).join("\n"))
+             recordings.map(&:path).join("\n"))
       Recording::Composer.new(mapping, recordings).compose
     end
 
@@ -97,7 +97,7 @@ module Import
     def warn_for_too_short_recordings(recordings)
       recordings.select(&:audio_duration_too_short?).each do |r|
         exception = Recording::TooShortError.new(r)
-        error(exception.message)
+        warn(exception.message)
         ExceptionNotifier.notify_exception(exception, data: { mapping: mapping })
       end
     end

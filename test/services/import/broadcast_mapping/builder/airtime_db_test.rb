@@ -56,14 +56,14 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert_not morgen_map.complete?
     assert_equal [file('2016-01-01T090000+0100_060.mp3'),
                   file('2016-01-01T100000+0100_060.mp3')],
-                 morgen_map.recordings.collect(&:path)
+                 morgen_map.recordings.map(&:path)
 
     info_map = mappings.second
     assert_equal info.name, info_map.show.name
     assert_equal Time.zone.local(2016, 1, 1, 11), info_map.broadcast.started_at
     assert info_map.complete?
     assert_equal [file('2016-01-01T110000+0100_060.mp3')],
-                 info_map.recordings.collect(&:path)
+                 info_map.recordings.map(&:path)
 
     becken_map = mappings.third
     assert_equal becken.name, becken_map.show.name
@@ -71,7 +71,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert_equal Time.zone.local(2016, 1, 1, 13), becken_map.broadcast.finished_at
     assert_not becken_map.complete?
     assert_equal [file('2016-01-01T110000+0100_060.mp3')],
-                 becken_map.recordings.collect(&:path)
+                 becken_map.recordings.map(&:path)
   end
 
   test 'multiple recordings are mapped to overlapping broadcasts' do
@@ -115,7 +115,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
                   file('2016-01-01T093000+0100_060.mp3'),
                   file('2016-01-01T100000+0100_060.mp3'),
                   file('2016-01-01T103000+0100_030.mp3')],
-                 morgen_map.recordings.collect(&:path)
+                 morgen_map.recordings.map(&:path)
 
     info_map = mappings.second
     assert_equal info.name, info_map.show.name
@@ -123,7 +123,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert info_map.complete?
     assert_equal [file('2016-01-01T110000+0100_090.mp3'),
                   file('2016-01-01T110000+0100_060.mp3')],
-                 info_map.recordings.collect(&:path)
+                 info_map.recordings.map(&:path)
 
     becken_map = mappings.third
     assert_equal becken.name, becken_map.show.name
@@ -132,7 +132,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert_not becken_map.complete?
     assert_equal [file('2016-01-01T110000+0100_090.mp3'),
                   file('2016-01-01T110000+0100_060.mp3')],
-                 becken_map.recordings.collect(&:path)
+                 becken_map.recordings.map(&:path)
   end
 
   test 'recordings are mapped to adjacent broadcasts' do
@@ -166,7 +166,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert_equal [file('2016-01-01T080000+0100_060.mp3'),
                   file('2016-01-01T090000+0100_060.mp3'),
                   file('2016-01-01T100000+0100_060.mp3')],
-                 map8.recordings.collect(&:path)
+                 map8.recordings.map(&:path)
 
     map10 = mappings.second
     assert_equal morgen.name, map8.show.name
@@ -174,7 +174,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert_equal Time.zone.local(2016, 1, 1, 11), map10.broadcast.finished_at
     assert map10.complete?
     assert_equal [file('2016-01-01T100000+0100_060.mp3')],
-                 map10.recordings.collect(&:path)
+                 map10.recordings.map(&:path)
   end
 
   test 'recording is mapped to single broadcasts' do
@@ -201,7 +201,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
     assert_equal Time.zone.local(2016, 1, 1, 10), map.broadcast.finished_at
     assert map.complete?
     assert_equal [file('2016-01-01T090000+0100_060.mp3')],
-                 map.recordings.collect(&:path)
+                 map.recordings.map(&:path)
   end
 
   test 'logs warnings for unmapped recordings' do
@@ -291,7 +291,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
   end
 
   def build_recordings(*names)
-    names.collect { |f| Import::Recording::File.new(file(f)) }
+    names.map { |f| Import::Recording::File.new(file(f)) }
   end
 
 end

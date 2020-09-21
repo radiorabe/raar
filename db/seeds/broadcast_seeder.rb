@@ -25,7 +25,7 @@ class BroadcastSeeder
   end
 
   def parse_broadcasts
-    load_broadcasts.collect do |day, start, finish, name|
+    load_broadcasts.map do |day, start, finish, name|
       start_offset = make_time(day, start)
       finish_offset = make_time(day, finish)
       finish_offset += 1.day if finish_offset < start_offset

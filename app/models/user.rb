@@ -66,7 +66,7 @@ class User < ApplicationRecord
   private
 
   def listify(string)
-    string.to_s.split(/[,;]/).collect(&:strip).compact
+    string.to_s.split(/[,;]/).map(&:strip).compact
   end
 
 end
