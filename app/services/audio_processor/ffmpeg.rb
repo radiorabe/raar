@@ -106,7 +106,7 @@ module AudioProcessor
 
     def accurate_duration
       out = run_command(FFMPEG.ffmpeg_binary, '-i', file, '-acodec', 'copy', '-f', 'null', '-')
-      segments = out.scan(/\btime=(\d+)\:(\d\d)\:(\d\d(\.\d+)?)\b/)
+      segments = out.scan(/\btime=(\d+):(\d\d):(\d\d(\.\d+)?)\b/)
       raise("Could not determine duration for #{file}: #{out}") if segments.blank?
 
       number_of_seconds(segments.last)

@@ -25,7 +25,7 @@ module Import
         private
 
         def filename_parts
-          basename.match(/\-(\d{8}\-\d{4})\d{2}\-(\d{4})-sec-(.+)\.\w+.mp3$/)
+          basename.match(/-(\d{8}-\d{4})\d{2}-(\d{4})-sec-(.+)\.\w+.mp3$/)
         end
 
       end

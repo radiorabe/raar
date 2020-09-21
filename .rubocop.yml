@@ -4,6 +4,7 @@ require:
 
 AllCops:
   DisplayCopNames: true
+  NewCops: enable
   Exclude:
     # only generated files
     - db/schema.rb
@@ -55,6 +56,9 @@ Style/EmptyMethod:
 Style/FormatStringToken:
   Enabled: false
 
+Style/HashAsLastArrayItem:
+  EnforcedStyle: no_braces
+
 Style/GuardClause:
   MinBodyLength: 3
 
@@ -71,10 +75,21 @@ Rails/CreateTableWithTimestamps:
 Rails/Delegate:
   Enabled: false
 
+Rails/FilePath:
+  EnforcedStyle: arguments
+
 # with dry_crud, this is a pattern
 Rails/LexicallyScopedActionFilter:
   Enabled: false
 
+# not all
+Rails/RakeEnvironment:
+  Enabled: false
+
 # we should know about update_all constraints.
 Rails/SkipsModelValidations:
+  Enabled: false
+
+# disable for tuple uniqueness
+Rails/UniqueValidationWithoutIndex:
   Enabled: false

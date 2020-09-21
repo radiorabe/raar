@@ -88,8 +88,8 @@ class AudioFile < ApplicationRecord
 
   def timestamp_params
     timestamp = broadcast.started_at
-    [:year, :month, :day, :hour, :min, :sec].each_with_object({}) do |key, hash|
-      hash[key] = format('%02d', timestamp.send(key))
+    [:year, :month, :day, :hour, :min, :sec].index_with do |key|
+      format('%02d', timestamp.send(key))
     end
   end
 

@@ -27,7 +27,7 @@ require 'capistrano/passenger'
 
 $LOAD_PATH.push File.expand_path('lib', __dir__)
 
-require_relative 'lib/capistrano/artifact_plugin.rb'
+require_relative 'lib/capistrano/artifact_plugin'
 install_plugin Capistrano::ArtifactPlugin
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined

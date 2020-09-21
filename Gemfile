@@ -2,7 +2,11 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '6.0.1'
+gem 'actionpack'
+gem 'activemodel'
+gem 'activerecord'
+gem 'activesupport'
+gem 'railties'
 
 gem 'pg'
 

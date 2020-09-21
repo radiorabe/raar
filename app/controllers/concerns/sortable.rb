@@ -48,7 +48,7 @@ module Sortable
 
   # Split the sort param into sort field and order.
   def sort_with_order
-    sort = params[:sort].to_s.gsub(/\A\-/, '')
+    sort = params[:sort].to_s.gsub(/\A-/, '')
     [sort, sort == params[:sort] ? 'ASC' : 'DESC']
   end
 

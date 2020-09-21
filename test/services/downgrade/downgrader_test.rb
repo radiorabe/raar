@@ -29,7 +29,7 @@ module Downgrade
       assert_no_difference('AudioFile.count') do
         downgrader.handle(file)
       end
-      assert_not AudioFile.where(id: file.id).exists?
+      assert_not AudioFile.exists?(id: file.id)
       lower = AudioFile.where(broadcast_id: b1.id, bitrate: 192, channels: 2).first
       assert_equal path, lower.path
     end
@@ -72,9 +72,9 @@ module Downgrade
       assert_difference('AudioFile.count', -2) do
         [file1, file2, file3].shuffle.each { |file| downgrader.handle(file) }
       end
-      assert_not AudioFile.where(id: file1.id).exists?
-      assert_not AudioFile.where(id: file2.id).exists?
-      assert_not AudioFile.where(id: file3.id).exists?
+      assert_not AudioFile.exists?(id: file1.id)
+      assert_not AudioFile.exists?(id: file2.id)
+      assert_not AudioFile.exists?(id: file3.id)
       lower = AudioFile.where(broadcast_id: b1.id, bitrate: 192, channels: 2).first
       assert_equal path, lower.path
     end
@@ -91,7 +91,7 @@ module Downgrade
       assert_difference('AudioFile.count', -1) do
         downgrader.handle(higher)
       end
-      assert_not AudioFile.where(id: higher.id).exists?
+      assert_not AudioFile.exists?(id: higher.id)
     end
 
     test 're-creates lower-bitrate file even if database entry exists' do
@@ -109,7 +109,7 @@ module Downgrade
       assert_difference('AudioFile.count', -1) do
         downgrader.handle(higher)
       end
-      assert_not AudioFile.where(id: higher.id).exists?
+      assert_not AudioFile.exists?(id: higher.id)
     end
 
     test 're-creates database entry if lower-bitrate file exists' do
@@ -125,11 +125,11 @@ module Downgrade
       assert_no_difference('AudioFile.count') do
         downgrader.handle(higher)
       end
-      assert_not AudioFile.where(id: higher.id).exists?
-      assert AudioFile.where(broadcast_id: lower.broadcast_id,
-                             codec: 'mp3',
-                             bitrate: 192,
-                             channels: 2).exists?
+      assert_not AudioFile.exists?(id: higher.id)
+      assert AudioFile.exists?(broadcast_id: lower.broadcast_id,
+                               codec: 'mp3',
+                               bitrate: 192,
+                               channels: 2)
     end
 
     test 'finds files with higher bitrate' do

@@ -27,8 +27,7 @@ module Auth
     def access_granted(code)
       # This may be subject to timing attacks. Please fix if you read this.
       ::AccessCode.where('expires_at IS NULL OR expires_at >= ?', Time.zone.today)
-                  .where(code: code)
-                  .exists?
+                  .exists?(code: code)
     end
 
   end

@@ -25,9 +25,9 @@ class Profile < ApplicationRecord
   validates :default, inclusion: [true, false]
   validate :assert_exactly_one_default_profile_exists
 
+  before_destroy :protect_default
   # If we set a new default, remove flag from other instances.
   after_save :clear_defaults, if: :default
-  before_destroy :protect_default
 
   scope :list, -> { order(Arel.sql('LOWER(name)')) }
 
@@ -46,7 +46,7 @@ class Profile < ApplicationRecord
   private
 
   def clear_defaults
-    Profile.where('id <> ?', id).update_all(default: false)
+    Profile.where.not(id: id).update_all(default: false)
   end
 
   def assert_exactly_one_default_profile_exists

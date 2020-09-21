@@ -29,7 +29,7 @@ class AccessCode < ApplicationRecord
 
   def generate_code
     self.code = SecureRandom.base58(CODE_LENGTH)
-    generate_code if AccessCode.where(code: code).exists?
+    generate_code if AccessCode.exists?(code: code)
   end
 
 end

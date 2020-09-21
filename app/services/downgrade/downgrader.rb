@@ -6,7 +6,7 @@ module Downgrade
     class << self
 
       def actions
-        DowngradeAction.where('bitrate IS NOT NULL')
+        DowngradeAction.where.not(bitrate: nil)
       end
 
     end

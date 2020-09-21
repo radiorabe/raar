@@ -51,7 +51,7 @@ Rails.application.configure do
       else ActiveSupport::TaggedLogging.new(Syslog::Logger.new('raar-api'))
       end
   when 'stdout'
-    config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+    config.logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
   when /.+/
     file = ENV['RAAR_LOG'].to_s
     FileUtils.mkdir_p(File.dirname(file))

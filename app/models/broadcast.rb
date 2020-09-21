@@ -29,9 +29,8 @@ class Broadcast < ApplicationRecord
   validates :label, :started_at, :finished_at, presence: true
   validates :started_at, :finished_at, uniqueness: true
 
-  after_create :assign_tracks
-
   before_validation :set_show_label_if_empty
+  after_create :assign_tracks
 
   scope :list, -> { order('broadcasts.started_at') }
 

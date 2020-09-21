@@ -17,8 +17,8 @@ module Import
         PERIOD_GLOB = 'PT{*H,*M,*S}' # ISO time period, e.g. PT1H30M
         FILENAME_GLOB = "#{DATE_GLOB}T#{TIME_GLOB}_{#{DURATION_GLOB},#{PERIOD_GLOB}}"
 
-        self.pending_glob = FILENAME_GLOB + '.*'
-        self.imported_glob = FILENAME_GLOB + IMPORTED_SUFFIX + '.*'
+        self.pending_glob = "#{FILENAME_GLOB}.*"
+        self.imported_glob = "#{FILENAME_GLOB}#{IMPORTED_SUFFIX}.*"
 
         def started_at
           @started_at ||= Time.strptime(filename_parts[1], DATE_TIME_FORMAT).in_time_zone
@@ -48,7 +48,7 @@ module Import
 
         def filename_parts
           name = basename('.*')
-          name.match(/^(.+)_(\d{3}|PT[0-9\.\,HMS]+)(#{IMPORTED_SUFFIX})?$/)
+          name.match(/^(.+)_(\d{3}|PT[0-9.,HMS]+)(#{IMPORTED_SUFFIX})?$/)
         end
 
       end
