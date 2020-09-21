@@ -6,6 +6,11 @@ module Import
   class Importer
 
     include Loggable
+    # Even if there are a few minutes missing, consider a mapping as complete
+    # after a 24 hours grace period when recordings could still show up.
+    # It's better to import what we have instead of nothing.
+    INCOMPLETE_MAPPING_TOLERANCE = 15.minutes
+    INCOMPLETE_MAPPING_GRACE_PERIOD = 24.hours
 
     attr_reader :mapping
 
@@ -53,13 +58,21 @@ module Import
     end
 
     def mapping_complete?
-      mapping.complete?.tap do |complete|
-        unless complete
-          inform("Broadcast #{mapping} is not imported, " \
-                 "as the following recordings do not cover the entire duration:\n" +
-                 mapping.recordings.map(&:path).join("\n"))
-        end
+      tolerance = grace_period_over? ? INCOMPLETE_MAPPING_TOLERANCE : Recording::DURATION_TOLERANCE
+      mapping.complete?(tolerance).tap do |complete|
+        log_mapping_not_imported if !complete && mapping.finished_at < 1.hour.ago
       end
+    end
+
+    def log_mapping_not_imported
+      log(grace_period_over? ? 'WARN' : 'INFO',
+          "Broadcast #{mapping} is not imported, " \
+          "as the following recordings do not cover the entire duration:\n" +
+          mapping.recordings.map(&:path).join("\n"))
+    end
+
+    def grace_period_over?
+      mapping.finished_at < INCOMPLETE_MAPPING_GRACE_PERIOD.ago
     end
 
     def broadcast_valid?

@@ -12,11 +12,36 @@ class Import::ImporterTest < ActiveSupport::TestCase
     importer.run
   end
 
-  test 'it does nothing if recordings are not complete' do
+  test 'it does nothing if recordings are not complete at all' do
     mapping.add_recording_if_overlapping(Import::Recording::File.new(file('2013-06-19T200000+0200_060.mp3')))
     Import::Archiver.expects(:new).never
     ExceptionNotifier.expects(:notify_exception).never
     importer.run
+  end
+
+  test 'it does nothing if recent recordings have a few minutes gap' do
+    travel_to(Time.zone.local(2013, 6, 19, 22))
+    mapping.add_recording_if_overlapping(Import::Recording::File.new(file('2013-06-19T200000+0200_060.mp3')))
+    mapping.add_recording_if_overlapping(Import::Recording::File.new(file('2013-06-19T211200+0200_048.mp3')))
+    Import::Archiver.expects(:new).never
+    ExceptionNotifier.expects(:notify_exception).never
+    importer.run
+  end
+
+  test 'imports anyways even if older recordings have a few minutes gap' do
+    f1 = touch('2013-06-19T200000+0200_060.mp3')
+    f2 = touch('2013-06-19T211200+0200_048.mp3')
+    mapping.add_recording_if_overlapping(Import::Recording::File.new(f1))
+    mapping.add_recording_if_overlapping(Import::Recording::File.new(f2))
+    AudioProcessor::Ffmpeg.any_instance.expects(:duration).returns(60 * 60)
+    AudioProcessor::Ffmpeg.any_instance.expects(:duration).returns(48 * 60)
+    Import::Recording::Composer.any_instance.expects(:compose).returns(File.new(f1))
+    AudioProcessor::Ffmpeg.any_instance.expects(:transcode).times(3)
+    assert_difference('Broadcast.count', 1) do
+      assert_difference('AudioFile.count', 3) do
+        importer.run
+      end
+    end
   end
 
   test 'it marks recordings as imported and aborts if broadcast is already imported' do

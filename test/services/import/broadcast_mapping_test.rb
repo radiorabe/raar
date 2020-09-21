@@ -203,6 +203,13 @@ class Import::BroadcastMappingTest < ActiveSupport::TestCase
     assert mapping.complete?
   end
 
+  test '#complete? with bigger tolerance is true if recordings have bigger gap' do
+    assign_broadcast
+    mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T200000+0200_060.mp3'))
+    mapping.add_recording_if_overlapping(Import::Recording::File.new('2013-06-12T211400+0200_060.mp3'))
+    assert mapping.complete?(15.minutes)
+  end
+
   private
 
   def mapping

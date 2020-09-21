@@ -330,6 +330,22 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
     composer.compose
   end
 
+  test 'returns merged recordings with gaps' do
+    composer = build_composer('2013-06-12T200000+0200_045.mp3',
+                              '2013-06-12T205500+0200_005.mp3',
+                              '2013-06-12T210000+0200_060.mp3')
+
+    expect_concat(2)
+    mock_audio_format('mp3', 320)
+    expect_no_trim(file(0))
+    expect_no_trim(file(1))
+    expect_no_trim(file(2))
+    mock_duration(file(0), 45)
+    mock_duration(file(1), 5)
+    mock_duration(file(2), 60)
+    composer.compose
+  end
+
   private
 
   def build_composer(*recordings)

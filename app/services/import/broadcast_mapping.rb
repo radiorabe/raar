@@ -62,11 +62,11 @@ module Import
     end
 
     # Do the assigned recordings cover the entire duration of the broadcast?
-    def complete?
-      finish = started_at + Recording::DURATION_TOLERANCE.seconds
+    def complete?(maximum_gap = Recording::DURATION_TOLERANCE)
+      finish = started_at + maximum_gap
       @recordings.sort_by(&:started_at).all? do |r|
         adjacent = r.started_at <= finish
-        new_finish = r.finished_at + Recording::DURATION_TOLERANCE.seconds
+        new_finish = r.finished_at + maximum_gap
         finish = new_finish if new_finish > finish
         adjacent
       end && finish >= finished_at
