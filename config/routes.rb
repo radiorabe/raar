@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     get 'login', to: 'login#show'
     post 'login', to: 'login#create'
     patch 'login', to: 'login#update'
+    get 'openid_connect', to: 'login#openid_connect'
 
     get 'status', to: 'status#show'
 

@@ -69,6 +69,10 @@ class LoginController < ApplicationController
     end
   end
 
+  def openid_connect
+    p request.env['omniauth.auth']
+  end
+
   # POST /login: Placeholder login action to act as FreeIPA endpoint.
   def create
     if current_user

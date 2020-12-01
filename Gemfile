@@ -14,6 +14,7 @@ gem 'active_model_serializers'
 gem 'exception_notification'
 gem 'jwt'
 gem 'kaminari'
+gem 'omniauth_openid_connect'
 gem 'rails-i18n'
 gem 'streamio-ffmpeg'
 
