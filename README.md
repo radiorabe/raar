@@ -25,5 +25,5 @@ It consists of three main parts:
 ## License
 
 RAAR is released under the terms of the GNU Affero General Public License.
-Copyright 2015-2020 Radio Rabe.
+Copyright 2015-2021 Radio Rabe.
 See `LICENSE` for further information.

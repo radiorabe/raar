@@ -48,7 +48,7 @@ module Sortable
 
   # Split the sort param into sort field and order.
   def sort_with_order
-    sort = params[:sort].to_s.gsub(/\A-/, '')
+    sort = params[:sort].to_s.delete_prefix('-')
     [sort, sort == params[:sort] ? 'ASC' : 'DESC']
   end
 
@@ -64,7 +64,7 @@ module Sortable
 
   # Conform to json api and notify client about invalid sort param
   def handle_invalid_sort
-    head 400 if params[:sort].present? && !sortable?
+    head :bad_request if params[:sort].present? && !sortable?
   end
 
   # Class methods for sorting.

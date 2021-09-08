@@ -32,7 +32,7 @@ module Stats
     end
 
     def sort_counts(counts)
-      Hash[counts.sort_by { |key, value| [-value, key] }]
+      counts.sort_by { |key, value| [-value, key] }.to_h
     end
 
   end

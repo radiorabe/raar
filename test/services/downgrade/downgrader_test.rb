@@ -63,9 +63,9 @@ module Downgrade
         .with(is_a(String), AudioFormat.new('mp3', 192, 2))
       FileUtils.expects(:mv).with(is_a(String), File.join(home, path))
 
-      File.expects(:exist?).with(File.join(home, path)).at_least(1).returns(false, true, true)
+      downgrader.expects(:file_exists?).with(File.join(home, path)).at_least(1).returns(false, true, true)
       [file1, file2, file3].each do |file|
-        File.expects(:exist?).with(file.absolute_path).returns(true)
+        downgrader.expects(:file_exists?).with(file.absolute_path).returns(true)
         FileUtils.expects(:rm).with(file.absolute_path)
       end
 
@@ -83,8 +83,8 @@ module Downgrade
       higher = audio_files(:info_april_best)
       lower = audio_files(:info_april_high)
 
-      File.expects(:exist?).with(lower.absolute_path).returns(true)
-      File.expects(:exist?).with(higher.absolute_path).returns(true)
+      downgrader.expects(:file_exists?).with(lower.absolute_path).returns(true)
+      downgrader.expects(:file_exists?).with(higher.absolute_path).returns(true)
       FileUtils.expects(:rm).with(higher.absolute_path)
       AudioProcessor::Ffmpeg.any_instance.expects(:transcode).never
 
@@ -99,8 +99,8 @@ module Downgrade
       lower = audio_files(:info_april_high)
       home = FileStore::Structure.home
 
-      File.expects(:exist?).with(lower.absolute_path).returns(false)
-      File.expects(:exist?).with(higher.absolute_path).returns(false)
+      downgrader.expects(:file_exists?).with(lower.absolute_path).returns(false)
+      downgrader.expects(:file_exists?).with(higher.absolute_path).returns(false)
       AudioProcessor::Ffmpeg.any_instance
                             .expects(:transcode)
                             .with(is_a(String), AudioFormat.new('mp3', 192, 2))
@@ -116,8 +116,8 @@ module Downgrade
       higher = audio_files(:info_april_best)
       lower = audio_files(:info_april_high)
 
-      File.expects(:exist?).with(lower.absolute_path).returns(true)
-      File.expects(:exist?).with(higher.absolute_path).returns(false)
+      downgrader.expects(:file_exists?).with(lower.absolute_path).returns(true)
+      downgrader.expects(:file_exists?).with(higher.absolute_path).returns(false)
       AudioProcessor::Ffmpeg.any_instance.expects(:transcode).never
 
       lower.destroy!
@@ -284,7 +284,7 @@ module Downgrade
     end
 
     def downgrader
-      Downgrade::Downgrader.new(action)
+      @downgrader ||= Downgrade::Downgrader.new(action)
     end
 
     def action

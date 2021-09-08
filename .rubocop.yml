@@ -27,7 +27,7 @@ Layout/LineLength:
 
 # Long Blocks used for swagger documentation, otherwise handled by method length.
 Metrics/BlockLength:
-  ExcludedMethods:
+  IgnoredMethods:
     - configure
     - defaults
     - draw

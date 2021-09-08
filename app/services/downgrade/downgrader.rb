@@ -40,7 +40,7 @@ module Downgrade
 
     def create_downgraded(source)
       target = target_audio_file(source)
-      downgrade_audio(source, target) unless File.exist?(target.absolute_path)
+      downgrade_audio(source, target) unless file_exists?(target.absolute_path)
       create_database_entry(target)
     end
 

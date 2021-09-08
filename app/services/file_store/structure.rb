@@ -50,7 +50,7 @@ module FileStore
 
     def filename
       "#{timestamp.iso8601.tr(':', '')}_#{format('%03d', duration)}_#{broadcast_name}." \
-      "#{audio_file.bitrate}k_#{audio_file.channels}.#{extension}"
+        "#{audio_file.bitrate}k_#{audio_file.channels}.#{extension}"
     end
 
     def broadcast_name

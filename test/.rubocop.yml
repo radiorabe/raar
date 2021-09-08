@@ -28,13 +28,16 @@ Metrics/AbcSize:
   Enabled: false
 
 Metrics/BlockLength:
-  ExcludedMethods:
+  IgnoredMethods:
     - test
 
 Metrics/ClassLength:
   Enabled: false
 
 Metrics/MethodLength:
+  Enabled: false
+
+Naming/VariableNumber:
   Enabled: false
 
 Style/ClassAndModuleChildren:

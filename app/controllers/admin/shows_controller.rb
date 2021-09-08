@@ -18,7 +18,7 @@ module Admin
       super.includes(:profile)
     end
 
-    # Only allow a trusted parameter "white list" through.
+    # Only allow a trusted parameter "allow list" through.
     def model_params
       attrs = nested_param(:data, :attributes) || ActionController::Parameters.new
       profile_id = nested_param(:data, :relationships, :profile, :data, :id)

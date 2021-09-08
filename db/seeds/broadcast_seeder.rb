@@ -4,7 +4,7 @@ class BroadcastSeeder
 
   def run
     broadcasts = parse_broadcasts
-    monday = 1.year.ago.beginning_of_week.to_date.to_time # rubocop:disable Rails/Date
+    monday = 1.year.ago.beginning_of_week.to_date.to_time
     Show.transaction do
       while monday < (Time.zone.today - 60)
         create_weekly_broadcasts(broadcasts, monday)

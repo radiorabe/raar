@@ -54,13 +54,17 @@ module Downgrade
     end
 
     def remove(file)
-      FileUtils.rm(file.absolute_path) if File.exist?(file.absolute_path)
+      FileUtils.rm(file.absolute_path) if file_exists?(file.absolute_path)
       file.destroy!
       inform(file, "Deleted #{file.codec}/#{file.bitrate}/#{file.channels}")
     end
 
     def inform(file, action)
       super("#{action} of #{file.broadcast.show} at #{file.broadcast.started_at}")
+    end
+
+    def file_exists?(path)
+      File.exist?(path)
     end
 
   end

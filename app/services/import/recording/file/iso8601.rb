@@ -48,7 +48,7 @@ module Import
 
         def filename_parts
           name = basename('.*')
-          name.match(/^(.+)_(\d{3}|PT[0-9.,HMS]+)(#{IMPORTED_SUFFIX})?$/)
+          name.match(/^(.+)_(\d{3}|PT[0-9.,HMS]+)(#{IMPORTED_SUFFIX})?$/o)
         end
 
       end

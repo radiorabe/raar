@@ -31,7 +31,7 @@ class CrudController < ListController
   # DELETE /users/1
   def destroy
     if entry.destroy
-      head 204
+      head :no_content
     else
       render json: entry,
              status: :unprocessable_entity,
@@ -50,7 +50,7 @@ class CrudController < ListController
     instance_variable_set(:"@#{ivar_name}", model_scope.new(model_params))
   end
 
-  # Only allow a trusted parameter "white list" through.
+  # Only allow a trusted parameter "allow list" through.
   def model_params
     params.require('data').require('attributes').permit(permitted_attrs)
   end

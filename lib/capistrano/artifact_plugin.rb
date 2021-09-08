@@ -45,6 +45,7 @@ module Capistrano
 
         desc 'Determine the revision that will be deployed'
         task :set_current_revision do
+          # noop
         end
       end
     end

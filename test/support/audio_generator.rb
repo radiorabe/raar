@@ -39,7 +39,7 @@ class AudioGenerator
            '-metadata album="Albüm" ' \
            '-metadata date="2016" '
     cmd += path
-    Rails.logger.debug("Create silent file: #{cmd}")
+    Rails.logger.debug { "Create silent file: #{cmd}" }
     Open3.popen3(cmd) do |i, o, e, t|
       i.close
       o.gets
