@@ -74,17 +74,17 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 * `usermod -a -G raar apache`
 * `chmod g+w /var/www/raar`
 * Add your SSH public key to `/var/www/raar/.ssh/authorized_keys`.
-* `yum install gcc glibc-headers rh-ruby25-ruby-devel rh-ruby25-rubygem-bundler httpd mod_xsendfile postgresql-devel libxml2-devel libxslt-devel ffmpeg`
-* Add `/opt/rh/rh-ruby25/root/usr/local/bin` to PATH in `/opt/rh/rh-ruby25/enable`
+* `yum install gcc glibc-headers rh-ruby27-ruby-devel rh-ruby27-rubygem-bundler httpd mod_xsendfile postgresql-devel libxml2-devel libxslt-devel ffmpeg`
+* Add `/opt/rh/rh-ruby27/root/usr/local/bin` to PATH in `/opt/rh/rh-ruby27/enable`
 * Install Passenger according to these [instructions](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/apache/oss/el7/install_passenger.html).
-* Build Passenger native support: `/usr/bin/scl enable rh-ruby25 "ruby /usr/bin/passenger-config build-native-support"`
+* Build Passenger native support: `/usr/bin/scl enable rh-ruby27 "ruby /usr/bin/passenger-config build-native-support"`
 * Create `/var/www/raar/.env` with all environment variables required for configuration.
 * Create `/var/www/raar/.bashrc` with the following content:
 
   ```bash
   alias rails='bundle exec rails'
 
-  source /opt/rh/rh-ruby25/enable
+  source /opt/rh/rh-ruby27/enable
 
   export $(cat ~/.env | xargs)
   ```
@@ -115,7 +115,7 @@ Perform the following steps on a CentOS or the corresponding ones on a different
     <Location /api>
         PassengerBaseURI /api
         PassengerAppRoot /var/www/raar/current
-        PassengerRuby /opt/rh/rh-ruby25/root/usr/bin/ruby
+        PassengerRuby /opt/rh/rh-ruby27/root/usr/bin/ruby
         PassengerMinInstances 2
     </Location>
 
@@ -256,8 +256,8 @@ To conform with Capistrano deployments, the following steps are required:
   ln -s ../../../shared/config/show_names.yml config/
   ```
 
-* Install / update the Ruby gems: `source /opt/rh/rh-ruby25/enable && bundle install --deployment --quiet --local`
-* Migrate the database: `source /opt/rh/rh-ruby25/enable && bundle exec rake db:migrate`
+* Install / update the Ruby gems: `source /opt/rh/rh-ruby27/enable && bundle install --deployment --quiet --local`
+* Migrate the database: `source /opt/rh/rh-ruby27/enable && bundle exec rake db:migrate`
 * `cd /var/www/raar`
 * Change the current link to the new release folder: `ln -sf releases/<created-folder> current`
 * Restart Passenger: `touch current/tmp/restart.txt`
