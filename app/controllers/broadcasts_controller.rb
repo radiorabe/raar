@@ -135,7 +135,7 @@ class BroadcastsController < CrudController
     end
 
     operation :patch do
-      key :description, 'Updates the description of an an existing broadcast.'
+      key :description, 'Updates the description of an existing broadcast.'
       key :tags, [:broadcast]
 
       parameter_id('broadcast', 'update')

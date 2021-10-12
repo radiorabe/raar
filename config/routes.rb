@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   root to: 'apidocs#index'
 
   defaults format: :json do
-    resources :shows, only: [:index, :show]
+    resources :shows, only: [:index, :show, :update]
 
     resources :broadcasts, only: [:show, :update] do
       resources :audio_files, only: :index

@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
-class ShowsController < ListController
+class ShowsController < CrudController
+
+  include WriteAuthenticatable
+
+  self.permitted_attrs = [:details]
 
   self.search_columns = %w[name details]
 
@@ -42,6 +46,21 @@ class ShowsController < ListController
       security http_token: []
       security api_token: []
       security access_code: []
+    end
+
+    operation :patch do
+      key :description, 'Updates the description of a show.'
+      key :tags, [:show]
+
+      parameter_id('show', 'update')
+      parameter_attrs('show', 'update', 'Show')
+
+      response_entity('Show')
+      response_unprocessable
+
+      security api_token: []
+      security http_token: []
+      security jwt_token: []
     end
   end
 

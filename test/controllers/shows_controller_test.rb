@@ -48,4 +48,34 @@ class ShowsControllerTest < ActionController::TestCase
     assert_equal false, json['data']['attributes']['audio_access']
   end
 
+  test 'PATCH as regular user with api_token is possible' do
+    entry = shows(:klangbecken)
+    patch :update,
+          params: {
+            id: entry.id,
+            api_token: users(:speedee).api_token,
+            data: { attributes: {
+              name: 'Klängbecks',
+              details: 'The best sound all over'
+            } }
+          }
+    assert_response 200
+    assert_equal 'Klangbecken', json['data']['attributes']['name']
+    assert_equal 'The best sound all over', json['data']['attributes']['details']
+    assert_equal 'Klangbecken', entry.reload.name
+    assert_equal 'The best sound all over', entry.reload.details
+    assert_equal users(:speedee), entry.updater
+  end
+
+  test 'PATCH with access code fails' do
+    code = AccessCode.create!(expires_at: 1.month.from_now).code
+    patch :update,
+          params: {
+            access_code: code,
+            id: shows(:klangbecken).id,
+            data: { attributes: { details: 'Very important shows', started_at: '17:00' } }
+          }
+    assert_response 401
+  end
+
 end

@@ -522,7 +522,7 @@
         ]
       },
       "patch": {
-        "description": "Updates the description of an an existing broadcast.",
+        "description": "Updates the description of an existing broadcast.",
         "tags": [
           "broadcast"
         ],
@@ -792,6 +792,66 @@
           },
           {
             "access_code": [
+
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "description": "Updates the description of a show.",
+        "tags": [
+          "show"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the show to update.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Attributes defining the show to update.",
+            "required": true,
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Show"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/Show"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/responses/unprocessable_entity"
+          }
+        },
+        "security": [
+          {
+            "api_token": [
+
+            ]
+          },
+          {
+            "http_token": [
+
+            ]
+          },
+          {
+            "jwt_token": [
 
             ]
           }
