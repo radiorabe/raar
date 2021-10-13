@@ -16,7 +16,7 @@ set :deploy_to, '/var/www/raar'
 # set :scm, :git
 # set :scm, :artifact
 
-set :bundle_flags, '--deployment --quiet --local'
+set :bundle_config, { deployment: true, quiet: true, local: true }
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
