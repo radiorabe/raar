@@ -1,0 +1,115 @@
+
+name: Build
+
+on:
+  push:
+  pull_request:
+    branches: [ $default-branch ]
+
+env:
+  RAAR_DB_ADAPTER: postgresql
+  RAAR_DB_HOST: localhost
+  RAAR_DB_NAME: raar_test
+  RAAR_DB_USERNAME: postgres
+  RAAR_DB_PASSWORD: postgres
+  AIRTIME_DB_ADAPTER: postgresql
+  AIRTIME_DB_HOST: localhost
+  AIRTIME_DB_NAME: airtime_test
+  AIRTIME_DB_USERNAME: postgres
+  AIRTIME_DB_PASSWORD: postgres
+  PARALLEL_WORKERS: 1
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['2.5', '2.7', '3.0']
+
+    services:
+      db:
+        image: postgres:11
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: Prepare
+      env:
+        PGPASSWORD: postgres
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg
+        psql -c 'create database raar_test;' -U $RAAR_DB_USERNAME -h $RAAR_DB_HOST
+        psql -c 'create database airtime_test;' -U $RAAR_DB_USERNAME -h $RAAR_DB_HOST
+    - name: Run tests
+      run: bundle exec rails test
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: Run rubocop
+      run: bundle exec rubocop
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:11
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: Prepare
+      env:
+        PGPASSWORD: postgres
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg
+        psql -c 'create database raar_test;' -U $RAAR_DB_USERNAME -h $RAAR_DB_HOST
+        psql -c 'create database airtime_test;' -U $RAAR_DB_USERNAME -h $RAAR_DB_HOST
+    - name: Run tests
+      run: bundle exec rails test
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: "./test/coverage/lcov.info"
