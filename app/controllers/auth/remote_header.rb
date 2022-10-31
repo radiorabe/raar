@@ -5,6 +5,13 @@ module Auth
   # the web server.
   class RemoteHeader < Base
 
+    REMOTE_USER_HEADERS = %w[
+      REMOTE_USER
+      REMOTE_USER_GROUPS
+      REMOTE_USER_FIRST_NAME
+      REMOTE_USER_LAST_NAME
+    ]
+
     def fetch_user
       fetch_user_and_update_user(*remote_user_params)
     end
@@ -25,11 +32,10 @@ module Auth
 
     def remote_user_params
       h = request.headers
-      [h['REMOTE_USER'],
-       h['REMOTE_USER_GROUPS'],
-       h['REMOTE_USER_FIRST_NAME'],
-       h['REMOTE_USER_LAST_NAME']]
-        .map { |str| str&.force_encoding('UTF-8') }
+      REMOTE_USER_HEADERS.map do |key|
+        str = h[key] || h[key.gsub('_', '-')]
+        str&.force_encoding('UTF-8')
+      end
     end
 
   end
