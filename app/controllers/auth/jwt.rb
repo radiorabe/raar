@@ -26,7 +26,7 @@ module Auth
       private
 
       def secret
-        Rails.application.secrets.secret_key_base
+        Rails.application.secrets.secret_key_base.to_s
       end
 
       def minutes_to_expire
