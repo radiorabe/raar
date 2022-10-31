@@ -584,7 +584,7 @@
     },
     "/login": {
       "get": {
-        "description": "Get the user object of the currently logged in user. The user may be identified by an API token, an access code, a JWT token or over FreeIPA.",
+        "description": "Get the user object of the currently logged in user. The user may be identified by an API token, an access code, a JWT token or over the REMOTE_USER header.",
         "tags": [
           "user"
         ],
@@ -627,28 +627,9 @@
         ]
       },
       "post": {
-        "description": "Login with the FreeIPA username and password. Returns the user object including the api_token for further requests. If the user has admin priviledges, a X-Auth-Token header with a JWT token is returned to be used in the /admin section.",
+        "description": "Login with the REMOTE_USER header. Returns the user object including the api_token for further requests. If the user has admin priviledges, a X-Auth-Token header with a JWT token is returned to be used in the /admin section.",
         "tags": [
           "user"
-        ],
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "formData",
-            "description": "The username of the user to login.",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "password",
-            "in": "formData",
-            "description": "The password of the user to login.",
-            "required": true,
-            "type": "string"
-          }
         ],
         "responses": {
           "200": {
@@ -667,7 +648,7 @@
         }
       },
       "patch": {
-        "description": "Regenerates the api key of the current FreeIPA user.",
+        "description": "Regenerates the api key of the user given in the REMOTE_USER header.",
         "tags": [
           "user"
         ],

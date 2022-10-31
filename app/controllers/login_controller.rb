@@ -6,7 +6,8 @@ class LoginController < ApplicationController
     operation :get do
       key :description,
           'Get the user object of the currently logged in user. ' \
-          'The user may be identified by an API token, an access code, a JWT token or over FreeIPA.'
+          'The user may be identified by an API token, an access code, ' \
+          'a JWT token or over the REMOTE_USER header.'
       key :tags, [:user]
 
       response_entity('User')
@@ -21,24 +22,11 @@ class LoginController < ApplicationController
 
     operation :post do
       key :description,
-          'Login with the FreeIPA username and password. ' \
+          'Login with the REMOTE_USER header. ' \
           'Returns the user object including the api_token for further requests. ' \
           'If the user has admin priviledges, a X-Auth-Token header with a JWT token ' \
           'is returned to be used in the /admin section.'
       key :tags, [:user]
-      key :consumes, ['application/x-www-form-urlencoded']
-
-      parameter name: :username,
-                in: :formData,
-                description: 'The username of the user to login.',
-                required: true,
-                type: :string
-
-      parameter name: :password,
-                in: :formData,
-                description: 'The password of the user to login.',
-                required: true,
-                type: :string
 
       response_entity('User')
       response 401 do
@@ -47,7 +35,7 @@ class LoginController < ApplicationController
     end
 
     operation :patch do
-      key :description, 'Regenerates the api key of the current FreeIPA user.'
+      key :description, 'Regenerates the api key of the user given in the REMOTE_USER header.'
       key :tags, [:user]
 
       response_entity('User')
@@ -57,22 +45,28 @@ class LoginController < ApplicationController
     end
   end
 
-  before_action :set_current_user_from_remote_header, only: [:create, :update]
-
   def show
-    set_current_user
-    if current_user
-      render json: current_user, serializer: UserSerializer
-    else
-      render json: { errors: 'Not authenticated' },
-             status: :unauthorized
-    end
+    set_user_from_any_auth
+    render_current_user
   end
 
   # POST /login: Placeholder login action to act as FreeIPA endpoint.
   def create
+    set_user_from_remote_header
+    render_current_user
+  end
+
+  def update
+    set_user_from_remote_header
+    current_user&.regenerate_api_key!
+    render_current_user
+  end
+
+  private
+
+  def render_current_user
     if current_user
-      headers['X-Auth-Token'] = Auth::Jwt.generate_token(current_user) if current_user.admin?
+      generate_admin_token if current_user.admin?
       render json: current_user, serializer: UserSerializer
     else
       render json: { errors: request.headers['EXTERNAL_AUTH_ERROR'] || 'Not authenticated' },
@@ -80,18 +74,11 @@ class LoginController < ApplicationController
     end
   end
 
-  def update
-    if current_user
-      current_user.regenerate_api_key!
-      render json: current_user, serializer: UserSerializer
-    else
-      render json: { errors: 'Not authenticated' }, status: :unauthorized
-    end
+  def generate_admin_token
+    headers['X-Auth-Token'] = Auth::Jwt.generate_token(current_user)
   end
 
-  private
-
-  def set_current_user_from_remote_header
+  def set_user_from_remote_header
     @current_user =
       if Rails.env.development?
         User.find_by(username: params[:username])
@@ -100,11 +87,12 @@ class LoginController < ApplicationController
       end
   end
 
-  def set_current_user
-    @current_user = Auth::ApiToken.new(request).fetch_user ||
-                    Auth::AccessCode.new(request).fetch_user ||
-                    Auth::Jwt.new(request).fetch_user ||
-                    Auth::RemoteHeader.new(request).fetch_user
+  def set_user_from_any_auth
+    @current_user =
+      Auth::ApiToken.new(request).fetch_user ||
+      Auth::AccessCode.new(request).fetch_user ||
+      Auth::Jwt.new(request).fetch_user ||
+      Auth::RemoteHeader.new(request).fetch_user
   end
 
 end
