@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # config valid only for current version of Capistrano
-lock '3.16.0'
+lock '3.17.1'
 
 set :application, 'raar'
 set :repo_url, 'git@github.com:radiorabe/raar.git'
@@ -17,6 +17,10 @@ set :deploy_to, '/var/www/raar'
 # set :scm, :artifact
 
 set :bundle_config, { deployment: true, quiet: true, local: true }
+
+# Restart passenger with `touch tmp/restart.txt`
+# The alternative would be `passenger-config restart-app`
+set :passenger_restart_with_touch, true
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh

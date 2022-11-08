@@ -13,55 +13,55 @@
 jayz:
   title: "99 problems"
   artist: "Jay-Z"
-  started_at: <%= Time.zone.local(2013, 5, 20, 20, 01, 13).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 5, 20, 20, 04, 51).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 5, 20, 20, 01, 13).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 5, 20, 20, 04, 51).to_fs(:db) %>
   broadcast: g9s_mai
 
 choco1:
   title: Schwenger
   artist: Chocolococolo
-  started_at: <%= Time.zone.local(2013, 5, 20, 20, 10, 44).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 5, 20, 20, 13, 5).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 5, 20, 20, 10, 44).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 5, 20, 20, 13, 5).to_fs(:db) %>
   broadcast: g9s_mai
 
 goeldin:
   title: Liebi i Zyte vom kommende Ufstand
   artist: "Göldin, Bit-Tuner"
-  started_at: <%= Time.zone.local(2013, 6, 12, 20, 36, 21).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 6, 12, 20, 39, 9).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 6, 12, 20, 36, 21).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 6, 12, 20, 39, 9).to_fs(:db) %>
   broadcast: g9s_juni
 
 bit:
   title: Sacre du printemps
   artist: "Bit-Tuner"
-  started_at: <%= Time.zone.local(2013, 6, 12, 20, 39, 21).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 6, 12, 20, 54, 59).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 6, 12, 20, 39, 21).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 6, 12, 20, 54, 59).to_fs(:db) %>
   broadcast: g9s_juni
 
 choco2:
   title: Schwenger
   artist: Chocolococolo
-  started_at: <%= Time.zone.local(2013, 6, 12, 21, 10, 44).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 6, 12, 21, 13, 5).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 6, 12, 21, 10, 44).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 6, 12, 21, 13, 5).to_fs(:db) %>
   broadcast: g9s_juni
 
 shakira:
   title: Loco
   artist: Shakira
-  started_at: <%= Time.zone.local(2013, 5, 20, 11, 45, 13).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 5, 20, 11, 48).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 5, 20, 11, 45, 13).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 5, 20, 11, 48).to_fs(:db) %>
   broadcast: klangbecken_mai1
 
 jayz_klangbecken_1:
   title: "99 problems"
   artist: "Jay-Z"
-  started_at: <%= Time.zone.local(2013, 5, 20, 13, 24, 1).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 5, 20, 13, 27, 39).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 5, 20, 13, 24, 1).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 5, 20, 13, 27, 39).to_fs(:db) %>
   broadcast: klangbecken_mai1
 
 jayz_klangbecken_2:
   title: "101 problems"
   artist: "Jay-Z"
-  started_at: <%= Time.zone.local(2013, 5, 21, 3, 39, 13).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 5, 21, 3, 43, 4).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 5, 21, 3, 39, 13).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 5, 21, 3, 43, 4).to_fs(:db) %>
   broadcast: klangbecken_mai2

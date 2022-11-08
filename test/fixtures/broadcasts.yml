@@ -17,35 +17,35 @@
 info_april:
   show: info
   label: Info April
-  started_at: <%= Time.zone.local(2013, 4, 10, 11).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 4, 10, 11, 30).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 4, 10, 11).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 4, 10, 11, 30).to_fs(:db) %>
 
 info_mai:
   show: info
   label: Info Mai
-  started_at: <%= Time.zone.local(2013, 5, 20, 11).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 5, 20, 11, 30).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 5, 20, 11).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 5, 20, 11, 30).to_fs(:db) %>
 
 klangbecken_mai1:
   show: klangbecken
   label: Klangbecken
-  started_at: <%= Time.zone.local(2013, 5, 20, 11, 30).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 5, 20, 20).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 5, 20, 11, 30).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 5, 20, 20).to_fs(:db) %>
 
 klangbecken_mai2:
   show: klangbecken
   label: Klangbecken
-  started_at: <%= Time.zone.local(2013, 5, 20, 23).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 5, 21, 8).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 5, 20, 23).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 5, 21, 8).to_fs(:db) %>
 
 g9s_mai:
   show: g9s
   label: G9S Shizzle Edition
-  started_at: <%= Time.zone.local(2013, 5, 20, 20).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 5, 20, 23).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 5, 20, 20).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 5, 20, 23).to_fs(:db) %>
 
 g9s_juni:
   show: g9s
   label: G9S Shizzle Edition II
-  started_at: <%= Time.zone.local(2013, 6, 12, 20).to_s(:db) %>
-  finished_at: <%= Time.zone.local(2013, 6, 12, 22).to_s(:db) %>
+  started_at: <%= Time.zone.local(2013, 6, 12, 20).to_fs(:db) %>
+  finished_at: <%= Time.zone.local(2013, 6, 12, 22).to_fs(:db) %>
