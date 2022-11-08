@@ -2,8 +2,8 @@
 
 class AudioFilesController < ListController
 
-  NOT_FOUND_PATH = Rails.root.join('public', 'system', 'not_found.mp3')
-  THE_FUTURE_PATH = Rails.root.join('public', 'system', 'the_future.mp3')
+  NOT_FOUND_PATH = Rails.public_path.join('system', 'not_found.mp3')
+  THE_FUTURE_PATH = Rails.public_path.join('system', 'the_future.mp3')
 
   swagger_path '/broadcasts/{broadcast_id}/audio_files' do
     operation :get do
@@ -152,7 +152,7 @@ class AudioFilesController < ListController
     bytes = Rack::Utils.byte_ranges(request.headers, size)[0]
 
     set_range_headers(bytes, size)
-    send_data(IO.binread(path, bytes.size, bytes.begin), send_file_options(path, mime, 206))
+    send_data(File.binread(path, bytes.size, bytes.begin), send_file_options(path, mime, 206))
   end
 
   def set_range_headers(bytes, size)

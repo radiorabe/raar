@@ -22,12 +22,15 @@ Layout/EmptyLinesAroundClassBody:
 Layout/EmptyLinesAroundModuleBody:
   EnforcedStyle: empty_lines_except_namespace
 
+Layout/LineContinuationLeadingSpace:
+  Enabled: false
+
 Layout/LineLength:
   Max: 100
 
 # Long Blocks used for swagger documentation, otherwise handled by method length.
 Metrics/BlockLength:
-  IgnoredMethods:
+  AllowedMethods:
     - configure
     - defaults
     - draw

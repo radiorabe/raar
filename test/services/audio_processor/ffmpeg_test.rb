@@ -179,7 +179,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
 
   test 'tags mp3 file without changing other stuff' do
     mp3 = Tempfile.new(['source', '.mp3'])
-    File.delete(mp3.path) if File.exist?(mp3.path)
+    FileUtils.rm_f(mp3.path)
     begin
       AudioGenerator.new.silent_file(AudioFormat.new('mp3', 192, 2), mp3.path)
       p = AudioProcessor::Ffmpeg.new(mp3.path)

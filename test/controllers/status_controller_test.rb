@@ -20,7 +20,7 @@ class StatusControllerTest < ActionController::TestCase
   end
 
   test 'GET show with failure returns 503' do
-    Show.delete_all
+    Show.expects(:count).returns(0)
     get :show
 
     assert_equal 503, response.status

@@ -17,7 +17,7 @@ class StatusTest < ActiveSupport::TestCase
   end
 
   test 'database is false if no shows exist' do
-    Show.delete_all
+    Show.expects(:count).returns(0)
     assert_equal false, Status.new.database
   end
 

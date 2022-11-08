@@ -156,7 +156,7 @@ module Import
         with_same_format(list) do |unified|
           new_tempfile(unified[0]).tap do |target_file|
             proc = AudioProcessor.new(unified[0])
-            proc.concat(target_file.path, unified[1..-1])
+            proc.concat(target_file.path, unified[1..])
           end
         end
       end

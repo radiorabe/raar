@@ -3,11 +3,57 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "561ae18b5ea2dcc0f7463481e7c5cbd91019f9a4716f1f2066e946c7fc531c7a",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/services/audio_access/base.rb",
+      "line": 27,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "with_archive_format.where(\"archive_formats.max_public_bitrate IS NULL OR archive_formats.max_public_bitrate >= #{compared_bitrate}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "AudioAccess::Base",
+        "method": "for_public"
+      },
+      "user_input": "compared_bitrate",
+      "confidence": "Weak",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "ade2e56fd6efd094d16610560e7ba3f033824a6534905de326183bc024ce0639",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/services/audio_access/base.rb",
+      "line": 34,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "with_archive_format.where(\"archive_formats.max_logged_in_bitrate IS NULL OR archive_formats.max_logged_in_bitrate >= #{compared_bitrate} OR ((#{priv_condition}) AND  (archive_formats.max_priviledged_bitrate IS NULL OR   archive_formats.max_priviledged_bitrate >= #{compared_bitrate}))\", *priv_args)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "AudioAccess::Base",
+        "method": "for_logged_in"
+      },
+      "user_input": "compared_bitrate",
+      "confidence": "Weak",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "fd92abd624a5387c0a2b505cacac5764123ff9cfe646a3987085e1f4d0b7e7f6",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/downgrade_action.rb",
-      "line": 59,
+      "line": 61,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "DowngradeAction.where(:archive_format_id => archive_format_id).where(\"(months > ? AND #{attr} > ?) OR (months < ? AND (#{attr} < ? OR #{attr} IS NULL))\", months, send(attr), months, send(attr))",
       "render_path": null,
@@ -18,9 +64,12 @@
       },
       "user_input": "attr",
       "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
       "note": "attr is hardcoded as bitrate or channels"
     }
   ],
-  "updated": "2019-01-09 22:09:51 +0100",
-  "brakeman_version": "4.2.1"
+  "updated": "2022-11-08 11:16:24 +0100",
+  "brakeman_version": "5.3.1"
 }
