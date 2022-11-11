@@ -11,6 +11,17 @@ class LoginControllerTest < ActionController::TestCase
     assert_equal 'speedee', json['data']['attributes']['username']
     assert_match /\A#{users(:speedee).id}\$[A-Za-z0-9]{24}\z/,
                  json['data']['attributes']['api_token']
+    assert response.headers['X-Auth-Token'].blank?
+  end
+
+  test 'GET show with REMOTE_USER returns admin user object and jwt' do
+    request.env['REMOTE_USER'] = +'admin'
+    get :show
+    assert_response 200
+    assert_equal 'admin', json['data']['attributes']['username']
+    assert_match /\A#{users(:admin).id}\$[A-Za-z0-9]{24}\z/,
+                 json['data']['attributes']['api_token']
+    assert response.headers['X-Auth-Token'].present?
   end
 
   test 'GET show with api_token returns user object' do
@@ -18,6 +29,14 @@ class LoginControllerTest < ActionController::TestCase
         params: { api_token: users(:speedee).api_token }
     assert_response 200
     assert_equal 'speedee', json['data']['attributes']['username']
+  end
+
+  test 'GET show with api_token returns admin user object but no JWT' do
+    get :show,
+        params: { api_token: users(:admin).api_token }
+    assert_response 200
+    assert_equal 'admin', json['data']['attributes']['username']
+    assert response.headers['X-Auth-Token'].blank?
   end
 
   test 'GET show with access_code returns empty user object' do
@@ -41,6 +60,18 @@ class LoginControllerTest < ActionController::TestCase
     assert_equal 'speedee', json['data']['attributes']['username']
     assert_match /\A#{users(:speedee).id}\$[A-Za-z0-9]{24}\z/,
                  json['data']['attributes']['api_token']
+    assert response.headers['X-Auth-Token'].blank?
+  end
+
+  test 'POST login with REMOTE_USER returns admin user object and JWT' do
+    request.env['REMOTE_USER'] = +'admin'
+    post :create,
+         params: { username: 'admin', password: 'foo' }
+    assert_response 200
+    assert_equal 'admin', json['data']['attributes']['username']
+    assert_match /\A#{users(:admin).id}\$[A-Za-z0-9]{24}\z/,
+                 json['data']['attributes']['api_token']
+    assert response.headers['X-Auth-Token'].present?
   end
 
   test 'POST login without REMOTE_USER returns error' do
@@ -51,9 +82,8 @@ class LoginControllerTest < ActionController::TestCase
   end
 
   test 'POST login with api_token responds unauthorized' do
-    login
     post :create,
-         params: { username: 'speedee', password: 'foo' }
+         params: { api_token: users(:speedee).api_token }
     assert_response 401
   end
 

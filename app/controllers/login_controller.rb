@@ -47,18 +47,21 @@ class LoginController < ApplicationController
 
   def show
     set_user_from_any_auth
+    generate_admin_token if Auth::RemoteHeader.new(request).present?
     render_current_user
   end
 
   # POST /login: Placeholder login action to act as FreeIPA endpoint.
   def create
     set_user_from_remote_header
+    generate_admin_token
     render_current_user
   end
 
   def update
     set_user_from_remote_header
     current_user&.regenerate_api_key!
+    generate_admin_token
     render_current_user
   end
 
@@ -66,7 +69,6 @@ class LoginController < ApplicationController
 
   def render_current_user
     if current_user
-      generate_admin_token if current_user.admin?
       render json: current_user, serializer: UserSerializer
     else
       render json: { errors: request.headers['EXTERNAL_AUTH_ERROR'] || 'Not authenticated' },
@@ -75,6 +77,8 @@ class LoginController < ApplicationController
   end
 
   def generate_admin_token
+    return unless current_user&.admin?
+
     headers['X-Auth-Token'] = Auth::Jwt.generate_token(current_user)
   end
 

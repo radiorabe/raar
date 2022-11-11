@@ -32,6 +32,8 @@ Rails.application.routes.draw do
     get 'login', to: 'login#show'
     post 'login', to: 'login#create'
     patch 'login', to: 'login#update'
+    # duplicate entry to allow different server config for checking sso authentication
+    get 'sso', to: 'login#show'
 
     get 'status', to: 'status#show'
 

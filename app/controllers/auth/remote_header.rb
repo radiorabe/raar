@@ -10,10 +10,14 @@ module Auth
       REMOTE_USER_GROUPS
       REMOTE_USER_FIRST_NAME
       REMOTE_USER_LAST_NAME
-    ]
+    ].freeze
 
     def fetch_user
       fetch_user_and_update_user(*remote_user_params)
+    end
+
+    def present?
+      header(REMOTE_USER_HEADERS.first).present?
     end
 
     private
@@ -31,11 +35,13 @@ module Auth
     end
 
     def remote_user_params
-      h = request.headers
       REMOTE_USER_HEADERS.map do |key|
-        str = h[key] || h[key.gsub('_', '-')]
-        str&.force_encoding('UTF-8')
+        header(key)&.force_encoding('UTF-8')
       end
+    end
+
+    def header(key)
+      request.headers[key] || request.headers[key.tr('_', '-')]
     end
 
   end

@@ -38,13 +38,15 @@ module Auth
     private
 
     def fetch_user(username, groups, first_name, last_name)
-      request = stub('request')
-      request.expects(headers: {
-                        'REMOTE_USER' => username,
-                        'REMOTE_USER_GROUPS' => groups,
-                        'REMOTE_USER_FIRST_NAME' => first_name,
-                        'REMOTE_USER_LAST_NAME' => last_name
-                      })
+      request = stub(
+        'request',
+        headers: {
+          'REMOTE_USER' => username,
+          'REMOTE_USER_GROUPS' => groups,
+          'REMOTE_USER_FIRST_NAME' => first_name,
+          'REMOTE_USER_LAST_NAME' => last_name
+        }
+      )
       Auth::RemoteHeader.new(request).fetch_user
     end
 
