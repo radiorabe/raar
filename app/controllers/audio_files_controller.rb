@@ -2,6 +2,7 @@
 
 class AudioFilesController < ListController
 
+  include TimeFilterable
   NOT_FOUND_PATH = Rails.public_path.join('system', 'not_found.mp3')
   THE_FUTURE_PATH = Rails.public_path.join('system', 'the_future.mp3')
 
@@ -192,10 +193,7 @@ class AudioFilesController < ListController
   end
 
   def timestamp
-    @timestamp ||=
-      Time.zone.local(*params.values_at(:year, :month, :day, :hour, :min, :sec))
-  rescue ArgumentError
-    not_found
+    @timestamp ||= get_timestamp(param_time_parts)
   end
 
   def access

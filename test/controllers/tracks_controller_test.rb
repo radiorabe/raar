@@ -52,13 +52,23 @@ class TracksControllerTest < ActionController::TestCase
     assert_equal %w[Shakira Jay-Z Jay-Z Chocolococolo], json_attrs(:artist)
   end
 
-  test 'GET index with hour time range returns filtered list' do
+  test 'GET index with hour range returns filtered list' do
     get :index, params: { year: 2013, month: 5, day: 20, hour: 11 }
     assert_equal ['Shakira'], json_attrs(:artist)
   end
 
-  test 'GET index with minute time range returns filtered list' do
+  test 'GET index with time range returns filtered list' do
+    get :index, params: { year: 2013, month: 5, day: 20, time: 11 }
+    assert_equal ['Shakira'], json_attrs(:artist)
+  end
+
+  test 'GET index with hour and minute range returns filtered list' do
     get :index, params: { year: 2013, month: 5, day: 20, hour: 20, min: 12 }
+    assert_equal ['Chocolococolo'], json_attrs(:artist)
+  end
+
+  test 'GET index with hourminute time range returns filtered list' do
+    get :index, params: { year: 2013, month: 5, day: 20, time: '2012' }
     assert_equal ['Chocolococolo'], json_attrs(:artist)
   end
 
@@ -94,19 +104,19 @@ class TracksControllerTest < ActionController::TestCase
   test 'GET index with time parts up to hour resolves params correctly' do
     assert_routing({ path: 'tracks/2013/05/20/20', method: :get },
                    controller: 'tracks', action: 'index', format: :json,
-                   year: '2013', month: '05', day: '20', hour: '20')
+                   year: '2013', month: '05', day: '20', time: '20')
   end
 
   test 'GET index with time parts up to minute resolves params correctly' do
     assert_routing({ path: 'tracks/2013/05/20/2015', method: :get },
                    controller: 'tracks', action: 'index', format: :json,
-                   year: '2013', month: '05', day: '20', hour: '20', min: '15')
+                   year: '2013', month: '05', day: '20', time: '2015')
   end
 
   test 'GET index with time parts up to seconds resolves params correctly' do
     assert_routing({ path: 'tracks/2013/05/20/201534', method: :get },
                    controller: 'tracks', action: 'index', format: :json,
-                   year: '2013', month: '05', day: '20', hour: '20', min: '15', sec: '34')
+                   year: '2013', month: '05', day: '20', time: '201534')
   end
 
   test 'GET show returns entry' do

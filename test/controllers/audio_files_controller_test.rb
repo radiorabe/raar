@@ -441,6 +441,20 @@ class AudioFilesControllerTest < ActionController::TestCase
     assert_response 404
   end
 
+  test 'GET index with time parts up to minutes resolves params correctly' do
+    assert_routing({ path: 'audio_files/2013/05/20/2015_high.mp3', method: :get },
+                   controller: 'audio_files', action: 'show', format: 'mp3',
+                   year: '2013', month: '05', day: '20', hour: '20', min: '15',
+                   playback_format: 'high')
+  end
+
+  test 'GET index with time parts up to seconds resolves params correctly' do
+    assert_routing({ path: 'audio_files/2013/05/20/201542_high.mp3', method: :get },
+                   controller: 'audio_files', action: 'show', format: 'mp3',
+                   year: '2013', month: '05', day: '20', hour: '20', min: '15', sec: '42',
+                   playback_format: 'high')
+  end
+
   private
 
   def file

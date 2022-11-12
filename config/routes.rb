@@ -16,8 +16,11 @@ Rails.application.routes.draw do
     resources :tracks, except: :index
 
     constraints(year: /\d{4}/, month: /\d{2}/, day: /\d{2}/,
-                hour: /\d{2}/, min: /\d{2}/, sec: /\d{2}/) do
-      get '(/shows/:show_id)/broadcasts(/:year(/:month(/:day(/:hour(:min(:sec))))))',
+                hour: /\d{2}/, min: /\d{2}/, sec: /\d{2}/,
+                time: /(\d{2})(\d{2})?(\d{2})?/) do
+      # Does not work anymore with rails 7:
+      # get '(/shows/:show_id)/broadcasts(/:year(/:month(/:day(/:hour(:min(:sec))))))',
+      get '(/shows/:show_id)/broadcasts(/:year(/:month(/:day(/:time))))',
           to: 'broadcasts#index',
           as: :broadcasts
 
@@ -25,7 +28,7 @@ Rails.application.routes.draw do
           to: 'audio_files#show',
           as: :audio_file
 
-      get '(/shows/:show_id)/tracks(/:year(/:month(/:day(/:hour(:min(:sec))))))',
+      get '(/shows/:show_id)/tracks(/:year(/:month(/:day(/:time))))',
           to: 'tracks#index'
     end
 

@@ -7,10 +7,17 @@ module TimeFilterable
   private
 
   def start_finish
-    parts = params.values_at(*TIME_PARTS).compact
+    parts = param_time_parts
     start = get_timestamp(parts)
     finish = start + range(parts)
     [start, finish]
+  end
+
+  def param_time_parts
+    parts = params.values_at(*TIME_PARTS).compact
+    time = params[:time].to_s.match(/^(\d{2})(\d{2})?(\d{2})?$/)
+    parts += time[1..3].compact if time && parts.size == 3
+    parts
   end
 
   def range(parts)
