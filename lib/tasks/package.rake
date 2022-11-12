@@ -11,7 +11,7 @@ task :package do
 
   # compose contents
   sh 'git archive --format=tar HEAD | (cd dist && tar -xf -)'
-  Bundler.with_clean_env do
+  Bundler.with_unbundled_env do
     sh 'cd dist && RAILS_ENV=production bundle package --all-platforms'
   end
   sh 'rm -rf dist/.bundle'
