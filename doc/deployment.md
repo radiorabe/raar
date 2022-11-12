@@ -74,17 +74,17 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 * `usermod -a -G raar apache`
 * `chmod g+w /var/www/raar`
 * Add your SSH public key to `/var/www/raar/.ssh/authorized_keys`.
-* `yum install gcc glibc-headers rh-ruby27-ruby-devel rh-ruby27-rubygem-bundler httpd mod_xsendfile postgresql-devel libxml2-devel libxslt-devel ffmpeg`
-* Add `/opt/rh/rh-ruby27/root/usr/local/bin` to PATH in `/opt/rh/rh-ruby27/enable`
+* `yum install gcc glibc-headers rh-ruby30-ruby-devel rh-ruby30-rubygem-bundler rh-ruby30-rubygem-irb httpd mod_xsendfile postgresql-devel libxml2-devel libxslt-devel ffmpeg`
+* Add `/opt/rh/rh-ruby30/root/usr/local/bin` to PATH in `/opt/rh/rh-ruby30/enable`
 * Install Passenger according to these [instructions](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/apache/oss/el7/install_passenger.html).
-* Build Passenger native support: `/usr/bin/scl enable rh-ruby27 "ruby /usr/bin/passenger-config build-native-support"`
+* Build Passenger native support: `/usr/bin/scl enable rh-ruby30 "ruby /usr/bin/passenger-config build-native-support"`
 * Create `/var/www/raar/.env` with all environment variables required for configuration.
 * Create `/var/www/raar/.bashrc` with the following content:
 
   ```bash
   alias rails='bundle exec rails'
 
-  source /opt/rh/rh-ruby27/enable
+  source /opt/rh/rh-ruby30/enable
 
   export $(cat ~/.env | xargs)
   ```
@@ -115,7 +115,7 @@ Perform the following steps on a CentOS or the corresponding ones on a different
     <Location /api>
         PassengerBaseURI /api
         PassengerAppRoot /var/www/raar/current
-        PassengerRuby /opt/rh/rh-ruby27/root/usr/bin/ruby
+        PassengerRuby /opt/rh/rh-ruby30/root/usr/bin/ruby
         PassengerMinInstances 2
     </Location>
 
@@ -213,7 +213,7 @@ To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication a
 * `setsebool -P allow_httpd_mod_auth_pam 1`.
 * `setsebool -P httpd_mod_auth_pam 1`.
 * `setsebool -P httpd_dbus_sssd 1`
-* Restart Apache: `systemctl restart httpd`.
+* Restart Apache: `systemctl reload httpd`.
 
 
 ## Application Deployment
@@ -252,12 +252,12 @@ To conform with Capistrano deployments, the following steps are required:
   ln -s ../../../shared/tmp/cache tmp/
   ln -s ../../../shared/tmp/sockets tmp/
   ln -s ../../../shared/public/system public/
-  ln -s ../../../shared/vendor/bundle vendor/
+  ln -s ../../../shared/bundle vendor/
   ln -s ../../../shared/config/show_names.yml config/
   ```
 
-* Install / update the Ruby gems: `source /opt/rh/rh-ruby27/enable && bundle install --deployment --quiet --local`
-* Migrate the database: `source /opt/rh/rh-ruby27/enable && bundle exec rake db:migrate`
+* Install / update the Ruby gems: `source /opt/rh/rh-ruby30/enable && bundle install --deployment --quiet --local`
+* Migrate the database: `source /opt/rh/rh-ruby30/enable && bundle exec rake db:migrate`
 * `cd /var/www/raar`
 * Change the current link to the new release folder: `ln -sf releases/<created-folder> current`
 * Restart Passenger: `touch current/tmp/restart.txt`

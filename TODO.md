@@ -1,9 +1,5 @@
 # TODOs
 
-* update to rails 7
-* update to ruby 3
-* fix github action
-
 ## Code
 
 * create script to manually import partial broadcasts

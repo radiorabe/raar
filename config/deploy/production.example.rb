@@ -31,6 +31,9 @@ server 'raar.example.com', user: 'raar', roles: %w[app db web]
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
+# Ruby home directory of server
+set :scl_ruby_home, '/opt/rh/rh-ruby30'
+
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a
