@@ -1,10 +1,12 @@
 # Deployment
 
+[[_TOC_]]
+
 ## System Dependencies
 
 The following software must be installed on your system:
 
-* Ruby >= 2.5.0
+* Ruby >= 2.7.0
 * PostgreSQL >= 9.0
 * Ffmpeg >= 2.7.0
 * Apache HTTPD
@@ -93,7 +95,7 @@ Perform the following steps on a CentOS or the corresponding ones on a different
 * Create `/etc/httpd/conf.d/raar_env.inc` with `SetEnv` statements with the same values as before.
 * Create `/etc/httpd/conf.d/raar.conf` with the following content:
 
-  ```xml
+  ```conf
   <VirtualHost *:80>
     ServerName raar
     ServerAlias archiv.rabe.ch
@@ -161,13 +163,13 @@ To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication a
 * `yum install mod_auth_gssapi mod_authnz_pam mod_intercept_form_submit sssd-dbus mod_lookup_identity`
 * Create `/etc/pam.d/raar` with the following contents:
 
-  ```bash
+  ```conf
   auth     required  pam_sss.so
   account  required  pam_sss.so
   ```
 
 * Add the following additional lines to `/etc/sssd/sssd.conf`:
-  ```bash
+  ```conf
   ldap_user_extra_attrs = mail, givenname, sn
 
   [sssd]
@@ -180,28 +182,20 @@ To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication a
 
 * Add the following to `/etc/httpd/conf.d/raar.conf`:
 
-  ```xml
+  ```conf
   LoadModule auth_gssapi_module modules/mod_auth_gssapi.so
   LoadModule authnz_pam_module modules/mod_authnz_pam.so
   LoadModule intercept_form_submit_module modules/mod_intercept_form_submit.so
   LoadModule lookup_identity_module modules/mod_lookup_identity.so
 
   <Location /api/login>
-    <If "%{REQUEST_METHOD} == 'GET'">
-      AuthType GSSAPI
-      AuthName "Kerberos Login"
-      GssapiCredStore keytab:/etc/http.keytab
-      require pam-account raar
-      ErrorDocument 401 "{ errors: 'Not authenticated' }"
-    </If>
-
     <If "%{REQUEST_METHOD} == 'POST'">
       InterceptFormPAMService raar
       InterceptFormLogin username
       InterceptFormPassword password
       InterceptFormClearRemoteUserForSkipped on
       InterceptFormPasswordRedact on
-      InterceptFormLoginRealms <your.realm.org> ''
+      # InterceptFormLoginRealms <your.realm.org> ''
     </If>
 
     LookupUserAttr givenname REMOTE_USER_FIRST_NAME
@@ -215,6 +209,81 @@ To configure Free IPA, see https://www.freeipa.org/page/Web_App_Authentication a
 * `setsebool -P httpd_dbus_sssd 1`
 * Restart Apache: `systemctl reload httpd`.
 
+### OpenID Connect
+
+Another authentication possibility is OpenID Connect. Due to the browser redirect mechanisms used in this approach, OpenID Connect makes sense if the frontend application is hosted on the same server. OpenID Connect can be configured exclusively or additionally to FreeIPA (to support service accounts that directly access the API, an additional FreeIPA configuration is recommended).
+
+Using `mod_auth_openidc`, Apache HTTPD can be configured to manage the authentication flow. Configure the `/login` endpoint to obtain `REMOTE_USER`, `REMOTE_USER_GROUPS`, `REMOTE_USER_FIRST_NAME`, `REMOTE_USER_LAST_NAME` or `EXTERNAL_AUTH_ERROR` headers. If the `REMOTE_USER` is set, a user object with the generated API token is returned.
+
+See the [documentation of mod_auth_openidc](https://github.com/zmartzone/mod_auth_openidc) and follow these instructions:
+
+* `yum install mod_auth_openidc`
+* Add the following to `/etc/httpd/conf.d/raar.conf`:
+
+  ```conf
+  LoadModule auth_openidc_module modules/mod_auth_openidc.so
+
+  # Keycloak OIDC client settings
+  OIDCProviderMetadataURL <your-realm/.well-known/openid-configuration>
+  OIDCClientID <client-id>
+  OIDCClientSecret <client-secret>
+  OIDCRedirectURI /sso/redirect
+  OIDCCryptoPassphrase egalwas0123456789
+  OIDCRemoteUserClaim preferred_username
+  OIDCProviderTokenEndpointAuth client_secret_basic
+  OIDCSessionMaxDuration 0
+  OIDCDefaultURL /
+
+  # Configuration of the login enpoint where raar gets the REMOTE_USER header.
+  <Location /api/login>
+    AuthType openid-connect
+    Require valid-user
+    # Still pass the request to the backend if not authenticated.
+    OIDCUnAuthAction pass
+
+    RequestHeader set REMOTE-USER-GROUPS %{OIDC_CLAIM_groups}e
+    RequestHeader set REMOTE-USER-FIRST-NAME %{OIDC_CLAIM_given_name}e
+    RequestHeader set REMOTE-USER-LAST-NAME %{OIDC_CLAIM_family_name}e
+
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </Location>
+
+  # This path must be called from a frontend application to login users.
+  # You may define multiple such paths if you need different redirects,
+  # e.g. additionally for `/admin/sso` / `Redirect "/admin/sso" "/admin"`.
+  # Redirects to SSO if not authenticated, and then back to the frontend
+  # home (also coming from /sso/redirect; see OIDCRedirectURI).
+  <Location /sso>
+    AuthType openid-connect
+    Require valid-user
+    # Redirects to OpenID Connect provider if not authenticated
+    OIDCUnAuthAction auth
+
+    # Redirect to the frontend home path
+    Redirect "/sso" "/"
+  </Location>
+  ```
+
+* If your version of mod_auth_openidc is too old (e.g. Centos 7), `OIDCUnAuthAction pass` might not work. In this case, a secondary backend route `/api/sso` (a simple alias for `/api/login`)  can handle the openid authentication, while the original `/api/login` enpoint can still be used as a fallback for token authentication when OpenID Connect is unauthenticated.
+  Replace the `<Location /api/login>` above with the following configuration:
+
+  ```conf
+  <Location /api/sso>
+    AuthType openid-connect
+    Require valid-user
+    # Respond with 401 if not (yet) authenticated
+    OIDCUnAuthAction 401
+    ErrorDocument 401 "{ errors: 'Not authenticated' }"
+
+    RequestHeader set REMOTE-USER-GROUPS %{OIDC_CLAIM_groups}e
+    RequestHeader set REMOTE-USER-FIRST-NAME %{OIDC_CLAIM_given_name}e
+    RequestHeader set REMOTE-USER-LAST-NAME %{OIDC_CLAIM_family_name}e
+
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </Location>
+  ```
+
+* Restart Apache: `systemctl reload httpd`.
 
 ## Application Deployment
 
@@ -233,7 +302,6 @@ touch /var/www/raar/shared/config/initializers/exception_notification.rb
 * Copy `config/deploy/production.example.rb` to `config/deploy/production.rb` and add your production server.
 * Add the `raar` user created above as well.
 * Run `cap production deploy` in the raar home folder on your machine.
-
 
 ### Manually install pre-packaged builds
 
@@ -264,7 +332,6 @@ To conform with Capistrano deployments, the following steps are required:
 
 When Capistrano is not used at all, the tarball may be directly exploded into `/var/www/raar/current`. The special release folder is not required and all the linking steps may be omitted.
 
-
 ### Deploy the systemd timers
 
 * Deploy the application to `/var/www/raar/current` as described above.
@@ -276,8 +343,7 @@ When Capistrano is not used at all, the tarball may be directly exploded into `/
   systemctl enable --now raar-downgrade.timer
   ```
 
-
-## Cron Jobs
+### Cron Jobs
 
 As an alternative to Systemd timers, the import and downgrade executables may also be run as cron jobs. The import and downgrade executables live in `bin/import` and `bin/downgrade`, respectively. The may be run by two separate cron jobs, houry and daily based on your average broadcast duration.
 
@@ -330,7 +396,6 @@ In order for the zabbix agent to be able to read the log files, only the followi
   semodule_package -o zabbix_read_logs.pp -m zabbix_read_logs.mod
   semodule -i zabbix_read_logs.pp
   ```
-
 
 ### Configure Zabbix
 
