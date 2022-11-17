@@ -1,7 +1,5 @@
 # Deployment
 
-[[_TOC_]]
-
 ## System Dependencies
 
 The following software must be installed on your system:
