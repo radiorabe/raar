@@ -18,7 +18,7 @@ module Auth
       end
 
       def decode(token)
-        HashWithIndifferentAccess.new(JWT.decode(token, secret)[0])
+        ActiveSupport::HashWithIndifferentAccess.new(JWT.decode(token, secret)[0])
       rescue StandardError
         nil
       end

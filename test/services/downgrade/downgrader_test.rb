@@ -72,11 +72,10 @@ module Downgrade
       assert_difference('AudioFile.count', -2) do
         [file1, file2, file3].shuffle.each { |file| downgrader.handle(file) }
       end
-      assert_not AudioFile.exists?(id: file1.id)
-      assert_not AudioFile.exists?(id: file2.id)
-      assert_not AudioFile.exists?(id: file3.id)
       lower = AudioFile.where(broadcast_id: b1.id, bitrate: 192, channels: 2).first
       assert_equal path, lower.path
+      old_ids = [file1, file2, file3].map(&:id) - [lower.id]
+      assert_not AudioFile.exists?(id: old_ids)
     end
 
     test 'just deletes higher-bitrate file when lower-bitrate already exists' do

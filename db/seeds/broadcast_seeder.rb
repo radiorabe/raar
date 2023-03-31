@@ -35,7 +35,7 @@ class BroadcastSeeder
 
   def load_broadcasts
     input = File.read('db/seeds/broadcasts.txt')
-    input.split("\n").reject(&:blank?).map { |line| line.split("\t") }
+    input.split("\n").compact_blank.map { |line| line.split("\t") }
   end
 
   def make_time(day, time)

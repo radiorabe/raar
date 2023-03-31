@@ -40,7 +40,7 @@ Rails.application.configure do
   config.log_tags = [:request_id]
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new
 
   # Use a different logger for distributed setups.
   case ENV['RAAR_LOG'].to_s.downcase.strip
