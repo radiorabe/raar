@@ -13,26 +13,25 @@ module AudioProcessor
                       album: :album,
                       year: :date }.freeze
 
-    COMMON_FLAC_FRAME_SIZE = 1152
+    COMMON_FLAC_FRAME_SIZE = 1024
 
     def transcode(new_path, audio_format, tags = {})
       assert_directory(new_path)
+
+      flac = (audio_format.codec == 'flac')
       # always transcode flacs to assert a common frame size
-      if same_format?(audio_format) && audio_format.codec != 'flac'
-        preserving_transcode(new_path, custom: metadata_args(tags))
+      if same_format?(audio_format) && !flac
+        transcode_preserving(new_path, custom: metadata_args(tags))
       else
-        options = codec_options(audio_format).merge(validate: true)
-        options[:custom] ||= []
-        options[:custom].push(*metadata_args(tags))
-        audio.transcode(new_path, options)
+        transcode_format(new_path, audio_format, tags).tap do
+          assert_transcoded_with_same_duration(new_path) if flac
+        end
       end
     end
 
     def trim(new_path, start, duration)
       assert_directory(new_path)
-      preserving_transcode(new_path,
-                           seek_time: start,
-                           duration: duration)
+      transcode_preserving(new_path, seek_time: start, duration: duration)
     end
 
     def concat(new_path, other_paths)
@@ -50,7 +49,7 @@ module AudioProcessor
     def tag(tags)
       work_file = Tempfile.new(['tagged', File.extname(file)])
       begin
-        preserving_transcode(work_file.path, custom: metadata_args(tags))
+        transcode_preserving(work_file.path, custom: metadata_args(tags))
         FileUtils.mv(work_file.path, file, force: true)
       ensure
         work_file.close!
@@ -84,12 +83,27 @@ module AudioProcessor
       @audio ||= FFMPEG::Movie.new(file)
     end
 
-    def preserving_transcode(new_path, options = {})
+    def transcode_preserving(new_path, options = {})
       audio.transcode(new_path,
                       options.reverse_merge(
                         audio_codec: 'copy',
                         validate: true
                       ))
+    end
+
+    def transcode_format(new_path, audio_format, tags)
+      options = codec_options(audio_format).merge(validate: true, custom: metadata_args(tags))
+      options[:custom].push('-frame_size', COMMON_FLAC_FRAME_SIZE) if audio_format.codec == 'flac'
+      audio.transcode(new_path, options)
+    end
+
+    def codec_options(audio_format)
+      options = {
+        audio_codec: audio_format.codec,
+        audio_channels: audio_format.channels
+      }
+      options[:audio_bitrate] = audio_format.bitrate unless audio_format.encoding.lossless?
+      options
     end
 
     def create_list_file(file, paths)
@@ -107,7 +121,7 @@ module AudioProcessor
     def accurate_duration
       out = run_command(FFMPEG.ffmpeg_binary, '-i', file, '-acodec', 'copy', '-f', 'null', '-')
       segments = out.scan(/\btime=(\d+):(\d\d):(\d\d(\.\d+)?)\b/)
-      raise("Could not determine duration for #{file}: #{out}") if segments.blank?
+      raise(FFMPEG::Error, "Could not determine duration for #{file}: #{out}") if segments.blank?
 
       number_of_seconds(segments.last)
     end
@@ -121,7 +135,10 @@ module AudioProcessor
     def run_command(*command)
       FFMPEG.logger.info("Running command...\n#{command.join(' ')}\n")
       out, status = Open3.capture2e(*command)
-      raise("#{command} failed with status #{status}:\n#{out}") unless status.success?
+      unless status.success?
+        raise(FFMPEG::Error,
+              "#{command} failed with status #{status}:\n#{out}")
+      end
 
       out
     end
@@ -130,17 +147,6 @@ module AudioProcessor
       tags.slice(*METADATA_TAGS.keys).flat_map do |tag, value|
         %W[-metadata #{METADATA_TAGS[tag]}=#{value}]
       end
-    end
-
-    def codec_options(audio_format)
-      options = {
-        audio_codec: audio_format.codec,
-        audio_bitrate: audio_format.bitrate,
-        audio_channels: audio_format.channels
-      }
-      options.delete(:audio_bitrate) if audio_format.encoding.lossless?
-      options[:custom] = %W[-frame_size #{COMMON_FLAC_FRAME_SIZE}] if audio_format.codec == 'flac'
-      options
     end
 
     def same_format?(audio_format)
@@ -159,6 +165,16 @@ module AudioProcessor
         raise ArgumentError,
               "Cannot concat files with different extensions (#{extensions.join(', ')})"
       end
+    end
+
+    # Transcoding flacs crashes sometimes. Check durations to actually note those crashes.
+    def assert_transcoded_with_same_duration(transcoded_file)
+      transcoded_duration = self.class.new(transcoded_file).duration
+      return unless (duration - transcoded_duration).abs > 1
+
+      raise FFMPEG::Error,
+            "Transcoded file has duration #{transcoded_duration}, " \
+            "while original has #{duration} (#{file}})"
     end
 
   end

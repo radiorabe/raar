@@ -4,7 +4,9 @@ require 'test_helper'
 
 class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
 
-  setup { AudioGenerator.new.silent_files_for_audio_files }
+  delegate :silent_file, :silent_source_file, to: :audio_generator
+
+  setup { audio_generator.silent_files_for_audio_files }
 
   test 'reads mp3 codec' do
     assert_equal 'mp3', processor(:klangbecken_mai1_best).codec
@@ -81,7 +83,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     file = Tempfile.new(['same', '.flac'])
     begin
       format = AudioFormat.new('flac', nil, 2)
-      flac = AudioGenerator.new.silent_source_file(format)
+      flac = silent_source_file(format)
       same = AudioProcessor::Ffmpeg.new(flac)
                                    .transcode(file.path, AudioFormat.new('flac', nil, 2))
       assert_equal 'flac', same.audio_codec
@@ -91,11 +93,28 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     end
   end
 
+  test 'transcodes same format flac file to common frame size but fails if ffmpeg crashes' do
+    file = Tempfile.new(['same', '.flac'])
+    FileUtils.rm(file.path)
+    begin
+      format = AudioFormat.new('flac', nil, 2)
+      flac = silent_source_file(format)
+      result = silent_file(format, file.path, 1)
+      processor = AudioProcessor::Ffmpeg.new(flac)
+      processor.send(:audio).stubs(:transcode).returns(result)
+      assert_raises(FFMPEG::Error) do
+        processor.transcode(file.path, format)
+      end
+    ensure
+      file.close!
+    end
+  end
+
   test 'converts flac to mp3' do
     mp3 = Tempfile.new(['output', '.mp3'])
 
     begin
-      flac = AudioGenerator.new.silent_source_file(AudioFormat.new('flac', nil, 2))
+      flac = silent_source_file(AudioFormat.new('flac', nil, 2))
       output = AudioProcessor::Ffmpeg.new(flac).transcode(mp3.path, AudioFormat.new('mp3', 56, 2))
       assert_equal 56_000, output.audio_bitrate
       assert_equal 2, output.audio_channels
@@ -109,7 +128,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     flac = Tempfile.new(['output', '.flac'])
 
     begin
-      mp3 = AudioGenerator.new.silent_source_file(AudioFormat.new('mp3', 320, 2))
+      mp3 = silent_source_file(AudioFormat.new('mp3', 320, 2))
       output = AudioProcessor::Ffmpeg.new(mp3).transcode(flac.path, AudioFormat.new('flac', 1, 2))
       assert_equal 2, output.audio_channels
       assert_equal 'flac', output.audio_codec
@@ -149,9 +168,9 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     file = Tempfile.new(['merge', '.flac'])
     begin
       format = AudioFormat.new('flac', nil, 2)
-      flac1 = AudioGenerator.new.silent_source_file(format)
-      flac2 = AudioGenerator.new.silent_source_file(format)
-      flac3 = AudioGenerator.new.silent_source_file(format)
+      flac1 = silent_source_file(format)
+      flac2 = silent_source_file(format)
+      flac3 = silent_source_file(format)
       AudioProcessor::Ffmpeg.new(flac1).concat(file.path, [flac2, flac3])
 
       merge = FFMPEG::Movie.new(file.path)
@@ -166,9 +185,9 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     file = Tempfile.new(['merge', '.flac'])
     begin
       format = AudioFormat.new('flac', nil, 2)
-      flac1 = AudioGenerator.new.silent_source_file(format)
+      flac1 = silent_source_file(format)
       mp31 = audio_files(:g9s_mai_high).absolute_path
-      flac3 = AudioGenerator.new.silent_source_file(format)
+      flac3 = silent_source_file(format)
       assert_raises(ArgumentError) do
         AudioProcessor::Ffmpeg.new(flac1).concat(file.path, [mp31, flac3])
       end
@@ -181,7 +200,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     mp3 = Tempfile.new(['source', '.mp3'])
     FileUtils.rm_f(mp3.path)
     begin
-      AudioGenerator.new.silent_file(AudioFormat.new('mp3', 192, 2), mp3.path)
+      silent_file(AudioFormat.new('mp3', 192, 2), mp3.path)
       p = AudioProcessor::Ffmpeg.new(mp3.path)
       p.tag(title: 'title "yeah!"', artist: 'artist', album: 'Albüm', year: '2016')
       tags = read_tags(mp3.path)
@@ -195,6 +214,10 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     ensure
       mp3.close!
     end
+  end
+
+  def audio_generator
+    @audio_generator ||= AudioGenerator.new
   end
 
   def processor(audio_file)
