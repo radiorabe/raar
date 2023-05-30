@@ -76,7 +76,7 @@ class ArchiveFormat < ApplicationRecord
   end
 
   def priviledged_group_list
-    priviledged_groups.to_s.split(/[,;]/).map(&:strip).compact
+    priviledged_groups.to_s.split(/[,;]/).filter_map(&:strip)
   end
 
   private
