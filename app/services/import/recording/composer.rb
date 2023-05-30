@@ -14,6 +14,8 @@ module Import
 
       include Loggable
 
+      MAX_TRANSCODE_RETRIES = 3
+
       attr_reader :mapping, :recordings
 
       def initialize(mapping, recordings)
@@ -144,7 +146,7 @@ module Import
 
       def trim(file, start, duration)
         inform("Trimming #{file} from #{start.round}s to #{(start + duration).round}s")
-        new_tempfile(file).tap do |target_file|
+        new_tempfile(::File.extname(file)).tap do |target_file|
           proc = AudioProcessor.new(file)
           proc.trim(target_file.path, start, duration)
         end
@@ -154,7 +156,7 @@ module Import
         return list.first if list.size <= 1
 
         with_same_format(list) do |unified|
-          new_tempfile(unified[0]).tap do |target_file|
+          new_tempfile(::File.extname(unified[0])).tap do |target_file|
             proc = AudioProcessor.new(unified[0])
             proc.concat(target_file.path, unified[1..])
           end
@@ -165,30 +167,64 @@ module Import
         unified = convert_all_to_same_format(list)
         yield unified.map(&:path)
       ensure
-        unified&.each { |file| file.close! if file.respond_to?(:close!) }
+        close_files(unified) if unified
       end
 
       def convert_all_to_same_format(list)
         format = AudioProcessor.new(list.first.path).audio_format
+        if format.codec == 'flac'
+          # always convert flacs so they have the same frame size
+          convert_list_to_flac(list, format)
+        else
+          convert_list_to_format(list, format)
+        end
+      end
+
+      # When converting a list of flacs, they must all have the same
+      # frame size. This transcoding sometimes fails for certain files
+      # reproducibly in ffmpeg, based on the given frame size. With an
+      # adjusted frame size, transcoding succeeds. Hence retry a few
+      # times before raising the exception.
+      def convert_list_to_flac(list, format)
+        frame_size ||= AudioProcessor::COMMON_FLAC_FRAME_SIZE
+        converted = list.map { |file| convert_to_flac(file, format, frame_size) }
+      rescue AudioProcessor::FailingFrameSizeError
+        close_files(converted) if converted
+        frame_size += 1
+        max_retry_frame_size = AudioProcessor::COMMON_FLAC_FRAME_SIZE + MAX_TRANSCODE_RETRIES
+        frame_size <= max_retry_frame_size ? retry : raise
+      end
+
+      def convert_list_to_format(list, format)
         list.map do |file|
-          # always convert flacs to assert a common frame size
-          if ::File.extname(file.path) != ".#{format.file_extension}" || format.codec == 'flac'
-            convert_to_format(file, format)
-          else
+          if ::File.extname(file.path) == ".#{format.file_extension}"
             file
+          else
+            convert_to_format(file, format)
           end
         end
       end
 
       def convert_to_format(file, format)
-        Tempfile.new(['master', ".#{format.file_extension}"]).tap do |target_file|
-          proc = AudioProcessor.new(file.path)
-          proc.transcode(target_file.path, format)
+        processor = AudioProcessor.new(file.path)
+        new_tempfile(".#{format.file_extension}").tap do |target_file|
+          processor.transcode(target_file.path, format)
         end
       end
 
-      def new_tempfile(template = first.path)
-        Tempfile.new(['master', ::File.extname(template)])
+      def convert_to_flac(file, format, frame_size)
+        processor = AudioProcessor.new(file.path)
+        new_tempfile(".#{format.file_extension}").tap do |target_file|
+          processor.transcode_flac(target_file.path, format, frame_size)
+        end
+      end
+
+      def close_files(list)
+        list.each { |file| file.close! if file.respond_to?(:close!) }
+      end
+
+      def new_tempfile(extension)
+        Tempfile.new(['master', extension])
       end
 
     end

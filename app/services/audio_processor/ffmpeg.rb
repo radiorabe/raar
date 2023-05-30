@@ -13,19 +13,21 @@ module AudioProcessor
                       album: :album,
                       year: :date }.freeze
 
-    COMMON_FLAC_FRAME_SIZE = 1024
-
     def transcode(new_path, audio_format, tags = {})
       assert_directory(new_path)
 
-      flac = (audio_format.codec == 'flac')
-      # always transcode flacs to assert a common frame size
-      if same_format?(audio_format) && !flac
+      if same_format?(audio_format)
         transcode_preserving(new_path, custom: metadata_args(tags))
       else
-        transcode_format(new_path, audio_format, tags).tap do
-          assert_transcoded_with_same_duration(new_path) if flac
-        end
+        transcode_format(new_path, audio_format, tags)
+      end
+    end
+
+    def transcode_flac(new_path, audio_format, frame_size = AudioProcessor::COMMON_FLAC_FRAME_SIZE)
+      options = transcode_options(audio_format)
+      options[:custom] = ['-frame_size', frame_size]
+      audio.transcode(new_path, options).tap do
+        assert_transcoded_with_same_duration(new_path)
       end
     end
 
@@ -92,13 +94,13 @@ module AudioProcessor
     end
 
     def transcode_format(new_path, audio_format, tags)
-      options = codec_options(audio_format).merge(validate: true, custom: metadata_args(tags))
-      options[:custom].push('-frame_size', COMMON_FLAC_FRAME_SIZE) if audio_format.codec == 'flac'
+      options = transcode_options(audio_format).merge(custom: metadata_args(tags))
       audio.transcode(new_path, options)
     end
 
-    def codec_options(audio_format)
+    def transcode_options(audio_format)
       options = {
+        validate: true,
         audio_codec: audio_format.codec,
         audio_channels: audio_format.channels
       }
@@ -170,11 +172,11 @@ module AudioProcessor
     # Transcoding flacs crashes sometimes. Check durations to actually note those crashes.
     def assert_transcoded_with_same_duration(transcoded_file)
       transcoded_duration = self.class.new(transcoded_file).duration
-      return unless (duration - transcoded_duration).abs > 1
+      return if (duration - transcoded_duration).abs < 1
 
-      raise FFMPEG::Error,
+      raise AudioProcessor::FailingFrameSizeError,
             "Transcoded file has duration #{transcoded_duration}, " \
-            "while original has #{duration} (#{file}})"
+            "while original has #{duration} (#{transcoded_file}})"
     end
 
   end

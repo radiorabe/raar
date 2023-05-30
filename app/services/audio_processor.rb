@@ -3,6 +3,11 @@
 # Interface for audio processors.
 module AudioProcessor
 
+  COMMON_FLAC_FRAME_SIZE = 1152
+
+  class FailingFrameSizeError < StandardError
+  end
+
   mattr_writer :klass
 
   def self.klass
