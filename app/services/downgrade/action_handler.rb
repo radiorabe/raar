@@ -50,7 +50,6 @@ module Downgrade
       end
     rescue StandardError => e
       error(e)
-      ExceptionNotifier.notify_exception(e, data: { audio_file: file, downgrade_action: action })
     end
 
     def remove(file)

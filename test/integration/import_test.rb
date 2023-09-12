@@ -21,16 +21,6 @@ class ImportTest < ActiveSupport::TestCase
     build_recording_files
     build_airtime_entries
 
-    ExceptionNotifier
-      .expects(:notify_exception)
-      .with(Import::Recording::UnimportedWarning.new(Import::Recording::File.new(@f1)))
-    ExceptionNotifier
-      .expects(:notify_exception)
-      .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f6)), instance_of(Hash))
-    ExceptionNotifier
-      .expects(:notify_exception)
-      .with(Import::Recording::TooShortError.new(Import::Recording::File.new(@f8)), instance_of(Hash))
-
     assert_difference('Show.count', 2) do
       assert_difference('Broadcast.count', 2) do
         assert_difference('AudioFile.count', 6) do

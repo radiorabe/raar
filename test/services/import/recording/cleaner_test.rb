@@ -22,7 +22,10 @@ class Import::Recording::CleanerTest < ActiveSupport::TestCase
     older = touch("#{2.days.ago.to_fs(:iso8601).tr(':', '')}_020.mp3")
     imported = touch("#{2.days.ago.to_fs(:iso8601).tr(':', '')}_020_imported.mp3")
 
-    ExceptionNotifier.expects(:notify_exception).once
+    Rails.logger.expects(:add).with(
+      3,
+      regexp_matches(/ERROR Recording .* not imported/)
+    )
     cleaner.warn_for_old_unimported
   end
 

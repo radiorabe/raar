@@ -9,7 +9,6 @@ gem 'railties'
 gem 'pg', '< 1.3.0' # newer requires posgresql >= 9.3
 
 gem 'active_model_serializers'
-gem 'exception_notification'
 gem 'jwt'
 gem 'kaminari'
 gem 'rails-i18n'

@@ -26,7 +26,6 @@ module Import
 
           exception = UnimportedWarning.new(recording)
           error(exception.message)
-          ExceptionNotifier.notify_exception(exception)
         end
       end
 

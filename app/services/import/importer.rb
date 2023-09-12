@@ -27,7 +27,6 @@ module Import
       mark_recordings_as_imported
     rescue StandardError => e
       error("#{e}\n  #{e.backtrace.join("\n  ")}")
-      ExceptionNotifier.notify_exception(e, data: { mapping: mapping })
     ensure
       master.close! if master.respond_to?(:close!)
     end
@@ -81,8 +80,6 @@ module Import
         unless valid
           error("Broadcast #{mapping} is invalid: " \
                 "#{broadcast.errors.full_messages.join(', ')}")
-          ExceptionNotifier.notify_exception(ActiveRecord::RecordInvalid.new(broadcast),
-                                             data: { mapping: mapping })
         end
       end
     end
@@ -111,7 +108,6 @@ module Import
       recordings.select(&:audio_duration_too_short?).each do |r|
         exception = Recording::TooShortError.new(r)
         warn(exception.message)
-        ExceptionNotifier.notify_exception(exception, data: { mapping: mapping })
       end
     end
 
