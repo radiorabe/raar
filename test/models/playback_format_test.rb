@@ -21,7 +21,7 @@ require 'test_helper'
 class PlaybackFormatTest < ActiveSupport::TestCase
 
   test 'all fixtures valid' do
-    PlaybackFormat.all.each do |e|
+    PlaybackFormat.find_each do |e|
       assert_valid e
     end
   end

@@ -19,7 +19,7 @@ require 'test_helper'
 class ShowTest < ActiveSupport::TestCase
 
   test 'all fixtures valid' do
-    Show.all.each do |e|
+    Show.find_each do |e|
       assert_valid e
     end
   end

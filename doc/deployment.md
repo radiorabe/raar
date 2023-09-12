@@ -4,7 +4,7 @@
 
 The following software must be installed on your system:
 
-* Ruby >= 2.7.0
+* Ruby >= 3.0.0
 * PostgreSQL >= 9.0
 * Ffmpeg >= 2.7.0
 * Apache HTTPD

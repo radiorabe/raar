@@ -22,7 +22,7 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
 
   test 'all fixtures valid' do
-    User.all.each do |e|
+    User.find_each do |e|
       assert_valid e
     end
   end

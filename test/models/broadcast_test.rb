@@ -21,7 +21,7 @@ require 'test_helper'
 class BroadcastTest < ActiveSupport::TestCase
 
   test 'all fixtures valid' do
-    Broadcast.all.each do |e|
+    Broadcast.find_each do |e|
       assert_valid e
     end
   end

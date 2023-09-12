@@ -25,7 +25,7 @@ require 'test_helper'
 class ArchiveFormatTest < ActiveSupport::TestCase
 
   test 'all fixtures valid' do
-    ArchiveFormat.all.each do |e|
+    ArchiveFormat.find_each do |e|
       assert_valid e
     end
   end

@@ -3,9 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'actionpack'
-gem 'activemodel'
 gem 'activerecord'
-gem 'activesupport'
 gem 'railties'
 
 gem 'pg', '< 1.3.0' # newer requires posgresql >= 9.3

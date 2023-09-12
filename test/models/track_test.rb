@@ -17,7 +17,7 @@ require 'test_helper'
 class TrackTest < ActiveSupport::TestCase
 
   test 'all fixtures valid' do
-    Track.all.each do |e|
+    Track.find_each do |e|
       assert_valid e
     end
   end

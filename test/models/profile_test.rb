@@ -19,7 +19,7 @@ require 'test_helper'
 class ProfileTest < ActiveSupport::TestCase
 
   test 'all fixtures valid' do
-    Profile.all.each do |e|
+    Profile.find_each do |e|
       assert_valid e
     end
   end

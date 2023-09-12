@@ -20,7 +20,7 @@ require 'test_helper'
 class DowngradeActionTest < ActiveSupport::TestCase
 
   test 'all fixtures valid' do
-    DowngradeAction.all.each do |e|
+    DowngradeAction.find_each do |e|
       assert_valid e
     end
   end
