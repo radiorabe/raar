@@ -1,6 +1,6 @@
 #!/bin/bash
 ################################################################################
-# raar-record-handler.sh - Moves new recordings to the raar import directory
+# raar-record-handler.sh - Uploads new recordings via SFTP for later importing
 ################################################################################
 #
 # Copyright (C) 2018 - 2024 Radio Bern RaBe
@@ -30,18 +30,26 @@
 # Description:
 # This script uses inotifywatch to listen for a close_write event on a given
 # watch directory, containing recording files. The script assumes, that a
-# recording has finished on such an event and moves the file to the given
-# destination directory.
-# Before moving the recording file to its final location, the script determines
+# recording has finished on such an event and uploads the file using SFTP to
+# its final destination.
+#
+# Before uploading the recording file to its final location, the script determines
 # the duration of the recording and adds it to the final file name.
+#
 # If the archival was successful, the script sends the last successful
 # recording timestamp to a Zabbix monitoring system with the help of the
 # zabbix_sender tool.
+#
 # The script is intended to be used together with the rotter recording tool
 # and RAAR.
 #
 # Usage:
-# raar-record-handler.sh <WATCH-DIRECTORY> <DESTINATION-DIRECTORY>
+# raar-record-handler.sh <WATCH-DIRECTORY> <SFTP-DESTINATION> <SSH-PRIVATE-KEY> [<SFTP-OPTIONS>]
+#
+# Example:
+# raar-record-handler.sh "/var/lib/rotter/raar" \
+#                        "sftp://user-01@archive.example.com/upload" \
+#                        "/var/lib/rotter/.ssh/raar-record-handler.id_ed25519"
 #
 
 # Check if all required external commands are available
@@ -49,6 +57,7 @@ for cmd in ffprobe \
            inotifywait \
            mv \
            printf \
+           sftp \
            zabbix_sender
 do
     command -v "${cmd}" >/dev/null 2>&1 || {
@@ -59,7 +68,9 @@ do
 done
 
 watchDir="$1"
-destDir="$2"
+sftpDestination="$2"
+sshPrivateKey="$3"
+sftpOptions="${4:-''}"
 
 if test -z "${watchDir}"; then
     echo "Missing watch directory as the first parameter" >&2
@@ -71,18 +82,34 @@ if ! test -d "${watchDir}"; then
     exit 2
 fi
 
-if test -z "${destDir}"; then
-    echo "Missing destination directory as the second parameter" >&2
+if test -z "${sftpDestination}"; then
+    echo "Missing SFTP destination as the second parameter" >&2
     exit 1
 fi
 
-if ! test -d "${destDir}"; then
-    echo "Destination directory does not exist" >&2
+if test -z "${sshPrivateKey}"; then
+    echo "Missing SSH private key as the third parameter" >&2
+    exit 1
+fi
+
+if ! test -r "${sshPrivateKey}"; then
+    echo "SSH private key does not exist or is not readable" >&2
     exit 2
 fi
 
+
+# Initial test if the SFTP connection works
+if ! sftp -i "${sshPrivateKey}" ${sftpOptions} -b - \
+          "${sftpDestination}" <<< "pwd" > /dev/null
+then
+    echo "Unable to establish SFTP connection to '${sftpDestination}'" >&2
+    echo "with SSH private key '${sshPrivateKey}'" >&2
+    exit 3
+fi
+
+
 echo "Watching for new records in ${watchDir}"
-echo "Recordings will be moved to ${destDir}"
+echo "Recordings will be uploaded to ${sftpDestination}"
 
 # The minimum size a recording must have to trigger an archival
 minFileSize="$(( 20 * 1048576 ))" # 20 MiB
@@ -134,29 +161,42 @@ do
     # For example, the file name "2019-11-30T170000+0100.flac" will be renamed
     # to "2019-11-30T170000+0100_PT3600S.flac"
     finalFileName="${fileName}_PT${duration}S.${fileExtension}"
+    finalFilePath="${watchDir}/${finalFileName}"
 
-    echo "Setting final recording file name to: ${finalFileName}"
+    # Rename (move) the recording localy first, to preserve the finale file name
+    # in case the upload fails later on.
+    echo "Renaming recording to final file name: ${finalFileName}"
+    if ! mv "${sourcePath}" "${finalFilePath}"; then
+        echo "Moving ${sourcePath} to ${finalFilePath} failed" >&2
+	continue
+    fi
 
-    tmpPath="${destDir}/.${finalFileName}.tmp"
-    destPath="${destDir}/${finalFileName}"
+    # Upload the recording to a tempoary filename in a first step.
+    # This prevents the archive from importing an incomplete file, in
+    # case the upload is interrupted or still in progress.
+    # Afterwards rename (move) it to the final file name, which should
+    # be an atomic opperation as the files are on the same filesystem.
+    tmpFileName=".${finalFileName}.tmp"
+    echo "Uploading ${finalFilePath} to ${sftpDestination}/${finalFileName}"
 
-    # Move the file to a temporary location in a first step. This prevents the
-    # archive from importing an unfinished file, in case the source and
-    # destination are located on different file systems (which leads to a copy
-    # instead of a move operation)
-    echo "Moving ${sourcePath} to ${tmpPath}"
-    if ! mv "${sourcePath}" "${tmpPath}"; then
-        echo "Moving ${sourcePath} to ${tmpPath} failed" >&2
+    printf "%s\n" \
+           "put ${finalFilePath} ${tmpFileName}" \
+           "chmod 660 ${tmpFileName}" \
+           "rename ${tmpFileName} ${finalFileName}" | \
+        sftp -i "${sshPrivateKey}" ${sftpOptions} -b - "${sftpDestination}"
+
+    if test $? -ne 0; then
+        echo "Uploading ${finalFilePath} to ${sftpDestination}/${finalFileName} failed" >&2
         continue
     fi
 
-    echo "Moving ${tmpPath} to ${destPath}"
-    if ! mv "${tmpPath}" "${destPath}"; then
-        echo "Moving ${tmpPath} to ${destPath} failed" >&2
+    echo "Removing local recording file '${finalFilePath}'"
+    if ! rm -f "${finalFilePath}"; then
+        echo "Removing local recording file '${finalFilePath}' failed" >&2
         continue
     fi
 
-    echo "${eventFileName} successfully archived to ${destPath}"
+    echo "${eventFileName} successfully archived to ${sftpDestination}/${finalFileName}"
 
     # Inform the monitoring system about the last successful recording
     zabbix_sender --config /etc/zabbix/zabbix_agentd.conf \
