@@ -3,7 +3,7 @@
 # raar-record-handler.sh - Moves new recordings to the raar import directory
 ################################################################################
 #
-# Copyright (C) 2018 - 2019 Radio Bern RaBe
+# Copyright (C) 2018 - 2024 Radio Bern RaBe
 #                           Switzerland
 #                           https://rabe.ch
 #
