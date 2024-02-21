@@ -23,6 +23,14 @@ gem 'rack-cors', require: 'rack/cors'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
 
+# rdoc is a transitive dependency of railties. Set version lower than 6.4 to avoid another
+# transitive dependency on psych, which would require libyaml,
+# which is currently not available in production.
+gem 'rdoc', '< 6.4.0'
+
+# Ruby 3.0 uses this version of the base64 default gem
+gem 'base64', '0.1.0'
+
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
