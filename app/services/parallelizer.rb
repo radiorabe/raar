@@ -47,7 +47,7 @@ class Parallelizer
   end
 
   def default_thread_count
-    Rails.application.secrets.parallel_transcodings.to_i
+    Rails.application.settings.parallel_transcodings.to_i
   end
 
 end

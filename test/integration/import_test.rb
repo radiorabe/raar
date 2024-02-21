@@ -10,11 +10,11 @@ class ImportTest < ActiveSupport::TestCase
   teardown :clear_archive_dir
 
   teardown do
-    Rails.application.secrets.import_default_show_id = nil
+    Rails.application.settings.import_default_show_id = nil
   end
 
   test 'imports recordings as broadcasts' do
-    Rails.application.secrets.import_default_show_id = shows(:klangbecken).id
+    Rails.application.settings.import_default_show_id = shows(:klangbecken).id
     Time.zone.stubs(today: Time.zone.local(2013, 6, 19),
                     now: Time.zone.local(2013, 6, 19, 11))
     # build dummy recordings and broadcasts with a duration of two minutes

@@ -8,7 +8,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
   include AirtimeHelper
 
   teardown do
-    Rails.application.secrets.import_default_show_id = nil
+    Rails.application.settings.import_default_show_id = nil
   end
 
   test 'returns no mappings without recordings' do
@@ -232,7 +232,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
   end
 
   test 'creates broadcast for default show for unmapped recordings' do
-    Rails.application.secrets.import_default_show_id = shows(:klangbecken).id
+    Rails.application.settings.import_default_show_id = shows(:klangbecken).id
     recordings = build_recordings('2016-01-01T080000+0100_060.mp3',
                                   '2016-01-01T090000+0100_060.mp3',
                                   '2016-01-01T100000+0100_060.mp3')
@@ -266,7 +266,7 @@ class Import::BroadcastMapping::Builder::AirtimeDbTest < ActiveSupport::TestCase
   end
 
   test 'creates broadcast for default show for unmapped recordings for entire duration' do
-    Rails.application.secrets.import_default_show_id = shows(:klangbecken).id
+    Rails.application.settings.import_default_show_id = shows(:klangbecken).id
     recordings = build_recordings('2016-01-01T080000+0100_060.mp3',
                                   '2016-01-01T090000+0100_060.mp3')
 

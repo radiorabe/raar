@@ -62,21 +62,21 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 'root,admin', user.groups
   end
 
-  test '#regenerate_api_key! creates and persists a new key' do
+  test '#regenerate_api_key creates and persists a new key' do
     user = users(:admin)
     key = user.api_key
-    user.regenerate_api_key!
+    user.regenerate_api_key
     assert_not_equal key, user.api_key
     assert_equal({}, user.changes)
     assert_nil user.api_key_expires_at
   end
 
-  test '#regenerate_api_key! updates expire date' do
-    Rails.application.secrets.days_to_expire_api_key = '30'
+  test '#regenerate_api_key updates expire date' do
+    Rails.application.settings.days_to_expire_api_key = '30'
     user = users(:admin)
-    user.regenerate_api_key!
+    user.regenerate_api_key
     assert_equal Time.zone.now.at_midnight + 30.days, user.api_key_expires_at
-    Rails.application.secrets.days_to_expire_api_key = nil
+    Rails.application.settings.days_to_expire_api_key = nil
   end
 
 end

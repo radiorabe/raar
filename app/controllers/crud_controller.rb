@@ -43,7 +43,7 @@ class CrudController < ListController
 
   def entry_url
     prefix = self.class.name.deconstantize.underscore.tr('/', '_')
-    send("#{prefix}_#{entry.class.model_name.singular_route_key}_path", entry)
+    send(:"#{prefix}_#{entry.class.model_name.singular_route_key}_path", entry)
   end
 
   def build_entry

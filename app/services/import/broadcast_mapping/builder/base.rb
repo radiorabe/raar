@@ -81,7 +81,7 @@ module Import
 
         def default_show
           @default_show ||= begin
-            id = Rails.application.secrets.import_default_show_id
+            id = Rails.application.settings.import_default_show_id
             id.present? && Show.find(id)
           end
         end

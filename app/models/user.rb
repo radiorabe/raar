@@ -36,7 +36,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    (listify(groups) & listify(Rails.application.secrets.admin_groups)).present?
+    (listify(groups) & listify(Rails.application.settings.admin_groups)).present?
   end
 
   def groups=(value)
@@ -52,14 +52,14 @@ class User < ApplicationRecord
     "#{id}$#{api_key}" if api_key?
   end
 
-  def regenerate_api_key!
+  def regenerate_api_key
     self.api_key = self.class.generate_unique_secure_token
     reset_api_key_expires_at
     save!
   end
 
   def reset_api_key_expires_at
-    days = Rails.application.secrets.days_to_expire_api_key
+    days = Rails.application.settings.days_to_expire_api_key
     self.api_key_expires_at = days.present? ? Time.zone.today + days.to_i.days : nil
   end
 

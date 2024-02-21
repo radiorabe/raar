@@ -31,7 +31,7 @@ module Import
       end
 
       def config_import_directories
-        Rails.application.secrets.import_directories ||
+        Rails.application.settings.import_directories ||
           raise('IMPORT_DIRECTORIES not set!')
       end
 

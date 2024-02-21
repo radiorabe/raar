@@ -21,7 +21,7 @@ module Auth
     end
 
     test 'returns and updates existing user' do
-      Rails.application.secrets.days_to_expire_api_key = '30'
+      Rails.application.settings.days_to_expire_api_key = '30'
       existing = users(:speedee)
       assert_no_difference('User.count') do
         user = fetch_user(+'speedee', +'chief', +'Spee', +'Dee')
@@ -32,7 +32,7 @@ module Auth
         assert_equal existing.api_key, user.api_key
         assert_equal Time.zone.now.at_midnight + 30.days, user.api_key_expires_at
       end
-      Rails.application.secrets.days_to_expire_api_key = nil
+      Rails.application.settings.days_to_expire_api_key = nil
     end
 
     private

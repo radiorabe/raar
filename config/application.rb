@@ -2,12 +2,10 @@
 
 require File.expand_path('boot', __dir__)
 
-require 'rails'
 # Pick the frameworks you want:
 require 'active_model/railtie'
 require 'active_record/railtie'
 require 'action_controller/railtie'
-# require "action_mailer/railtie"
 require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
@@ -17,8 +15,10 @@ Bundler.require(*Rails.groups)
 module Raar
   class Application < Rails::Application
 
+    attr_accessor :settings
+
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -39,11 +39,9 @@ module Raar
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 
-    routes.default_url_options = {
-      protocol: Rails.application.secrets.ssl ? 'https' : 'http',
-      host: Rails.application.secrets.host_name,
-      script_name: Rails.application.secrets.base_path
-    }
+    config.active_record.raise_on_assign_to_attr_readonly = false
+
+    config.active_record.generate_secure_token_on = :create
 
   end
 end

@@ -7,7 +7,7 @@ module FileStore
     class << self
 
       def home
-        home = Rails.application.secrets.archive_home
+        home = Rails.application.settings.archive_home
         # rubocop:disable Style/GlobalVars
         if Rails.env.test? && $TEST_WORKER
           File.join(home, $TEST_WORKER.to_s)
