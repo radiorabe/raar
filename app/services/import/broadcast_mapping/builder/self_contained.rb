@@ -56,7 +56,7 @@ module Import
         def show_name_mapping
           @show_name_mapping ||=
             if File.exist?(SHOW_NAME_YAML)
-              YAML.safe_load(File.read(SHOW_NAME_YAML))
+              YAML.safe_load_file(SHOW_NAME_YAML)
             else
               {}
             end

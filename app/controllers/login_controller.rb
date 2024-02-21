@@ -60,7 +60,7 @@ class LoginController < ApplicationController
 
   def update
     set_user_from_remote_header
-    current_user&.regenerate_api_key!
+    current_user&.regenerate_api_key
     generate_admin_token
     render_current_user
   end

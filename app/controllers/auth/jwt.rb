@@ -26,11 +26,11 @@ module Auth
       private
 
       def secret
-        Rails.application.secrets.secret_key_base.to_s
+        Rails.application.credentials.secret_key_base.to_s
       end
 
       def minutes_to_expire
-        Rails.application.secrets.minutes_to_expire_jwt_token.to_i.minutes
+        Rails.application.settings.minutes_to_expire_jwt_token.to_i.minutes
       end
 
     end

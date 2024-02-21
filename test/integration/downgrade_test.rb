@@ -20,7 +20,6 @@ class DowngradeTest < ActiveSupport::TestCase
     assert_equal 5, file_count('2013', '05', '20')
 
     assert_difference('AudioFile.count', -4) do
-      require 'downgrade' # load main module file
       Downgrade.run
     end
 

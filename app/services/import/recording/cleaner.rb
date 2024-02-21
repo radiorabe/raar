@@ -36,11 +36,11 @@ module Import
       end
 
       def days_to_keep_imported
-        Rails.application.secrets.days_to_keep_imported
+        Rails.application.settings.days_to_keep_imported
       end
 
       def days_to_finish_import
-        Rails.application.secrets.days_to_finish_import
+        Rails.application.settings.days_to_finish_import
       end
 
     end

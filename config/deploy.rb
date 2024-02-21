@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # config valid only for current version of Capistrano
-lock '3.17.3'
+lock '3.18.0'
 
 set :application, 'raar'
 set :repo_url, 'git@github.com:radiorabe/raar.git'

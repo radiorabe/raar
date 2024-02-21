@@ -144,7 +144,7 @@ class ApidocsController < ApplicationController
   end
 
   def host_info
-    secrets = Rails.application.secrets
+    secrets = Rails.application.settings
     {}.tap do |hash|
       hash['host'] = secrets.host_name if secrets.host_name.present?
       hash['basePath'] = secrets.base_path if secrets.base_path.present?

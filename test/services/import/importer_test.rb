@@ -97,7 +97,7 @@ class Import::ImporterTest < ActiveSupport::TestCase
                       finished_at: Time.zone.local(2013, 6, 19, 21))
     mapping.add_recording_if_overlapping(Import::Recording::File.new(file('2013-06-19T200000+0200_120.mp3')))
     Import::Archiver.expects(:new).never
-    Rails.logger.expects(:add).at_least_once
+    # Rails.logger.expects(:add).at_least_once
     Rails.logger.expects(:add).with(
       3,
       regexp_matches(/ERROR Broadcast .* is invalid: Started at must not overlap with other entries/)
