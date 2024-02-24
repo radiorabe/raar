@@ -257,10 +257,11 @@ drwxr-xr-x. 3 rotter rotter        17 Feb  6 15:45 ..
 ```
 
 #### RAAR Record Handler
-The [RAAR Record Handler](bin/raar-record-handler.sh) will move the finished
-recordings from the `/var/lib/rotter/raar` directory to a final RAAR import
-directory (`IMPORT_DIRECTORIES`) waiting for the [RAAR Importer](import.md) to
-pick them up.
+The [RAAR Record Handler](bin/raar-record-handler.sh) will upload the finished
+recordings from the `/var/lib/rotter/raar` directory to an SFTP server, which
+serves the RAAR import directory (`IMPORT_DIRECTORIES`). The [RAAR
+Importer](import.md) will pick up the final recordings from the SFTP upload
+(import) directory.
 
 The record handler also determines the recording duration with the help of
 [`ffprobe`](http://www.ffmpeg.org/ffprobe.html) and adds it to the recording
@@ -268,14 +269,44 @@ file name in the [ISO 8601 duration
 format](https://en.wikipedia.org/wiki/ISO_8601#Durations) in seconds.
 
 For example, a one hour (3600 seconds) rotter recording file
-`/var/lib/rotter/raar/2019-11-30T170000+0100.flac` will be renamed and moved to
-`/var/tmp/raar/import/2019-11-30T170000+0100_PT3600S.flac`
+`/var/lib/rotter/raar/2019-11-30T170000+0100.flac` will be renamed and upload to
+`sftp://user-01@archive.example.com/upload/2019-11-30T170000+0100_PT3600S.flac`
 
 ##### RAAR Record Handler installation
 Install `ffmpeg` (required for
 [`ffprobe`](https://www.ffmpeg.org/ffprobe.html)) from the packages provided by
 your distribution or [compile it from
 source](https://www.ffmpeg.org/download.html).
+
+Create an SSH public/private key pair and ensure the the corresponding user is able
+to login via SFTP to the SFTP server:
+```bash
+su -l -s /bin/bash rotter
+mkdir --mode=700 ~/.ssh
+
+# Create the key pair with no passphrase
+ssh-keygen -C "RAAR record handler key for ${USER}@$(hostname --fqdn)" \
+           -t ed25519 \
+           -N '' \
+           -f ~/.ssh/raar-record-handler.id_ed25519
+
+# Exit the temporary rotter login shell
+exit
+
+# Display the public key
+cat "/var/lib/rotter/.ssh/raar-record-handler.id_ed25519.pub"
+```
+
+Add the previously generated public key to the user's `~/.ssh/authorized_keys`
+file on the remote SFTP server.
+
+Test the SFTP login (you have to adapt `user-01@archive.example.com`):
+```bash
+su -c '/usr/bin/sftp -i /var/lib/rotter/.ssh/raar-record-handler.id_ed25519 user-01@archive.example.com' \
+   -s /bin/bash \
+   rotter
+```
+
 
 Install the [RAAR Record Handler](bin/raar-record-handler.sh) and its
 corresponding systemd service unit
@@ -295,24 +326,23 @@ wget -O /etc/tmpfiles.d/rotter-raar.conf \
      https://raw.githubusercontent.com/radiorabe/raar/master/config/systemd/tmpfiles.d/rotter-raar.conf
 ```
 
-You might want to adapt the destination directory, which defaults to
-`/var/tmp/raar/import` (this must match with a directory from
-`IMPORT_DIRECTORIES` of the RAAR importer):
+You have to adapt the SFTP destination, which defaults to
+`sftp://user-01@archive.example.com/upload` (the path must match with a
+directory from `IMPORT_DIRECTORIES` of the RAAR importer, in case the importer
+runs on the same host):
 ```bash
 systemctl edit raar-record-handler.service
 ```
 
 ```
 [Service]
-# Use a different destination directory
-Environment="RAAR_RECORD_HANDLER_DEST_DIR="/path/to/my/raar-import/dir"
+# SFTP upload destination
+Environment="RAAR_RECORD_HANDLER_SFTP_DEST="sftp://user-01@archive.example.com/upload"
 ```
+The path to the SSH key can also be overridden in case you have chosen a
+different one (`RAAR_RECORD_HANDLER_SSH_PRIVAT_KEY`).
 
-Make sure the `rotter` user has read/write access to the destination directory:
-```bash
-# Adapt to your import directory
-chown rotter:rotter /var/tmp/raar/import
-```
+
 
 Enable and start the `raar-record-handler.service`: 
 ```bash
@@ -325,8 +355,8 @@ systemctl status raar-record-handler.service
 journalctl -u raar-record-handler.service
 ```
 
-At every hour, the service should move the finished recordings to
-`/var/tmp/raar/import` (or whatever directory you have configured).
+At every hour, the service should upload the finished recordings to
+the SFTP destination.
 
 ## Troubleshooting
 The following commands and logs might be helpful for troubleshooting.
