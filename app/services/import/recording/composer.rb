@@ -14,7 +14,7 @@ module Import
 
       include Loggable
 
-      MAX_TRANSCODE_RETRIES = 3
+      MAX_TRANSCODE_RETRIES = 5
 
       attr_reader :mapping, :recordings
 
