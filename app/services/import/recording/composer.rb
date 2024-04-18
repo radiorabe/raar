@@ -146,7 +146,7 @@ module Import
 
       def trim(file, start, duration)
         inform("Trimming #{file} from #{start.round}s to #{(start + duration).round}s")
-        new_tempfile(::File.extname(file)).tap do |target_file|
+        new_tempfile(::File.extname(file)) do |target_file|
           proc = AudioProcessor.new(file)
           proc.trim(target_file.path, start, duration)
         end
@@ -156,7 +156,7 @@ module Import
         return list.first if list.size <= 1
 
         with_same_format(list) do |unified|
-          new_tempfile(::File.extname(unified[0])).tap do |target_file|
+          new_tempfile(::File.extname(unified[0])) do |target_file|
             proc = AudioProcessor.new(unified[0])
             proc.concat(target_file.path, unified[1..])
           end
@@ -187,16 +187,15 @@ module Import
       # times before raising the exception.
       def convert_list_to_flac(list, format)
         frame_size ||= AudioProcessor::COMMON_FLAC_FRAME_SIZE
-        converted = list.map { |file| convert_to_flac(file, format, frame_size) }
+        convert_file_list(list) { |file| convert_to_flac(file, format, frame_size) }
       rescue AudioProcessor::FailingFrameSizeError
-        close_files(converted) if converted
         frame_size += 1
         max_retry_frame_size = AudioProcessor::COMMON_FLAC_FRAME_SIZE + MAX_TRANSCODE_RETRIES
         frame_size <= max_retry_frame_size ? retry : raise
       end
 
       def convert_list_to_format(list, format)
-        list.map do |file|
+        convert_file_list(list) do |file|
           if ::File.extname(file.path) == ".#{format.file_extension}"
             file
           else
@@ -207,24 +206,42 @@ module Import
 
       def convert_to_format(file, format)
         processor = AudioProcessor.new(file.path)
-        new_tempfile(".#{format.file_extension}").tap do |target_file|
+        new_tempfile(".#{format.file_extension}") do |target_file|
           processor.transcode(target_file.path, format)
         end
       end
 
       def convert_to_flac(file, format, frame_size)
         processor = AudioProcessor.new(file.path)
-        new_tempfile(".#{format.file_extension}").tap do |target_file|
+        new_tempfile(".#{format.file_extension}") do |target_file|
           processor.transcode_flac(target_file.path, format, frame_size)
         end
+      end
+
+      def convert_file_list(list)
+        converted = []
+        # use `each` instead of `map` to be able to close previously converted files
+        # if an error is raised in the middle of the list.
+        list.each { |file| converted << yield(file) }
+        converted
+      rescue StandardError
+        close_files(converted)
+        raise
       end
 
       def close_files(list)
         list.each { |file| file.close! if file.respond_to?(:close!) }
       end
 
+      # Create a new tempfile, generate its content and then return the file.
+      # If generating content fails, remove the tempfile and raise the original error.
       def new_tempfile(extension)
-        Tempfile.new(['master', extension])
+        file = Tempfile.new(['master', extension])
+        yield file # generate content
+        file
+      rescue StandardError
+        file&.close!
+        raise
       end
 
     end

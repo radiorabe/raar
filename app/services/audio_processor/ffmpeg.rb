@@ -40,22 +40,18 @@ module AudioProcessor
       assert_directory(new_path)
       assert_same_codecs(other_paths)
       list_file = Tempfile.new('list')
-      begin
-        create_list_file(list_file, [audio.path, *other_paths])
-        concat_audio(new_path, list_file)
-      ensure
-        list_file.close!
-      end
+      create_list_file(list_file, [audio.path, *other_paths])
+      concat_audio(new_path, list_file)
+    ensure
+      list_file&.close!
     end
 
     def tag(tags)
       work_file = Tempfile.new(['tagged', File.extname(file)])
-      begin
-        transcode_preserving(work_file.path, custom: metadata_args(tags))
-        FileUtils.mv(work_file.path, file, force: true)
-      ensure
-        work_file.close!
-      end
+      transcode_preserving(work_file.path, custom: metadata_args(tags))
+      FileUtils.mv(work_file.path, file, force: true)
+    ensure
+      work_file&.close!
     end
 
     def bitrate
