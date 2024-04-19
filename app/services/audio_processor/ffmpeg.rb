@@ -23,7 +23,7 @@ module AudioProcessor
       end
     end
 
-    def transcode_flac(new_path, audio_format, frame_size = AudioProcessor::COMMON_FLAC_FRAME_SIZE)
+    def transcode_flac(new_path, audio_format, frame_size)
       options = transcode_options(audio_format)
       options[:custom] = ['-frame_size', frame_size]
       audio.transcode(new_path, options).tap do
@@ -172,7 +172,7 @@ module AudioProcessor
 
       raise AudioProcessor::FailingFrameSizeError,
             "Transcoded file has duration #{transcoded_duration}, " \
-            "while original has #{duration} (#{transcoded_file}})"
+            "while original has #{duration} (#{file}})"
     end
 
   end

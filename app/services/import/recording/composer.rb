@@ -14,6 +14,8 @@ module Import
 
       include Loggable
 
+      COMMON_FLAC_FRAME_SIZE = 1024
+      FLAC_FRAME_SIZE_RANGE = 256
       MAX_TRANSCODE_RETRIES = 5
 
       attr_reader :mapping, :recordings
@@ -183,15 +185,16 @@ module Import
       # When converting a list of flacs, they must all have the same
       # frame size. This transcoding sometimes fails for certain files
       # reproducibly in ffmpeg, based on the given frame size. With an
-      # adjusted frame size, transcoding succeeds. Hence retry a few
+      # adjusted frame size, transcoding may succeed. Hence retry a few
       # times before raising the exception.
       def convert_list_to_flac(list, format)
-        frame_size ||= AudioProcessor::COMMON_FLAC_FRAME_SIZE
+        retries ||= 0
+        frame_size ||= COMMON_FLAC_FRAME_SIZE
         convert_file_list(list) { |file| convert_to_flac(file, format, frame_size) }
       rescue AudioProcessor::FailingFrameSizeError
-        frame_size += 1
-        max_retry_frame_size = AudioProcessor::COMMON_FLAC_FRAME_SIZE + MAX_TRANSCODE_RETRIES
-        frame_size <= max_retry_frame_size ? retry : raise
+        retries += 1
+        frame_size = COMMON_FLAC_FRAME_SIZE + rand(FLAC_FRAME_SIZE_RANGE) + 1
+        retries <= MAX_TRANSCODE_RETRIES ? retry : raise
       end
 
       def convert_list_to_format(list, format)

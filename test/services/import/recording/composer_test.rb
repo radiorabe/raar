@@ -121,11 +121,10 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
                               '2013-06-12T203000+0200_030.flac',
                               '2013-06-12T210000+0200_060.flac')
 
-    fs = AudioProcessor::COMMON_FLAC_FRAME_SIZE
     expect_concat(2)
-    expect_transcode_flac(fs + 1)
-    expect_transcode_flac(fs + 1)
-    expect_transcode_flac(fs + 1)
+    expect_transcode_flac(instance_of(Integer))
+    expect_transcode_flac(instance_of(Integer))
+    expect_transcode_flac(instance_of(Integer))
     expect_transcode_flac_with_exception
     expect_transcode_flac
     expect_transcode_flac
@@ -140,15 +139,14 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
     composer = build_composer('2013-06-12T200000+0200_060.flac',
                               '2013-06-12T210000+0200_060.flac')
 
-    fs = AudioProcessor::COMMON_FLAC_FRAME_SIZE
-    retries = Import::Recording::Composer::MAX_TRANSCODE_RETRIES
-    (fs..(fs + retries)).to_a.reverse_each do |i|
-      expect_transcode_flac_with_exception(i)
-      expect_transcode_flac(i)
+    (Import::Recording::Composer::MAX_TRANSCODE_RETRIES + 1).times do
+      expect_transcode_flac_with_exception(instance_of(Integer))
+      expect_transcode_flac(instance_of(Integer))
     end
     mock_audio_format('flac', 1)
     mock_duration(file(0), 60)
     mock_duration(file(1), 60)
+
     assert_raises(AudioProcessor::FailingFrameSizeError) do
       composer.compose
     end
@@ -427,13 +425,13 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
     AudioProcessor.expects(:new).with(instance_of(String)).returns(proc)
   end
 
-  def expect_transcode_flac(frame_size = AudioProcessor::COMMON_FLAC_FRAME_SIZE)
+  def expect_transcode_flac(frame_size = Import::Recording::Composer::COMMON_FLAC_FRAME_SIZE)
     proc = mock('processor')
     proc.expects(:transcode_flac).with(instance_of(String), instance_of(AudioFormat), frame_size)
     AudioProcessor.expects(:new).with(instance_of(String)).returns(proc)
   end
 
-  def expect_transcode_flac_with_exception(frame_size = AudioProcessor::COMMON_FLAC_FRAME_SIZE)
+  def expect_transcode_flac_with_exception(frame_size = Import::Recording::Composer::COMMON_FLAC_FRAME_SIZE)
     proc = mock('processor')
     proc.expects(:transcode_flac)
         .with(instance_of(String), instance_of(AudioFormat), frame_size)

@@ -84,8 +84,9 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
     begin
       format = AudioFormat.new('flac', nil, 2)
       flac = silent_source_file(format)
-      same = AudioProcessor::Ffmpeg.new(flac)
-                                   .transcode_flac(file.path, AudioFormat.new('flac', nil, 2))
+      same = AudioProcessor::Ffmpeg
+             .new(flac)
+             .transcode_flac(file.path, AudioFormat.new('flac', nil, 2), 1024)
       assert_equal 'flac', same.audio_codec
       assert_equal 2, same.audio_channels
     ensure
@@ -103,7 +104,7 @@ class AudioProcessor::FfmpegTest < ActiveSupport::TestCase
       processor = AudioProcessor::Ffmpeg.new(flac)
       processor.send(:audio).stubs(:transcode).returns(result)
       assert_raises(AudioProcessor::FailingFrameSizeError) do
-        processor.transcode_flac(file.path, format)
+        processor.transcode_flac(file.path, format, 1024)
       end
     ensure
       file.close!
