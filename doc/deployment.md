@@ -32,6 +32,7 @@ An easy way to manage these values is to create a `~/.env` file with several `VA
 | RAAR_DB_PASSWORD | The password used to connect to the database. | - |
 | RAAR_DB_ADAPTER | The database adapter name, e.g. `postgresql`. | sqlite3 |
 | RAAR_LOG | Where to log messages. Either 'syslog', 'stdout' or empty to use the rails defaults (`log/production.log`). | - |
+| FFMPEG_LOG | If set to true, log ffmpeg commands as well. | - |
 | AIRTIME_DB_NAME | The airtime database name to connect to. | - |
 | AIRTIME_DB_HOST | The airtime database host to connect to. | - |
 | AIRTIME_DB_PORT | The airtime database port to connect to. | - |

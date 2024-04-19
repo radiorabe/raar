@@ -2,7 +2,8 @@
 
 module AudioProcessor
 
-  FFMPEG.logger = Rails.env.development? ? Rails.logger : Logger.new('/dev/null')
+  log = Rails.env.development? || ENV['FFMPEG_LOG'].present?
+  FFMPEG.logger = log ? Rails.logger : Logger.new('/dev/null')
 
   # Specific processor class working with FFmpeg backend.
   class Ffmpeg < Base
@@ -131,7 +132,7 @@ module AudioProcessor
     end
 
     def run_command(*command)
-      FFMPEG.logger.info("Running command...\n#{command.join(' ')}\n")
+      FFMPEG.logger.info("Running command...\n#{command.inspect}\n")
       out, status = Open3.capture2e(*command)
       unless status.success?
         raise(FFMPEG::Error,
