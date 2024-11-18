@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version: ["3.0", "3.1"]
+        ruby-version: ["3.2", "3.3"]
 
     services:
       db:
@@ -68,7 +68,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.0"
+          ruby-version: "3.2"
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Run rubocop
         run: bundle exec rubocop
@@ -96,7 +96,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.0"
+          ruby-version: "3.2"
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Prepare
         env:

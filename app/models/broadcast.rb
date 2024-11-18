@@ -18,10 +18,10 @@
 
 class Broadcast < ApplicationRecord
 
-  include UserStampable
   include NonOverlappable
 
   belongs_to :show
+  belongs_to :updater, optional: true, class_name: 'User'
 
   has_many :audio_files, dependent: :restrict_with_error
   has_many :tracks, dependent: :nullify
@@ -30,6 +30,7 @@ class Broadcast < ApplicationRecord
   validates :started_at, :finished_at, uniqueness: true
 
   before_validation :set_show_label_if_empty
+  before_save :set_user_stamps
   after_create :assign_tracks
 
   scope :list, -> { order('broadcasts.started_at') }
@@ -61,6 +62,12 @@ class Broadcast < ApplicationRecord
     Track
       .where(tracks: { started_at: started_at..finished_at })
       .update_all(broadcast_id: id)
+  end
+
+  def set_user_stamps
+    return unless User.current
+
+    self.updater = User.current
   end
 
 end

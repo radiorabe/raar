@@ -6,7 +6,7 @@ gem 'actionpack'
 gem 'activerecord'
 gem 'railties'
 
-gem 'pg', '< 1.3.0' # newer requires posgresql >= 9.3
+gem 'pg'
 
 gem 'active_model_serializers'
 gem 'jwt'
@@ -28,9 +28,6 @@ gem 'bootsnap', require: false
 # which is currently not available in production.
 gem 'rdoc', '< 6.4.0'
 
-# Ruby 3.0 uses this version of the base64 default gem
-gem 'base64', '0.1.0'
-
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
@@ -48,10 +45,6 @@ group :development do
   gem 'rubocop-rails'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-
-  # Loading the listen gem enables an evented file system monitor. Check
-  # https://github.com/guard/listen#listen-adapters if on Windows or *BSD.
-  # gem 'listen', '~> 3.0.4'
 end
 
 group :test do

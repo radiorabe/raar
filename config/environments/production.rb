@@ -21,12 +21,18 @@ Rails.application.configure do
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
+  # Cache assets for far-future expiry since they are all digest stamped.
+  config.public_file_server.headers = { 'cache-control' => "public, max-age=#{1.year.to_i}" }
+
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = 'http://assets.example.com'
 
   # Specifies the header that your server uses for sending files.
   config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
+
+  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
+  config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = ENV['RAAR_SSL'] == 'true'
@@ -61,6 +67,9 @@ Rails.application.configure do
       "#{severity} [#{datetime.strftime('%Y-%m-%d %H:%M:%S.%6N')}]: #{msg}\n"
     end
   end
+
+  # Prevent health checks from clogging up the logs.
+  config.silence_healthcheck_path = '/up'
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store

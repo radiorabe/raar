@@ -5,8 +5,8 @@ module UserStampable
   extend ActiveSupport::Concern
 
   included do
-    belongs_to :creator, optional: true, class_name: 'User' if column_names.include?('creator_id')
-    belongs_to :updater, optional: true, class_name: 'User' if column_names.include?('updater_id')
+    belongs_to :creator, optional: true, class_name: 'User'
+    belongs_to :updater, optional: true, class_name: 'User'
 
     before_save :set_user_stamps
   end
@@ -16,8 +16,8 @@ module UserStampable
   def set_user_stamps
     return unless User.current
 
-    self.creator = User.current if new_record? && respond_to?(:creator=)
-    self.updater = User.current if respond_to?(:updater=)
+    self.creator = User.current if new_record?
+    self.updater = User.current
   end
 
 end
