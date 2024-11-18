@@ -124,19 +124,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -227,19 +221,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -288,19 +276,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -391,19 +373,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -459,19 +435,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -505,19 +475,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       },
@@ -565,19 +529,13 @@
         },
         "security": [
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -605,24 +563,16 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           },
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -715,19 +665,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -762,19 +706,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       },
@@ -822,19 +760,13 @@
         },
         "security": [
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -877,9 +809,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -920,9 +850,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -957,9 +885,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1007,9 +933,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1037,9 +961,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1121,19 +1043,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -1180,19 +1096,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -1239,19 +1149,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -1322,9 +1226,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1366,9 +1268,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1403,9 +1303,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1454,9 +1352,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1485,9 +1381,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1534,9 +1428,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1585,9 +1477,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1629,9 +1519,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1687,9 +1575,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1725,9 +1611,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1756,9 +1640,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1812,9 +1694,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1870,9 +1750,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1921,9 +1799,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1986,9 +1862,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2031,9 +1905,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2076,9 +1948,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2120,9 +1990,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2157,9 +2025,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2208,9 +2074,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2239,9 +2103,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2284,9 +2146,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2328,9 +2188,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2365,9 +2223,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2416,9 +2272,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2447,9 +2301,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2489,9 +2341,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2533,9 +2383,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2570,9 +2418,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2621,9 +2467,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2652,9 +2496,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2695,9 +2537,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2740,9 +2580,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2784,9 +2622,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2821,9 +2657,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2872,9 +2706,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2903,9 +2735,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2947,9 +2777,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }

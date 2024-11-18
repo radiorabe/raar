@@ -18,11 +18,16 @@ module Raar
     attr_accessor :settings
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 8.0
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+    #
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[tasks capistrano])
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake time:zones:all" for a time zone names list. Default is UTC.
