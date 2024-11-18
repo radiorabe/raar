@@ -35,7 +35,7 @@ module Downgrade
         .joins(broadcast: { show: { profile: :archive_formats } })
         .where(archive_formats: { id: action.archive_format_id })
         .where('audio_files.codec = archive_formats.codec')
-        .where('broadcasts.started_at < ?', Time.zone.now - action.months.months)
+        .where(broadcasts: { started_at: ...(Time.zone.now - action.months.months) })
     end
 
     def handle(file)

@@ -29,7 +29,7 @@ module Admin
     test 'GET index returns unauthorized if not logged in' do
       logout
       get :index
-      assert_response 401
+      assert_response :unauthorized
     end
 
     test 'GET show returns entry' do
@@ -48,7 +48,7 @@ module Admin
                  }
                }
              }
-        assert_response 201
+        assert_response :created
       end
       assert_equal '2100-02-01', json['data']['attributes']['expires_at']
       assert_equal AccessCode::CODE_LENGTH, json['data']['attributes']['code'].size
@@ -64,7 +64,7 @@ module Admin
                  }
                }
              }
-        assert_response 422
+        assert_response :unprocessable_content
       end
     end
 
@@ -74,7 +74,7 @@ module Admin
               id: entry.id,
               data: { attributes: { expires_at: '2100-02-01' } }
             }
-      assert_response 200
+      assert_response :ok
       assert_equal '2100-02-01', json['data']['attributes']['expires_at']
     end
 
@@ -84,7 +84,7 @@ module Admin
               id: entry.id,
               data: { attributes: { expires_at: nil } }
             }
-      assert_response 422
+      assert_response :unprocessable_content
     end
 
     test 'DELETE destroy removes existing entry' do
@@ -92,7 +92,7 @@ module Admin
       assert_difference('AccessCode.count', -1) do
         delete :destroy, params: { id: entry.id }
       end
-      assert_response 204
+      assert_response :no_content
     end
 
     private

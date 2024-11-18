@@ -20,13 +20,13 @@ module Admin
     test 'GET show returns unauthorized for api token' do
       login('speedee')
       get :show, params: { id: users(:admin).id }
-      assert_response 401
+      assert_response :unauthorized
     end
 
     test 'GET show returns unauthorized if not logged in' do
       logout
       get :show, params: { id: users(:speedee).id }
-      assert_response 401
+      assert_response :unauthorized
     end
 
     test 'POST create adds new user' do
@@ -42,7 +42,7 @@ module Admin
                  }
                }
              }
-        assert_response 201
+        assert_response :created
       end
       assert_equal 'foo', json['data']['attributes']['username']
     end
@@ -60,7 +60,7 @@ module Admin
                  }
                }
              }
-        assert_response 422
+        assert_response :unprocessable_content
       end
       assert_equal 1, json['errors'].size
       assert_equal '/data/attributes/username', json['errors'].first['source']['pointer']
@@ -72,7 +72,7 @@ module Admin
               id: users(:speedee).id,
               data: { attributes: { first_name: 'Spee', last_name: 'Dee' } }
             }
-      assert_response 200
+      assert_response :ok
       assert_equal 'Spee', json['data']['attributes']['first_name']
       assert_equal 'Spee', users(:speedee).reload.first_name
       assert_equal 'Dee', users(:speedee).last_name
@@ -84,7 +84,7 @@ module Admin
               id: users(:speedee).id,
               data: { attributes: { username: 'admin' } }
             }
-      assert_response 422
+      assert_response :unprocessable_content
       assert_match /taken/, response.body
       assert_equal 'speedee', users(:speedee).reload.username
     end
@@ -93,7 +93,7 @@ module Admin
       assert_difference('User.count', -1) do
         delete :destroy, params: { id: users(:speedee).id }
       end
-      assert_response 204
+      assert_response :no_content
     end
 
   end

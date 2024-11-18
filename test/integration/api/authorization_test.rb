@@ -10,45 +10,45 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
   test 'GET show audio file with HTTP token is allowed' do
     assert_no_difference('User.count') do
       get audio_path, headers: { 'HTTP_AUTHORIZATION' => encode_token(users(:admin).api_token) }
-      assert_response 200
+      assert_response :ok
     end
   end
 
   test 'GET show audio file with api_token param is allowed' do
     assert_no_difference('User.count') do
       get "#{audio_path}?api_token=#{users(:admin).api_token}"
-      assert_response 200
+      assert_response :ok
     end
   end
 
   test 'GET show audio file without authorization fails' do
     assert_no_difference('User.count') do
       get audio_path
-      assert_response 401
+      assert_response :unauthorized
     end
   end
 
   test 'GET show profile without authorization fails' do
     get admin_profile_path(profiles(:default).id)
-    assert_response 401
+    assert_response :unauthorized
   end
 
   test 'GET show profile with api token fails' do
     get admin_profile_path(profiles(:default).id),
         headers: { 'HTTP_AUTHORIZATION' => encode_token(users(:admin).api_token) }
-    assert_response 401
+    assert_response :unauthorized
   end
 
   test 'GET show profile with jwt token works' do
     get admin_profile_path(profiles(:default).id),
         headers: { 'HTTP_AUTHORIZATION' => encode_token(Auth::Jwt.generate_token(users(:admin))) }
-    assert_response 200
+    assert_response :ok
   end
 
   test 'GET show profile with jwt token fails for non-admin user' do
     get admin_profile_path(profiles(:default).id),
         headers: { 'HTTP_AUTHORIZATION' => encode_token(Auth::Jwt.generate_token(users(:speedee))) }
-    assert_response 403
+    assert_response :forbidden
   end
 
   private

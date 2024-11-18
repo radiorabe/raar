@@ -15,7 +15,7 @@ module Admin
     test 'GET index returns unauthorized if not logged in' do
       logout
       get :index
-      assert_response 401
+      assert_response :unauthorized
     end
 
     test 'GET show returns entry' do
@@ -36,7 +36,7 @@ module Admin
                  }
                }
              }
-        assert_response 201
+        assert_response :created
       end
       assert_equal 'mid', json['data']['attributes']['name']
     end
@@ -53,7 +53,7 @@ module Admin
                  }
                }
              }
-        assert_response 422
+        assert_response :unprocessable_content
       end
       assert_match /can't be blank/, response.body
     end
@@ -64,7 +64,7 @@ module Admin
               id: entry.id,
               data: { attributes: { channels: 2 } }
             }
-      assert_response 200
+      assert_response :ok
       assert_equal 2, json['data']['attributes']['channels']
       assert_equal 2, entry.reload.channels
     end
@@ -75,7 +75,7 @@ module Admin
               id: entry.id,
               data: { attributes: { bitrate: '123' } }
             }
-      assert_response 422
+      assert_response :unprocessable_content
       assert_match /not included/, response.body
       assert_equal 96, entry.reload.bitrate
     end
@@ -84,7 +84,7 @@ module Admin
       assert_difference('PlaybackFormat.count', -1) do
         delete :destroy, params: { id: entry.id }
       end
-      assert_response 204
+      assert_response :no_content
     end
 
     private

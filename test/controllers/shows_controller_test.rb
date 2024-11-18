@@ -59,7 +59,7 @@ class ShowsControllerTest < ActionController::TestCase
               details: 'The best sound all over'
             } }
           }
-    assert_response 200
+    assert_response :ok
     assert_equal 'Klangbecken', json['data']['attributes']['name']
     assert_equal 'The best sound all over', json['data']['attributes']['details']
     assert_equal 'Klangbecken', entry.reload.name
@@ -75,7 +75,7 @@ class ShowsControllerTest < ActionController::TestCase
             id: shows(:klangbecken).id,
             data: { attributes: { details: 'Very important shows', started_at: '17:00' } }
           }
-    assert_response 401
+    assert_response :unauthorized
   end
 
 end

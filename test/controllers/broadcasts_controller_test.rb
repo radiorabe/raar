@@ -158,7 +158,7 @@ class BroadcastsControllerTest < ActionController::TestCase
             id: entry.id,
             data: { attributes: { details: 'Very important shows', started_at: '17:00' } }
           }
-    assert_response 200
+    assert_response :ok
     assert_equal 'Very important shows', json['data']['attributes']['details']
     assert_equal '2013-04-10T11:00:00.000+02:00', json['data']['attributes']['started_at']
     assert_equal 'Very important shows', entry.reload.details
@@ -176,7 +176,7 @@ class BroadcastsControllerTest < ActionController::TestCase
               started_at: '17:00'
             } }
           }
-    assert_response 200
+    assert_response :ok
     assert_equal 'Info April 1', json['data']['attributes']['label']
     assert_equal 'Very important shows', json['data']['attributes']['details']
     assert_equal '2013-04-10T11:00:00.000+02:00', json['data']['attributes']['started_at']
@@ -192,7 +192,7 @@ class BroadcastsControllerTest < ActionController::TestCase
             id: entry.id,
             data: { attributes: { details: 'Very important shows', started_at: '17:00' } }
           }
-    assert_response 401
+    assert_response :unauthorized
   end
 
   test 'DELETE destroy is not possible' do

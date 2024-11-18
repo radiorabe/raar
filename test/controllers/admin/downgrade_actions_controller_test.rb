@@ -23,7 +23,7 @@ module Admin
             profile_id: profiles(:default).id,
             archive_format_id: archive_formats(:default_mp3).id
           }
-      assert_response 401
+      assert_response :unauthorized
     end
 
     test 'GET show returns entry' do
@@ -50,7 +50,7 @@ module Admin
                  }
                }
              }
-        assert_response 201
+        assert_response :created
       end
       assert_equal 12, json['data']['attributes']['months']
     end
@@ -69,7 +69,7 @@ module Admin
                  }
                }
              }
-        assert_response 422
+        assert_response :unprocessable_content
       end
     end
 
@@ -81,7 +81,7 @@ module Admin
               archive_format_id: archive_formats(:default_mp3).id,
               data: { attributes: { months: 6, bitrate: 224 } }
             }
-      assert_response 200, response.body
+      assert_response :ok, response.body
       assert_equal 6, json['data']['attributes']['months']
       assert_equal 224, json['data']['attributes']['bitrate']
       assert_equal 6, entry.reload.months
@@ -96,7 +96,7 @@ module Admin
               archive_format_id: archive_formats(:default_mp3).id,
               data: { attributes: { bitrate: 123 } }
             }
-      assert_response 422
+      assert_response :unprocessable_content
       assert_match /not included/, response.body
       assert_equal 192, entry.reload.bitrate
     end
@@ -110,7 +110,7 @@ module Admin
                  archive_format_id: archive_formats(:default_mp3).id
                }
       end
-      assert_response 204
+      assert_response :no_content
     end
 
     private

@@ -7,7 +7,7 @@ class LoginControllerTest < ActionController::TestCase
   test 'GET show with REMOTE_USER returns user object' do
     request.env['REMOTE_USER'] = +'speedee'
     get :show
-    assert_response 200
+    assert_response :ok
     assert_equal 'speedee', json['data']['attributes']['username']
     assert_match /\A#{users(:speedee).id}\$[A-Za-z0-9]{24}\z/,
                  json['data']['attributes']['api_token']
@@ -17,7 +17,7 @@ class LoginControllerTest < ActionController::TestCase
   test 'GET show with REMOTE_USER returns admin user object and jwt' do
     request.env['REMOTE_USER'] = +'admin'
     get :show
-    assert_response 200
+    assert_response :ok
     assert_equal 'admin', json['data']['attributes']['username']
     assert_match /\A#{users(:admin).id}\$[A-Za-z0-9]{24}\z/,
                  json['data']['attributes']['api_token']
@@ -27,14 +27,14 @@ class LoginControllerTest < ActionController::TestCase
   test 'GET show with api_token returns user object' do
     get :show,
         params: { api_token: users(:speedee).api_token }
-    assert_response 200
+    assert_response :ok
     assert_equal 'speedee', json['data']['attributes']['username']
   end
 
   test 'GET show with api_token returns admin user object but no JWT' do
     get :show,
         params: { api_token: users(:admin).api_token }
-    assert_response 200
+    assert_response :ok
     assert_equal 'admin', json['data']['attributes']['username']
     assert response.headers['X-Auth-Token'].blank?
   end
@@ -43,20 +43,20 @@ class LoginControllerTest < ActionController::TestCase
     code = AccessCode.create!(expires_at: 1.month.from_now).code
     get :show,
         params: { access_code: code }
-    assert_response 200
+    assert_response :ok
     assert_nil json['data']['attributes']['username']
   end
 
   test 'GET show without auth returns unauthorized' do
     get :show
-    assert_response 401
+    assert_response :unauthorized
   end
 
   test 'POST login with REMOTE_USER returns user object' do
     request.env['REMOTE_USER'] = +'speedee'
     post :create,
          params: { username: 'speedee', password: 'foo' }
-    assert_response 200
+    assert_response :ok
     assert_equal 'speedee', json['data']['attributes']['username']
     assert_match /\A#{users(:speedee).id}\$[A-Za-z0-9]{24}\z/,
                  json['data']['attributes']['api_token']
@@ -67,7 +67,7 @@ class LoginControllerTest < ActionController::TestCase
     request.env['REMOTE_USER'] = +'admin'
     post :create,
          params: { username: 'admin', password: 'foo' }
-    assert_response 200
+    assert_response :ok
     assert_equal 'admin', json['data']['attributes']['username']
     assert_match /\A#{users(:admin).id}\$[A-Za-z0-9]{24}\z/,
                  json['data']['attributes']['api_token']
@@ -77,21 +77,21 @@ class LoginControllerTest < ActionController::TestCase
   test 'POST login without REMOTE_USER returns error' do
     post :create,
          params: { username: 'speedee', password: 'foo' }
-    assert_response 401
+    assert_response :unauthorized
     assert_match /Not authenticated/, response.body
   end
 
   test 'POST login with api_token responds unauthorized' do
     post :create,
          params: { api_token: users(:speedee).api_token }
-    assert_response 401
+    assert_response :unauthorized
   end
 
   test 'POST login with EXTERNAL_AUTH_ERROR returns error' do
     request.env['EXTERNAL_AUTH_ERROR'] = 'invalid password'
     post :create,
          params: { username: 'speedee', password: 'foo' }
-    assert_response 401
+    assert_response :unauthorized
     assert_match /invalid password/, response.body
   end
 
@@ -100,7 +100,7 @@ class LoginControllerTest < ActionController::TestCase
     user = users(:speedee)
     key = user.api_key
     patch :update
-    assert_response 200
+    assert_response :ok
     assert_not_equal key, user.reload.api_key
     assert_equal user.api_token, json['data']['attributes']['api_token']
   end
@@ -109,13 +109,13 @@ class LoginControllerTest < ActionController::TestCase
     user = users(:speedee)
     key = user.api_key
     patch :update, params: { api_token: user.api_token }
-    assert_response 401
+    assert_response :unauthorized
     assert_equal key, user.reload.api_key
   end
 
   test 'PATCH update responds unauthorized without authentication' do
     patch :update
-    assert_response 401
+    assert_response :unauthorized
   end
 
 end

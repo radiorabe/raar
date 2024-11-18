@@ -15,7 +15,7 @@ module Admin
     test 'GET index returns unauthorized if not logged in' do
       logout
       get :index
-      assert_response 401
+      assert_response :unauthorized
     end
 
     test 'GET show returns entry' do
@@ -35,7 +35,7 @@ module Admin
                  }
                }
              }
-        assert_response 201
+        assert_response :created
       end
       assert_equal 'Live', json['data']['attributes']['name']
       assert_equal users(:admin).id, json['data']['attributes']['creator_id']
@@ -52,7 +52,7 @@ module Admin
                  }
                }
              }
-        assert_response 422
+        assert_response :unprocessable_content
       end
     end
 
@@ -62,7 +62,7 @@ module Admin
               id: entry.id,
               data: { attributes: { description: 'Very important shows' } }
             }
-      assert_response 200
+      assert_response :ok
       assert_equal 'Very important shows', json['data']['attributes']['description']
       assert_nil json['data']['attributes']['creator_id']
       assert_equal users(:admin).id, json['data']['attributes']['updater_id']
@@ -77,7 +77,7 @@ module Admin
               id: entry.id,
               data: { attributes: { name: 'Unimportant' } }
             }
-      assert_response 422
+      assert_response :unprocessable_content
       assert_match /taken/, response.body
       assert_equal 'Important', entry.reload.name
     end
@@ -87,14 +87,14 @@ module Admin
       assert_difference('Profile.count', -1) do
         delete :destroy, params: { id: profile.id }
       end
-      assert_response 204
+      assert_response :no_content
     end
 
     test 'DELETE destroy does not remove used entry' do
       assert_no_difference('Profile.count') do
         delete :destroy, params: { id: entry.id }
       end
-      assert_response 422
+      assert_response :unprocessable_content
       assert_match /dependent shows/, response.body
     end
 

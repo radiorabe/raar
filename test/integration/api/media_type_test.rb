@@ -23,7 +23,7 @@ class MediaTypeTest < ActionDispatch::IntegrationTest
            env: {
              'HTTP_AUTHORIZATION' => encode_token(Auth::Jwt.generate_token(users(:admin)))
            }
-      assert_response 201
+      assert_response :created
       assert_equal 'application/vnd.api+json; charset=utf-8', response.headers['Content-Type']
     end
     assert_equal 'foo', json['data']['attributes']['username']
@@ -48,7 +48,7 @@ class MediaTypeTest < ActionDispatch::IntegrationTest
            env: {
              'HTTP_AUTHORIZATION' => encode_token(Auth::Jwt.generate_token(users(:admin)))
            }
-      assert_response 201
+      assert_response :created
     end
     assert_equal 'foo', json['data']['attributes']['username']
   end

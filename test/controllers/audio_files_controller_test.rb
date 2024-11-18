@@ -205,7 +205,7 @@ class AudioFilesControllerTest < ActionController::TestCase
           format: 'mp3'
         }
 
-    assert_response 401
+    assert_response :unauthorized
   end
 
   test 'GET show for public file returns audio file' do
@@ -223,7 +223,7 @@ class AudioFilesControllerTest < ActionController::TestCase
           format: 'mp3'
         }
 
-    assert_response 200
+    assert_response :ok
     assert_equal AudioEncoding::Mp3.mime_type, response.headers['Content-Type']
     assert_match 'inline', response.headers['Content-Disposition']
   end
@@ -244,7 +244,7 @@ class AudioFilesControllerTest < ActionController::TestCase
           download: 'true'
         }
 
-    assert_response 401
+    assert_response :unauthorized
   end
 
   test 'GET show for file with no max_public_bitrate set returns audio file' do
@@ -263,7 +263,7 @@ class AudioFilesControllerTest < ActionController::TestCase
           format: 'mp3'
         }
 
-    assert_response 200
+    assert_response :ok
     assert_equal AudioEncoding::Mp3.mime_type, response.headers['Content-Type']
   end
 
@@ -281,7 +281,7 @@ class AudioFilesControllerTest < ActionController::TestCase
           format: 'mp3'
         }
 
-    assert_response 200
+    assert_response :ok
     assert_equal AudioEncoding::Mp3.mime_type, response.headers['Content-Type']
   end
 
@@ -298,7 +298,7 @@ class AudioFilesControllerTest < ActionController::TestCase
           format: 'mp3'
         }
 
-    assert_response 200
+    assert_response :ok
   end
 
   test 'GET show logged in with best quality returns audio file' do
@@ -314,7 +314,7 @@ class AudioFilesControllerTest < ActionController::TestCase
           format: 'mp3'
         }
 
-    assert_response 200
+    assert_response :ok
     assert_match 'inline', response.headers['Content-Disposition']
   end
 
@@ -332,7 +332,7 @@ class AudioFilesControllerTest < ActionController::TestCase
           download: true
         }
 
-    assert_response 200
+    assert_response :ok
     assert_match 'attachment', response.headers['Content-Disposition']
   end
 
@@ -351,7 +351,7 @@ class AudioFilesControllerTest < ActionController::TestCase
           api_token: users(:member).api_token
         }
 
-    assert_response 401
+    assert_response :unauthorized
   end
 
   test 'GET show via access_code with high quality and download flag returns audio file' do
@@ -371,7 +371,7 @@ class AudioFilesControllerTest < ActionController::TestCase
           access_code: code
         }
 
-    assert_response 200
+    assert_response :ok
     assert_match 'attachment', response.headers['Content-Disposition']
   end
 
@@ -420,7 +420,7 @@ class AudioFilesControllerTest < ActionController::TestCase
           format: 'mp3'
         }
 
-    assert_response 404
+    assert_response :not_found
   end
 
   test 'GET show in the future returns 404' do
@@ -438,7 +438,7 @@ class AudioFilesControllerTest < ActionController::TestCase
           format: 'mp3'
         }
 
-    assert_response 404
+    assert_response :not_found
   end
 
   test 'GET index with time parts up to minutes resolves params correctly' do

@@ -23,7 +23,7 @@ class AccessCode < ApplicationRecord
   before_validation :generate_code, on: :create
 
   scope :list, -> { order(expires_at: :desc) }
-  scope :expired, -> { where('expires_at < ?', Time.zone.today) }
+  scope :expired, -> { where(expires_at: ...Time.zone.today) }
 
   private
 

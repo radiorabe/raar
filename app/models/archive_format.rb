@@ -72,7 +72,7 @@ class ArchiveFormat < ApplicationRecord
 
   def priviledged_groups=(value)
     value = value.join(',') if value.is_a?(Array)
-    super(value)
+    super
   end
 
   def priviledged_group_list

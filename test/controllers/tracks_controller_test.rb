@@ -147,7 +147,7 @@ class TracksControllerTest < ActionController::TestCase
             id: entry.id,
             data: { attributes: { artist: 'ChocoLocoColo', finished_at: '2013-05-20T20:13:06' } }
           }
-    assert_response 200
+    assert_response :ok
     assert_equal 'ChocoLocoColo', json['data']['attributes']['artist']
     assert_equal '2013-05-20T20:10:44.000+02:00', json['data']['attributes']['started_at']
     assert_equal '2013-05-20T20:13:06.000+02:00', json['data']['attributes']['finished_at']
@@ -164,7 +164,7 @@ class TracksControllerTest < ActionController::TestCase
               started_at: '2013-05-20T20:10:40'
             } }
           }
-    assert_response 200
+    assert_response :ok
     assert_equal 'Vvvroom', json['data']['attributes']['title']
     assert_equal '2013-05-20T20:10:40.000+02:00', json['data']['attributes']['started_at']
     assert_equal '2013-05-20T20:13:05.000+02:00', json['data']['attributes']['finished_at']
@@ -179,7 +179,7 @@ class TracksControllerTest < ActionController::TestCase
             id: entry.id,
             data: { attributes: { artist: 'Blabla', started_at: '17:00' } }
           }
-    assert_response 401
+    assert_response :unauthorized
   end
 
   test 'DELETE destroy removes entry' do

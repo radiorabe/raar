@@ -225,7 +225,7 @@ module Import
         converted = []
         # use `each` instead of `map` to be able to close previously converted files
         # if an error is raised in the middle of the list.
-        list.each { |file| converted << yield(file) }
+        list.each { |file| converted << yield(file) } # rubocop:disable Style/MapIntoArray
         converted
       rescue StandardError
         close_files(converted)

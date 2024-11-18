@@ -26,7 +26,7 @@ module Admin
     test 'GET create returns unauthorized if not logged in' do
       logout
       post :create
-      assert_response 401
+      assert_response :unauthorized
     end
 
     test 'POST create adds new show' do
@@ -40,7 +40,7 @@ module Admin
                  }
                }
              }
-        assert_response 201
+        assert_response :created
       end
       assert_equal 'foo', json['data']['attributes']['name']
       assert_equal profiles(:default).id.to_s, json['data']['relationships']['profile']['data']['id']
@@ -56,7 +56,7 @@ module Admin
                  }
                }
              }
-        assert_response 422
+        assert_response :unprocessable_content
       end
     end
 
@@ -78,7 +78,7 @@ module Admin
                  }
                }
              }
-        assert_response 201
+        assert_response :created
       end
 
       assert_equal 'foo', json['data']['attributes']['name']
@@ -91,7 +91,7 @@ module Admin
               id: shows(:info).id,
               data: { attributes: { details: 'yabadabadoo' } }
             }
-      assert_response 200
+      assert_response :ok
       assert_equal 'yabadabadoo', json['data']['attributes']['details']
       assert_equal 'yabadabadoo', shows(:info).reload.details
       assert_equal profiles(:important).id, shows(:info).profile_id
@@ -112,7 +112,7 @@ module Admin
                 }
               }
             }
-      assert_response 200
+      assert_response :ok
       assert_equal profiles(:unimportant).id, shows(:info).reload.profile_id
     end
 
@@ -122,7 +122,7 @@ module Admin
               id: shows(:info).id,
               data: { attributes: { name: 'Klangbecken' } }
             }
-      assert_response 422
+      assert_response :unprocessable_content
       assert_match /taken/, response.body
       assert_equal 'Info', shows(:info).reload.name
     end
@@ -132,14 +132,14 @@ module Admin
       assert_difference('Show.count', -1) do
         delete :destroy, params: { id: show.id }
       end
-      assert_response 204
+      assert_response :no_content
     end
 
     test 'DELETE destroy does not remove show with broadcasts' do
       assert_no_difference('Show.count') do
         delete :destroy, params: { id: shows(:info).id }
       end
-      assert_response 422
+      assert_response :unprocessable_content
     end
 
   end

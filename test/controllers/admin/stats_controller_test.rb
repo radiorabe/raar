@@ -25,7 +25,7 @@ module Admin
     test 'GET index returns unauthorized if not logged in' do
       logout
       get :index, params: { year: 2013 }
-      assert_response 401
+      assert_response :unauthorized
     end
 
     private

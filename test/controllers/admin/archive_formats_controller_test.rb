@@ -15,7 +15,7 @@ module Admin
     test 'GET index returns unauthorized if not logged in' do
       logout
       get :index, params: { profile_id: profiles(:default).id }
-      assert_response 401
+      assert_response :unauthorized
     end
 
     test 'GET show returns entry' do
@@ -41,7 +41,7 @@ module Admin
                  }
                }
              }
-        assert_response 201
+        assert_response :created
       end
       format = ArchiveFormat.find(json['data']['id'])
       assert_equal %w[staff sendungsmachende], format.priviledged_group_list
@@ -62,7 +62,7 @@ module Admin
                  }
                }
              }
-        assert_response 422
+        assert_response :unprocessable_content
       end
       assert_equal 1, json['errors'].size
       assert_equal '/data/attributes/codec', json['errors'].first['source']['pointer']
@@ -75,7 +75,7 @@ module Admin
               profile_id: profiles(:default).id,
               data: { attributes: { codec: 'mp3', initial_bitrate: 224 } }
             }
-      assert_response 200
+      assert_response :ok
       assert_equal 'mp3', json['data']['attributes']['codec']
       assert_equal 224, json['data']['attributes']['initial_bitrate']
       assert_equal 'mp3', entry.reload.codec
@@ -89,7 +89,7 @@ module Admin
               profile_id: profiles(:default).id,
               data: { attributes: { codec: 'flac', initial_bitrate: 1 } }
             }
-      assert_response 422
+      assert_response :unprocessable_content
       assert_match /must not be changed/, response.body
       assert_equal 'mp3', entry.reload.codec
     end
@@ -101,7 +101,7 @@ module Admin
               profile_id: profiles(:default).id,
               data: { attributes: { initial_bitrate: 123 } }
             }
-      assert_response 422
+      assert_response :unprocessable_content
       assert_match /not included/, response.body
       assert_equal 256, entry.reload.initial_bitrate
     end
@@ -110,7 +110,7 @@ module Admin
       assert_difference('ArchiveFormat.count', -1) do
         delete :destroy, params: { id: entry.id, profile_id: profiles(:default).id }
       end
-      assert_response 204
+      assert_response :no_content
     end
 
     private

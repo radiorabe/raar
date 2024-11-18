@@ -41,7 +41,7 @@ class User < ApplicationRecord
 
   def groups=(value)
     value = value.join(',') if value.is_a?(Array)
-    super(value)
+    super
   end
 
   def group_list
