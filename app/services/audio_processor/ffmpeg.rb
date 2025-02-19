@@ -3,7 +3,7 @@
 module AudioProcessor
 
   log = Rails.env.development? || ENV['FFMPEG_LOG'].present?
-  FFMPEG.logger = log ? Rails.logger : Logger.new('/dev/null')
+  FFMPEG.logger = log ? Rails.logger : Logger.new(File::NULL)
 
   # Specific processor class working with FFmpeg backend.
   class Ffmpeg < Base
