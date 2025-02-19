@@ -1,10 +1,11 @@
-require:
+plugins:
   - rubocop-rails
   - rubocop-performance
 
 AllCops:
   DisplayCopNames: true
   NewCops: enable
+  TargetRubyVersion: 3.0
   Exclude:
     # only generated files
     - db/schema.rb

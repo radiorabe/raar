@@ -14,42 +14,42 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
   test 'returns trimmed single recording if it is longer' do
     composer = build_composer('2013-06-12T200000+0200_120.mp3')
-    expect_trim(file(0), 0, 120)
+    expect_processor_trim(file(0), 0, 120)
     mock_duration(file(0), 125)
     assert_not_equal file(0), composer.compose.path
   end
 
   test 'returns trimmed recording if it is longer than mapping' do
     composer = build_composer('2013-06-12T200000+0200_140.mp3')
-    expect_trim(file(0), 0, 120)
+    expect_processor_trim(file(0), 0, 120)
     mock_duration(file(0), 140)
     composer.compose
   end
 
   test 'returns original recording if it is specified longer than mapping, but shorter audio' do
     composer = build_composer('2013-06-12T200000+0200_140.mp3')
-    expect_no_trim(file(0))
+    expect_no_processor_trim(file(0))
     mock_duration(file(0), 10)
     composer.compose
   end
 
   test 'returns trimmed recording if it is longer than mapping, but a little shorter audio' do
     composer = build_composer('2013-06-12T200000+0200_140.mp3')
-    expect_trim(file(0), 0, 120)
+    expect_processor_trim(file(0), 0, 120)
     mock_duration(file(0), 130)
     composer.compose
   end
 
   test 'returns trimmed recording if it is earlier than mapping' do
     composer = build_composer('2013-06-12T194000+0200_140.mp3')
-    expect_trim(file(0), 20, 120)
+    expect_processor_trim(file(0), 20, 120)
     mock_duration(file(0), 140)
     composer.compose
   end
 
   test 'returns trimmed recording if it is earlier than mapping, but shorter audio' do
     composer = build_composer('2013-06-12T194000+0200_140.mp3')
-    expect_trim(file(0), 20, 80)
+    expect_processor_trim(file(0), 20, 80)
     mock_duration(file(0), 100)
     composer.compose
   end
@@ -62,14 +62,14 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
   test 'returns trimmed recording if it is earlier and longer than mapping' do
     composer = build_composer('2013-06-12T195000+0200_140.mp3')
-    expect_trim(file(0), 10, 120)
+    expect_processor_trim(file(0), 10, 120)
     mock_duration(file(0), 140)
     composer.compose
   end
 
   test 'returns trimmed recording if it is earlier and longer than mapping, but shorter audio' do
     composer = build_composer('2013-06-12T195000+0200_140.mp3')
-    expect_trim(file(0), 10, 90)
+    expect_processor_trim(file(0), 10, 90)
     mock_duration(file(0), 100)
     composer.compose
   end
@@ -82,7 +82,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
   test 'returns trimmed recording if it is earlier and longer than mapping, but longer audio' do
     composer = build_composer('2013-06-12T195000+0200_140.mp3')
-    expect_trim(file(0), 10, 120)
+    expect_processor_trim(file(0), 10, 120)
     mock_duration(file(0), 160)
     composer.compose
   end
@@ -172,8 +172,8 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
     expect_concat(2)
     mock_audio_format('mp3', 320)
-    expect_trim(file(0), 0, 30)
-    expect_trim(file(2), 0o0, 60)
+    expect_processor_trim(file(0), 0, 30)
+    expect_processor_trim(file(2), 0o0, 60)
     mock_duration(file(0), 40)
     mock_duration(file(1), 30)
     mock_duration(file(2), 80)
@@ -187,7 +187,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
     expect_concat(1)
     mock_audio_format('mp3', 320)
     mock_duration(file(1), 60)
-    expect_trim(file(0), 10, 60)
+    expect_processor_trim(file(0), 10, 60)
     mock_duration(file(0), 70)
     composer.compose
   end
@@ -199,7 +199,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
     expect_concat(1)
     mock_audio_format('mp3', 320)
     mock_duration(file(1), 60)
-    expect_trim(file(0), 10, 40)
+    expect_processor_trim(file(0), 10, 40)
     mock_duration(file(0), 50)
     composer.compose
   end
@@ -220,7 +220,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
     expect_concat(1)
     mock_audio_format('mp3', 320)
     mock_duration(file(0), 60)
-    expect_trim(file(1), 0, 60)
+    expect_processor_trim(file(1), 0, 60)
     mock_duration(mapping.recordings.last.path, 65)
     composer.compose
   end
@@ -233,9 +233,9 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
     expect_concat(2)
     mock_audio_format('mp3', 320)
     mock_duration(file(1), 60)
-    expect_trim(file(0), 30, 30)
-    expect_no_trim(file(1))
-    expect_trim(file(2), 0, 30)
+    expect_trim(composer, file(0), 30, 30)
+    expect_no_trim(composer, file(1))
+    expect_trim(composer, file(2), 0, 30)
     mock_duration(file(0), 60)
     mock_duration(mapping.recordings.last.path, 60)
     composer.compose
@@ -248,9 +248,9 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
     expect_concat(2)
     mock_audio_format('mp3', 320)
-    expect_trim(file(0), 30, 20)
-    expect_no_trim(file(1))
-    expect_no_trim(file(2))
+    expect_trim(composer, file(0), 30, 20)
+    expect_no_trim(composer, file(1))
+    expect_no_trim(composer, file(2))
     mock_duration(file(0), 50)
     mock_duration(file(1), 40)
     mock_duration(file(2), 20)
@@ -265,10 +265,10 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
     expect_concat(3)
     mock_audio_format('mp3', 320)
-    expect_trim(file(0), 30, 20)
-    expect_trim(file(1), 5, 25)
-    expect_trim(file(2), 15, 45)
-    expect_trim(file(3), 15, 30)
+    expect_trim(composer, file(0), 30, 20)
+    expect_trim(composer, file(1), 5, 25)
+    expect_trim(composer, file(2), 15, 45)
+    expect_trim(composer, file(3), 15, 30)
     mock_duration(file(0), 50)
     mock_duration(file(1), 30)
     mock_duration(file(2), 60)
@@ -284,7 +284,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
     expect_concat(2)
     mock_audio_format('mp3', 320)
-    expect_trim(file(3), 20, 10)
+    expect_trim(composer, file(3), 20, 10)
     mock_duration(file(0), 59.95)
     # not called actually
     # mock_duration(file(1), 30)
@@ -303,9 +303,9 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
     mock_duration(file(0), 15)
     mock_duration(file(1), 30)
     mock_duration(file(2), 60)
-    expect_no_trim(file(0))
-    expect_no_trim(file(1))
-    expect_no_trim(file(2))
+    expect_no_trim(composer, file(0))
+    expect_no_trim(composer, file(1))
+    expect_no_trim(composer, file(2))
     composer.compose
   end
 
@@ -317,10 +317,10 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
     expect_concat(1)
     mock_audio_format('mp3', 320)
-    expect_no_trim(file(0))
-    expect_no_trim(file(1))
-    expect_no_trim(file(2))
-    expect_no_trim(file(3))
+    expect_no_trim(composer, file(0))
+    expect_no_trim(composer, file(1))
+    expect_no_trim(composer, file(2))
+    expect_no_trim(composer, file(3))
     mock_duration(file(0), 60)
     # mock_duration(file(1), 30)  not actually called
     mock_duration(file(2), 60)
@@ -336,10 +336,10 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
     expect_concat(2)
     mock_audio_format('mp3', 320)
-    expect_trim(file(0), 30, 30)
-    expect_no_trim(file(1))
-    expect_no_trim(file(2))
-    expect_trim(file(3), 30, 30)
+    expect_trim(composer, file(0), 30, 30)
+    expect_no_trim(composer, file(1))
+    expect_no_trim(composer, file(2))
+    expect_trim(composer, file(3), 30, 30)
     mock_duration(file(0), 60)
     # mock_duration(file(1), 30)  not actually called
     mock_duration(file(2), 60)
@@ -356,9 +356,9 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
     expect_concat(2)
     mock_audio_format('mp3', 320)
-    expect_no_trim(file(1))
-    expect_no_trim(file(2))
-    expect_trim(file(3), 10, 50)
+    expect_no_trim(composer, file(1))
+    expect_no_trim(composer, file(2))
+    expect_trim(composer, file(3), 10, 50)
     mock_duration(file(0), 60)
     mock_duration(file(1), 15)
     mock_duration(file(2), 50)
@@ -373,9 +373,7 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
 
     expect_concat(2)
     mock_audio_format('mp3', 320)
-    expect_no_trim(file(0))
-    expect_no_trim(file(1))
-    expect_no_trim(file(2))
+    composer.expects(:trim).never
     mock_duration(file(0), 45)
     mock_duration(file(1), 5)
     mock_duration(file(2), 60)
@@ -397,13 +395,27 @@ class Import::Recording::ComposerTest < ActiveSupport::TestCase
     AudioProcessor.expects(:new).with(file).returns(proc)
   end
 
-  def expect_trim(file, start, duration)
+  def expect_trim(composer, file, start, duration)
+    composer
+      .expects(:trim)
+      .with(file, start.minutes.to_f, duration.minutes.to_f)
+      .returns(Tempfile.new(['master', '.mp3']))
+  end
+
+  def expect_no_trim(composer, file)
+    composer.expects(:trim).with(file, instance_of(Float), instance_of(Float)).never
+  end
+
+  # When a spec has expectations about certain files being trimmed and others not,
+  # the low level `expect_processor_(no_)trim` methods do not work.
+  # Use the `expect_(no_)trim` methods above in this case.
+  def expect_processor_trim(file, start, duration)
     proc = mock('processor')
     proc.expects(:trim).with(instance_of(String), start.minutes.to_f, duration.minutes.to_f)
     AudioProcessor.expects(:new).with(file).returns(proc)
   end
 
-  def expect_no_trim(file)
+  def expect_no_processor_trim(file)
     AudioProcessor.expects(:new).with(file).never
   end
 

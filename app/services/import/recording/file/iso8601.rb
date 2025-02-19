@@ -15,7 +15,7 @@ module Import
         TIME_GLOB = '[0-2][0-9][0-5][0-9][0-5][0-9]{+,-}[0-2][0-9][0-5]0' # HHMMSS+ZZZZ
         DURATION_GLOB = DIGIT_GLOB * 3 # ddd, minutes
         PERIOD_GLOB = 'PT{*H,*M,*S}' # ISO time period, e.g. PT1H30M
-        FILENAME_GLOB = "#{DATE_GLOB}T#{TIME_GLOB}_{#{DURATION_GLOB},#{PERIOD_GLOB}}"
+        FILENAME_GLOB = "#{DATE_GLOB}T#{TIME_GLOB}_{#{DURATION_GLOB},#{PERIOD_GLOB}}".freeze
 
         self.pending_glob = "#{FILENAME_GLOB}.*"
         self.imported_glob = "#{FILENAME_GLOB}#{IMPORTED_SUFFIX}.*"
