@@ -26,7 +26,11 @@ module Auth
       private
 
       def secret
-        Rails.application.credentials.secret_key_base.to_s
+        if Rails.env.production?
+          Rails.application.credentials.secret_key_base.to_s
+        else
+          '42' # dummy not-nil secret for dev and test env
+        end
       end
 
       def minutes_to_expire
