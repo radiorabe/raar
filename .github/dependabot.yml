@@ -1,5 +1,25 @@
 version: 2
 updates:
+  - package-ecosystem: gem
+    directory: /
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    groups:
+      rails:
+        patterns:
+          - railties
+          - activesupport
+          - actionpack
+          - activerecord
+          - activemodel
+          - actionview
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major" # leave major version updates to devs
+          - "version-update:semver-patch" # ignore patch versions to reduce noise
   - package-ecosystem: github-actions
     directory: /
     schedule:
