@@ -71,7 +71,7 @@ module Swaggerable
 
     def response_unprocessable
       response 422 do
-        key '$ref', '#/responses/unprocessable_entity'
+        key '$ref', '#/responses/unprocessable_content'
       end
     end
 

@@ -89,7 +89,7 @@ class ApidocsController < ApplicationController
           'may be obtained in the X-Auth-Token Header from a successfull /login request as admin.'
     end
 
-    response :unprocessable_entity do
+    response :unprocessable_content do
       key :description, 'unprocessable entity'
       schema do
         property :errors, type: :array do

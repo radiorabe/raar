@@ -37,7 +37,7 @@
     }
   },
   "responses": {
-    "unprocessable_entity": {
+    "unprocessable_content": {
       "description": "unprocessable entity",
       "schema": {
         "properties": {
@@ -124,19 +124,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -227,19 +221,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -288,19 +276,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -391,19 +373,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -459,19 +435,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -505,19 +475,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       },
@@ -560,24 +524,18 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -605,24 +563,16 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           },
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -715,19 +665,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -762,19 +706,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       },
@@ -817,24 +755,18 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -877,9 +809,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -915,14 +845,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -957,9 +885,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1002,14 +928,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1032,14 +956,12 @@
             "description": "successfull operation"
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1121,19 +1043,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -1180,19 +1096,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -1239,19 +1149,13 @@
         },
         "security": [
           {
-            "http_token": [
-
-            ]
+            "http_token": []
           },
           {
-            "api_token": [
-
-            ]
+            "api_token": []
           },
           {
-            "access_code": [
-
-            ]
+            "access_code": []
           }
         ]
       }
@@ -1322,9 +1226,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1361,14 +1263,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1403,9 +1303,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1449,14 +1347,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1480,14 +1376,12 @@
             "description": "successfull operation"
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1534,9 +1428,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1580,14 +1472,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1629,9 +1519,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1682,14 +1570,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1720,14 +1606,12 @@
             "description": "successfull operation"
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1756,9 +1640,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1812,9 +1694,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1865,14 +1745,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -1921,9 +1799,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -1981,14 +1857,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2026,14 +1900,12 @@
             "description": "successfull operation"
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2076,9 +1948,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2115,14 +1985,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2157,9 +2025,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2203,14 +2069,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2234,14 +2098,12 @@
             "description": "successfull operation"
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2284,9 +2146,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2323,14 +2183,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2365,9 +2223,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2411,14 +2267,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2442,14 +2296,12 @@
             "description": "successfull operation"
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2489,9 +2341,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2528,14 +2378,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2570,9 +2418,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2616,14 +2462,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2647,14 +2491,12 @@
             "description": "successfull operation"
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2695,9 +2537,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2740,9 +2580,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2779,14 +2617,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2821,9 +2657,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2867,14 +2701,12 @@
             }
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       },
@@ -2898,14 +2730,12 @@
             "description": "successfull operation"
           },
           "422": {
-            "$ref": "#/responses/unprocessable_entity"
+            "$ref": "#/responses/unprocessable_content"
           }
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
@@ -2947,9 +2777,7 @@
         },
         "security": [
           {
-            "jwt_token": [
-
-            ]
+            "jwt_token": []
           }
         ]
       }
