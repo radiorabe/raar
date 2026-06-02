@@ -12,7 +12,7 @@ class CrudController < ListController
       render json: entry, status: :created, location: entry_url, serializer: model_serializer
     else
       render json: entry,
-             status: :unprocessable_entity,
+             status: :unprocessable_content,
              serializer: ActiveModel::Serializer::ErrorSerializer
     end
   end
@@ -23,7 +23,7 @@ class CrudController < ListController
       render json: entry, serializer: model_serializer
     else
       render json: entry,
-             status: :unprocessable_entity,
+             status: :unprocessable_content,
              serializer: ActiveModel::Serializer::ErrorSerializer
     end
   end
@@ -34,7 +34,7 @@ class CrudController < ListController
       head :no_content
     else
       render json: entry,
-             status: :unprocessable_entity,
+             status: :unprocessable_content,
              serializer: ActiveModel::Serializer::ErrorSerializer
     end
   end
