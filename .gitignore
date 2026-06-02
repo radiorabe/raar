@@ -16,6 +16,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
+/config/*.example
 /config/deploy/*
 /dist
 !/log/.keep
