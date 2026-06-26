@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: gem
     directory: /
     schedule:
-      interval: daily
+      interval: weekly
     cooldown:
       default-days: 7
     groups:
@@ -18,12 +18,20 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types:
-          - "version-update:semver-major" # leave major version updates to devs
           - "version-update:semver-patch" # ignore patch versions to reduce noise
+      - dependency-name: "railties"
+        update-types:
+          - "version-update:semver-major" # leave major version updates to devs
+      - dependency-name: "active*"
+        update-types:
+          - "version-update:semver-major" # leave major version updates to devs
+      - dependency-name: "action*"
+        update-types:
+          - "version-update:semver-major" # leave major version updates to devs
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: daily
+      interval: weekly
     commit-message:
       prefix: "chore(ci): "
     groups:
