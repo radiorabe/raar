@@ -45,64 +45,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Set up Ruby
+      - &setup-ruby
+        name: Set up Ruby
         uses: ruby/setup-ruby@7f797815d8adceb1c412e7abefdd1ab4abc47a5f # v1.335.0
         with:
-          ruby-version: ${{ matrix.ruby-version }}
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Prepare
-        env:
-          PGPASSWORD: postgres
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-          psql -c 'create database raar_test;' -U $RAAR_DB_USERNAME -h $RAAR_DB_HOST
-          psql -c 'create database airtime_test;' -U $RAAR_DB_USERNAME -h $RAAR_DB_HOST
-      - name: Run tests
-        run: bundle exec rails test
-
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@7f797815d8adceb1c412e7abefdd1ab4abc47a5f # v1.335.0
-        with:
-          ruby-version: "3.0"
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Run rubocop
-        run: bundle exec rubocop
-
-  coverage:
-    name: Coverage
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    services:
-      db:
-        image: postgres:11
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_DB: postgres
-          POSTGRES_PASSWORD: postgres
-        ports: ["5432:5432"]
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@7f797815d8adceb1c412e7abefdd1ab4abc47a5f # v1.335.0
-        with:
-          ruby-version: "3.0"
+          ruby-version: ${{ matrix.ruby-version || 'default' }} # 'default' reads .ruby-version
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Prepare
         env:
@@ -115,7 +62,20 @@ jobs:
       - name: Run tests
         run: bundle exec rails test
       - name: Coveralls
+        if: matrix.ruby-version == '3.0'
         uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: "./test/coverage/lcov.info"
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - *setup-ruby
+      - name: Run rubocop
+        run: bundle exec rubocop
